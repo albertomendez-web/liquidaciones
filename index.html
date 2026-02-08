@@ -300,6 +300,40 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .col-toggle-item input[type=checkbox] { accent-color: #4f8cff; width: 15px; height: 15px; cursor: pointer; }
 .col-toggle-item.locked { opacity: 0.4; cursor: not-allowed; }
 .col-toggle-item.locked:hover { background: transparent; }
+/* MONTH PICKER */
+.mp-wrap { position: relative; }
+.mp-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; border: 1.5px solid #dde1e8; background: #fafbfc; font-size: 13px; font-weight: 500; color: #6b7280; cursor: pointer; font-family: inherit; transition: all 0.2s; white-space: nowrap; }
+.mp-btn:hover { border-color: #4f8cff; color: #4f8cff; background: #f0f5ff; }
+.mp-btn.active { border-color: #4f8cff; background: #e3f2fd; color: #1565c0; font-weight: 600; }
+.mp-btn .mp-icon { font-size: 14px; }
+.mp-btn .mp-clear { margin-left: 4px; width: 16px; height: 16px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: #9ca3af; }
+.mp-btn .mp-clear:hover { color: #e53935; background: #ffebee; }
+.mp-dd { display: none; position: absolute; top: calc(100% + 4px); left: 0; background: #fff; border: 1.5px solid #dde1e8; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 60; padding: 12px; min-width: 280px; }
+.mp-dd.open { display: block; }
+.mp-years { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
+.mp-year { padding: 5px 12px; border-radius: 6px; border: 1.5px solid #e0e4ea; background: #fafbfc; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: inherit; color: #6b7280; }
+.mp-year:hover { border-color: #4f8cff; color: #4f8cff; }
+.mp-year.sel { background: #4f8cff; color: #fff; border-color: #4f8cff; }
+.mp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.mp-month { padding: 8px 4px; border-radius: 6px; border: none; background: #f8f9fb; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; font-family: inherit; text-align: center; color: #1a1a2e; }
+.mp-month:hover { background: #e3f2fd; color: #1565c0; }
+.mp-month.sel { background: #4f8cff; color: #fff; font-weight: 700; }
+.mp-month.dim { opacity: 0.3; cursor: default; pointer-events: none; }
+.mp-month .mp-cnt { display: block; font-size: 10px; font-weight: 400; opacity: 0.6; margin-top: 1px; }
+.mp-month.sel .mp-cnt { opacity: 0.8; }
+.mp-all { display: block; width: 100%; padding: 7px; margin-top: 8px; border-radius: 6px; border: 1.5px dashed #dde1e8; background: transparent; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; color: #6b7280; text-align: center; transition: all 0.15s; }
+.mp-all:hover { border-color: #4f8cff; color: #4f8cff; background: #f0f5ff; }
+/* MULTI-SELECT COMBO ADDITIONS */
+.combo-item-chk { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 13px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; }
+.combo-item-chk:hover { background: #eef3ff; }
+.combo-item-chk input[type=checkbox] { accent-color: #4f8cff; width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
+.combo-item-chk .match { font-weight: 700; color: #4f8cff; }
+.combo-item-chk .combo-item-count { font-size: 11px; color: #9ca3af; margin-left: auto; }
+.combo-selall { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 12px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; color: #4f8cff; font-weight: 600; border-bottom: 1px solid #eef0f4; margin-bottom: 2px; }
+.combo-selall:hover { background: #f0f5ff; }
+.combo-selall input[type=checkbox] { accent-color: #4f8cff; width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
+.combo-tags { display: flex; gap: 4px; flex-wrap: wrap; max-width: 240px; }
+.combo-tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 4px; background: #e3f2fd; color: #1565c0; font-size: 11px; font-weight: 600; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
 </style>
 <style id="col-visibility-style"></style>
 <style id="consol-col-visibility-style"></style>
@@ -456,6 +490,10 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
         <div class="combo-clear" onclick="clearSimpleCombo('status')" title="Limpiar">&#10005;</div>
         <div class="combo-list" id="combo-list-status"></div>
       </div>
+      <div class="mp-wrap" id="mp-wrap">
+        <button class="mp-btn" id="mp-btn" onclick="toggleMonthPicker()"><span class="mp-icon">&#128197;</span> <span id="mp-label">Todos los meses</span></button>
+        <div class="mp-dd" id="mp-dd"></div>
+      </div>
       <div class="filter-sep"></div>
       <label>Ordenar</label>
       <div class="combo" id="combo-sort" style="min-width:160px;">
@@ -540,9 +578,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 // ═══════════════════════════════════════════════════════════════
 // CONTROL DE VERSIONES
 // ═══════════════════════════════════════════════════════════════
-const APP_VERSION = '1.3.0';
-const APP_BUILD   = '2026-02-09T10:00:00';
-const APP_CHANGES = 'URL por defecto configurable con autocarga al conectar Google';
+const APP_VERSION = '1.4.0';
+const APP_BUILD   = '2026-02-09T12:00:00';
+const APP_CHANGES = 'Filtros multi-selección + selector de mes/año por fecha de entrada';
 
 // Mostrar versión en sidebar
 window.addEventListener('DOMContentLoaded', () => {
@@ -915,7 +953,9 @@ function scheduleRender(mode) {
 // Cached filter+sort result — invalidated on filter/sort/data changes, NOT on pagination
 let _cachedFiltered = null, _filterSortKey = '', _validatedVersion = 0;
 function getFilterSortKey() {
-  return comboState.platform.value + '|' + comboState.aloj.value + '|' +
+  const pKey = [...comboState.platform.selected].sort().join(',') || 'all';
+  const aKey = [...comboState.aloj.selected].sort().join(',') || 'all';
+  return pKey + '|' + aKey + '|' + _mpYear + '|' + _mpMonth + '|' +
     simpleComboState.status.value + '|' + simpleComboState.sort.value + '|' +
     simpleComboState.sortdir.value + '|' + _validatedVersion + '|' + allReservas.length;
 }
@@ -923,11 +963,16 @@ function invalidateFilterCache() { _cachedFiltered = null; _filterSortKey = ''; 
 function getFilteredSorted() {
   const key = getFilterSortKey();
   if (_cachedFiltered && _filterSortKey === key) return _cachedFiltered;
-  const pf = comboState.platform.value, af = comboState.aloj.value, sf2 = simpleComboState.status.value;
+  const pSel = comboState.platform.selected, aSel = comboState.aloj.selected;
+  const sf2 = simpleComboState.status.value;
   const sortF = simpleComboState.sort.value, sortD = simpleComboState.sortdir.value;
   let fil = allReservas.filter(r => {
-    if (pf !== "all" && r.plataforma !== pf) return false;
-    if (af !== "all" && r.alojamiento !== af) return false;
+    if (pSel.size > 0 && !pSel.has(r.plataforma)) return false;
+    if (aSel.size > 0 && !aSel.has(r.alojamiento)) return false;
+    if (_mpYear !== null && r._dEntrada) {
+      if (r._dEntrada.getFullYear() !== _mpYear) return false;
+      if (_mpMonth !== null && r._dEntrada.getMonth() !== _mpMonth) return false;
+    } else if (_mpYear !== null && !r._dEntrada) return false;
     if (sf2 === "validated" && !validated.has(r.idx)) return false;
     if (sf2 === "pending" && validated.has(r.idx)) return false;
     return true;
@@ -1101,6 +1146,7 @@ function processRows(json) {
   populateCombo('platform', plats);
   const alojs = [...new Set(allReservas.map(r => r.alojamiento))].sort();
   populateCombo('aloj', alojs);
+  buildAvailableMonths();
   invalidateCache();
   invalidateAlojCache();
   rebuildSelectCache();
@@ -1420,9 +1466,9 @@ function _buildRowHtml(r) {
 function _renderFull() {
   const fil = getFilteredSorted();
   _lastFiltered = fil;
-  const pf = comboState.platform.value, af = comboState.aloj.value, sf2 = simpleComboState.status.value;
+  const sf2 = simpleComboState.status.value;
   const sortF = simpleComboState.sort.value, sortD = simpleComboState.sortdir.value;
-  const hasFilter = pf !== "all" || af !== "all" || sf2 !== "all";
+  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpYear !== null;
 
   document.getElementById("filter-count").textContent = fil.length + " reservas";
 
@@ -1727,8 +1773,8 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
 }
 
 function _renderStatsFromCache(fil, st) {
-  const pf = comboState.platform.value, af = comboState.aloj.value, sf2 = simpleComboState.status.value;
-  const hasFilter = pf !== "all" || af !== "all" || sf2 !== "all";
+  const sf2 = simpleComboState.status.value;
+  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpYear !== null;
 
   const gs = getGlobalStats();
   const tR = gs.tR, tL = gs.tL, vC = validated.size;
@@ -1761,8 +1807,9 @@ function _renderStatsFromCache(fil, st) {
 let highlightIdx = null;
 function goToReserva(idx) {
   // Reset filters so the reservation is visible
-  clearCombo('platform');
-  clearCombo('aloj');
+  comboState.platform.selected = new Set(); updateComboDisplay('platform');
+  comboState.aloj.selected = new Set(); updateComboDisplay('aloj');
+  clearMonthFilter();
   simpleComboState.status.value = 'all';
   document.querySelector('#combo-status .combo-input').value = '';
   document.querySelector('#combo-status .combo-input').placeholder = 'Todos los estados';
@@ -2522,23 +2569,127 @@ function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);con
 function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal();}
 
 // ─── SEARCHABLE COMBO SYSTEM ───
-const comboState = { platform: { value: 'all', options: [] }, aloj: { value: 'all', options: [] } };
+const comboState = { platform: { selected: new Set(), options: [] }, aloj: { selected: new Set(), options: [] } };
 const comboLabels = { platform: 'Todas las plataformas', aloj: 'Todos los alojamientos' };
+
+// ─── MONTH PICKER STATE ───
+const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MONTH_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+let _mpYear = null, _mpMonth = null; // null = all
+let _mpAvailable = {}; // { 2025: {0: count, 1: count, ...}, ... }
+let _mpYears = [];
+
+function buildAvailableMonths() {
+  _mpAvailable = {};
+  allReservas.forEach(r => {
+    if (!r._dEntrada) return;
+    const y = r._dEntrada.getFullYear(), m = r._dEntrada.getMonth();
+    if (!_mpAvailable[y]) _mpAvailable[y] = {};
+    _mpAvailable[y][m] = (_mpAvailable[y][m] || 0) + 1;
+  });
+  _mpYears = Object.keys(_mpAvailable).map(Number).sort((a,b) => b-a);
+  _mpYear = null; _mpMonth = null;
+  updateMonthPickerBtn();
+}
+
+function toggleMonthPicker() {
+  document.querySelectorAll('.combo-list').forEach(l => l.classList.remove('open'));
+  const dd = document.getElementById('mp-dd');
+  const wasOpen = dd.classList.contains('open');
+  dd.classList.toggle('open');
+  if (!wasOpen) renderMonthPickerDD();
+}
+
+function renderMonthPickerDD() {
+  const dd = document.getElementById('mp-dd');
+  // Default to first available year if none selected for display
+  const dispYear = _mpYear !== null ? _mpYear : (_mpYears[0] || new Date().getFullYear());
+  const ym = _mpAvailable[dispYear] || {};
+
+  let yearsHtml = _mpYears.map(y =>
+    `<button class="mp-year ${y===dispYear?'sel':''}" onclick="event.stopPropagation();selectMPYear(${y})">${y}</button>`
+  ).join('');
+
+  let monthsHtml = '';
+  for (let m = 0; m < 12; m++) {
+    const cnt = ym[m] || 0;
+    const isSel = _mpYear === dispYear && _mpMonth === m;
+    const dim = cnt === 0 ? 'dim' : '';
+    monthsHtml += `<button class="mp-month ${isSel?'sel':''} ${dim}" onclick="event.stopPropagation();selectMPMonth(${dispYear},${m})">${MONTH_NAMES[m]}<span class="mp-cnt">${cnt>0?cnt:''}</span></button>`;
+  }
+
+  // If a year is selected but no month, highlight the year-only filter
+  const yearOnlyActive = _mpYear === dispYear && _mpMonth === null;
+
+  dd.innerHTML = `
+    <div class="mp-years">${yearsHtml}</div>
+    <div class="mp-grid">${monthsHtml}</div>
+    ${_mpYear !== null || _mpMonth !== null ? `<button class="mp-all" onclick="event.stopPropagation();clearMonthFilter()">✕ Quitar filtro de fecha</button>` : ''}
+  `;
+}
+
+function selectMPYear(year) {
+  if (_mpYear === year && _mpMonth === null) {
+    // Clicking same year again = deselect
+    _mpYear = null;
+  } else {
+    _mpYear = year;
+    _mpMonth = null;
+  }
+  updateMonthPickerBtn();
+  invalidateFilterCache(); _currentPage = 1; renderTable();
+  renderMonthPickerDD();
+}
+
+function selectMPMonth(year, month) {
+  if (_mpYear === year && _mpMonth === month) {
+    // Clicking same month = deselect month (stay on year)
+    _mpMonth = null;
+  } else {
+    _mpYear = year;
+    _mpMonth = month;
+  }
+  updateMonthPickerBtn();
+  invalidateFilterCache(); _currentPage = 1; renderTable();
+  // Close dropdown for month selection (quick workflow)
+  if (_mpMonth !== null) document.getElementById('mp-dd').classList.remove('open');
+  else renderMonthPickerDD();
+}
+
+function clearMonthFilter() {
+  _mpYear = null; _mpMonth = null;
+  updateMonthPickerBtn();
+  invalidateFilterCache(); _currentPage = 1;
+  document.getElementById('mp-dd').classList.remove('open');
+}
+
+function updateMonthPickerBtn() {
+  const btn = document.getElementById('mp-btn');
+  const label = document.getElementById('mp-label');
+  if (!btn || !label) return;
+  if (_mpYear !== null && _mpMonth !== null) {
+    label.innerHTML = MONTH_FULL[_mpMonth] + ' ' + _mpYear + ' <span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();renderTable();">✕</span>';
+    btn.classList.add('active');
+  } else if (_mpYear !== null) {
+    label.innerHTML = 'Año ' + _mpYear + ' <span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();renderTable();">✕</span>';
+    btn.classList.add('active');
+  } else {
+    label.textContent = 'Todos los meses';
+    btn.classList.remove('active');
+  }
+}
 
 function populateCombo(id, items) {
   comboState[id].options = items;
-  comboState[id].value = 'all';
-  const input = document.querySelector(`#combo-${id} .combo-input`);
-  input.value = '';
-  input.placeholder = comboLabels[id];
-  document.getElementById(`combo-${id}`).classList.remove('has-value');
+  comboState[id].selected = new Set();
+  updateComboDisplay(id);
 }
 
 function openCombo(id) {
-  // Close others first
   document.querySelectorAll('.combo-list').forEach(l => l.classList.remove('open'));
+  document.querySelectorAll('.mp-dd').forEach(l => l.classList.remove('open'));
   const input = document.querySelector(`#combo-${id} .combo-input`);
-  if (comboState[id].value !== 'all') { input.value = ''; }
+  input.value = '';
   input.select();
   renderComboList(id, '');
   document.getElementById(`combo-list-${id}`).classList.add('open');
@@ -2556,49 +2707,76 @@ function renderComboList(id, query) {
   const items = comboState[id].options;
   let filtered = items;
   if (q) filtered = items.filter(i => i.toLowerCase().includes(q));
+  const sel = comboState[id].selected;
 
-  // Count reservas per option
   const countFn = id === 'platform'
     ? (v) => allReservas.filter(r => r.plataforma === v).length
     : (v) => allReservas.filter(r => r.alojamiento === v).length;
 
-  let html = `<div class="combo-item ${comboState[id].value==='all'?'active':''}" onclick="selectCombo('${id}','all')">${comboLabels[id]} <span class="combo-item-count">(${allReservas.length})</span></div>`;
+  const allChecked = sel.size === 0;
+  let html = `<label class="combo-selall" onclick="event.stopPropagation()"><input type="checkbox" ${allChecked?'checked':''} onchange="toggleComboAll('${id}', this.checked)"> ${comboLabels[id]} <span class="combo-item-count">(${allReservas.length})</span></label>`;
   if (filtered.length === 0) {
     html += '<div class="combo-empty">Sin resultados</div>';
   } else {
     filtered.forEach(item => {
-      const isActive = comboState[id].value === item;
+      const isChecked = sel.has(item);
       let label = item;
       if (q) {
         const idx = item.toLowerCase().indexOf(q);
         if (idx >= 0) label = item.slice(0, idx) + '<span class="match">' + item.slice(idx, idx + q.length) + '</span>' + item.slice(idx + q.length);
       }
       const count = countFn(item);
-      html += `<div class="combo-item ${isActive?'active':''}" onclick="selectCombo('${id}','${item.replace(/'/g,"\\'")}')">${label} <span class="combo-item-count">(${count})</span></div>`;
+      const esc = item.replace(/'/g, "\\'");
+      html += `<label class="combo-item-chk" onclick="event.stopPropagation()"><input type="checkbox" ${isChecked?'checked':''} onchange="toggleComboItem('${id}','${esc}',this.checked)"> ${label} <span class="combo-item-count">(${count})</span></label>`;
     });
   }
   list.innerHTML = html;
 }
 
-function selectCombo(id, value) {
-  comboState[id].value = value;
+function toggleComboItem(id, item, checked) {
+  const sel = comboState[id].selected;
+  if (checked) sel.add(item); else sel.delete(item);
+  updateComboDisplay(id);
+  invalidateFilterCache(); _currentPage = 1; renderTable();
+  // Re-render list to update checkboxes
+  const input = document.querySelector(`#combo-${id} .combo-input`);
+  renderComboList(id, '');
+}
+
+function toggleComboAll(id, checked) {
+  if (checked) {
+    comboState[id].selected = new Set();
+  } else {
+    comboState[id].selected = new Set(comboState[id].options);
+  }
+  updateComboDisplay(id);
+  invalidateFilterCache(); _currentPage = 1; renderTable();
+  renderComboList(id, '');
+}
+
+function updateComboDisplay(id) {
   const input = document.querySelector(`#combo-${id} .combo-input`);
   const wrap = document.getElementById(`combo-${id}`);
-  if (value === 'all') {
+  const sel = comboState[id].selected;
+  if (sel.size === 0) {
     input.value = '';
     input.placeholder = comboLabels[id];
     wrap.classList.remove('has-value');
+  } else if (sel.size === 1) {
+    input.value = [...sel][0];
+    wrap.classList.add('has-value');
   } else {
-    input.value = value;
+    const noun = id === 'platform' ? 'plataformas' : 'alojamientos';
+    input.value = sel.size + ' ' + noun;
     wrap.classList.add('has-value');
   }
-  document.getElementById(`combo-list-${id}`).classList.remove('open');
-  _currentPage = 1;
-  renderTable();
 }
 
 function clearCombo(id) {
-  selectCombo(id, 'all');
+  comboState[id].selected = new Set();
+  updateComboDisplay(id);
+  document.getElementById(`combo-list-${id}`).classList.remove('open');
+  invalidateFilterCache(); _currentPage = 1; renderTable();
 }
 
 // ─── SIMPLE COMBO SYSTEM (for status, sort, sortdir) ───
@@ -2715,16 +2893,17 @@ document.addEventListener('click', function(e) {
       if (dd) dd.classList.remove('open');
     }
   });
+  // Close month picker
+  const mpWrap = document.getElementById('mp-wrap');
+  if (mpWrap && !mpWrap.contains(e.target)) {
+    document.getElementById('mp-dd').classList.remove('open');
+  }
   document.querySelectorAll('.combo').forEach(c => {
     if (!c.contains(e.target)) {
       c.querySelector('.combo-list').classList.remove('open');
       const id = c.id.replace('combo-', '');
-      const input = c.querySelector('.combo-input');
-      // Restore searchable combos
-      if (comboState[id]) {
-        if (comboState[id].value === 'all') { input.value = ''; input.placeholder = comboLabels[id]; }
-        else { input.value = comboState[id].value; }
-      }
+      // Restore display for searchable combos
+      if (comboState[id]) updateComboDisplay(id);
     }
   });
 });

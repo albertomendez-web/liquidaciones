@@ -359,6 +359,49 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
             <button class="btn btn-outline" id="btn-google-disconnect" onclick="googleSignOut()" style="display:none;">Desconectar</button>
           </div>
         </div>
+        <div id="gsheet-default-area" style="display:none; margin-top:20px;">
+          <div style="background:#f0f5ff;border:1.5px solid #c3d9ff;border-radius:10px;padding:16px 20px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#4f8cff;">&#9733; Hoja por defecto</span>
+              <div style="display:flex;gap:6px;">
+                <button class="btn btn-sm btn-primary" id="btn-load-default" onclick="loadDefaultSheet()">&#9654; Cargar ahora</button>
+                <button class="btn btn-sm btn-outline" onclick="editDefaultUrl()" title="Cambiar URL">&#9998;</button>
+                <button class="btn btn-sm" style="background:#ffebee;color:#e53935;padding:6px 10px;" onclick="clearDefaultUrl()" title="Quitar por defecto">&#10005;</button>
+              </div>
+            </div>
+            <div id="default-url-display" style="font-size:13px;color:#1a2744;font-weight:500;word-break:break-all;"></div>
+            <div id="default-url-edit" style="display:none;">
+              <div class="gsheet-url-row" style="margin-bottom:0;">
+                <input class="gsheet-url-input" type="text" id="default-url-edit-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+                <button class="btn btn-sm btn-success" onclick="saveDefaultUrlEdit()">Guardar</button>
+                <button class="btn btn-sm btn-outline" onclick="cancelDefaultUrlEdit()">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="gsheet-autoload-status" style="display:none;margin-top:12px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:#e8f5e9;color:#2e7d32;font-size:13px;font-weight:500;">
+            <div class="gsheet-spinner" style="border-top-color:#43a047;border-color:#c8e6c9;width:18px;height:18px;"></div>
+            <span id="autoload-status-text">Cargando hoja por defecto...</span>
+          </div>
+        </div>
+        <div id="gsheet-no-default" style="display:none; margin-top:20px;">
+          <div style="background:#f8f9fb;border:1.5px dashed #dde1e8;border-radius:10px;padding:14px 20px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#9ca3af;margin-bottom:4px;">Hoja por defecto</div>
+                <div style="font-size:13px;color:#6b7280;">Configura una URL para cargar autom&aacute;ticamente al conectar</div>
+              </div>
+              <button class="btn btn-sm btn-outline" onclick="showSetDefaultUrl()">Configurar</button>
+            </div>
+            <div id="set-default-url-form" style="display:none;margin-top:12px;">
+              <div class="gsheet-url-row" style="margin-bottom:0;">
+                <input class="gsheet-url-input" type="text" id="set-default-url-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+                <button class="btn btn-sm btn-success" onclick="saveNewDefaultUrl()">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div id="gsheet-picker-area" style="display:none; margin-top:20px;">
           <div class="gsheet-actions" style="margin-bottom:12px;">
             <button class="btn btn-primary" onclick="openGooglePicker()">&#128193; Explorar Google Drive</button>
@@ -497,9 +540,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 // ═══════════════════════════════════════════════════════════════
 // CONTROL DE VERSIONES
 // ═══════════════════════════════════════════════════════════════
-const APP_VERSION = '1.2.0';
-const APP_BUILD   = '2026-02-08T21:30:00';
-const APP_CHANGES = 'Columnas completas del Excel con toggle de visibilidad';
+const APP_VERSION = '1.3.0';
+const APP_BUILD   = '2026-02-09T10:00:00';
+const APP_CHANGES = 'URL por defecto configurable con autocarga al conectar Google';
 
 // Mostrar versión en sidebar
 window.addEventListener('DOMContentLoaded', () => {
@@ -522,6 +565,8 @@ let _gapiInited = false, _gisInited = false, _googleToken = null, _tokenClient =
 let _pickerInited = false;
 let _sheetHistory = [];
 try { const h = localStorage.getItem('gsheet-history'); if (h) _sheetHistory = JSON.parse(h); } catch(e) {}
+let _defaultSheetUrl = null;
+try { _defaultSheetUrl = localStorage.getItem('gsheet-default-url') || null; } catch(e) {}
 
 function gapiLoaded() {
   gapi.load('client:picker', async () => {
@@ -573,6 +618,7 @@ function googleSignOut() {
   if (_googleToken) { google.accounts.oauth2.revoke(_googleToken.access_token, () => {}); _googleToken = null; }
   updateGoogleStatus(false);
 }
+let _autoLoadAttempted = false;
 function updateGoogleStatus(connected) {
   const statusEl = document.getElementById('gsheet-status');
   const labelEl = document.getElementById('gsheet-status-label');
@@ -580,18 +626,105 @@ function updateGoogleStatus(connected) {
   const btnD = document.getElementById('btn-google-disconnect');
   const picker = document.getElementById('gsheet-picker-area');
   const sidebar = document.getElementById('sidebar-google');
+  const defaultArea = document.getElementById('gsheet-default-area');
+  const noDefaultArea = document.getElementById('gsheet-no-default');
   if (connected) {
     statusEl.className = 'gsheet-status connected'; labelEl.textContent = 'Conectado con Google';
     btnC.style.display = 'none'; btnD.style.display = ''; picker.style.display = '';
     sidebar.style.display = 'block';
     document.getElementById('google-dot').className = 'status-dot on';
     document.getElementById('google-status-text').textContent = 'Google conectado';
+    if (_defaultSheetUrl) {
+      defaultArea.style.display = '';
+      noDefaultArea.style.display = 'none';
+      renderDefaultUrlDisplay();
+      if (!_autoLoadAttempted && allReservas.length === 0) {
+        _autoLoadAttempted = true;
+        setTimeout(function() { autoLoadDefaultSheet(); }, 300);
+      }
+    } else {
+      defaultArea.style.display = 'none';
+      noDefaultArea.style.display = '';
+    }
   } else {
     statusEl.className = 'gsheet-status disconnected'; labelEl.textContent = 'No conectado';
     btnC.style.display = ''; btnD.style.display = 'none'; picker.style.display = 'none';
     sidebar.style.display = 'none';
+    defaultArea.style.display = 'none';
+    noDefaultArea.style.display = 'none';
+    document.getElementById('gsheet-autoload-status').style.display = 'none';
   }
   renderSheetHistory();
+}
+
+// \u2550\u2550\u2550 DEFAULT SHEET URL MANAGEMENT \u2550\u2550\u2550
+function renderDefaultUrlDisplay() {
+  var el = document.getElementById('default-url-display');
+  if (!el || !_defaultSheetUrl) return;
+  var short = _defaultSheetUrl.length > 80 ? _defaultSheetUrl.substring(0, 77) + '...' : _defaultSheetUrl;
+  el.innerHTML = '<span style="color:#6b7280;font-size:12px;">URL:</span> ' + short;
+}
+function loadDefaultSheet() {
+  if (!_defaultSheetUrl) return;
+  var id = extractSheetId(_defaultSheetUrl);
+  if (!id) { alert('La URL por defecto no es v\u00e1lida.'); return; }
+  loadSheetById(id, 'Hoja por defecto');
+}
+function autoLoadDefaultSheet() {
+  if (!_defaultSheetUrl || !_googleToken) return;
+  var id = extractSheetId(_defaultSheetUrl);
+  if (!id) return;
+  var statusEl = document.getElementById('gsheet-autoload-status');
+  statusEl.style.display = '';
+  document.getElementById('autoload-status-text').textContent = 'Cargando hoja por defecto...';
+  loadSheetById(id, 'Hoja por defecto');
+}
+function editDefaultUrl() {
+  document.getElementById('default-url-display').style.display = 'none';
+  document.getElementById('default-url-edit').style.display = '';
+  document.getElementById('default-url-edit-input').value = _defaultSheetUrl || '';
+  document.getElementById('default-url-edit-input').focus();
+}
+function cancelDefaultUrlEdit() {
+  document.getElementById('default-url-display').style.display = '';
+  document.getElementById('default-url-edit').style.display = 'none';
+}
+function saveDefaultUrlEdit() {
+  var url = document.getElementById('default-url-edit-input').value.trim();
+  if (!url) { alert('Introduce una URL v\u00e1lida.'); return; }
+  var id = extractSheetId(url);
+  if (!id) { alert('URL no v\u00e1lida. Debe ser una URL de Google Sheets.'); return; }
+  _defaultSheetUrl = url;
+  try { localStorage.setItem('gsheet-default-url', url); } catch(e) {}
+  cancelDefaultUrlEdit();
+  renderDefaultUrlDisplay();
+  document.getElementById('gsheet-default-area').style.display = '';
+  document.getElementById('gsheet-no-default').style.display = 'none';
+}
+function clearDefaultUrl() {
+  if (!confirm('\u00bfQuitar la hoja por defecto?')) return;
+  _defaultSheetUrl = null;
+  try { localStorage.removeItem('gsheet-default-url'); } catch(e) {}
+  document.getElementById('gsheet-default-area').style.display = 'none';
+  if (_googleToken) document.getElementById('gsheet-no-default').style.display = '';
+}
+function showSetDefaultUrl() {
+  var form = document.getElementById('set-default-url-form');
+  form.style.display = form.style.display === 'none' ? '' : 'none';
+  if (form.style.display !== 'none') document.getElementById('set-default-url-input').focus();
+}
+function saveNewDefaultUrl() {
+  var url = document.getElementById('set-default-url-input').value.trim();
+  if (!url) { alert('Introduce una URL v\u00e1lida.'); return; }
+  var id = extractSheetId(url);
+  if (!id) { alert('URL no v\u00e1lida. Debe ser una URL de Google Sheets.'); return; }
+  _defaultSheetUrl = url;
+  try { localStorage.setItem('gsheet-default-url', url); } catch(e) {}
+  document.getElementById('set-default-url-form').style.display = 'none';
+  document.getElementById('set-default-url-input').value = '';
+  document.getElementById('gsheet-no-default').style.display = 'none';
+  document.getElementById('gsheet-default-area').style.display = '';
+  renderDefaultUrlDisplay();
 }
 
 // ═══ GOOGLE PICKER ═══
@@ -692,7 +825,7 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
 
 // ═══ LOADING UI ═══
 function showGSheetLoading(text) { document.getElementById('gsheet-loading').style.display = 'flex'; document.getElementById('gsheet-loading-text').textContent = text || 'Cargando...'; }
-function hideGSheetLoading() { document.getElementById('gsheet-loading').style.display = 'none'; }
+function hideGSheetLoading() { document.getElementById('gsheet-loading').style.display = 'none'; document.getElementById('gsheet-autoload-status').style.display = 'none'; }
 
 // ═══ SHEET HISTORY ═══
 function addToSheetHistory(sheetId, name, sheetTab) {

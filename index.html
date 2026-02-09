@@ -1819,11 +1819,12 @@ function calcLiquidacion(r, s) {
     const pr = s.pasarelaRate !== undefined ? s.pasarelaRate : (isB ? pasarelaBookingOptions[0]/100 : pasarelaStripeOptions[0]/100);
     comPas = total * pr;
   }
-  const limp = s.limpieza || cleaningOptions[0];
+  const limp = s.limpieza !== undefined ? s.limpieza : cleaningOptions[0];
   const rawAmen = s.amenities;
   const amen = (rawAmen !== undefined && amenitiesOptions.some(function(o){return Math.abs(o-rawAmen)<0.001;})) ? rawAmen : amenitiesOptions[0];
   const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
-  const iva = sub * IVA_SUBTOTAL, irpfRate = s.irpf || irpfOptions[0]/100, ret = sub * irpfRate;
+  const irpfRate = s.irpf !== undefined ? s.irpf : irpfOptions[0]/100;
+  const iva = sub * IVA_SUBTOTAL, ret = sub * irpfRate;
   return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, iva, irpfRate, ret, totalLiq: sub + iva - ret };
 }
 
@@ -3078,30 +3079,26 @@ function buildConsolDeductionsHtml(alojName) {
 
   var html = '';
 
-  // Maintenance row
-  html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;">';
-  html += '<div style="display:flex;align-items:center;gap:8px;">';
-  html += '<button onclick="toggleConsolMaint(\''+esc+'\')" style="width:20px;height:20px;border-radius:4px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">'+(maint.enabled?'&#10003;':'')+'</button>';
-  html += '<span style="font-size:13px;'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
-  if (maint.enabled) html += ' <select class="sel" onchange="changeConsolMaintAmount(\''+esc+'\',this.value)" style="font-size:11px;padding:3px 6px;">'+maintSelOpts+'</select>';
-  html += '</div>';
+  // Maintenance row — same consol-row style
+  html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
+  html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaint(\''+esc+'\')">'+(maint.enabled?'&#10003;':'')+'</span>';
+  html += '<span style="'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
+  if (maint.enabled) html += ' <select class="sel no-print" onchange="changeConsolMaintAmount(\''+esc+'\',this.value)" style="font-size:11px;padding:2px 6px;">'+maintSelOpts+'</select>';
+  html += '</span>';
   if (maint.enabled) html += '<span class="neg">- '+fmt(maint.amount)+' \u20AC</span>';
   html += '</div>';
 
-  // Extra concepts
+  // Extra concepts — same consol-row style
   extras.forEach(function(ex, ei) {
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;">';
-    html += '<div style="display:flex;align-items:center;gap:8px;">';
-    html += '<button onclick="removeConsolExtra(\''+esc+'\','+ei+')" style="width:20px;height:20px;border-radius:4px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">&#10005;</button>';
-    html += '<span style="font-size:13px;">'+ex.label+'</span>';
-    html += '</div>';
-    html += '<span class="neg">- '+fmt(ex.amount)+' \u20AC</span>';
-    html += '</div>';
+    html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
+    html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeConsolExtra(\''+esc+'\','+ei+')">&#10005;</span>';
+    html += ex.label;
+    html += '</span><span class="neg">- '+fmt(ex.amount)+' \u20AC</span></div>';
   });
 
   // Add concept button
-  html += '<div class="no-print" style="padding:4px 0;">';
-  html += '<button onclick="addConsolExtra(\''+esc+'\')" style="font-size:11px;color:#3b82f6;background:none;border:1px dashed #93c5fd;border-radius:6px;padding:4px 10px;cursor:pointer;">+ A\u00f1adir concepto</button>';
+  html += '<div class="consol-row no-print" style="padding-top:4px;padding-bottom:4px;">';
+  html += '<button onclick="addConsolExtra(\''+esc+'\')" style="font-size:11px;color:#3b82f6;background:none;border:1px dashed #93c5fd;border-radius:5px;padding:3px 10px;cursor:pointer;">+ A\u00f1adir concepto</button>';
   html += '</div>';
 
   return html;

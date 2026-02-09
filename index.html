@@ -308,6 +308,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .mp-btn .mp-icon { font-size: 14px; }
 .mp-btn .mp-clear { margin-left: 4px; width: 16px; height: 16px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; color: #9ca3af; }
 .mp-btn .mp-clear:hover { color: #e53935; background: #ffebee; }
+.mp-nav { display: inline-flex; align-items: center; gap: 0; margin-right: 2px; }
+.mp-arrow { width: 22px; height: 22px; border-radius: 5px; border: none; background: transparent; cursor: pointer; font-size: 13px; color: #4f8cff; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s; font-family: inherit; padding: 0; }
+.mp-arrow:hover { background: rgba(79,140,255,0.15); }
 .mp-dd { display: none; position: absolute; top: calc(100% + 4px); left: 0; background: #fff; border: 1.5px solid #dde1e8; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 60; padding: 12px; min-width: 280px; }
 .mp-dd.open { display: block; }
 .mp-years { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
@@ -579,7 +582,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 // CONTROL DE VERSIONES
 // ═══════════════════════════════════════════════════════════════
 const APP_VERSION = '1.4.0';
-const APP_BUILD   = '2026-02-09T12:00:00';
+const APP_BUILD   = '2026-02-09T13:00:00';
 const APP_CHANGES = 'Filtros multi-selección + selector de mes/año por fecha de entrada';
 
 // Mostrar versión en sidebar
@@ -2668,15 +2671,53 @@ function updateMonthPickerBtn() {
   const label = document.getElementById('mp-label');
   if (!btn || !label) return;
   if (_mpYear !== null && _mpMonth !== null) {
-    label.innerHTML = MONTH_FULL[_mpMonth] + ' ' + _mpYear + ' <span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();renderTable();">✕</span>';
+    label.innerHTML = '<span class="mp-nav">'
+      + '<button class="mp-arrow" onclick="event.stopPropagation();mpPrev()">&#8249;</button>'
+      + '</span>'
+      + MONTH_FULL[_mpMonth] + ' ' + _mpYear
+      + '<span class="mp-nav">'
+      + '<button class="mp-arrow" onclick="event.stopPropagation();mpNext()">&#8250;</button>'
+      + '</span>'
+      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();renderTable();">✕</span>';
     btn.classList.add('active');
   } else if (_mpYear !== null) {
-    label.innerHTML = 'Año ' + _mpYear + ' <span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();renderTable();">✕</span>';
+    label.innerHTML = '<span class="mp-nav">'
+      + '<button class="mp-arrow" onclick="event.stopPropagation();mpPrev()">&#8249;</button>'
+      + '</span>'
+      + 'Año ' + _mpYear
+      + '<span class="mp-nav">'
+      + '<button class="mp-arrow" onclick="event.stopPropagation();mpNext()">&#8250;</button>'
+      + '</span>'
+      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();renderTable();">✕</span>';
     btn.classList.add('active');
   } else {
     label.textContent = 'Todos los meses';
     btn.classList.remove('active');
   }
+}
+
+function mpPrev() {
+  if (_mpYear !== null && _mpMonth !== null) {
+    // Move to previous month
+    _mpMonth--;
+    if (_mpMonth < 0) { _mpMonth = 11; _mpYear--; }
+  } else if (_mpYear !== null) {
+    _mpYear--;
+  }
+  updateMonthPickerBtn();
+  invalidateFilterCache(); _currentPage = 1; renderTable();
+}
+
+function mpNext() {
+  if (_mpYear !== null && _mpMonth !== null) {
+    // Move to next month
+    _mpMonth++;
+    if (_mpMonth > 11) { _mpMonth = 0; _mpYear++; }
+  } else if (_mpYear !== null) {
+    _mpYear++;
+  }
+  updateMonthPickerBtn();
+  invalidateFilterCache(); _currentPage = 1; renderTable();
 }
 
 function populateCombo(id, items) {

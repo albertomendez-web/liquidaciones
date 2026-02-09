@@ -2197,17 +2197,14 @@ function renderConsolGrid() {
   let totalAloj = 0, readyCount = 0, totalLiq = 0;
 
   // Pre-compute stats for sorting (with date-filtered reservas)
-  const alojData = alojamientos.map(a => {
+  let alojData = alojamientos.map(a => {
     const filtered = filterByDate(a.reservas);
     if (filtered.length === 0) return null; // hide alojamientos with 0 reservas in range
-    totalAloj++;
     const total = filtered.length;
     const valCount = filtered.filter(r => validated.has(r.idx)).length;
     const allVal = valCount === total;
-    if (allVal) readyCount++;
     const sumReservas = filtered.reduce((s, r) => s + r.totalReserva, 0);
     const sumLiq = filtered.reduce((s, r) => s + getLiq(r).totalLiq, 0);
-    totalLiq += sumLiq;
     return { ...a, reservas: filtered, total, valCount, allVal, sumReservas, sumLiq };
   }).filter(Boolean);
 
@@ -2228,6 +2225,13 @@ function renderConsolGrid() {
       );
     });
   }
+
+  // Compute stats after all filters
+  alojData.forEach(a => {
+    totalAloj++;
+    if (a.allVal) readyCount++;
+    totalLiq += a.sumLiq;
+  });
 
   // Sort
   const sortMode = simpleComboState.consolsort.value;

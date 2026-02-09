@@ -2580,17 +2580,7 @@ function viewDetail(idx) {
   const amenLabel = `Amenities ` + _sel(amenitiesOptions, c.amen, r.idx, 'amenities', false);
 
   const rows=[];
-  if (c.ceTotal > 0) {
-    rows.push({l:"Total Reserva (original)",v:c.totalOriginal,bold:true});
-    var ceItems = s.conceptosEspeciales || [];
-    ceItems.forEach(function(item) {
-      if (item.amount > 0) rows.push({l:'<span style="color:#d97706">&#9888; '+((item.label||'Concepto especial').replace(/</g,'&lt;'))+'</span>',v:-item.amount,neg:true});
-    });
-    rows.push({l:'<span style="color:#d97706;font-weight:700">Base ajustada (IVA incluido)</span>',v:c.total,bold:true});
-    rows.push({div:true});
-  } else {
-    rows.push({l:"Total Reserva (IVA incluido)",v:c.total,bold:true});
-  }
+  rows.push({l:"Total Reserva (IVA incluido)",v:c.total,bold:true});
   rows.push({l:`IVA Reserva (${(IVA_RESERVA*100).toFixed(0)}%)`,v:-(c.total-c.baseSinIVA),neg:true},
     {l:"Base sin IVA",v:c.baseSinIVA,bold:true},{div:true},
     {l:comPlatLabel,v:-c.comPlat,neg:true},

@@ -638,9 +638,9 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.6.0';
-const APP_BUILD   = '2026-02-09T22:00:00';
-const APP_CHANGES = 'Persistencia de configuraci\u00f3n en pesta\u00f1a "Configuracion" de Google Sheets';
+const APP_VERSION = '1.6.1';
+const APP_BUILD   = '2026-02-09T23:30:00';
+const APP_CHANGES = 'Amenities configurable por reserva; filtrado pesta\u00f1a Configuracion; correcci\u00f3n carga';
 
 // Mostrar versión en sidebar
 window.addEventListener('DOMContentLoaded', () => {
@@ -874,8 +874,10 @@ async function loadSheetById(sheetId, sheetName) {
     const meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: sheetId, fields: 'properties.title,sheets.properties' });
     const title = meta.result.properties.title;
     const sheets = meta.result.sheets.map(s => ({ name: s.properties.title, index: s.properties.index }));
-    if (sheets.length === 1) { await loadSheetData(sheetId, sheets[0].name, title); }
-    else { hideGSheetLoading(); showSheetSelector(sheetId, sheets, title); }
+    const dataSheets = sheets.filter(s => s.name !== CONFIG_TAB_NAME);
+    if (dataSheets.length === 0) { hideGSheetLoading(); alert('No se encontraron hojas de datos.'); return; }
+    if (dataSheets.length === 1) { await loadSheetData(sheetId, dataSheets[0].name, title); }
+    else { hideGSheetLoading(); showSheetSelector(sheetId, dataSheets, title); }
   } catch(e) {
     hideGSheetLoading(); console.error('Error loading sheet:', e);
     alert(e.result && e.result.error ? 'Error: ' + e.result.error.message : 'Error al cargar la hoja. Verifica que tienes acceso.');
@@ -886,7 +888,8 @@ function showSheetSelector(sheetId, sheets, title) {
   const list = document.getElementById('gsheet-sheets-list');
   sel.style.display = '';
   list.innerHTML = '';
-  sheets.forEach(s => {
+  const visibleSheets = sheets.filter(s => s.name !== CONFIG_TAB_NAME);
+  visibleSheets.forEach(s => {
     const btn = document.createElement('button');
     btn.className = 'btn btn-outline btn-sm';
     btn.textContent = s.name;
@@ -1110,7 +1113,7 @@ function buildGlobalConfigRows() {
   rows.push(['limpieza', cleaningOptions.join(',')]);
   rows.push(['irpf', irpfOptions.join(',')]);
   rows.push(['gtc', gtcOptions.join(',')]);
-  rows.push(['amenities', String(AMENITIES)]);
+  rows.push(['amenities', amenitiesOptions.join(',')]);
   return rows;
 }
 
@@ -1127,6 +1130,7 @@ function buildReservaConfigRows(indices) {
       s.comPlataforma !== undefined ? s.comPlataforma : '',
       s.comGTC !== undefined ? s.comGTC : '',
       s.limpieza !== undefined ? s.limpieza : '',
+      s.amenities !== undefined ? s.amenities : '',
       s.irpf !== undefined ? s.irpf : '',
       s.pasarela ? 'true' : 'false',
       s.pasarelaRate !== undefined ? s.pasarelaRate : ''
@@ -1146,7 +1150,7 @@ function buildFullConfigTabData() {
   globalRows.forEach(function(row) { data.push(row); });
   data.push([]);
   data.push(['AJUSTES POR RESERVA']);
-  data.push(['ID Reserva', 'comPlataforma', 'comGTC', 'limpieza', 'irpf', 'pasarela', 'pasarelaRate']);
+  data.push(['ID Reserva', 'comPlataforma', 'comGTC', 'limpieza', 'amenities', 'irpf', 'pasarela', 'pasarelaRate']);
   var reservaRows = buildReservaConfigRows();
   reservaRows.forEach(function(row) { data.push(row); });
   return data;
@@ -1157,7 +1161,7 @@ async function loadOrCreateConfigTab(sheetId) {
   if (!_googleToken) return;
   _configLoaded = false;
   try {
-    showGSheetLoading('Cargando configuraci\u00f3n...');
+    console.log('[Config] Loading config tab...');
     var meta = await gapi.client.sheets.spreadsheets.get({
       spreadsheetId: sheetId,
       fields: 'sheets.properties.title'
@@ -1236,8 +1240,7 @@ function applyConfigFromRows(rows) {
       } else if (key === 'gtc') {
         newGtc = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
       } else if (key === 'amenities') {
-        var a = parseFloat(val);
-        if (!isNaN(a)) newAmenities = a;
+        newAmenities = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
       }
     }
 
@@ -1253,7 +1256,7 @@ function applyConfigFromRows(rows) {
     if (newLimpieza && newLimpieza.length > 0) cleaningOptions = newLimpieza;
     if (newIrpf && newIrpf.length > 0) irpfOptions = newIrpf;
     if (newGtc && newGtc.length > 0) gtcOptions = newGtc;
-    if (newAmenities !== null) AMENITIES = newAmenities;
+    if (newAmenities !== null && newAmenities.length > 0) amenitiesOptions = newAmenities;
 
     console.log('[Config] Applied global options: ' + Object.keys(platformOptions).length + ' plataformas');
   }
@@ -1274,11 +1277,12 @@ function applyConfigFromRows(rows) {
       if (!s) continue;
 
       var comPlat = rows[i][1], comGTC = rows[i][2], limp = rows[i][3];
-      var irpf = rows[i][4], pasarela = rows[i][5], pasRate = rows[i][6];
+      var amen = rows[i][4], irpf = rows[i][5], pasarela = rows[i][6], pasRate = rows[i][7];
 
       if (comPlat !== undefined && comPlat !== '') s.comPlataforma = parseFloat(comPlat);
       if (comGTC !== undefined && comGTC !== '') s.comGTC = parseFloat(comGTC);
       if (limp !== undefined && limp !== '') s.limpieza = parseFloat(limp);
+      if (amen !== undefined && amen !== '') s.amenities = parseFloat(amen);
       if (irpf !== undefined && irpf !== '') s.irpf = parseFloat(irpf);
       if (pasarela !== undefined && pasarela !== '') s.pasarela = String(pasarela).trim() === 'true';
       if (pasRate !== undefined && pasRate !== '') s.pasarelaRate = parseFloat(pasRate);
@@ -1392,7 +1396,7 @@ function renderSheetHistory() {
 // ══════════════════════════════════════════════════
 
 const IVA_RESERVA = 0.10, IVA_SUBTOTAL = 0.21;
-let AMENITIES = 7;
+let amenitiesOptions = [7];
 
 let platformOptions = {
   "Airbnb.com": [15.5], "Booking.com": [15, 17, 22], "Caddie Golf": [10],
@@ -1495,6 +1499,8 @@ function rebuildSelectCache() {
   _selectCache.gtc = gtcOptions.map(o => `<option value="${o/100}">${o}%</option>`).join('');
   // Cleaning
   _selectCache.clean = cleaningOptions.map(o => `<option value="${o}">${o} €</option>`).join('');
+  // Amenities
+  _selectCache.amenities = amenitiesOptions.map(o => `<option value="${o}">${o} €</option>`).join('');
   // IRPF
   _selectCache.irpf = irpfOptions.map(o => `<option value="${o/100}">${o}%</option>`).join('');
   // Pasarela
@@ -1573,9 +1579,10 @@ function calcLiquidacion(r, s) {
     comPas = total * pr;
   }
   const limp = s.limpieza || cleaningOptions[0];
-  const sub = baseSinIVA - comPlat - comGTC - comPas - limp - AMENITIES;
+  const amen = s.amenities !== undefined ? s.amenities : amenitiesOptions[0];
+  const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
   const iva = sub * IVA_SUBTOTAL, irpfRate = s.irpf || irpfOptions[0]/100, ret = sub * irpfRate;
-  return { total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, sub, iva, irpfRate, ret, totalLiq: sub + iva - ret };
+  return { total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, iva, irpfRate, ret, totalLiq: sub + iva - ret };
 }
 
 // â”€â”€â”€ FILE â”€â”€â”€
@@ -1653,7 +1660,7 @@ function processRows(json) {
     if (!platformOptions[r.plataforma]) platformOptions[r.plataforma] = [10];
     settings[r.idx] = {
       comPlataforma: getDefaultForPlatform(r.plataforma), comGTC: gtcOptions[0]/100,
-      limpieza: cleaningOptions[0], irpf: irpfOptions[0]/100, pasarela: false,
+      limpieza: cleaningOptions[0], amenities: amenitiesOptions[0], irpf: irpfOptions[0]/100, pasarela: false,
       pasarelaRate: isB ? pasarelaBookingOptions[0]/100 : pasarelaStripeOptions[0]/100,
     };
   });
@@ -1951,6 +1958,7 @@ function _buildRowHtml(r) {
   const pO = selectWithValue(_selectCache['plat_' + r.plataforma] || '<option>10%</option>', s.comPlataforma);
   const gO = selectWithValue(_selectCache.gtc, s.comGTC);
   const cO = selectCleanWithValue(_selectCache.clean, s.limpieza);
+  const aO = selectCleanWithValue(_selectCache.amenities, s.amenities);
   const iO = selectWithValue(_selectCache.irpf, s.irpf);
   const psO = selectWithValue(isB ? _selectCache.pasBooking : _selectCache.pasStripe, s.pasarelaRate);
   return `<tr ${isV ? 'class="validated"' : ''} id="row-${r.idx}">
@@ -1976,7 +1984,8 @@ function _buildRowHtml(r) {
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.comGTC)} &#8364;</span></div></td>
     <td class="col-limpieza" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="changeSetting(${r.idx},'limpieza',parseFloat(this.value))" ${dis}>${cO}</select>
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.limp)} &#8364;</span></div></td>
-    <td class="col-amenities" style="text-align:center;vertical-align:middle;font-size:12px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(AMENITIES)} &#8364;</td>
+    <td class="col-amenities" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="changeSetting(${r.idx},'amenities',parseFloat(this.value))" ${dis}>${aO}</select>
+      <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.amen)} &#8364;</span></div></td>
     <td class="col-pasarela" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;">
       <div class="toggle" onclick="if(!${isV}){togglePasarela(${r.idx})}"><div class="toggle-track ${s.pasarela ? 'on' : ''}"><div class="toggle-thumb"></div></div></div>
       ${s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${r.idx},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label">${isB ? 'Booking' : 'Stripe'}</span>`}
@@ -2252,7 +2261,7 @@ function _computeStatsFromScratch(fil) {
     s.fR += r.totalReserva; s.fL += c.totalLiq;
     if (isV) { s.fV++; s.filValidatedCount++; } else s.filPendingCount++;
     s.tNoches += r._nights; s.tTotal += r.totalReserva; s.tBase += c.baseSinIVA;
-    s.tComPlat += c.comPlat; s.tComGTC += c.comGTC; s.tLimp += c.limp; s.tAmen += AMENITIES; s.tComPas += c.comPas;
+    s.tComPlat += c.comPlat; s.tComGTC += c.comGTC; s.tLimp += c.limp; s.tAmen += c.amen; s.tComPas += c.comPas;
     s.tSub += c.sub; s.tRet += c.ret; s.tIva21 += c.iva; s.tLiq += c.totalLiq;
   }
   _cachedFilteredStats = s;
@@ -2291,6 +2300,7 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
     st.tComPlat += (newC.comPlat - oldC.comPlat);
     st.tComGTC += (newC.comGTC - oldC.comGTC);
     st.tLimp += (newC.limp - oldC.limp);
+    st.tAmen += (newC.amen - oldC.amen);
     st.tComPas += (newC.comPas - oldC.comPas);
     st.tSub += (newC.sub - oldC.sub);
     st.tRet += (newC.ret - oldC.ret);
@@ -2392,6 +2402,7 @@ function viewDetail(idx) {
   const comPlatLabel = `Comisi&#243;n ${r.plataforma} ` + _sel(platOpts, c.comRate, r.idx, 'comPlataforma', true);
   const comGTCLabel = `Comisi&#243;n GTC ` + _sel(gtcOptions, c.gtcRate, r.idx, 'comGTC', true);
   const limpLabel = `Limpieza ` + _sel(cleaningOptions, c.limp, r.idx, 'limpieza', false);
+  const amenLabel = `Amenities ` + _sel(amenitiesOptions, c.amen, r.idx, 'amenities', false);
 
   const rows=[
     {l:"Total Reserva (IVA incluido)",v:c.total,bold:true},{l:`IVA Reserva (${(IVA_RESERVA*100).toFixed(0)}%)`,v:-(c.total-c.baseSinIVA),neg:true},
@@ -2412,7 +2423,7 @@ function viewDetail(idx) {
     if(!s.pasarela) rows.push({l:`Pasarela ${pasL} ${toggleHtml}`,v:0,custom:true});
     else rows.push({l:`${toggleHtml}`,v:0,custom:true});
   }
-  rows.push({l:limpLabel,v:-c.limp,neg:true},{l:"Amenities",v:-AMENITIES,neg:true},{div:true},
+  rows.push({l:limpLabel,v:-c.limp,neg:true},{l:amenLabel,v:-c.amen,neg:true},{div:true},
     {l:"Subtotal",v:c.sub,bold:true},
     {l:"__IRPF__",v:-c.ret,neg:true,irpf:true},
     {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
@@ -2703,7 +2714,7 @@ function viewConsolDetail(alojName) {
   const sumComGTC = calcs.reduce((s, x) => s + x.c.comGTC, 0);
   const sumComPas = calcs.reduce((s, x) => s + x.c.comPas, 0);
   const sumLimp = calcs.reduce((s, x) => s + x.c.limp, 0);
-  const sumAmen = calcs.reduce((s, x) => s + AMENITIES, 0);
+  const sumAmen = calcs.reduce((s, x) => s + x.c.amen, 0);
   const sumSub = calcs.reduce((s, x) => s + x.c.sub, 0);
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumRet = calcs.reduce((s, x) => s + x.c.ret, 0);
@@ -2727,10 +2738,11 @@ function viewConsolDetail(alojName) {
     const pO = selectWithValue(_selectCache['plat_'+r.plataforma]||'<option>10%</option>', s.comPlataforma);
     const gO = selectWithValue(_selectCache.gtc, s.comGTC);
     const cO = selectCleanWithValue(_selectCache.clean, s.limpieza);
+    const aO = selectCleanWithValue(_selectCache.amenities, s.amenities);
     const iO = selectWithValue(_selectCache.irpf, s.irpf);
     const psO = selectWithValue(isB?_selectCache.pasBooking:_selectCache.pasStripe, s.pasarelaRate);
 
-    cNoches+=nights; cTotal+=r.totalReserva; cBase+=c.baseSinIVA; cComPlat+=c.comPlat; cComGTC+=c.comGTC; cLimp+=c.limp; cAmen+=AMENITIES; cComPas+=c.comPas; cSub+=c.sub; cRet+=c.ret; cIva21+=c.iva; cLiq+=c.totalLiq;
+    cNoches+=nights; cTotal+=r.totalReserva; cBase+=c.baseSinIVA; cComPlat+=c.comPlat; cComGTC+=c.comGTC; cLimp+=c.limp; cAmen+=c.amen; cComPas+=c.comPas; cSub+=c.sub; cRet+=c.ret; cIva21+=c.iva; cLiq+=c.totalLiq;
 
     return `<tr ${isV?'class="validated"':''} id="crow-${r.idx}">
       <td class="cc-estado">${isV?'<span class="badge badge-green">&#10003; Validada</span>':'<span class="badge badge-amber">Pendiente</span>'}</td>
@@ -2754,7 +2766,8 @@ function viewConsolDetail(alojName) {
         <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.comGTC)} &#8364;</span></div></td>
       <td class="cc-limpieza" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="event.stopPropagation();changeSettingConsol(${r.idx},'limpieza',parseFloat(this.value))" ${dis}>${cO}</select>
         <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.limp)} &#8364;</span></div></td>
-      <td class="cc-amenities" style="text-align:center;vertical-align:middle;font-size:12px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(AMENITIES)} &#8364;</td>
+      <td class="cc-amenities" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="event.stopPropagation();changeSettingConsol(${r.idx},'amenities',parseFloat(this.value))" ${dis}>${aO}</select>
+        <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.amen)} &#8364;</span></div></td>
       <td class="cc-pasarela" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;">
         <div class="toggle" onclick="event.stopPropagation();if(!${isV}){togglePasarelaConsol(${r.idx})}"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>
         ${s.pasarela?`<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="event.stopPropagation();changeSettingConsol(${r.idx},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>`:`<span class="toggle-label">${isB?'Booking':'Stripe'}</span>`}
@@ -2859,7 +2872,7 @@ function viewConsolDetail(alojName) {
         ${buildGTCRows(calcs)}
         ${buildPasarelaRows(calcs)}
         ${buildLimpRows(calcs)}
-        <div class="consol-row"><span>Amenities (${a.reservas.length} &#215; ${AMENITIES} &#8364;)</span><span class="neg">- ${fmt(sumAmen)} &#8364;</span></div>
+        <div class="consol-row"><span>Amenities</span><span class="neg">- ${fmt(sumAmen)} &#8364;</span></div>
         <div class="consol-divider"></div>
         <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(sumSub)} &#8364;</span></div>
         ${buildIrpfRows(calcs)}
@@ -2961,7 +2974,7 @@ function buildPrintCards() {
     ];
     if(s.pasarela) rows.push({l:`Comisión pasarela ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
     rows.push({l:`Limpieza (${fmt(c.limp)} €)`,v:-c.limp,neg:true},
-      {l:"Amenities",v:-AMENITIES,neg:true},{div:true},
+      {l:`Amenities (${fmt(c.amen)} €)`,v:-c.amen,neg:true},{div:true},
       {l:"Subtotal",v:c.sub,bold:true},
       {l:`Retención IRPF (${(c.irpfRate*100).toFixed(0)}%)`,v:-c.ret,neg:true},
       {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
@@ -3137,15 +3150,14 @@ function renderConfigModal() {
     '<hr class="section-divider">' +
     buildOS("Retención IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR") +
     '<hr class="section-divider">' +
-    buildOS("Amenities","Coste fijo por reserva en €",[AMENITIES]," €","add-am","addAM","delAM");
+    buildOS("Amenities","Coste fijo por reserva en €",amenitiesOptions," €","add-am","addAM","delAM");
 }
 function addPS(){aL(pasarelaStripeOptions,"add-ps",100);} function delPS(i){dL(pasarelaStripeOptions,i);}
 function addPB(){aL(pasarelaBookingOptions,"add-pb",100);} function delPB(i){dL(pasarelaBookingOptions,i);}
 function addCL(){aL(cleaningOptions,"add-cl",99999,false);} function delCL(i){dL(cleaningOptions,i);}
 function addIR(){aL(irpfOptions,"add-ir",100);} function delIR(i){dL(irpfOptions,i);}
 function addGTC(){aL(gtcOptions,"add-gtc",100);} function delGTC(i){dL(gtcOptions,i);}
-function addAM(){const inp=document.getElementById("add-am");const v=parseFloat(inp.value);if(isNaN(v)||v<0){alert("Valor válido.");return;}AMENITIES=v;inp.value="";renderConfigModal();}
-function delAM(){}
+function addAM(){aL(amenitiesOptions,"add-am",99999,false);} function delAM(i){dL(amenitiesOptions,i);}
 function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);const v=parseFloat(inp.value);
   if(isP!==false){if(isNaN(v)||v<0||v>max){alert("Valor válido.");return;}}else{if(isNaN(v)||v<0){alert("Valor válido.");return;}}
   if(list.some(x=>Math.abs(x-v)<0.001)){alert("Ya existe.");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}

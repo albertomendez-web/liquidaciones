@@ -1127,21 +1127,104 @@ const CONFIG_TAB_NAME = 'Configuracion';
 const PROPIETARIOS_TAB_NAME = 'Propietarios';
 let _propietariosMap = {}; // alojamiento code (normalized) -> propietario name
 let _propietariosKeys = []; // sorted by length desc for best match
+let _propietariosRowMap = {}; // alojamiento code (normalized) -> sheet row number (1-based)
+let _propietariosSheetId = null;
 
 function getPropietario(alojamiento) {
   if (!alojamiento) return 'Falta propietario';
   var key = alojamiento.trim().toLowerCase();
-  // Exact match first
   if (_propietariosMap[key]) return _propietariosMap[key];
-  // Substring match: check if alojamiento contains any propietario key
   for (var i = 0; i < _propietariosKeys.length; i++) {
     if (key.indexOf(_propietariosKeys[i]) !== -1) return _propietariosMap[_propietariosKeys[i]];
   }
   return 'Falta propietario';
 }
 
+function _getPropietarioKey(alojamiento) {
+  if (!alojamiento) return null;
+  var key = alojamiento.trim().toLowerCase();
+  if (_propietariosMap[key]) return key;
+  for (var i = 0; i < _propietariosKeys.length; i++) {
+    if (key.indexOf(_propietariosKeys[i]) !== -1) return _propietariosKeys[i];
+  }
+  return null;
+}
+
+async function savePropietario(alojamiento, newName) {
+  var matchedKey = _getPropietarioKey(alojamiento);
+  if (!_propietariosSheetId || !_googleToken) return false;
+  try {
+    if (matchedKey && _propietariosRowMap[matchedKey]) {
+      // Update existing row
+      var row = _propietariosRowMap[matchedKey];
+      await gapi.client.sheets.spreadsheets.values.update({
+        spreadsheetId: _propietariosSheetId,
+        range: PROPIETARIOS_TAB_NAME + '!B' + row,
+        valueInputOption: 'RAW'
+      }, { values: [[newName]] });
+      _propietariosMap[matchedKey] = newName;
+    } else {
+      // New entry: find alojamiento code from the full name
+      var code = alojamiento.trim();
+      var codeKey = code.toLowerCase();
+      // Append new row
+      await gapi.client.sheets.spreadsheets.values.append({
+        spreadsheetId: _propietariosSheetId,
+        range: PROPIETARIOS_TAB_NAME + '!A:B',
+        valueInputOption: 'RAW',
+        insertDataOption: 'INSERT_ROWS'
+      }, { values: [[code, newName]] });
+      _propietariosMap[codeKey] = newName;
+      // Estimate new row number
+      var maxRow = 1;
+      for (var k in _propietariosRowMap) { if (_propietariosRowMap[k] > maxRow) maxRow = _propietariosRowMap[k]; }
+      _propietariosRowMap[codeKey] = maxRow + 1;
+      _propietariosKeys = Object.keys(_propietariosMap).sort(function(a, b) { return b.length - a.length; });
+    }
+    return true;
+  } catch(e) { console.error('Error saving propietario:', e); return false; }
+}
+
+function editPropietarioInline(alojamiento, el) {
+  var current = getPropietario(alojamiento);
+  if (current === 'Falta propietario') current = '';
+  var inp = document.createElement('input');
+  inp.type = 'text'; inp.value = current;
+  inp.style.cssText = 'font-size:inherit;font-weight:700;border:2px solid #3b82f6;border-radius:6px;padding:4px 8px;width:100%;max-width:350px;outline:none;';
+  var container = el.parentNode;
+  var original = el;
+  container.replaceChild(inp, original);
+  inp.focus(); inp.select();
+
+  var saving = false;
+  async function doSave() {
+    if (saving) return; saving = true;
+    var val = inp.value.trim();
+    if (!val) val = current; // revert if empty
+    if (val !== current) {
+      inp.disabled = true; inp.style.opacity = '0.5';
+      var ok = await savePropietario(alojamiento, val);
+      if (!ok) { alert('Error al guardar. ¿Estás conectado a Google Sheets?'); }
+    }
+    // Rebuild element
+    var span = document.createElement('span');
+    span.className = original.className;
+    var prop = getPropietario(alojamiento);
+    span.textContent = prop;
+    span.title = 'Clic para editar propietario';
+    span.style.cursor = 'pointer';
+    if (prop === 'Falta propietario') span.style.color = '#e53935';
+    span.onclick = function() { editPropietarioInline(alojamiento, span); };
+    container.replaceChild(span, inp);
+  }
+  inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); doSave(); } if (e.key === 'Escape') { saving = true; container.replaceChild(original, inp); } });
+  inp.addEventListener('blur', function() { setTimeout(doSave, 100); });
+}
+
 async function loadPropietariosTab(sheetId) {
   _propietariosMap = {};
+  _propietariosRowMap = {};
+  _propietariosSheetId = sheetId;
   try {
     var meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: sheetId, fields: 'sheets.properties' });
     var sheets = meta.result.sheets || [];
@@ -1153,16 +1236,16 @@ async function loadPropietariosTab(sheetId) {
     });
     var rows = resp.result.values;
     if (!rows || rows.length < 2) return;
-    // Skip header row, map col A (alojamiento) -> col B (propietario)
     for (var i = 1; i < rows.length; i++) {
       var aloj = (rows[i][0] || '').trim();
       var prop = (rows[i][1] || '').trim();
-      if (aloj && prop) {
-        _propietariosMap[aloj.toLowerCase()] = prop;
+      if (aloj) {
+        var k = aloj.toLowerCase();
+        _propietariosMap[k] = prop || '';
+        _propietariosRowMap[k] = i + 1; // 1-based sheet row
       }
     }
     console.log('Propietarios loaded:', Object.keys(_propietariosMap).length);
-    // Sort keys by length desc so longer (more specific) codes match first
     _propietariosKeys = Object.keys(_propietariosMap).sort(function(a, b) { return b.length - a.length; });
   } catch(e) { console.warn('Error loading Propietarios tab:', e); }
 }
@@ -1879,7 +1962,7 @@ const COLUMNS = [
   { key:"iva21",label:"IVA 21%",sortable:false },
   { key:"totalLiquidar",label:"A<br>Liquidar",sortable:true,right:true,locked:true },
   { key:"observacion",label:"Observación",sortable:true },
-  { key:"acciones",label:"",sortable:false,locked:true },
+  { key:"acciones",label:"",sortable:true,locked:true },
 ];
 // Column visibility state
 let colVisibility = {};
@@ -2029,6 +2112,7 @@ function getSortValue(r, f) {
     case "subtotal": return c.sub;
     case "totalLiquidar": return c.totalLiq;
     case "observacion": return (r.observacion||"").toLowerCase();
+    case "acciones": return validated.has(r.idx)?1:0;
     default: return r.idx;
   }
 }
@@ -2647,8 +2731,8 @@ function viewDetail(idx) {
     {l:comGTCLabel,v:-c.comGTC,neg:true}
   );
   if(s.pasarela){
-    const pasLabel = isV ? `Comisi&#243;n pasarela ${pasL} (${(pasR*100).toFixed(1)}%)`
-      : `Comisi&#243;n pasarela ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true);
+    const pasLabel = isV ? `Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`
+      : `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true);
     rows.push({l:pasLabel,v:-c.comPas,neg:true});
   }
   // Pasarela toggle row (only if not validated)
@@ -2672,9 +2756,9 @@ function viewDetail(idx) {
     const label=row.irpf?irpfSelHtml:row.l;
     return`<div class="liq-row${cl}"><span>${label}</span><span class="${vc}">${d} &#8364;</span></div>`;}).join("");
     const _prop = getPropietario(r.alojamiento);
-    const _propStyle = _prop === 'Falta propietario' ? ' style="color:#e53935"' : '';
+    const _propStyle = _prop === 'Falta propietario' ? ' style="color:#e53935;cursor:pointer" ' : ' style="cursor:pointer" ';
     document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
-    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidación':'Preliquidación'}</div><div class="name"${_propStyle}>${_prop}</div></div>
+    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidación':'Preliquidación'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)">${_prop}</div></div>
     <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; VALIDADA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div></div>
     <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
     <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
@@ -2880,7 +2964,7 @@ function buildPasarelaRows(calcs) {
     html += `<div class="consol-row sub"><span>${g.label} (${(g.rate*100).toFixed(1)}%) &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
     total += g.sum;
   });
-  return `<div class="consol-row"><span>Comisiones pasarela</span><span class="neg">- ${fmt(total)} &#8364;</span></div>` + html;
+  return `<div class="consol-row"><span>Pasarela de pago</span><span class="neg">- ${fmt(total)} &#8364;</span></div>` + html;
 }
 
 function buildIrpfRows(calcs) {
@@ -3072,7 +3156,7 @@ function viewConsolDetail(alojName) {
           <div>${allVal?'<span class="badge-liq badge-liq-green">&#10003; LISTA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div>
         </div>
         <div class="consol-meta">
-          <div><div class="consol-meta-label">Propietario</div><div class="consol-meta-value"${getPropietario(a.name)==='Falta propietario'?' style="color:#e53935"':''}>${getPropietario(a.name)}</div></div>
+          <div><div class="consol-meta-label">Propietario</div><div class="consol-meta-value" style="cursor:pointer;${getPropietario(a.name)==='Falta propietario'?'color:#e53935':''}" title="Clic para editar propietario" onclick="editPropietarioInline('${a.name.replace(/'/g,"\\'")}', this)">${getPropietario(a.name)}</div></div>
           <div><div class="consol-meta-label">Edificio</div><div class="consol-meta-value">${a.edificio}</div></div>
           <div><div class="consol-meta-label">Nº Reservas</div><div class="consol-meta-value">${filteredReservas.length}</div></div>
           <div><div class="consol-meta-label">Validadas</div><div class="consol-meta-value">${filteredReservas.filter(r=>validated.has(r.idx)).length} / ${filteredReservas.length}</div></div>
@@ -3227,7 +3311,7 @@ function buildPrintCards() {
       {l:`Canal de Venta ${r.plataforma} (${(c.comRate*100).toFixed(1)}%)`,v:-c.comPlat,neg:true},
       {l:`Gestión GTC (${(c.gtcRate*100).toFixed(0)}%)`,v:-c.comGTC,neg:true},
     ];
-    if(s.pasarela) rows.push({l:`Comisión pasarela ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
+    if(s.pasarela) rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
     rows.push({l:`Limpieza (${fmt(c.limp)} \u20AC)`,v:-c.limp,neg:true},
       {l:`Amenities (${fmt(c.amen)} \u20AC)`,v:-c.amen,neg:true},{div:true},
       {l:"Subtotal",v:c.sub,bold:true},

@@ -353,6 +353,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .combo-tag { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 4px; background: #e3f2fd; color: #1565c0; font-size: 11px; font-weight: 600; white-space: nowrap; max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
 /* === CONCEPTOS ESPECIALES === */
 .ce-btn { display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;border:1.5px dashed #d0d5dd;background:transparent;color:#9ca3af;font-size:15px;cursor:pointer;transition:all .15s;padding:0; }
+.ce-btn * { pointer-events:none; }
 .ce-btn:hover { border-color:#f59e0b;background:#fffbeb;color:#f59e0b;transform:scale(1.08); }
 .ce-btn.has { width:auto;padding:0 8px;height:24px;gap:4px;border:1.5px solid #f59e0b;background:#fffbeb;color:#d97706;font-size:11px;font-weight:700;border-style:solid;white-space:nowrap; }
 .ce-btn.has .ce-dot { width:5px;height:5px;border-radius:50%;background:#f59e0b;animation:cePulse 2s infinite; }
@@ -2103,19 +2104,16 @@ function toggleCEPanel(idx) {
     if (prev) prev.style.display = 'none';
   }
   if (panel.style.display === 'none') {
+    var wrap = panel.closest('.table-wrap');
+    var st = wrap ? wrap.scrollTop : window.scrollY;
     panel.style.display = '';
+    if (wrap) wrap.scrollTop = st; else window.scrollTo(0, st);
     _openCEPanel = idx;
-    // If no items yet, auto-add one empty row
     var s = settings[idx];
     if (!s.conceptosEspeciales || s.conceptosEspeciales.length === 0) {
       s.conceptosEspeciales = [{label:'', amount:0}];
       _refreshCEPanel(idx);
     }
-    // Stabilize view after panel opens
-    requestAnimationFrame(function() {
-      var row = document.getElementById('row-' + idx);
-      if (row) row.scrollIntoView({block:'nearest',behavior:'instant'});
-    });
   } else {
     panel.style.display = 'none';
     _openCEPanel = null;

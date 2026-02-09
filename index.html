@@ -666,15 +666,53 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.7.1';
-const APP_BUILD   = '2026-02-09T23:30:00';
-const APP_CHANGES = 'Propietarios desde Google Sheets; mejoras CE y búsqueda';
+const APP_VERSION = '1.7.2';
+const APP_BUILD   = '2026-02-10T01:00:00';
+const APP_CHANGES = 'Deducciones mensuales (mantenimiento + extras); fix limpieza 0€; filtro fecha por defecto';
 
-// Mostrar versión en sidebar
+// Mostrar versión en sidebar + toast si nueva versión
 window.addEventListener('DOMContentLoaded', () => {
   const vl = document.getElementById('version-label');
   if (vl) vl.textContent = APP_VERSION;
+  try {
+    const lastSeen = localStorage.getItem('app-last-version');
+    if (lastSeen && lastSeen !== APP_VERSION) {
+      showVersionToast(lastSeen);
+    }
+    localStorage.setItem('app-last-version', APP_VERSION);
+  } catch(e) {}
 });
+
+function showVersionToast(prevVersion) {
+  const toast = document.createElement('div');
+  toast.id = 'version-toast';
+  toast.innerHTML = `
+    <div style="display:flex;align-items:flex-start;gap:12px;">
+      <span style="font-size:22px;line-height:1;">🚀</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:4px;">Actualización v${APP_VERSION}</div>
+        <div style="font-size:12px;color:#cbd5e1;line-height:1.4;">${APP_CHANGES}</div>
+        <div style="font-size:11px;color:#64748b;margin-top:4px;">Anterior: v${prevVersion}</div>
+      </div>
+      <button onclick="closeVersionToast()" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;padding:0;line-height:1;">&times;</button>
+    </div>`;
+  toast.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;background:linear-gradient(135deg,#0f172a,#1e293b);color:#f1f5f9;padding:16px 20px;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.3),0 0 0 1px rgba(255,255,255,0.08);max-width:360px;min-width:280px;opacity:0;transform:translateY(20px);transition:all 0.4s cubic-bezier(0.16,1,0.3,1);font-family:inherit;';
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+    });
+  });
+  setTimeout(() => closeVersionToast(), 8000);
+}
+function closeVersionToast() {
+  const t = document.getElementById('version-toast');
+  if (!t) return;
+  t.style.opacity = '0';
+  t.style.transform = 'translateY(20px)';
+  setTimeout(() => t.remove(), 400);
+}
 function showVersionInfo() {
   const buildDate = new Date(APP_BUILD);
   const buildStr = buildDate.toLocaleDateString('es-ES', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });

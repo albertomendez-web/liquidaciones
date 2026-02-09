@@ -649,7 +649,7 @@ window.addEventListener('load', () => {
 function googleSignIn() {
   if (!_tokenClient) { alert('Google API no inicializada. Recarga la página.'); return; }
   if (_googleToken) { updateGoogleStatus(true); return; }
-  _tokenClient.requestAccessToken({ prompt: 'consent' });
+  _tokenClient.requestAccessToken({ prompt: '' });
 }
 function onTokenResponse(resp) {
   if (resp.error) { console.error('Auth error:', resp); return; }

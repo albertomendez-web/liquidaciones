@@ -712,6 +712,17 @@ function gisLoaded() {
 
 function maybeEnableGoogleUI() {
   if (_gapiInited && _gisInited) {
+    // Restore token from sessionStorage if available
+    if (!_googleToken) {
+      try {
+        var saved = sessionStorage.getItem('gtoken');
+        if (saved) {
+          _googleToken = JSON.parse(saved);
+          gapi.client.setToken(_googleToken);
+          updateGoogleStatus(true);
+        }
+      } catch(e) {}
+    }
     renderSheetHistory();
     if (GOOGLE_CLIENT_ID === 'TU_CLIENT_ID.apps.googleusercontent.com') {
       const el = document.getElementById('gsheet-section');
@@ -736,10 +747,14 @@ function googleSignIn() {
 }
 function onTokenResponse(resp) {
   if (resp.error) { console.error('Auth error:', resp); return; }
-  _googleToken = resp; updateGoogleStatus(true);
+  _googleToken = resp;
+  gapi.client.setToken(resp);
+  try { sessionStorage.setItem('gtoken', JSON.stringify(resp)); } catch(e) {}
+  updateGoogleStatus(true);
 }
 function googleSignOut() {
   if (_googleToken) { google.accounts.oauth2.revoke(_googleToken.access_token, () => {}); _googleToken = null; }
+  try { sessionStorage.removeItem('gtoken'); } catch(e) {}
   updateGoogleStatus(false);
 }
 let _autoLoadAttempted = false;

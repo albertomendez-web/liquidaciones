@@ -627,7 +627,7 @@ tr.ce-highlighted { background:#fffdf5; }
       <button class="modal-close" onclick="closeConfigModal()">&#10005;</button>
     </div>
     <div class="modal-tabs">
-      <button class="modal-tab active" onclick="switchTab('tab-plat',this)">Com. Plataforma</button>
+      <button class="modal-tab active" onclick="switchTab('tab-plat',this)">Canal de Venta</button>
       <button class="modal-tab" onclick="switchTab('tab-pasarela',this)">Pasarela</button>
       <button class="modal-tab" onclick="switchTab('tab-otros',this)">GTC / Limpieza / IRPF</button>
     </div>
@@ -1869,8 +1869,8 @@ const COLUMNS = [
   { key:"totalReserva",label:"Total Reserva<br>(IVA inc.)",sortable:true,right:true },
   { key:"ce",label:"C.E.<br>(IVA inc.)",sortable:false },
   { key:"baseSinIVA",label:"Base<br>sin IVA",sortable:true,right:true },
-  { key:"comPlataforma",label:"Com.<br>Plataforma",sortable:false },
-  { key:"comGTC",label:"Com.<br>GTC",sortable:false },
+  { key:"comPlataforma",label:"Canal de<br>Venta",sortable:false },
+  { key:"comGTC",label:"Gestión<br>GTC",sortable:false },
   { key:"limpieza",label:"Limpieza",sortable:false },
   { key:"amenities",label:"Amenities",sortable:false },
   { key:"pasarela",label:"Pasarela",sortable:false },
@@ -2634,8 +2634,8 @@ function viewDetail(idx) {
   const platOpts = platformOptions[r.plataforma]||[10];
   const pasOpts = isB ? pasarelaBookingOptions : pasarelaStripeOptions;
 
-  const comPlatLabel = `Comisi&#243;n ${r.plataforma} ` + _sel(platOpts, c.comRate, r.idx, 'comPlataforma', true);
-  const comGTCLabel = `Comisi&#243;n GTC ` + _sel(gtcOptions, c.gtcRate, r.idx, 'comGTC', true);
+  const comPlatLabel = `Canal de Venta ${r.plataforma} ` + _sel(platOpts, c.comRate, r.idx, 'comPlataforma', true);
+  const comGTCLabel = `Gestión GTC ` + _sel(gtcOptions, c.gtcRate, r.idx, 'comGTC', true);
   const limpLabel = `Limpieza ` + _sel(cleaningOptions, c.limp, r.idx, 'limpieza', false);
   const amenLabel = `Amenities ` + _sel(amenitiesOptions, c.amen, r.idx, 'amenities', false);
 
@@ -2824,7 +2824,7 @@ function buildComPlatRows(calcs) {
   const entries = Object.values(groups);
   if (entries.length === 1) {
     const g = entries[0];
-    return `<div class="consol-row"><span>Comisi&#243;n ${g.plat} (${(g.rate*100).toFixed(1)}%) &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
+    return `<div class="consol-row"><span>Canal de Venta ${g.plat} (${(g.rate*100).toFixed(1)}%) &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
   }
   let html = '';
   let total = 0;
@@ -2832,7 +2832,7 @@ function buildComPlatRows(calcs) {
     html += `<div class="consol-row sub"><span>${g.plat} (${(g.rate*100).toFixed(1)}%) &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
     total += g.sum;
   });
-  return `<div class="consol-row"><span>Comisiones plataforma</span><span class="neg">- ${fmt(total)} &#8364;</span></div>` + html;
+  return `<div class="consol-row"><span>Canal de Venta</span><span class="neg">- ${fmt(total)} &#8364;</span></div>` + html;
 }
 
 function buildGTCRows(calcs) {
@@ -2847,14 +2847,14 @@ function buildGTCRows(calcs) {
   const entries = Object.values(groups);
   if (entries.length === 1) {
     const g = entries[0];
-    return `<div class="consol-row"><span>Comisiones GTC (${(g.rate*100).toFixed(0)}%) &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
+    return `<div class="consol-row"><span>Gestión GTC (${(g.rate*100).toFixed(0)}%) &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
   }
   let html = '', total = 0;
   entries.forEach(g => {
     html += `<div class="consol-row sub"><span>GTC al ${(g.rate*100).toFixed(0)}% &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
     total += g.sum;
   });
-  return `<div class="consol-row"><span>Comisiones GTC</span><span class="neg">- ${fmt(total)} &#8364;</span></div>` + html;
+  return `<div class="consol-row"><span>Gestión GTC</span><span class="neg">- ${fmt(total)} &#8364;</span></div>` + html;
 }
 
 function buildPasarelaRows(calcs) {
@@ -3224,8 +3224,8 @@ function buildPrintCards() {
       {l:"Total Reserva (IVA incluido)",v:c.total,bold:true},
       {l:`IVA Reserva (${(IVA_RESERVA*100).toFixed(0)}%)`,v:-(c.total-c.baseSinIVA),neg:true},
       {l:"Base sin IVA",v:c.baseSinIVA,bold:true},{div:true},
-      {l:`Comisión ${r.plataforma} (${(c.comRate*100).toFixed(1)}%)`,v:-c.comPlat,neg:true},
-      {l:`Comisión GTC (${(c.gtcRate*100).toFixed(0)}%)`,v:-c.comGTC,neg:true},
+      {l:`Canal de Venta ${r.plataforma} (${(c.comRate*100).toFixed(1)}%)`,v:-c.comPlat,neg:true},
+      {l:`Gestión GTC (${(c.gtcRate*100).toFixed(0)}%)`,v:-c.comGTC,neg:true},
     ];
     if(s.pasarela) rows.push({l:`Comisión pasarela ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
     rows.push({l:`Limpieza (${fmt(c.limp)} \u20AC)`,v:-c.limp,neg:true},
@@ -3399,7 +3399,7 @@ function renderConfigModal() {
     '<hr class="section-divider">' +
     buildOS("Pasarela Booking","Solo para Booking.com",pasarelaBookingOptions,"%","add-pb","addPB","delPB");
   document.getElementById("tab-otros").innerHTML =
-    buildOS("Comisión GTC","% sobre base sin IVA",gtcOptions,"%","add-gtc","addGTC","delGTC") +
+    buildOS("Gestión GTC","% sobre base sin IVA",gtcOptions,"%","add-gtc","addGTC","delGTC") +
     '<hr class="section-divider">' +
     buildOS("Limpieza","\u20AC sin IVA",cleaningOptions," \u20AC","add-cl","addCL","delCL") +
     '<hr class="section-divider">' +

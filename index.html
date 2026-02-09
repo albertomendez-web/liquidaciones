@@ -2289,30 +2289,36 @@ function _buildRowHtml(r) {
   </tr>` + _buildCEPanelRow(r.idx, s, c);
 }
 
-function _buildCEButton(idx, c) {
+function _buildCEButton(idx, c, view) {
+  const v = view || 'p';
   if (c.ceTotal > 0) {
-    return `<button class="ce-btn has" onclick="event.stopPropagation();toggleCEPanel(${idx})"><span class="ce-dot"></span>&#8211;${fmt(c.ceTotal)} &#8364;</button>`;
+    return `<button class="ce-btn has" onclick="event.stopPropagation();toggleCEPanel(${idx},'${v}')"><span class="ce-dot"></span>&#8211;${fmt(c.ceTotal)} &#8364;</button>`;
   }
-  return `<button class="ce-btn" onclick="event.stopPropagation();toggleCEPanel(${idx})" title="Conceptos especiales (IVA inc.)">+</button>`;
+  return `<button class="ce-btn" onclick="event.stopPropagation();toggleCEPanel(${idx},'${v}')" title="Conceptos especiales (IVA inc.)">+</button>`;
 }
 
-function _buildCEPanelRow(idx, s, c) {
+function _buildCEPanelRow(idx, s, c, view) {
+  const v = view || 'p';
   const ce = s.conceptosEspeciales || [];
-  const colCount = COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
+  const colCount = v === 'c'
+    ? CONSOL_COLUMNS.filter(function(col){return consolColVis[col.key]!==false;}).length
+    : COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
   const r = allReservas[idx];
   const itemsHtml = ce.map(function(item, i) {
-    return `<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(item.label||'').replace(/"/g,'&quot;')}" onchange="updateCEItem(${idx},${i},'label',this.value)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(item.amount||0)}" onchange="updateCEItem(${idx},${i},'amount',this.value)" /><button class="ce-del" onclick="removeCEItem(${idx},${i})">&#215;</button></div>`;
+    return `<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(item.label||'').replace(/"/g,'&quot;')}" onchange="updateCEItem(${idx},${i},'label',this.value,'${v}')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(item.amount||0)}" onchange="updateCEItem(${idx},${i},'amount',this.value,'${v}')" /><button class="ce-del" onclick="removeCEItem(${idx},${i},'${v}')">&#215;</button></div>`;
   }).join('');
   const _b = 'text-align:center;padding:8px 12px;border-radius:8px;min-width:110px;';
-  return `<tr class="ce-panel-row" id="ce-panel-${idx}" style="display:none"><td colspan="${colCount}" style="padding:0"><div class="ce-panel-inner"><div class="ce-panel-left"><div class="ce-panel-title">&#9888; Conceptos especiales <span class="ce-eye">&#128065; Solo uso interno</span></div>${itemsHtml}<div class="ce-add-link" onclick="addCEItem(${idx})">+ A&#241;adir concepto</div></div><div class="ce-panel-summary" style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;"><div style="${_b}background:#f3f4f6;"><div class="ce-sum-label" style="color:#374151">Total Reserva<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#1a2744">${fmt(c.totalOriginal)} &#8364;</div></div><div style="${_b}background:#fef3c7;"><div class="ce-sum-label">Descontar<br>(IVA inc.)</div><div class="ce-sum-val">&#8211; ${fmt(c.ceTotal)} &#8364;</div></div><div style="${_b}background:#fff3e0;"><div class="ce-sum-label" style="color:#e65100">Total sin C.E.<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#e65100">${fmt(c.total)} &#8364;</div></div><div style="${_b}background:#e8f5e9;"><div class="ce-sum-label" style="color:#2e7d32">Total sin C.E.<br>(sin IVA)</div><div class="ce-sum-val" style="color:#2e7d32;font-size:15px">${fmt(c.baseSinIVA)} &#8364;</div></div></div></div></td></tr>`;
+  return `<tr class="ce-panel-row" id="ce-${v}panel-${idx}" style="display:none"><td colspan="${colCount}" style="padding:0"><div class="ce-panel-inner"><div class="ce-panel-left"><div class="ce-panel-title">&#9888; Conceptos especiales <span class="ce-eye">&#128065; Solo uso interno</span></div>${itemsHtml}<div class="ce-add-link" onclick="addCEItem(${idx},'${v}')">+ A&#241;adir concepto</div></div><div class="ce-panel-summary" style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;"><div style="${_b}background:#f3f4f6;"><div class="ce-sum-label" style="color:#374151">Total Reserva<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#1a2744">${fmt(c.totalOriginal)} &#8364;</div></div><div style="${_b}background:#fef3c7;"><div class="ce-sum-label">Descontar<br>(IVA inc.)</div><div class="ce-sum-val">&#8211; ${fmt(c.ceTotal)} &#8364;</div></div><div style="${_b}background:#fff3e0;"><div class="ce-sum-label" style="color:#e65100">Total sin C.E.<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#e65100">${fmt(c.total)} &#8364;</div></div><div style="${_b}background:#e8f5e9;"><div class="ce-sum-label" style="color:#2e7d32">Total sin C.E.<br>(sin IVA)</div><div class="ce-sum-val" style="color:#2e7d32;font-size:15px">${fmt(c.baseSinIVA)} &#8364;</div></div></div></div></td></tr>`;
 }
 
 let _openCEPanel = null;
-function toggleCEPanel(idx) {
-  var panel = document.getElementById('ce-panel-' + idx);
+let _openCEView = 'p';
+function toggleCEPanel(idx, view) {
+  var v = view || 'p';
+  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
   if (!panel) return;
-  if (_openCEPanel !== null && _openCEPanel !== idx) {
-    var prev = document.getElementById('ce-panel-' + _openCEPanel);
+  if (_openCEPanel !== null && (_openCEPanel !== idx || _openCEView !== v)) {
+    var prev = document.getElementById('ce-' + _openCEView + 'panel-' + _openCEPanel);
     if (prev) prev.style.display = 'none';
   }
   if (panel.style.display === 'none') {
@@ -2321,10 +2327,11 @@ function toggleCEPanel(idx) {
     panel.style.display = '';
     if (wrap) wrap.scrollTop = st; else window.scrollTo(0, st);
     _openCEPanel = idx;
+    _openCEView = v;
     var s = settings[idx];
     if (!s.conceptosEspeciales || s.conceptosEspeciales.length === 0) {
       s.conceptosEspeciales = [{label:'', amount:0}];
-      _refreshCEPanel(idx);
+      _refreshCEPanel(idx, v);
     }
   } else {
     panel.style.display = 'none';
@@ -2332,20 +2339,20 @@ function toggleCEPanel(idx) {
   }
 }
 
-function addCEItem(idx) {
+function addCEItem(idx, view) {
   var s = settings[idx]; if (!s) return;
   if (!s.conceptosEspeciales) s.conceptosEspeciales = [];
   s.conceptosEspeciales.push({label:'', amount:0});
-  _refreshCEPanel(idx);
+  _refreshCEPanel(idx, view || 'p');
 }
 
-function removeCEItem(idx, itemIdx) {
+function removeCEItem(idx, itemIdx, view) {
   var s = settings[idx]; if (!s || !s.conceptosEspeciales) return;
   s.conceptosEspeciales.splice(itemIdx, 1);
-  _applyCEChange(idx);
+  _applyCEChange(idx, view || 'p');
 }
 
-function updateCEItem(idx, itemIdx, field, rawVal) {
+function updateCEItem(idx, itemIdx, field, rawVal, view) {
   var s = settings[idx]; if (!s || !s.conceptosEspeciales || !s.conceptosEspeciales[itemIdx]) return;
   if (field === 'label') {
     s.conceptosEspeciales[itemIdx].label = rawVal;
@@ -2354,33 +2361,42 @@ function updateCEItem(idx, itemIdx, field, rawVal) {
     var v = parseFloat(String(rawVal).replace(/\./g,'').replace(',','.'));
     if (isNaN(v)) v = 0;
     s.conceptosEspeciales[itemIdx].amount = v;
-    _applyCEChange(idx);
+    _applyCEChange(idx, view || 'p');
   }
 }
 
-function _applyCEChange(idx) {
+function _applyCEChange(idx, view) {
+  var v = view || 'p';
   var oldC = getLiq(allReservas[idx]);
   invalidateCache(idx);
   var newC = getLiq(allReservas[idx]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
   _patchSingleRow(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
-  // Re-open panel if it was open
-  var panel = document.getElementById('ce-panel-' + idx);
-  if (panel) { panel.style.display = ''; _openCEPanel = idx; }
+  // If changed from consol view, re-render consol detail
+  if (v === 'c' && currentConsolAloj) {
+    viewConsolDetail(currentConsolAloj);
+  } else {
+    // Re-open panel if it was open in preliq
+    var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+    if (panel) { panel.style.display = ''; _openCEPanel = idx; _openCEView = v; }
+  }
 }
 
-function _refreshCEPanel(idx) {
+function _refreshCEPanel(idx, view) {
+  var v = view || 'p';
   var s = settings[idx] || {}, c = getLiq(allReservas[idx]);
-  var panel = document.getElementById('ce-panel-' + idx);
+  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
   if (!panel) return;
-  var colCount = COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
+  var colCount = v === 'c'
+    ? CONSOL_COLUMNS.filter(function(col){return consolColVis[col.key]!==false;}).length
+    : COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
   var ce = s.conceptosEspeciales || [];
   var itemsHtml = ce.map(function(item, i) {
-    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCEItem('+idx+','+i+',\'label\',this.value)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value)" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+')">&#215;</button></div>';
+    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button></div>';
   }).join('');
   var _b = 'text-align:center;padding:8px 12px;border-radius:8px;min-width:110px;';
-  panel.innerHTML = '<td colspan="'+colCount+'" style="padding:0"><div class="ce-panel-inner"><div class="ce-panel-left"><div class="ce-panel-title">&#9888; Conceptos especiales <span class="ce-eye">&#128065; Solo uso interno</span></div>'+itemsHtml+'<div class="ce-add-link" onclick="addCEItem('+idx+')">+ A\u00f1adir concepto</div></div><div class="ce-panel-summary" style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;"><div style="'+_b+'background:#f3f4f6;"><div class="ce-sum-label" style="color:#374151">Total Reserva<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#1a2744">'+fmt(c.totalOriginal)+' &#8364;</div></div><div style="'+_b+'background:#fef3c7;"><div class="ce-sum-label">Descontar<br>(IVA inc.)</div><div class="ce-sum-val">&#8211; '+fmt(c.ceTotal)+' &#8364;</div></div><div style="'+_b+'background:#fff3e0;"><div class="ce-sum-label" style="color:#e65100">Total sin C.E.<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#e65100">'+fmt(c.total)+' &#8364;</div></div><div style="'+_b+'background:#e8f5e9;"><div class="ce-sum-label" style="color:#2e7d32">Total sin C.E.<br>(sin IVA)</div><div class="ce-sum-val" style="color:#2e7d32;font-size:15px">'+fmt(c.baseSinIVA)+' &#8364;</div></div></div></div></td>';
+  panel.innerHTML = '<td colspan="'+colCount+'" style="padding:0"><div class="ce-panel-inner"><div class="ce-panel-left"><div class="ce-panel-title">&#9888; Conceptos especiales <span class="ce-eye">&#128065; Solo uso interno</span></div>'+itemsHtml+'<div class="ce-add-link" onclick="addCEItem('+idx+',\''+v+'\')">+ A\u00f1adir concepto</div></div><div class="ce-panel-summary" style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;"><div style="'+_b+'background:#f3f4f6;"><div class="ce-sum-label" style="color:#374151">Total Reserva<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#1a2744">'+fmt(c.totalOriginal)+' &#8364;</div></div><div style="'+_b+'background:#fef3c7;"><div class="ce-sum-label">Descontar<br>(IVA inc.)</div><div class="ce-sum-val">&#8211; '+fmt(c.ceTotal)+' &#8364;</div></div><div style="'+_b+'background:#fff3e0;"><div class="ce-sum-label" style="color:#e65100">Total sin C.E.<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#e65100">'+fmt(c.total)+' &#8364;</div></div><div style="'+_b+'background:#e8f5e9;"><div class="ce-sum-label" style="color:#2e7d32">Total sin C.E.<br>(sin IVA)</div><div class="ce-sum-val" style="color:#2e7d32;font-size:15px">'+fmt(c.baseSinIVA)+' &#8364;</div></div></div></div></td>';
 }
 
 function _renderFull() {
@@ -3247,7 +3263,7 @@ function viewConsolDetail(alojName) {
       <td class="cc-fechaSalida" style="font-size:12px;white-space:nowrap;">${r._fmtSalida}</td>
       <td class="cc-noches" style="text-align:center">${nights}</td>
       <td class="cc-totalReserva right bold">${fmt(r.totalReserva)} &#8364;</td>
-      <td class="cc-ce" style="text-align:center;vertical-align:middle;">${c.ceTotal > 0 ? '<span style="font-size:11px;font-weight:700;color:#d97706;">&#8211;'+fmt(c.ceTotal)+' &#8364;</span>' : ''}</td>
+      <td class="cc-ce" style="text-align:center;vertical-align:middle;">${_buildCEButton(r.idx, c, 'c')}</td>
       <td class="cc-baseSinIVA right" style="color:#6b7280;font-size:12px;">${fmt(c.baseSinIVA)} &#8364;</td>
       <td class="cc-comPlataforma" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="event.stopPropagation();changeSettingConsol(${r.idx},'comPlataforma',parseFloat(this.value))" ${dis}>${pO}</select>
         <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.comPlat)} &#8364;</span></div></td>
@@ -3271,7 +3287,7 @@ function viewConsolDetail(alojName) {
         <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();goToReserva(${r.idx})">&#128065;</button>
         ${!isV?`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#10004;</button>`:`<button class="btn btn-sm btn-orange" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#8617;</button>`}
       </div></td>
-    </tr>`;
+    </tr>${_buildCEPanelRow(r.idx, settings[r.idx], c, 'c')}`;
   }).join("");
 
   // Footer totals - identical dark bar like main table

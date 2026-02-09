@@ -665,9 +665,9 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.7.0';
+const APP_VERSION = '1.7.1';
 const APP_BUILD   = '2026-02-09T23:30:00';
-const APP_CHANGES = 'Conceptos Especiales: descuentos internos por reserva con panel inline';
+const APP_CHANGES = 'Propietarios desde Google Sheets; mejoras CE y búsqueda';
 
 // Mostrar versión en sidebar
 window.addEventListener('DOMContentLoaded', () => {
@@ -961,6 +961,9 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
     // Load or create config tab for persistence
     await loadOrCreateConfigTab(sheetId);
 
+    // Load propietarios mapping
+    await loadPropietariosTab(sheetId);
+
     addToSheetHistory(sheetId, displayName, sheetTab);
     document.getElementById("file-name").textContent = '\u{1F4CA} ' + displayName;
     document.getElementById("file-indicator").style.display = "block";
@@ -1121,6 +1124,48 @@ function updateSyncIndicator(state) {
 
 // === CONFIG PERSISTENCE: "Configuracion" tab in Google Sheets ===
 const CONFIG_TAB_NAME = 'Configuracion';
+const PROPIETARIOS_TAB_NAME = 'Propietarios';
+let _propietariosMap = {}; // alojamiento code (normalized) -> propietario name
+let _propietariosKeys = []; // sorted by length desc for best match
+
+function getPropietario(alojamiento) {
+  if (!alojamiento) return 'Falta propietario';
+  var key = alojamiento.trim().toLowerCase();
+  // Exact match first
+  if (_propietariosMap[key]) return _propietariosMap[key];
+  // Substring match: check if alojamiento contains any propietario key
+  for (var i = 0; i < _propietariosKeys.length; i++) {
+    if (key.indexOf(_propietariosKeys[i]) !== -1) return _propietariosMap[_propietariosKeys[i]];
+  }
+  return 'Falta propietario';
+}
+
+async function loadPropietariosTab(sheetId) {
+  _propietariosMap = {};
+  try {
+    var meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: sheetId, fields: 'sheets.properties' });
+    var sheets = meta.result.sheets || [];
+    var hasTab = sheets.some(function(s) { return s.properties.title === PROPIETARIOS_TAB_NAME; });
+    if (!hasTab) { console.log('No Propietarios tab found'); return; }
+    var resp = await gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: sheetId, range: PROPIETARIOS_TAB_NAME + '!A1:B1000',
+      valueRenderOption: 'FORMATTED_VALUE'
+    });
+    var rows = resp.result.values;
+    if (!rows || rows.length < 2) return;
+    // Skip header row, map col A (alojamiento) -> col B (propietario)
+    for (var i = 1; i < rows.length; i++) {
+      var aloj = (rows[i][0] || '').trim();
+      var prop = (rows[i][1] || '').trim();
+      if (aloj && prop) {
+        _propietariosMap[aloj.toLowerCase()] = prop;
+      }
+    }
+    console.log('Propietarios loaded:', Object.keys(_propietariosMap).length);
+    // Sort keys by length desc so longer (more specific) codes match first
+    _propietariosKeys = Object.keys(_propietariosMap).sort(function(a, b) { return b.length - a.length; });
+  } catch(e) { console.warn('Error loading Propietarios tab:', e); }
+}
 let _configLoaded = false; // true after config has been loaded/created for current sheet
 
 // Debounce timers for saving
@@ -2626,8 +2671,10 @@ function viewDetail(idx) {
     const d=row.v<0?`- ${fmt(Math.abs(row.v))}`:fmt(row.v);
     const label=row.irpf?irpfSelHtml:row.l;
     return`<div class="liq-row${cl}"><span>${label}</span><span class="${vc}">${d} &#8364;</span></div>`;}).join("");
-  document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
-    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidación':'Preliquidación'}</div><div class="name">${r.cliente}</div></div>
+    const _prop = getPropietario(r.alojamiento);
+    const _propStyle = _prop === 'Falta propietario' ? ' style="color:#e53935"' : '';
+    document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
+    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidación':'Preliquidación'}</div><div class="name"${_propStyle}>${_prop}</div></div>
     <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; VALIDADA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div></div>
     <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
     <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
@@ -3025,6 +3072,7 @@ function viewConsolDetail(alojName) {
           <div>${allVal?'<span class="badge-liq badge-liq-green">&#10003; LISTA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div>
         </div>
         <div class="consol-meta">
+          <div><div class="consol-meta-label">Propietario</div><div class="consol-meta-value"${getPropietario(a.name)==='Falta propietario'?' style="color:#e53935"':''}>${getPropietario(a.name)}</div></div>
           <div><div class="consol-meta-label">Edificio</div><div class="consol-meta-value">${a.edificio}</div></div>
           <div><div class="consol-meta-label">Nº Reservas</div><div class="consol-meta-value">${filteredReservas.length}</div></div>
           <div><div class="consol-meta-label">Validadas</div><div class="consol-meta-value">${filteredReservas.filter(r=>validated.has(r.idx)).length} / ${filteredReservas.length}</div></div>
@@ -3196,7 +3244,7 @@ function buildPrintCards() {
 
     return `<div class="liq-container print-card" style="margin-bottom:24px;">
       <div class="liq-header">
-        <div class="header-top"><div><div class="type">Liquidación ${i+1} de ${calcs.length}</div><div class="name">${r.cliente}</div></div></div>
+        <div class="header-top"><div><div class="type">Liquidación ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div></div>
         <div class="liq-meta">
           <div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
           <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>

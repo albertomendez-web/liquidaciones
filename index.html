@@ -37,6 +37,13 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .filters-bar { display: flex; gap: 12px; align-items: center; padding: 16px 24px; margin-bottom: 16px; flex-wrap: wrap; }
 .filters-bar label { font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.06em; }
 .filters-bar .count { font-size: 12px; color: #9ca3af; margin-left: auto; }
+.search-wrap { position: relative; display: flex; align-items: center; }
+.search-icon { position: absolute; left: 8px; font-size: 13px; pointer-events: none; z-index: 1; opacity: 0.5; }
+.search-input { padding: 6px 28px 6px 28px; border-radius: 8px; border: 1.5px solid #dde1e8; font-size: 13px; font-weight: 500; background: #fafbfc; outline: none; transition: border-color 0.2s; font-family: inherit; width: 180px; }
+.search-input:focus { border-color: #4f8cff; width: 240px; }
+.search-input::placeholder { color: #9ca3af; font-weight: 400; }
+.search-clear { position: absolute; right: 6px; cursor: pointer; color: #9ca3af; font-size: 14px; line-height: 1; padding: 2px; }
+.search-clear:hover { color: #e53935; }
 .filter-sep { width: 1px; height: 24px; background: #e5e7eb; }
 .table-wrap { overflow-x: auto; overflow-y: auto; max-height: 75vh; }
 table { width: 100%; border-collapse: collapse; }
@@ -509,6 +516,12 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
         <div class="mp-dd" id="mp-dd-p"></div>
       </div>
       <div class="filter-sep"></div>
+      <div class="search-wrap">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" class="search-input" id="search-preliq" placeholder="Buscar en todo..." oninput="onSearchPreliq(this.value)">
+        <div class="search-clear" id="search-preliq-clear" onclick="clearSearchPreliq()" style="display:none;">&#10005;</div>
+      </div>
+      <div class="filter-sep"></div>
       <label>Ordenar</label>
       <div class="combo" id="combo-sort" style="min-width:160px;">
         <input class="combo-input" type="text" placeholder="Orden original" readonly onclick="openSimpleCombo('sort')" style="cursor:pointer;">
@@ -556,6 +569,12 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
         <div class="mp-dd" id="mp-dd-c"></div>
       </div>
       <div class="filter-sep"></div>
+      <div class="search-wrap">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" class="search-input" id="search-consol" placeholder="Buscar alojamiento..." oninput="onSearchConsol(this.value)">
+        <div class="search-clear" id="search-consol-clear" onclick="clearSearchConsol()" style="display:none;">&#10005;</div>
+      </div>
+      <div class="filter-sep"></div>
       <label>Ordenar por</label>
       <div class="combo" id="combo-consolsort" style="min-width:190px;">
         <input class="combo-input" type="text" placeholder="Nombre A→Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
@@ -597,9 +616,31 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 // ═══════════════════════════════════════════════════════════════
 // CONTROL DE VERSIONES
 // ═══════════════════════════════════════════════════════════════
-const APP_VERSION = '1.5.0';
+// ─── SEARCH ───
+function onSearchPreliq(val) {
+  _searchText = val.trim().toLowerCase();
+  document.getElementById('search-preliq-clear').style.display = _searchText ? 'block' : 'none';
+  invalidateFilterCache();
+  _currentPage = 1;
+  renderTable();
+}
+function clearSearchPreliq() {
+  document.getElementById('search-preliq').value = '';
+  onSearchPreliq('');
+}
+function onSearchConsol(val) {
+  _searchTextConsol = val.trim().toLowerCase();
+  document.getElementById('search-consol-clear').style.display = _searchTextConsol ? 'block' : 'none';
+  renderConsolGrid();
+}
+function clearSearchConsol() {
+  document.getElementById('search-consol').value = '';
+  onSearchConsol('');
+}
+
+const APP_VERSION = '1.5.1';
 const APP_BUILD   = '2026-02-09T18:00:00';
-const APP_CHANGES = 'Escritura de validaciones en Google Sheets (columna Validada, sincronización inmediata)';
+const APP_CHANGES = 'Buscador global + columna Localizador ampliada + escritura validaciones en Google Sheets';
 
 // Mostrar versión en sidebar
 window.addEventListener('DOMContentLoaded', () => {
@@ -1123,12 +1164,13 @@ function scheduleRender(mode) {
 }
 // Cached filter+sort result — invalidated on filter/sort/data changes, NOT on pagination
 let _cachedFiltered = null, _filterSortKey = '', _validatedVersion = 0;
+let _searchText = '', _searchTextConsol = '';
 function getFilterSortKey() {
   const pKey = [...comboState.platform.selected].sort().join(',') || 'all';
   const aKey = [...comboState.aloj.selected].sort().join(',') || 'all';
   return pKey + '|' + aKey + '|' + _mpYear + '|' + _mpMonth + '|' +
     simpleComboState.status.value + '|' + simpleComboState.sort.value + '|' +
-    simpleComboState.sortdir.value + '|' + _validatedVersion + '|' + allReservas.length;
+    simpleComboState.sortdir.value + '|' + _validatedVersion + '|' + allReservas.length + '|' + _searchText;
 }
 function invalidateFilterCache() { _cachedFiltered = null; _filterSortKey = ''; _cachedFilteredStats = null; }
 function getFilteredSorted() {
@@ -1146,6 +1188,16 @@ function getFilteredSorted() {
     } else if (_mpYear !== null && !r._dEntrada) return false;
     if (sf2 === "validated" && !validated.has(r.idx)) return false;
     if (sf2 === "pending" && validated.has(r.idx)) return false;
+    if (_searchText) {
+      const s = _searchText;
+      if (!(r._clienteLc.includes(s) || r._alojLc.includes(s) || r._platLc.includes(s) ||
+            r.id.toLowerCase().includes(s) || r.localizador.toLowerCase().includes(s) ||
+            (r.edificio||'').toLowerCase().includes(s) || (r.atendidoPor||'').toLowerCase().includes(s) ||
+            (r.origenMarketing||'').toLowerCase().includes(s) || (r.observacion||'').toLowerCase().includes(s) ||
+            (r.tipoReserva||'').toLowerCase().includes(s) ||
+            r._fmtEntrada.includes(s) || r._fmtSalida.includes(s) || r._fmtAlta.includes(s) ||
+            String(r.totalReserva).includes(s))) return false;
+    }
     return true;
   });
   fil.sort((a, b) => {
@@ -1631,7 +1683,7 @@ function _buildRowHtml(r) {
   return `<tr ${isV ? 'class="validated"' : ''} id="row-${r.idx}">
     <td class="col-estado">${isV ? '<span class="badge badge-green">&#10003; Validada</span>' : '<span class="badge badge-amber">Pendiente</span>'}</td>
     <td class="col-idReserva muted" style="font-size:12px;">${r.id}</td>
-    <td class="col-localizador muted" style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis;">${r.localizador}</td>
+    <td class="col-localizador muted" style="font-size:11px;white-space:nowrap;">${r.localizador}</td>
     <td class="col-fechaAlta muted" style="font-size:12px;">${r._fmtAlta}</td>
     <td class="col-cliente bold ellip">${r.cliente}</td>
     <td class="col-alojamiento ellip muted">${r.alojamiento}</td>
@@ -2159,6 +2211,24 @@ function renderConsolGrid() {
     return { ...a, reservas: filtered, total, valCount, allVal, sumReservas, sumLiq };
   }).filter(Boolean);
 
+  // Text search filter for consol
+  if (_searchTextConsol) {
+    const s = _searchTextConsol;
+    alojData = alojData.filter(a => {
+      // Search in alojamiento name and edificio
+      if (a.name.toLowerCase().includes(s) || (a.edificio||'').toLowerCase().includes(s)) return true;
+      // Search in any reservation field within this alojamiento
+      return a.reservas.some(r =>
+        r._clienteLc.includes(s) || r.id.toLowerCase().includes(s) ||
+        r.localizador.toLowerCase().includes(s) || r._platLc.includes(s) ||
+        (r.atendidoPor||'').toLowerCase().includes(s) ||
+        (r.observacion||'').toLowerCase().includes(s) ||
+        r._fmtEntrada.includes(s) || r._fmtSalida.includes(s) ||
+        String(r.totalReserva).includes(s)
+      );
+    });
+  }
+
   // Sort
   const sortMode = simpleComboState.consolsort.value;
   alojData.sort((a, b) => {
@@ -2386,7 +2456,7 @@ function viewConsolDetail(alojName) {
     return `<tr ${isV?'class="validated"':''} id="crow-${r.idx}">
       <td class="cc-estado">${isV?'<span class="badge badge-green">&#10003; Validada</span>':'<span class="badge badge-amber">Pendiente</span>'}</td>
       <td class="cc-idReserva" style="font-size:12px;color:#6b7280;">${r.id}</td>
-      <td class="cc-localizador" style="font-size:11px;color:#6b7280;max-width:120px;overflow:hidden;text-overflow:ellipsis;">${r.localizador}</td>
+      <td class="cc-localizador" style="font-size:11px;color:#6b7280;white-space:nowrap;">${r.localizador}</td>
       <td class="cc-fechaAlta" style="font-size:12px;color:#6b7280;">${r._fmtAlta}</td>
       <td class="cc-cliente bold ellip">${r.cliente}</td>
       <td class="cc-edificio ellip" style="font-size:12px;color:#6b7280;">${r.edificio}</td>

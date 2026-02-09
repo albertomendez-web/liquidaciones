@@ -712,14 +712,11 @@ function gisLoaded() {
 
 function maybeEnableGoogleUI() {
   if (_gapiInited && _gisInited) {
-    // Restore token from sessionStorage if available
-    if (!_googleToken) {
+    // Auto re-auth silently if user was previously connected
+    if (!_googleToken && _tokenClient) {
       try {
-        var saved = sessionStorage.getItem('gtoken');
-        if (saved) {
-          _googleToken = JSON.parse(saved);
-          gapi.client.setToken(_googleToken);
-          updateGoogleStatus(true);
+        if (localStorage.getItem('gsheet-connected') === '1') {
+          _tokenClient.requestAccessToken({ prompt: '' });
         }
       } catch(e) {}
     }
@@ -749,12 +746,12 @@ function onTokenResponse(resp) {
   if (resp.error) { console.error('Auth error:', resp); return; }
   _googleToken = resp;
   gapi.client.setToken(resp);
-  try { sessionStorage.setItem('gtoken', JSON.stringify(resp)); } catch(e) {}
+  try { localStorage.setItem('gsheet-connected', '1'); } catch(e) {}
   updateGoogleStatus(true);
 }
 function googleSignOut() {
   if (_googleToken) { google.accounts.oauth2.revoke(_googleToken.access_token, () => {}); _googleToken = null; }
-  try { sessionStorage.removeItem('gtoken'); } catch(e) {}
+  try { localStorage.removeItem('gsheet-connected'); } catch(e) {}
   updateGoogleStatus(false);
 }
 let _autoLoadAttempted = false;

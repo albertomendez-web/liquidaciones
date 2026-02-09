@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liquidaciones — Gestión de Reservas</title>
+<title>Liquidaciones &mdash; Gestión de Reservas</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
@@ -227,7 +227,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .consol-body { box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; }
   .table-wrap { overflow: visible !important; }
 
-  /* Mini table — compact for landscape A4 */
+  /* Mini table \u2014 compact for landscape A4 */
   .consol-mini-table { table-layout: fixed !important; width: 100% !important; }
   .consol-mini-table th { padding: 4px 5px !important; font-size: 8px !important; }
   .consol-mini-table td { padding: 4px 5px !important; font-size: 9px !important; }
@@ -242,7 +242,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .consol-subtotal { padding: 8px 16px !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .consol-total { padding: 12px 16px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; }
 
-  /* CRITICAL: keep summary + total together — never split across pages */
+  /* CRITICAL: keep summary + total together \u2014 never split across pages */
   .consol-summary-block { page-break-inside: avoid !important; break-inside: avoid !important; }
 
   /* Table page break rules */
@@ -393,7 +393,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
         onclick="document.getElementById('fileInput').click();">
         <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
         <div class="title">Arrastra tu fichero aquí</div>
-        <div class="sub">o haz clic para seleccionar — formato .xlsx</div>
+        <div class="sub">o haz clic para seleccionar &mdash; formato .xlsx</div>
       </div>
       <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none;" onchange="handleFile(this.files[0]);">
 
@@ -577,7 +577,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
       <div class="filter-sep"></div>
       <label>Ordenar por</label>
       <div class="combo" id="combo-consolsort" style="min-width:190px;">
-        <input class="combo-input" type="text" placeholder="Nombre A↑Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
+        <input class="combo-input" type="text" placeholder="Nombre A\u2191Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
         <div class="combo-clear" onclick="clearSimpleCombo('consolsort')" title="Limpiar">&#10005;</div>
         <div class="combo-list" id="combo-list-consolsort"></div>
       </div>
@@ -613,10 +613,10 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // CONTROL DE VERSIONES
-// ═══════════════════════════════════════════════════════════════
-// ─── SEARCH ───
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// \u2500\u2500\u2500 SEARCH \u2500\u2500\u2500
 function onSearchPreliq(val) {
   _searchText = val.trim().toLowerCase();
   document.getElementById('search-preliq-clear').style.display = _searchText ? 'block' : 'none';
@@ -650,15 +650,15 @@ window.addEventListener('DOMContentLoaded', () => {
 function showVersionInfo() {
   const buildDate = new Date(APP_BUILD);
   const buildStr = buildDate.toLocaleDateString('es-ES', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
-  alert('Liquidaciones — Gestión de Reservas\n\nVersión: ' + APP_VERSION + '\nBuild: ' + buildStr + '\nCambios: ' + APP_CHANGES);
+  alert('Liquidaciones \u2014 Gestión de Reservas\n\nVersión: ' + APP_VERSION + '\nBuild: ' + buildStr + '\nCambios: ' + APP_CHANGES);
 }
 
-// ═══ CONFIGURACIÓN GOOGLE — Sustituye con tus credenciales reales ═══
+// \u2550\u2550\u2550 CONFIGURACIÓN GOOGLE \u2014 Sustituye con tus credenciales reales \u2550\u2550\u2550
 const GOOGLE_CLIENT_ID = '658971789892-cnsnbr36hus5jablgkuj2qk8ipic5ptf.apps.googleusercontent.com';
 const GOOGLE_API_KEY   = 'AIzaSyAqn7NyL_QRC97KW-huBjzZjTLPGpEoT-k';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.readonly';
 
-// ═══ GOOGLE STATE ═══
+// \u2550\u2550\u2550 GOOGLE STATE \u2550\u2550\u2550
 let _gapiInited = false, _gisInited = false, _googleToken = null, _tokenClient = null;
 let _pickerInited = false;
 let _sheetHistory = [];
@@ -702,7 +702,7 @@ window.addEventListener('load', () => {
   else { const s = document.querySelector('script[src*="accounts.google.com"]'); if (s) s.addEventListener('load', () => setTimeout(gisLoaded, 100)); }
 });
 
-// ═══ GOOGLE AUTH ═══
+// \u2550\u2550\u2550 GOOGLE AUTH \u2550\u2550\u2550
 function googleSignIn() {
   if (!_tokenClient) { alert('Google API no inicializada. Recarga la página.'); return; }
   if (_googleToken) { updateGoogleStatus(true); return; }
@@ -755,7 +755,7 @@ function updateGoogleStatus(connected) {
   renderSheetHistory();
 }
 
-// ═══ DEFAULT SHEET URL MANAGEMENT ═══
+// \u2550\u2550\u2550 DEFAULT SHEET URL MANAGEMENT \u2550\u2550\u2550
 function renderDefaultUrlDisplay() {
   var el = document.getElementById('default-url-display');
   if (!el || !_defaultSheetUrl) return;
@@ -825,7 +825,7 @@ function saveNewDefaultUrl() {
   renderDefaultUrlDisplay();
 }
 
-// ═══ GOOGLE PICKER ═══
+// \u2550\u2550\u2550 GOOGLE PICKER \u2550\u2550\u2550
 function getAppId() {
   const m = GOOGLE_CLIENT_ID.match(/^(\d+)/);
   return m ? m[1] : '';
@@ -851,7 +851,7 @@ function onPickerCallback(data) {
   }
 }
 
-// ═══ LOAD FROM URL ═══
+// \u2550\u2550\u2550 LOAD FROM URL \u2550\u2550\u2550
 function loadFromUrl() {
   const url = document.getElementById('gsheet-url-input').value.trim();
   if (!url) { alert('Pega la URL de la hoja de Google Sheets'); return; }
@@ -866,7 +866,7 @@ function extractSheetId(url) {
   return null;
 }
 
-// ═══ LOAD SHEET DATA ═══
+// \u2550\u2550\u2550 LOAD SHEET DATA \u2550\u2550\u2550
 async function loadSheetById(sheetId, sheetName) {
   if (!_googleToken) { alert('Inicia sesión con Google primero.'); return; }
   showGSheetLoading('Obteniendo información de la hoja...');
@@ -934,11 +934,11 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
   }
 }
 
-// ═══ LOADING UI ═══
+// \u2550\u2550\u2550 LOADING UI \u2550\u2550\u2550
 function showGSheetLoading(text) { document.getElementById('gsheet-loading').style.display = 'flex'; document.getElementById('gsheet-loading-text').textContent = text || 'Cargando...'; }
 function hideGSheetLoading() { document.getElementById('gsheet-loading').style.display = 'none'; document.getElementById('gsheet-autoload-status').style.display = 'none'; }
 
-// ═══ SHEET WRITE-BACK: Validation column ═══
+// \u2550\u2550\u2550 SHEET WRITE-BACK: Validation column \u2550\u2550\u2550
 function colIndexToLetter(idx) {
   let s = '';
   idx = Math.max(0, idx);
@@ -964,7 +964,7 @@ async function setupSheetSource(sheetId, sheetTab, headerRowIdx, valColIdx) {
     return;
   }
 
-  // Column doesn't exist — create it after the last used column
+  // Column doesn't exist \u2014 create it after the last used column
   // Find the max column used in header row
   const headerResp = await gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: sheetId,
@@ -1292,7 +1292,7 @@ function applyConfigFromRows(rows) {
       if (cpCol !== undefined) { var v = rows[i][cpCol]; if (v !== undefined && v !== '') s.comPlataforma = parseFloat(v); }
       if (cgCol !== undefined) { var v = rows[i][cgCol]; if (v !== undefined && v !== '') s.comGTC = parseFloat(v); }
       if (lmCol !== undefined) { var v = rows[i][lmCol]; if (v !== undefined && v !== '') s.limpieza = parseFloat(v); }
-      if (amCol !== undefined) { var v = rows[i][amCol]; if (v !== undefined && v !== '') s.amenities = parseFloat(v); }
+      if (amCol !== undefined) { var v = rows[i][amCol]; if (v !== undefined && v !== '') { var av = parseFloat(v); if (!isNaN(av) && amenitiesOptions.some(function(o){return Math.abs(o-av)<0.001;})) s.amenities = av; } }
       if (irCol !== undefined) { var v = rows[i][irCol]; if (v !== undefined && v !== '') s.irpf = parseFloat(v); }
       if (paCol !== undefined) { var v = rows[i][paCol]; if (v !== undefined && v !== '') s.pasarela = String(v).trim() === 'true'; }
       if (prCol !== undefined) { var v = rows[i][prCol]; if (v !== undefined && v !== '') s.pasarelaRate = parseFloat(v); }
@@ -1300,6 +1300,17 @@ function applyConfigFromRows(rows) {
       applied++;
     }
     console.log('[Config] Applied per-reservation settings: ' + applied + ' reservas');
+
+    // Sanitize: reset any amenities value that isn't in amenitiesOptions
+    var sanitized = 0;
+    allReservas.forEach(function(r) {
+      var s = settings[r.idx];
+      if (s && s.amenities !== undefined && !amenitiesOptions.some(function(o){return Math.abs(o-s.amenities)<0.001;})) {
+        s.amenities = amenitiesOptions[0];
+        sanitized++;
+      }
+    });
+    if (sanitized > 0) console.log('[Config] Sanitized ' + sanitized + ' reservas with invalid amenities value');
   }
 
   // Rebuild caches after applying config
@@ -1360,7 +1371,7 @@ async function flushReservaConfigSaves() {
   }
 }
 
-// ═══ SHEET HISTORY ═══
+// \u2550\u2550\u2550 SHEET HISTORY \u2550\u2550\u2550
 function addToSheetHistory(sheetId, name, sheetTab) {
   _sheetHistory = _sheetHistory.filter(h => h.id !== sheetId || h.tab !== sheetTab);
   _sheetHistory.unshift({ id: sheetId, name, tab: sheetTab, date: new Date().toISOString() });
@@ -1401,9 +1412,9 @@ function renderSheetHistory() {
   });
 }
 
-// ══════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // APP ORIGINAL
-// ══════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 
 const IVA_RESERVA = 0.10, IVA_SUBTOTAL = 0.21;
 let amenitiesOptions = [7];
@@ -1422,7 +1433,7 @@ let gtcOptions = [20];
 let allReservas = [], settings = {}, validated = new Set(), _lastFiltered = [];
 let currentConsolAloj = null, currentDetailIdx = null;
 // Google Sheets write-back state
-let _sheetSource = null; // { id, tab, valColIdx, valColLetter, headerRow } – null when loaded from file
+let _sheetSource = null; // { id, tab, valColIdx, valColLetter, headerRow } \u2013 null when loaded from file
 let _syncQueue = []; // pending write operations
 let _syncActive = false; // true while a write is in flight
 // Performance: liquidation cache + pagination + render debouncing
@@ -1449,7 +1460,7 @@ function scheduleRender(mode) {
     else _renderFull();
   });
 }
-// Cached filter+sort result — invalidated on filter/sort/data changes, NOT on pagination
+// Cached filter+sort result \u2014 invalidated on filter/sort/data changes, NOT on pagination
 let _cachedFiltered = null, _filterSortKey = '', _validatedVersion = 0;
 let _searchText = '', _searchTextConsol = '';
 function getFilterSortKey() {
@@ -1508,9 +1519,9 @@ function rebuildSelectCache() {
   // GTC
   _selectCache.gtc = gtcOptions.map(o => `<option value="${o/100}">${o}%</option>`).join('');
   // Cleaning
-  _selectCache.clean = cleaningOptions.map(o => `<option value="${o}">${o} €</option>`).join('');
+  _selectCache.clean = cleaningOptions.map(o => `<option value="${o}">${o} \u20AC</option>`).join('');
   // Amenities
-  _selectCache.amenities = amenitiesOptions.map(o => `<option value="${o}">${o} €</option>`).join('');
+  _selectCache.amenities = amenitiesOptions.map(o => `<option value="${o}">${o} \u20AC</option>`).join('');
   // IRPF
   _selectCache.irpf = irpfOptions.map(o => `<option value="${o/100}">${o}%</option>`).join('');
   // Pasarela
@@ -1542,7 +1553,7 @@ function fmt(n) {
 }
 // Fast date formatter (avoid toLocaleDateString)
 function fmtDate(d) {
-  if (!d) return '—';
+  if (!d) return '\u2014';
   const dd = d.getDate(), mm = d.getMonth() + 1, yy = d.getFullYear();
   return (dd < 10 ? '0' : '') + dd + '/' + (mm < 10 ? '0' : '') + mm + '/' + yy;
 }
@@ -1559,7 +1570,7 @@ function parseDate(val) {
 }
 function formatDate(val) {
   const d = parseDate(val);
-  return d ? fmtDate(d) : (val ? String(val) : "—");
+  return d ? fmtDate(d) : (val ? String(val) : "\u2014");
 }
 function dateToNum(val) { const d = parseDate(val); return d ? d.getTime() : 0; }
 function calcNights(e, s) {
@@ -1570,7 +1581,7 @@ function parseNum(v) {
   if (typeof v === "number") return v;
   if (!v) return 0;
   const s = String(v).trim();
-  // Spanish format: 1.400,00 ↑ remove dots, replace comma with dot
+  // Spanish format: 1.400,00 \u2191 remove dots, replace comma with dot
   if (s.includes(",")) return parseFloat(s.replace(/\./g, "").replace(",", ".")) || 0;
   return parseFloat(s) || 0;
 }
@@ -1589,13 +1600,14 @@ function calcLiquidacion(r, s) {
     comPas = total * pr;
   }
   const limp = s.limpieza || cleaningOptions[0];
-  const amen = s.amenities !== undefined ? s.amenities : amenitiesOptions[0];
+  const rawAmen = s.amenities;
+  const amen = (rawAmen !== undefined && amenitiesOptions.some(function(o){return Math.abs(o-rawAmen)<0.001;})) ? rawAmen : amenitiesOptions[0];
   const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
   const iva = sub * IVA_SUBTOTAL, irpfRate = s.irpf || irpfOptions[0]/100, ret = sub * irpfRate;
   return { total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, iva, irpfRate, ret, totalLiq: sub + iva - ret };
 }
 
-// ─── FILE ───
+// \u2500\u2500\u2500 FILE \u2500\u2500\u2500
 function isHtmlFile(buf) {
   // Detect HTML-based .xls (Avantio exports): first bytes contain "<html" or start with whitespace+<
   const head = new TextDecoder("utf-8").decode(buf.slice(0, 200)).trim().toLowerCase();
@@ -1652,9 +1664,9 @@ function processRows(json) {
     const dE = parseDate(r.fechaEntrada), dS = parseDate(r.fechaSalida);
     const dA = parseDate(r.fechaAlta);
     r._dEntrada = dE; r._dSalida = dS; r._dAlta = dA;
-    r._fmtEntrada = dE ? fmtDate(dE) : '—';
-    r._fmtSalida = dS ? fmtDate(dS) : '—';
-    r._fmtAlta = dA ? fmtDate(dA) : '—';
+    r._fmtEntrada = dE ? fmtDate(dE) : '\u2014';
+    r._fmtSalida = dS ? fmtDate(dS) : '\u2014';
+    r._fmtAlta = dA ? fmtDate(dA) : '\u2014';
     r._dateNum = dE ? dE.getTime() : 0;
     r._dateAltaNum = dA ? dA.getTime() : 0;
     r._nights = (dE && dS) ? Math.max(0, Math.round((dS - dE) / 86400000)) : 0;
@@ -1743,7 +1755,7 @@ function showScreen(name) {
   _navigating = false;
 }
 
-// ─── TABLE ───
+// \u2500\u2500\u2500 TABLE \u2500\u2500\u2500
 const COLUMNS = [
   { key:"estado",label:"Estado",sortable:true,locked:true },
   { key:"idReserva",label:"ID Reserva",sortable:true },
@@ -1819,7 +1831,7 @@ function toggleColDropdown() {
   if (!isOpen) renderColToggle();
 }
 
-// ─── CONSOLIDATED TABLE: columns, sort, visibility ───
+// \u2500\u2500\u2500 CONSOLIDATED TABLE: columns, sort, visibility \u2500\u2500\u2500
 const CONSOL_COLUMNS = COLUMNS.filter(c => c.key !== 'alojamiento');
 let consolColVis = {};
 CONSOL_COLUMNS.forEach(c => { consolColVis[c.key] = true; });
@@ -2038,9 +2050,9 @@ function _renderFull() {
   const btnVal = document.getElementById("btn-validar-todas");
   const btnDesval = document.getElementById("btn-desvalidar-todas");
   btnVal.style.display = filPendingCount > 0 ? '' : 'none';
-  btnVal.textContent = filPendingCount === fil.length ? `✓ Validar todas (${filPendingCount})` : `✓ Validar pendientes (${filPendingCount})`;
+  btnVal.textContent = filPendingCount === fil.length ? `\u2713 Validar todas (${filPendingCount})` : `\u2713 Validar pendientes (${filPendingCount})`;
   btnDesval.style.display = filValidatedCount > 0 ? '' : 'none';
-  btnDesval.textContent = filValidatedCount === fil.length ? `↩ Desvalidar todas (${filValidatedCount})` : `↩ Desvalidar validadas (${filValidatedCount})`;
+  btnDesval.textContent = filValidatedCount === fil.length ? `\u21A9 Desvalidar todas (${filValidatedCount})` : `\u21A9 Desvalidar validadas (${filValidatedCount})`;
 
   const pctR = allReservas.length > 0 ? (fil.length / allReservas.length * 100).toFixed(1) : 0;
   const pctTR = tR > 0 ? (fR / tR * 100).toFixed(1) : 0;
@@ -2049,10 +2061,10 @@ function _renderFull() {
   document.getElementById("stats-row").innerHTML = `
     <div class="stat-card"><div class="stat-label">Reservas</div><div class="stat-value">${allReservas.length}</div>
       ${hasFilter ? `<div class="stat-filtered">${fil.length} filtradas <span class="stat-pct">(${pctR}%)</span></div>` : ''}</div>
-    <div class="stat-card"><div class="stat-label">Total Reservas</div><div class="stat-value" style="color:#1a2744">${fmt(tR)} €</div>
-      ${hasFilter ? `<div class="stat-filtered">${fmt(fR)} € <span class="stat-pct">(${pctTR}%)</span></div>` : ''}</div>
-    <div class="stat-card"><div class="stat-label">Total a Liquidar</div><div class="stat-value" style="color:#4f8cff">${fmt(tL)} €</div>
-      ${hasFilter ? `<div class="stat-filtered">${fmt(fL)} € <span class="stat-pct">(${pctTL}%)</span></div>` : ''}</div>
+    <div class="stat-card"><div class="stat-label">Total Reservas</div><div class="stat-value" style="color:#1a2744">${fmt(tR)} \u20AC</div>
+      ${hasFilter ? `<div class="stat-filtered">${fmt(fR)} \u20AC <span class="stat-pct">(${pctTR}%)</span></div>` : ''}</div>
+    <div class="stat-card"><div class="stat-label">Total a Liquidar</div><div class="stat-value" style="color:#4f8cff">${fmt(tL)} \u20AC</div>
+      ${hasFilter ? `<div class="stat-filtered">${fmt(fL)} \u20AC <span class="stat-pct">(${pctTL}%)</span></div>` : ''}</div>
     <div class="stat-card"><div class="stat-label">Validadas</div><div class="stat-value" style="color:#43a047">${vC} / ${allReservas.length}</div>
       ${hasFilter ? `<div class="stat-filtered">${fV} / ${fil.length} filtradas <span class="stat-pct">(${pctV}%)</span></div>` : ''}</div>`;
 
@@ -2081,7 +2093,7 @@ function _renderFull() {
   _updateFooter(fil.length, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tSub, tRet, tIva21, tLiq);
 }
 
-// Fast re-render for page changes only — no stats recalc
+// Fast re-render for page changes only \u2014 no stats recalc
 function _renderPageOnly() {
   const fil = getFilteredSorted();
   const totalPages = Math.max(1, Math.ceil(fil.length / _pageSize));
@@ -2124,7 +2136,7 @@ function _updatePaginationBar(totalCount, totalPages) {
 
   pages.forEach(p => {
     if (p === '...') {
-      pageButtons += `<span style="padding:4px 2px;color:#9ca3af;font-size:12px;">…</span>`;
+      pageButtons += `<span style="padding:4px 2px;color:#9ca3af;font-size:12px;">\u2026</span>`;
     } else {
       const active = p === _currentPage;
       pageButtons += `<button onclick="goToPage(${p})" style="
@@ -2145,7 +2157,7 @@ function _updatePaginationBar(totalCount, totalPages) {
       ${pageButtons}
       <button onclick="goToPage(_currentPage+1)" class="btn btn-sm btn-outline" style="padding:4px 10px;${_currentPage >= totalPages ? 'opacity:0.4;pointer-events:none;' : ''}">&#8250;</button>
     </div>
-    <span style="font-size:12px;color:#6b7280;">${startIdx}–${endIdx} de ${totalCount}</span>
+    <span style="font-size:12px;color:#6b7280;">${startIdx}\u2013${endIdx} de ${totalCount}</span>
     <div style="display:flex;align-items:center;gap:6px;">
       <label style="font-size:11px;color:#9ca3af;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Mostrar</label>
       <select class="sel" style="font-size:12px;padding:4px 8px;" onchange="changePageSize(parseInt(this.value))">${sizeOpts}</select>
@@ -2256,7 +2268,7 @@ function toggleValidate(i){
     invalidateFilterCache();
     renderTable();
   } else {
-    // Patch path — filtered set unchanged, just toggle badge + update stats
+    // Patch path \u2014 filtered set unchanged, just toggle badge + update stats
     _patchSingleRow(i, null, null, wasValidated);
   }
   if(document.getElementById("screen-detail").classList.contains("active"))viewDetail(i);
@@ -2264,7 +2276,7 @@ function toggleValidate(i){
   writeValidationToSheet(i, !wasValidated);
 }
 
-// ─── CACHED STATS for incremental updates ───
+// \u2500\u2500\u2500 CACHED STATS for incremental updates \u2500\u2500\u2500
 let _cachedFilteredStats = null; // { filPendingCount, filValidatedCount, fR, fL, fV, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tSub, tRet, tIva21, tLiq }
 
 function _computeStatsFromScratch(fil) {
@@ -2287,7 +2299,7 @@ function _getOrComputeStats(fil) {
   return _computeStatsFromScratch(fil);
 }
 
-// ─── IN-PLACE ROW UPDATE O(1) ───
+// \u2500\u2500\u2500 IN-PLACE ROW UPDATE O(1) \u2500\u2500\u2500
 function _patchSingleRow(idx, oldC, newC, validationFlipped) {
   const row = document.getElementById("row-" + idx);
   if (!row) { renderTable(); return; }
@@ -2299,14 +2311,14 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
   tmp.innerHTML = _buildRowHtml(r);
   row.replaceWith(tmp.firstElementChild);
 
-  // Incremental stats update — O(1) instead of O(n)
+  // Incremental stats update \u2014 O(1) instead of O(n)
   const fil = _lastFiltered;
   if (!fil) { renderTable(); return; }
 
   let st = _cachedFilteredStats;
   if (!st) { st = _computeStatsFromScratch(fil); }
 
-  // Row is in DOM ↑ guaranteed in filtered set. Apply delta:
+  // Row is in DOM \u2191 guaranteed in filtered set. Apply delta:
   if (oldC && newC) {
     // Setting/pasarela change: subtract old values, add new
     st.fL += (newC.totalLiq - oldC.totalLiq);
@@ -2342,9 +2354,9 @@ function _renderStatsFromCache(fil, st) {
   const btnVal = document.getElementById("btn-validar-todas");
   const btnDesval = document.getElementById("btn-desvalidar-todas");
   btnVal.style.display = st.filPendingCount > 0 ? '' : 'none';
-  btnVal.textContent = st.filPendingCount === fil.length ? `✓ Validar todas (${st.filPendingCount})` : `✓ Validar pendientes (${st.filPendingCount})`;
+  btnVal.textContent = st.filPendingCount === fil.length ? `\u2713 Validar todas (${st.filPendingCount})` : `\u2713 Validar pendientes (${st.filPendingCount})`;
   btnDesval.style.display = st.filValidatedCount > 0 ? '' : 'none';
-  btnDesval.textContent = st.filValidatedCount === fil.length ? `↩ Desvalidar todas (${st.filValidatedCount})` : `↩ Desvalidar validadas (${st.filValidatedCount})`;
+  btnDesval.textContent = st.filValidatedCount === fil.length ? `\u21A9 Desvalidar todas (${st.filValidatedCount})` : `\u21A9 Desvalidar validadas (${st.filValidatedCount})`;
 
   document.getElementById("filter-count").textContent = fil.length + " reservas";
   const pctR = allReservas.length > 0 ? (fil.length / allReservas.length * 100).toFixed(1) : 0;
@@ -2354,10 +2366,10 @@ function _renderStatsFromCache(fil, st) {
   document.getElementById("stats-row").innerHTML = `
     <div class="stat-card"><div class="stat-label">Reservas</div><div class="stat-value">${allReservas.length}</div>
       ${hasFilter ? `<div class="stat-filtered">${fil.length} filtradas <span class="stat-pct">(${pctR}%)</span></div>` : ''}</div>
-    <div class="stat-card"><div class="stat-label">Total Reservas</div><div class="stat-value" style="color:#1a2744">${fmt(tR)} €</div>
-      ${hasFilter ? `<div class="stat-filtered">${fmt(st.fR)} € <span class="stat-pct">(${pctTR}%)</span></div>` : ''}</div>
-    <div class="stat-card"><div class="stat-label">Total a Liquidar</div><div class="stat-value" style="color:#4f8cff">${fmt(tL)} €</div>
-      ${hasFilter ? `<div class="stat-filtered">${fmt(st.fL)} € <span class="stat-pct">(${pctTL}%)</span></div>` : ''}</div>
+    <div class="stat-card"><div class="stat-label">Total Reservas</div><div class="stat-value" style="color:#1a2744">${fmt(tR)} \u20AC</div>
+      ${hasFilter ? `<div class="stat-filtered">${fmt(st.fR)} \u20AC <span class="stat-pct">(${pctTR}%)</span></div>` : ''}</div>
+    <div class="stat-card"><div class="stat-label">Total a Liquidar</div><div class="stat-value" style="color:#4f8cff">${fmt(tL)} \u20AC</div>
+      ${hasFilter ? `<div class="stat-filtered">${fmt(st.fL)} \u20AC <span class="stat-pct">(${pctTL}%)</span></div>` : ''}</div>
     <div class="stat-card"><div class="stat-label">Validadas</div><div class="stat-value" style="color:#43a047">${vC} / ${allReservas.length}</div>
       ${hasFilter ? `<div class="stat-filtered">${st.fV} / ${fil.length} filtradas <span class="stat-pct">(${pctV}%)</span></div>` : ''}</div>`;
 
@@ -2395,7 +2407,7 @@ function goToReserva(idx) {
   }, 100);
 }
 
-// ─── INDIVIDUAL DETAIL ───
+// \u2500\u2500\u2500 INDIVIDUAL DETAIL \u2500\u2500\u2500
 function viewDetail(idx) {
   currentDetailIdx = idx;
   const r=allReservas.find(x=>x.idx===idx); if(!r)return;
@@ -2459,14 +2471,14 @@ function viewDetail(idx) {
     <div><div class="liq-meta-label">Localizador</div><div class="liq-meta-value" style="font-size:11px">${r.localizador}</div></div>
     <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${r.edificio}</div></div></div></div>
     <div style="padding:8px 0;">${rH}</div>
-    <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(c.totalLiq)} €</span></div></div>
+    <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(c.totalLiq)} \u20AC</span></div></div>
     <div class="liq-actions no-print">
       ${!isV?`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
       <button class="btn btn-outline" onclick="window.print()">&#128424; Imprimir</button></div>`;
   document.getElementById("nav-detail").style.display="block"; showScreen("detail");
 }
 
-// ─── CONSOLIDATED GRID ───
+// \u2500\u2500\u2500 CONSOLIDATED GRID \u2500\u2500\u2500
 let _alojCache = null;
 function invalidateAlojCache() { _alojCache = null; }
 function getAlojamientos() {
@@ -2568,8 +2580,8 @@ function renderConsolGrid() {
         <div class="aloj-edificio">${a.edificio}</div>
         <div class="aloj-stats">
           <div><div class="aloj-stat-label">Reservas</div><div class="aloj-stat-value">${a.total}</div></div>
-          <div><div class="aloj-stat-label">Facturación</div><div class="aloj-stat-value" style="font-size:14px;color:#1a2744">${fmt(a.sumReservas)} €</div></div>
-          <div><div class="aloj-stat-label">A Liquidar</div><div class="aloj-stat-value" style="color:#4f8cff;font-size:14px">${fmt(a.sumLiq)} €</div></div>
+          <div><div class="aloj-stat-label">Facturación</div><div class="aloj-stat-value" style="font-size:14px;color:#1a2744">${fmt(a.sumReservas)} \u20AC</div></div>
+          <div><div class="aloj-stat-label">A Liquidar</div><div class="aloj-stat-value" style="color:#4f8cff;font-size:14px">${fmt(a.sumLiq)} \u20AC</div></div>
         </div>
         <div class="aloj-bar"><div class="aloj-bar-fill" style="width:${pct}%;background:${barColor};"></div></div>
       </div>`;
@@ -2580,13 +2592,13 @@ function renderConsolGrid() {
 
   document.getElementById("consol-stats").innerHTML = `
     <div class="stat-card"><div class="stat-label">Alojamientos</div><div class="stat-value">${totalAloj}</div></div>
-    <div class="stat-card"><div class="stat-label">Total Facturación</div><div class="stat-value" style="color:#1a2744">${fmt(totalFact)} €</div></div>
-    <div class="stat-card"><div class="stat-label">Total a Liquidar</div><div class="stat-value" style="color:#4f8cff">${fmt(totalLiq)} €</div></div>
+    <div class="stat-card"><div class="stat-label">Total Facturación</div><div class="stat-value" style="color:#1a2744">${fmt(totalFact)} \u20AC</div></div>
+    <div class="stat-card"><div class="stat-label">Total a Liquidar</div><div class="stat-value" style="color:#4f8cff">${fmt(totalLiq)} \u20AC</div></div>
     <div class="stat-card"><div class="stat-label">Listos para liquidar</div><div class="stat-value" style="color:#43a047">${readyCount} / ${totalAloj}</div></div>`;
   document.getElementById("aloj-grid").innerHTML = cardsHTML;
 }
 
-// ─── CONSOLIDATED DETAIL ───
+// \u2500\u2500\u2500 CONSOLIDATED DETAIL \u2500\u2500\u2500
 function buildComPlatRows(calcs) {
   const groups = {};
   calcs.forEach(x => {
@@ -2906,7 +2918,7 @@ function viewConsolDetail(alojName) {
             </div>
             ${_previewPref !== null
               ? `<div style="font-size:12px;color:#9ca3af;">
-                  ${_previewPref ? '👁 Se mostrará previsualización' : '🖨 Se imprimirá directamente'}
+                  ${_previewPref ? '\ud83d\udc41 Se mostrará previsualización' : '\ud83d\udda8 Se imprimirá directamente'}
                   &nbsp;·&nbsp; <a href="#" onclick="resetPreviewPref();return false;" style="color:#4f8cff;">Cambiar</a>
                 </div>`
               : `<div id="preview-options" style="display:flex;gap:16px;align-items:center;">
@@ -2932,7 +2944,7 @@ function viewConsolDetail(alojName) {
   showScreen("consoldetail");
 }
 
-// ─── PRINT PREFERENCES ───
+// \u2500\u2500\u2500 PRINT PREFERENCES \u2500\u2500\u2500
 let _previewPref = null; // null = show options, true = always preview, false = never preview
 try { const v = localStorage.getItem('liq-preview-pref'); if (v !== null) _previewPref = v === 'true'; } catch(e) {}
 
@@ -2993,8 +3005,8 @@ function buildPrintCards() {
       {l:`Comisión GTC (${(c.gtcRate*100).toFixed(0)}%)`,v:-c.comGTC,neg:true},
     ];
     if(s.pasarela) rows.push({l:`Comisión pasarela ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
-    rows.push({l:`Limpieza (${fmt(c.limp)} €)`,v:-c.limp,neg:true},
-      {l:`Amenities (${fmt(c.amen)} €)`,v:-c.amen,neg:true},{div:true},
+    rows.push({l:`Limpieza (${fmt(c.limp)} \u20AC)`,v:-c.limp,neg:true},
+      {l:`Amenities (${fmt(c.amen)} \u20AC)`,v:-c.amen,neg:true},{div:true},
       {l:"Subtotal",v:c.sub,bold:true},
       {l:`Retención IRPF (${(c.irpfRate*100).toFixed(0)}%)`,v:-c.ret,neg:true},
       {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
@@ -3031,7 +3043,7 @@ function buildPrintCards() {
 
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-header">
-      <div class="header-top"><div><div class="type">Resumen Consolidado — ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
+      <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
       <div class="liq-meta">
         <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${a.edificio}</div></div>
         <div><div class="liq-meta-label">Nº Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
@@ -3129,7 +3141,7 @@ function printConsolDirect() {
   }, 100);
 }
 
-// ─── CONFIG MODAL ───
+// \u2500\u2500\u2500 CONFIG MODAL \u2500\u2500\u2500
 function switchTab(tabId, btn) {
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".modal-tab").forEach(t => t.classList.remove("active"));
@@ -3166,11 +3178,11 @@ function renderConfigModal() {
   document.getElementById("tab-otros").innerHTML =
     buildOS("Comisión GTC","% sobre base sin IVA",gtcOptions,"%","add-gtc","addGTC","delGTC") +
     '<hr class="section-divider">' +
-    buildOS("Limpieza","€ sin IVA",cleaningOptions," €","add-cl","addCL","delCL") +
+    buildOS("Limpieza","\u20AC sin IVA",cleaningOptions," \u20AC","add-cl","addCL","delCL") +
     '<hr class="section-divider">' +
     buildOS("Retención IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR") +
     '<hr class="section-divider">' +
-    buildOS("Amenities","Coste fijo por reserva en €",amenitiesOptions," €","add-am","addAM","delAM");
+    buildOS("Amenities","Coste fijo por reserva en \u20AC",amenitiesOptions," \u20AC","add-am","addAM","delAM");
 }
 function addPS(){aL(pasarelaStripeOptions,"add-ps",100);} function delPS(i){dL(pasarelaStripeOptions,i);}
 function addPB(){aL(pasarelaBookingOptions,"add-pb",100);} function delPB(i){dL(pasarelaBookingOptions,i);}
@@ -3183,11 +3195,11 @@ function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);con
   if(list.some(x=>Math.abs(x-v)<0.001)){alert("Ya existe.");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}
 function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal();}
 
-// ─── SEARCHABLE COMBO SYSTEM ───
+// \u2500\u2500\u2500 SEARCHABLE COMBO SYSTEM \u2500\u2500\u2500
 const comboState = { platform: { selected: new Set(), options: [] }, aloj: { selected: new Set(), options: [] } };
 const comboLabels = { platform: 'Todas las plataformas', aloj: 'Todos los alojamientos' };
 
-// ─── MONTH PICKER STATE ───
+// \u2500\u2500\u2500 MONTH PICKER STATE \u2500\u2500\u2500
 const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const MONTH_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let _mpYear = null, _mpMonth = null; // null = all
@@ -3243,7 +3255,7 @@ function renderMonthPickerDD() {
   dd.innerHTML = `
     <div class="mp-years">${yearsHtml}</div>
     <div class="mp-grid">${monthsHtml}</div>
-    ${_mpYear !== null || _mpMonth !== null ? `<button class="mp-all" onclick="event.stopPropagation();clearMonthFilter()">✕ Quitar filtro de fecha</button>` : ''}
+    ${_mpYear !== null || _mpMonth !== null ? `<button class="mp-all" onclick="event.stopPropagation();clearMonthFilter()">\u2715 Quitar filtro de fecha</button>` : ''}
   `;
 }
 
@@ -3293,7 +3305,7 @@ function _mpBtnHtml(arrows) {
       + '<span class="mp-nav">'
       + '<button class="mp-arrow" onclick="event.stopPropagation();mpNext()">&#8250;</button>'
       + '</span>'
-      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">✕</span>' };
+      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">\u2715</span>' };
   } else if (_mpYear !== null) {
     return { active: true, html: '<span class="mp-nav">'
       + '<button class="mp-arrow" onclick="event.stopPropagation();mpPrev()">&#8249;</button>'
@@ -3302,7 +3314,7 @@ function _mpBtnHtml(arrows) {
       + '<span class="mp-nav">'
       + '<button class="mp-arrow" onclick="event.stopPropagation();mpNext()">&#8250;</button>'
       + '</span>'
-      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">✕</span>' };
+      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">\u2715</span>' };
   }
   return { active: false, html: null };
 }
@@ -3443,12 +3455,12 @@ function clearCombo(id) {
   invalidateFilterCache(); _currentPage = 1; renderTable();
 }
 
-// ─── SIMPLE COMBO SYSTEM (for status, sort, sortdir) ───
+// \u2500\u2500\u2500 SIMPLE COMBO SYSTEM (for status, sort, sortdir) \u2500\u2500\u2500
 const simpleComboState = {
   status: { value: 'all', label: 'Todos los estados' },
   sort: { value: 'idx', label: 'Orden original' },
   sortdir: { value: 'asc', label: '&#8593;' },
-  consolsort: { value: 'name', label: 'Nombre A↑Z' }
+  consolsort: { value: 'name', label: 'Nombre A\u2191Z' }
 };
 const simpleComboOptions = {
   status: [
@@ -3483,8 +3495,8 @@ const simpleComboOptions = {
     { value: 'desc', label: '&#8595; Descendente' }
   ],
   consolsort: [
-    { value: 'name', label: 'Nombre A↑Z' },
-    { value: 'name-desc', label: 'Nombre Z↑A' },
+    { value: 'name', label: 'Nombre A\u2191Z' },
+    { value: 'name-desc', label: 'Nombre Z\u2191A' },
     { value: 'reservas-desc', label: 'Más reservas' },
     { value: 'reservas-asc', label: 'Menos reservas' },
     { value: 'liq-desc', label: 'Mayor liquidación' },
@@ -3533,7 +3545,7 @@ function selectSimpleCombo(id, value) {
     }
   } else if (id === 'consolsort') {
     if (value === 'name') {
-      input.value = ''; input.placeholder = 'Nombre A↑Z'; wrap.classList.remove('has-value');
+      input.value = ''; input.placeholder = 'Nombre A\u2191Z'; wrap.classList.remove('has-value');
     } else {
       input.value = opt.label; wrap.classList.add('has-value');
     }

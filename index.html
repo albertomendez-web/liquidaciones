@@ -47,10 +47,10 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .filter-sep { width: 1px; height: 24px; background: #e5e7eb; }
 .table-wrap { overflow-x: auto; overflow-y: auto; max-height: 75vh; }
 table { width: 100%; border-collapse: collapse; }
-th { padding: 10px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; border-bottom: 2px solid #eef0f4; text-align: center; white-space: nowrap; background: #f8f9fb; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 3; line-height: 1.3; }
+th { padding: 8px 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; border-bottom: 2px solid #eef0f4; text-align: center; white-space: nowrap; background: #f8f9fb; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 3; line-height: 1.35; vertical-align: middle; }
 th:hover { color: #4f8cff; }
-th.right { text-align: right; }
-th .sort-arrow { font-size: 10px; margin-left: 4px; opacity: 0.3; }
+th.right { text-align: center; }
+th .sort-arrow { font-size: 9px; margin-left: 3px; opacity: 0.3; }
 th.sorted .sort-arrow { opacity: 1; color: #4f8cff; }
 th.no-sort { cursor: default; }
 th.no-sort:hover { color: #6b7280; }
@@ -544,7 +544,7 @@ tr.ce-highlighted { background:#fffdf5; }
       <div class="filter-sep"></div>
       <div class="search-wrap">
         <span class="search-icon">&#128269;</span>
-        <input type="text" class="search-input" id="search-preliq" placeholder="Buscar en todo..." oninput="onSearchPreliq(this.value)">
+        <input type="text" class="search-input" id="search-preliq" placeholder="Buscar cliente, importe, fecha..." oninput="onSearchPreliq(this.value)">
         <div class="search-clear" id="search-preliq-clear" onclick="clearSearchPreliq()" style="display:none;">&#10005;</div>
       </div>
       <div class="filter-sep"></div>
@@ -597,7 +597,7 @@ tr.ce-highlighted { background:#fffdf5; }
       <div class="filter-sep"></div>
       <div class="search-wrap">
         <span class="search-icon">&#128269;</span>
-        <input type="text" class="search-input" id="search-consol" placeholder="Buscar alojamiento..." oninput="onSearchConsol(this.value)">
+        <input type="text" class="search-input" id="search-consol" placeholder="Buscar alojamiento, importe..." oninput="onSearchConsol(this.value)">
         <div class="search-clear" id="search-consol-clear" onclick="clearSearchConsol()" style="display:none;">&#10005;</div>
       </div>
       <div class="filter-sep"></div>
@@ -1517,13 +1517,16 @@ function getFilteredSorted() {
     if (sf2 === "pending" && validated.has(r.idx)) return false;
     if (_searchText) {
       const s = _searchText;
+      const c = getLiq(r);
+      const fTotal = fmt(r.totalReserva), fLiq = fmt(c.totalLiq), fBase = fmt(c.baseSinIVA), fSub = fmt(c.sub);
       if (!(r._clienteLc.includes(s) || r._alojLc.includes(s) || r._platLc.includes(s) ||
             r.id.toLowerCase().includes(s) || r.localizador.toLowerCase().includes(s) ||
             (r.edificio||'').toLowerCase().includes(s) || (r.atendidoPor||'').toLowerCase().includes(s) ||
             (r.origenMarketing||'').toLowerCase().includes(s) || (r.observacion||'').toLowerCase().includes(s) ||
             (r.tipoReserva||'').toLowerCase().includes(s) ||
             r._fmtEntrada.includes(s) || r._fmtSalida.includes(s) || r._fmtAlta.includes(s) ||
-            String(r.totalReserva).includes(s))) return false;
+            fTotal.includes(s) || fLiq.includes(s) || fBase.includes(s) || fSub.includes(s) ||
+            String(r.totalReserva).includes(s) || String(r._nights) === s)) return false;
     }
     return true;
   });
@@ -2684,14 +2687,16 @@ function renderConsolGrid() {
       // Search in alojamiento name and edificio
       if (a.name.toLowerCase().includes(s) || (a.edificio||'').toLowerCase().includes(s)) return true;
       // Search in any reservation field within this alojamiento
-      return a.reservas.some(r =>
-        r._clienteLc.includes(s) || r.id.toLowerCase().includes(s) ||
+      return a.reservas.some(r => {
+        const c = getLiq(r);
+        return r._clienteLc.includes(s) || r.id.toLowerCase().includes(s) ||
         r.localizador.toLowerCase().includes(s) || r._platLc.includes(s) ||
         (r.atendidoPor||'').toLowerCase().includes(s) ||
         (r.observacion||'').toLowerCase().includes(s) ||
         r._fmtEntrada.includes(s) || r._fmtSalida.includes(s) ||
-        String(r.totalReserva).includes(s)
-      );
+        fmt(r.totalReserva).includes(s) || fmt(c.totalLiq).includes(s) ||
+        fmt(c.baseSinIVA).includes(s) || String(r.totalReserva).includes(s);
+      });
     });
   }
 

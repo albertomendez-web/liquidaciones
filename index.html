@@ -913,7 +913,7 @@ async function loadSheetById(sheetId, sheetName) {
     const meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: sheetId, fields: 'properties.title,sheets.properties' });
     const title = meta.result.properties.title;
     const sheets = meta.result.sheets.map(s => ({ name: s.properties.title, index: s.properties.index }));
-    const dataSheets = sheets.filter(s => s.name !== CONFIG_TAB_NAME);
+    const dataSheets = sheets.filter(s => s.name !== CONFIG_TAB_NAME && s.name !== PROPIETARIOS_TAB_NAME);
     if (dataSheets.length === 0) { hideGSheetLoading(); alert('No se encontraron hojas de datos.'); return; }
     if (dataSheets.length === 1) { await loadSheetData(sheetId, dataSheets[0].name, title); }
     else { hideGSheetLoading(); showSheetSelector(sheetId, dataSheets, title); }
@@ -927,7 +927,7 @@ function showSheetSelector(sheetId, sheets, title) {
   const list = document.getElementById('gsheet-sheets-list');
   sel.style.display = '';
   list.innerHTML = '';
-  const visibleSheets = sheets.filter(s => s.name !== CONFIG_TAB_NAME);
+  const visibleSheets = sheets.filter(s => s.name !== CONFIG_TAB_NAME && s.name !== PROPIETARIOS_TAB_NAME);
   visibleSheets.forEach(s => {
     const btn = document.createElement('button');
     btn.className = 'btn btn-outline btn-sm';

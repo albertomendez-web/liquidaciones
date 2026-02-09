@@ -2114,6 +2114,11 @@ function toggleCEPanel(idx) {
       s.conceptosEspeciales = [{label:'', amount:0}];
       _refreshCEPanel(idx);
     }
+    // Stabilize view after panel opens
+    requestAnimationFrame(function() {
+      var row = document.getElementById('row-' + idx);
+      if (row) row.scrollIntoView({block:'nearest',behavior:'instant'});
+    });
   } else {
     panel.style.display = 'none';
     _openCEPanel = null;

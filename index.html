@@ -164,7 +164,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-mini-table .ellip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
 .consol-summary-block { }
 
-/* LIQUIDACIÁ“N INDIVIDUAL */
+/* LIQUIDACIÓN INDIVIDUAL */
 .liq-container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
 .liq-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color: #fff; padding: 36px 40px; }
 .liq-header .type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 4px; }
@@ -577,7 +577,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
       <div class="filter-sep"></div>
       <label>Ordenar por</label>
       <div class="combo" id="combo-consolsort" style="min-width:190px;">
-        <input class="combo-input" type="text" placeholder="Nombre A→Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
+        <input class="combo-input" type="text" placeholder="Nombre A↑Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
         <div class="combo-clear" onclick="clearSimpleCombo('consolsort')" title="Limpiar">&#10005;</div>
         <div class="combo-list" id="combo-list-consolsort"></div>
       </div>
@@ -613,10 +613,10 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // CONTROL DE VERSIONES
-// ═══════════════════════════════════════════════════════════════
-// ─── SEARCH ───
+// ═══════════════════════════════════════════════════════════════
+// â”€â”€â”€ SEARCH â”€â”€â”€
 function onSearchPreliq(val) {
   _searchText = val.trim().toLowerCase();
   document.getElementById('search-preliq-clear').style.display = _searchText ? 'block' : 'none';
@@ -638,9 +638,9 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.5.1';
-const APP_BUILD   = '2026-02-09T18:00:00';
-const APP_CHANGES = 'Buscador global + columna Localizador ampliada + escritura validaciones en Google Sheets';
+const APP_VERSION = '1.6.0';
+const APP_BUILD   = '2026-02-09T22:00:00';
+const APP_CHANGES = 'Persistencia de configuraci\u00f3n en pesta\u00f1a "Configuracion" de Google Sheets';
 
 // Mostrar versión en sidebar
 window.addEventListener('DOMContentLoaded', () => {
@@ -653,12 +653,12 @@ function showVersionInfo() {
   alert('Liquidaciones — Gestión de Reservas\n\nVersión: ' + APP_VERSION + '\nBuild: ' + buildStr + '\nCambios: ' + APP_CHANGES);
 }
 
-// ═══ CONFIGURACIÁ“N GOOGLE — Sustituye con tus credenciales reales ═══
+// ═══ CONFIGURACIÓN GOOGLE — Sustituye con tus credenciales reales ═══
 const GOOGLE_CLIENT_ID = '658971789892-cnsnbr36hus5jablgkuj2qk8ipic5ptf.apps.googleusercontent.com';
 const GOOGLE_API_KEY   = 'AIzaSyAqn7NyL_QRC97KW-huBjzZjTLPGpEoT-k';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.readonly';
 
-// ═══ GOOGLE STATE ═══
+// ═══ GOOGLE STATE ═══
 let _gapiInited = false, _gisInited = false, _googleToken = null, _tokenClient = null;
 let _pickerInited = false;
 let _sheetHistory = [];
@@ -702,7 +702,7 @@ window.addEventListener('load', () => {
   else { const s = document.querySelector('script[src*="accounts.google.com"]'); if (s) s.addEventListener('load', () => setTimeout(gisLoaded, 100)); }
 });
 
-// ═══ GOOGLE AUTH ═══
+// ═══ GOOGLE AUTH ═══
 function googleSignIn() {
   if (!_tokenClient) { alert('Google API no inicializada. Recarga la página.'); return; }
   if (_googleToken) { updateGoogleStatus(true); return; }
@@ -755,7 +755,7 @@ function updateGoogleStatus(connected) {
   renderSheetHistory();
 }
 
-// ═══ DEFAULT SHEET URL MANAGEMENT ═══
+// ═══ DEFAULT SHEET URL MANAGEMENT ═══
 function renderDefaultUrlDisplay() {
   var el = document.getElementById('default-url-display');
   if (!el || !_defaultSheetUrl) return;
@@ -825,7 +825,7 @@ function saveNewDefaultUrl() {
   renderDefaultUrlDisplay();
 }
 
-// ═══ GOOGLE PICKER ═══
+// ═══ GOOGLE PICKER ═══
 function getAppId() {
   const m = GOOGLE_CLIENT_ID.match(/^(\d+)/);
   return m ? m[1] : '';
@@ -851,7 +851,7 @@ function onPickerCallback(data) {
   }
 }
 
-// ═══ LOAD FROM URL ═══
+// ═══ LOAD FROM URL ═══
 function loadFromUrl() {
   const url = document.getElementById('gsheet-url-input').value.trim();
   if (!url) { alert('Pega la URL de la hoja de Google Sheets'); return; }
@@ -866,7 +866,7 @@ function extractSheetId(url) {
   return null;
 }
 
-// ═══ LOAD SHEET DATA ═══
+// ═══ LOAD SHEET DATA ═══
 async function loadSheetById(sheetId, sheetName) {
   if (!_googleToken) { alert('Inicia sesión con Google primero.'); return; }
   showGSheetLoading('Obteniendo información de la hoja...');
@@ -916,6 +916,9 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
     const headerRowIdx = processRows._lastHeaderRow;
     await setupSheetSource(sheetId, sheetTab, headerRowIdx, valColIdx);
 
+    // Load or create config tab for persistence
+    await loadOrCreateConfigTab(sheetId);
+
     addToSheetHistory(sheetId, displayName, sheetTab);
     document.getElementById("file-name").textContent = '\u{1F4CA} ' + displayName;
     document.getElementById("file-indicator").style.display = "block";
@@ -928,11 +931,11 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
   }
 }
 
-// ═══ LOADING UI ═══
+// ═══ LOADING UI ═══
 function showGSheetLoading(text) { document.getElementById('gsheet-loading').style.display = 'flex'; document.getElementById('gsheet-loading-text').textContent = text || 'Cargando...'; }
 function hideGSheetLoading() { document.getElementById('gsheet-loading').style.display = 'none'; document.getElementById('gsheet-autoload-status').style.display = 'none'; }
 
-// ═══ SHEET WRITE-BACK: Validation column ═══
+// ═══ SHEET WRITE-BACK: Validation column ═══
 function colIndexToLetter(idx) {
   let s = '';
   idx = Math.max(0, idx);
@@ -1073,7 +1076,277 @@ function updateSyncIndicator(state) {
   }
 }
 
-// ═══ SHEET HISTORY ═══
+
+// === CONFIG PERSISTENCE: "Configuracion" tab in Google Sheets ===
+const CONFIG_TAB_NAME = 'Configuracion';
+let _configLoaded = false; // true after config has been loaded/created for current sheet
+
+// Debounce timers for saving
+let _globalConfigSaveTimer = null;
+let _reservaConfigSaveTimer = null;
+let _pendingReservaConfigSaves = new Set();
+
+function scheduleGlobalConfigSave() {
+  if (!_sheetSource || !_googleToken) return;
+  if (_globalConfigSaveTimer) clearTimeout(_globalConfigSaveTimer);
+  _globalConfigSaveTimer = setTimeout(saveGlobalConfigToSheet, 1500);
+}
+
+function scheduleReservaConfigSave(idx) {
+  if (!_sheetSource || !_googleToken) return;
+  _pendingReservaConfigSaves.add(idx);
+  if (_reservaConfigSaveTimer) clearTimeout(_reservaConfigSaveTimer);
+  _reservaConfigSaveTimer = setTimeout(flushReservaConfigSaves, 1000);
+}
+
+// Build global config data as key-value rows
+function buildGlobalConfigRows() {
+  var rows = [];
+  Object.keys(platformOptions).sort().forEach(function(name) {
+    rows.push(['plataforma:' + name, platformOptions[name].join(',')]);
+  });
+  rows.push(['pasarela_stripe', pasarelaStripeOptions.join(',')]);
+  rows.push(['pasarela_booking', pasarelaBookingOptions.join(',')]);
+  rows.push(['limpieza', cleaningOptions.join(',')]);
+  rows.push(['irpf', irpfOptions.join(',')]);
+  rows.push(['gtc', gtcOptions.join(',')]);
+  rows.push(['amenities', String(AMENITIES)]);
+  return rows;
+}
+
+// Build per-reservation config rows
+function buildReservaConfigRows(indices) {
+  var rows = [];
+  var list = indices ? [...indices] : allReservas.map(function(r) { return r.idx; });
+  list.forEach(function(idx) {
+    var r = allReservas[idx];
+    var s = settings[idx];
+    if (!r || !s) return;
+    rows.push([
+      r.id,
+      s.comPlataforma !== undefined ? s.comPlataforma : '',
+      s.comGTC !== undefined ? s.comGTC : '',
+      s.limpieza !== undefined ? s.limpieza : '',
+      s.irpf !== undefined ? s.irpf : '',
+      s.pasarela ? 'true' : 'false',
+      s.pasarelaRate !== undefined ? s.pasarelaRate : ''
+    ]);
+  });
+  return rows;
+}
+
+// Full build of the Configuracion tab content
+function buildFullConfigTabData() {
+  var data = [];
+  data.push(['Configuracion', 'Liquidaciones App', 'v' + APP_VERSION]);
+  data.push([]);
+  data.push(['OPCIONES GLOBALES']);
+  data.push(['Clave', 'Valor']);
+  var globalRows = buildGlobalConfigRows();
+  globalRows.forEach(function(row) { data.push(row); });
+  data.push([]);
+  data.push(['AJUSTES POR RESERVA']);
+  data.push(['ID Reserva', 'comPlataforma', 'comGTC', 'limpieza', 'irpf', 'pasarela', 'pasarelaRate']);
+  var reservaRows = buildReservaConfigRows();
+  reservaRows.forEach(function(row) { data.push(row); });
+  return data;
+}
+
+// Load or create the Configuracion tab
+async function loadOrCreateConfigTab(sheetId) {
+  if (!_googleToken) return;
+  _configLoaded = false;
+  try {
+    showGSheetLoading('Cargando configuraci\u00f3n...');
+    var meta = await gapi.client.sheets.spreadsheets.get({
+      spreadsheetId: sheetId,
+      fields: 'sheets.properties.title'
+    });
+    var tabExists = meta.result.sheets.some(function(s) {
+      return s.properties.title === CONFIG_TAB_NAME;
+    });
+
+    if (tabExists) {
+      var resp = await gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: sheetId,
+        range: CONFIG_TAB_NAME + '!A1:H10000',
+        valueRenderOption: 'UNFORMATTED_VALUE'
+      });
+      var rows = resp.result.values || [];
+      applyConfigFromRows(rows);
+      _configLoaded = true;
+      console.log('[Config] Loaded config from "' + CONFIG_TAB_NAME + '" tab (' + rows.length + ' rows)');
+    } else {
+      await gapi.client.sheets.spreadsheets.batchUpdate({
+        spreadsheetId: sheetId,
+        resource: {
+          requests: [{ addSheet: { properties: { title: CONFIG_TAB_NAME } } }]
+        }
+      });
+      var data = buildFullConfigTabData();
+      await gapi.client.sheets.spreadsheets.values.update({
+        spreadsheetId: sheetId,
+        range: CONFIG_TAB_NAME + '!A1',
+        valueInputOption: 'RAW',
+        resource: { values: data }
+      });
+      _configLoaded = true;
+      console.log('[Config] Created "' + CONFIG_TAB_NAME + '" tab with ' + data.length + ' rows');
+    }
+  } catch(e) {
+    console.warn('[Config] Error loading/creating config tab:', e);
+  }
+}
+
+// Parse config rows and apply to app state
+function applyConfigFromRows(rows) {
+  if (!rows || rows.length < 4) return;
+
+  var globalStart = -1, reservaHeaderRow = -1;
+  for (var i = 0; i < rows.length; i++) {
+    var cell = String(rows[i][0] || '').trim();
+    if (cell === 'Clave' && globalStart === -1) { globalStart = i + 1; }
+    if (cell === 'ID Reserva') { reservaHeaderRow = i; break; }
+  }
+
+  // Parse global options
+  if (globalStart >= 0) {
+    var endRow = reservaHeaderRow > 0 ? reservaHeaderRow : rows.length;
+    var newPlatformOptions = {};
+    var newPasStripe = null, newPasBooking = null, newLimpieza = null;
+    var newIrpf = null, newGtc = null, newAmenities = null;
+
+    for (var i = globalStart; i < endRow; i++) {
+      var key = String(rows[i][0] || '').trim();
+      var val = String(rows[i][1] || '').trim();
+      if (!key || !val) continue;
+
+      if (key.startsWith('plataforma:')) {
+        var platName = key.substring(11);
+        var nums = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
+        if (nums.length > 0) newPlatformOptions[platName] = nums;
+      } else if (key === 'pasarela_stripe') {
+        newPasStripe = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
+      } else if (key === 'pasarela_booking') {
+        newPasBooking = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
+      } else if (key === 'limpieza') {
+        newLimpieza = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
+      } else if (key === 'irpf') {
+        newIrpf = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
+      } else if (key === 'gtc') {
+        newGtc = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
+      } else if (key === 'amenities') {
+        var a = parseFloat(val);
+        if (!isNaN(a)) newAmenities = a;
+      }
+    }
+
+    // Apply global options (merge with platforms from data)
+    if (Object.keys(newPlatformOptions).length > 0) {
+      Object.keys(platformOptions).forEach(function(p) {
+        if (!newPlatformOptions[p]) newPlatformOptions[p] = platformOptions[p];
+      });
+      platformOptions = newPlatformOptions;
+    }
+    if (newPasStripe && newPasStripe.length > 0) pasarelaStripeOptions = newPasStripe;
+    if (newPasBooking && newPasBooking.length > 0) pasarelaBookingOptions = newPasBooking;
+    if (newLimpieza && newLimpieza.length > 0) cleaningOptions = newLimpieza;
+    if (newIrpf && newIrpf.length > 0) irpfOptions = newIrpf;
+    if (newGtc && newGtc.length > 0) gtcOptions = newGtc;
+    if (newAmenities !== null) AMENITIES = newAmenities;
+
+    console.log('[Config] Applied global options: ' + Object.keys(platformOptions).length + ' plataformas');
+  }
+
+  // Parse per-reservation settings
+  if (reservaHeaderRow >= 0) {
+    var reservaMap = {};
+    allReservas.forEach(function(r) { reservaMap[r.id] = r.idx; });
+
+    var applied = 0;
+    for (var i = reservaHeaderRow + 1; i < rows.length; i++) {
+      var id = String(rows[i][0] || '').trim();
+      if (!id) continue;
+      var rIdx = reservaMap[id];
+      if (rIdx === undefined) continue;
+
+      var s = settings[rIdx];
+      if (!s) continue;
+
+      var comPlat = rows[i][1], comGTC = rows[i][2], limp = rows[i][3];
+      var irpf = rows[i][4], pasarela = rows[i][5], pasRate = rows[i][6];
+
+      if (comPlat !== undefined && comPlat !== '') s.comPlataforma = parseFloat(comPlat);
+      if (comGTC !== undefined && comGTC !== '') s.comGTC = parseFloat(comGTC);
+      if (limp !== undefined && limp !== '') s.limpieza = parseFloat(limp);
+      if (irpf !== undefined && irpf !== '') s.irpf = parseFloat(irpf);
+      if (pasarela !== undefined && pasarela !== '') s.pasarela = String(pasarela).trim() === 'true';
+      if (pasRate !== undefined && pasRate !== '') s.pasarelaRate = parseFloat(pasRate);
+
+      applied++;
+    }
+    console.log('[Config] Applied per-reservation settings: ' + applied + ' reservas');
+  }
+
+  // Rebuild caches after applying config
+  rebuildSelectCache();
+  invalidateCache();
+}
+
+// Save full global config to sheet
+async function saveGlobalConfigToSheet() {
+  if (!_sheetSource || !_googleToken || !_configLoaded) return;
+  updateSyncIndicator('syncing');
+  try {
+    var data = buildFullConfigTabData();
+    await gapi.client.sheets.spreadsheets.values.clear({
+      spreadsheetId: _sheetSource.id,
+      range: CONFIG_TAB_NAME + '!A1:H10000'
+    });
+    await gapi.client.sheets.spreadsheets.values.update({
+      spreadsheetId: _sheetSource.id,
+      range: CONFIG_TAB_NAME + '!A1',
+      valueInputOption: 'RAW',
+      resource: { values: data }
+    });
+    updateSyncIndicator('saved');
+    console.log('[Config] Saved full config (' + data.length + ' rows)');
+  } catch(e) {
+    console.error('[Config] Error saving config:', e);
+    updateSyncIndicator('error');
+  }
+}
+
+// Flush pending per-reservation config saves (batch)
+async function flushReservaConfigSaves() {
+  if (!_sheetSource || !_googleToken || !_configLoaded) return;
+  if (_pendingReservaConfigSaves.size === 0) return;
+
+  var indices = [..._pendingReservaConfigSaves];
+  _pendingReservaConfigSaves.clear();
+
+  updateSyncIndicator('syncing');
+  try {
+    var data = buildFullConfigTabData();
+    await gapi.client.sheets.spreadsheets.values.clear({
+      spreadsheetId: _sheetSource.id,
+      range: CONFIG_TAB_NAME + '!A1:H10000'
+    });
+    await gapi.client.sheets.spreadsheets.values.update({
+      spreadsheetId: _sheetSource.id,
+      range: CONFIG_TAB_NAME + '!A1',
+      valueInputOption: 'RAW',
+      resource: { values: data }
+    });
+    updateSyncIndicator('saved');
+    console.log('[Config] Saved config for ' + indices.length + ' reserva(s)');
+  } catch(e) {
+    console.error('[Config] Error saving reserva config:', e);
+    updateSyncIndicator('error');
+  }
+}
+
+// ═══ SHEET HISTORY ═══
 function addToSheetHistory(sheetId, name, sheetTab) {
   _sheetHistory = _sheetHistory.filter(h => h.id !== sheetId || h.tab !== sheetTab);
   _sheetHistory.unshift({ id: sheetId, name, tab: sheetTab, date: new Date().toISOString() });
@@ -1114,9 +1387,9 @@ function renderSheetHistory() {
   });
 }
 
-// ══════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // APP ORIGINAL
-// ══════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 
 const IVA_RESERVA = 0.10, IVA_SUBTOTAL = 0.21;
 let AMENITIES = 7;
@@ -1281,7 +1554,7 @@ function parseNum(v) {
   if (typeof v === "number") return v;
   if (!v) return 0;
   const s = String(v).trim();
-  // Spanish format: 1.400,00 → remove dots, replace comma with dot
+  // Spanish format: 1.400,00 ↑ remove dots, replace comma with dot
   if (s.includes(",")) return parseFloat(s.replace(/\./g, "").replace(",", ".")) || 0;
   return parseFloat(s) || 0;
 }
@@ -1305,7 +1578,7 @@ function calcLiquidacion(r, s) {
   return { total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, sub, iva, irpfRate, ret, totalLiq: sub + iva - ret };
 }
 
-// ─── FILE ───
+// â”€â”€â”€ FILE â”€â”€â”€
 function isHtmlFile(buf) {
   // Detect HTML-based .xls (Avantio exports): first bytes contain "<html" or start with whitespace+<
   const head = new TextDecoder("utf-8").decode(buf.slice(0, 200)).trim().toLowerCase();
@@ -1453,7 +1726,7 @@ function showScreen(name) {
   _navigating = false;
 }
 
-// ─── TABLE ───
+// â”€â”€â”€ TABLE â”€â”€â”€
 const COLUMNS = [
   { key:"estado",label:"Estado",sortable:true,locked:true },
   { key:"idReserva",label:"ID Reserva",sortable:true },
@@ -1529,7 +1802,7 @@ function toggleColDropdown() {
   if (!isOpen) renderColToggle();
 }
 
-// ─── CONSOLIDATED TABLE: columns, sort, visibility ───
+// â”€â”€â”€ CONSOLIDATED TABLE: columns, sort, visibility â”€â”€â”€
 const CONSOL_COLUMNS = COLUMNS.filter(c => c.key !== 'alojamiento');
 let consolColVis = {};
 CONSOL_COLUMNS.forEach(c => { consolColVis[c.key] = true; });
@@ -1746,9 +2019,9 @@ function _renderFull() {
   const btnVal = document.getElementById("btn-validar-todas");
   const btnDesval = document.getElementById("btn-desvalidar-todas");
   btnVal.style.display = filPendingCount > 0 ? '' : 'none';
-  btnVal.textContent = filPendingCount === fil.length ? `✔ Validar todas (${filPendingCount})` : `✔ Validar pendientes (${filPendingCount})`;
+  btnVal.textContent = filPendingCount === fil.length ? `âœ” Validar todas (${filPendingCount})` : `âœ” Validar pendientes (${filPendingCount})`;
   btnDesval.style.display = filValidatedCount > 0 ? '' : 'none';
-  btnDesval.textContent = filValidatedCount === fil.length ? `↩ Desvalidar todas (${filValidatedCount})` : `↩ Desvalidar validadas (${filValidatedCount})`;
+  btnDesval.textContent = filValidatedCount === fil.length ? `â†© Desvalidar todas (${filValidatedCount})` : `â†© Desvalidar validadas (${filValidatedCount})`;
 
   const pctR = allReservas.length > 0 ? (fil.length / allReservas.length * 100).toFixed(1) : 0;
   const pctTR = tR > 0 ? (fR / tR * 100).toFixed(1) : 0;
@@ -1919,11 +2192,12 @@ function changeSetting(i,k,v){
   // Delta update global stats O(1) instead of recomputing O(n)
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
   _patchSingleRow(i, oldC, newC);
+  scheduleReservaConfigSave(i);
 }
 function validarTodas() { const pending=_lastFiltered.filter(r=>!validated.has(r.idx)); const n=pending.length; if(!n||!confirm(`¿Validar ${n} reserva${n>1?'s':''}?`))return; pending.forEach(r => validated.add(r.idx)); _validatedVersion++; invalidateFilterCache(); renderTable(); batchWriteValidation(pending.map(r=>r.idx), true); }
 function desvalidarTodas() { const vals=_lastFiltered.filter(r=>validated.has(r.idx)); const n=vals.length; if(!n||!confirm(`¿Desvalidar ${n} reserva${n>1?'s':''}?`))return; vals.forEach(r => validated.delete(r.idx)); _validatedVersion++; invalidateFilterCache(); renderTable(); batchWriteValidation(vals.map(r=>r.idx), false); }
-function changeSettingConsol(i,k,v){const oldC=getLiq(allReservas[i]);settings[i][k]=v;invalidateCache(i);const newC=getLiq(allReservas[i]);if(_globalStatsCache)_globalStatsCache.tL+=(newC.totalLiq-oldC.totalLiq);if(currentConsolAloj)viewConsolDetail(currentConsolAloj);}
-function togglePasarelaConsol(i){const oldC=getLiq(allReservas[i]);settings[i].pasarela=!settings[i].pasarela;invalidateCache(i);const newC=getLiq(allReservas[i]);if(_globalStatsCache)_globalStatsCache.tL+=(newC.totalLiq-oldC.totalLiq);if(currentConsolAloj)viewConsolDetail(currentConsolAloj);}
+function changeSettingConsol(i,k,v){const oldC=getLiq(allReservas[i]);settings[i][k]=v;invalidateCache(i);const newC=getLiq(allReservas[i]);if(_globalStatsCache)_globalStatsCache.tL+=(newC.totalLiq-oldC.totalLiq);if(currentConsolAloj)viewConsolDetail(currentConsolAloj);scheduleReservaConfigSave(i);}
+function togglePasarelaConsol(i){const oldC=getLiq(allReservas[i]);settings[i].pasarela=!settings[i].pasarela;invalidateCache(i);const newC=getLiq(allReservas[i]);if(_globalStatsCache)_globalStatsCache.tL+=(newC.totalLiq-oldC.totalLiq);if(currentConsolAloj)viewConsolDetail(currentConsolAloj);scheduleReservaConfigSave(i);}
 function toggleValidateConsol(i){const wasV=validated.has(i);if(wasV)validated.delete(i);else validated.add(i);_validatedVersion++;invalidateFilterCache();if(currentConsolAloj)viewConsolDetail(currentConsolAloj);writeValidationToSheet(i,!wasV);}
 function validarTodasConsol(alojName) {
   const pending=allReservas.filter(r => r.alojamiento === alojName && !validated.has(r.idx));
@@ -1947,6 +2221,7 @@ function togglePasarela(i){
   const newC = getLiq(allReservas[i]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
   _patchSingleRow(i, oldC, newC);
+  scheduleReservaConfigSave(i);
 }
 function toggleValidate(i){
   const wasValidated = validated.has(i);
@@ -1966,7 +2241,7 @@ function toggleValidate(i){
   writeValidationToSheet(i, !wasValidated);
 }
 
-// ─── CACHED STATS for incremental updates ───
+// â”€â”€â”€ CACHED STATS for incremental updates â”€â”€â”€
 let _cachedFilteredStats = null; // { filPendingCount, filValidatedCount, fR, fL, fV, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tSub, tRet, tIva21, tLiq }
 
 function _computeStatsFromScratch(fil) {
@@ -1989,7 +2264,7 @@ function _getOrComputeStats(fil) {
   return _computeStatsFromScratch(fil);
 }
 
-// ─── IN-PLACE ROW UPDATE O(1) ───
+// â”€â”€â”€ IN-PLACE ROW UPDATE O(1) â”€â”€â”€
 function _patchSingleRow(idx, oldC, newC, validationFlipped) {
   const row = document.getElementById("row-" + idx);
   if (!row) { renderTable(); return; }
@@ -2008,7 +2283,7 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
   let st = _cachedFilteredStats;
   if (!st) { st = _computeStatsFromScratch(fil); }
 
-  // Row is in DOM → guaranteed in filtered set. Apply delta:
+  // Row is in DOM ↑ guaranteed in filtered set. Apply delta:
   if (oldC && newC) {
     // Setting/pasarela change: subtract old values, add new
     st.fL += (newC.totalLiq - oldC.totalLiq);
@@ -2043,9 +2318,9 @@ function _renderStatsFromCache(fil, st) {
   const btnVal = document.getElementById("btn-validar-todas");
   const btnDesval = document.getElementById("btn-desvalidar-todas");
   btnVal.style.display = st.filPendingCount > 0 ? '' : 'none';
-  btnVal.textContent = st.filPendingCount === fil.length ? `✔ Validar todas (${st.filPendingCount})` : `✔ Validar pendientes (${st.filPendingCount})`;
+  btnVal.textContent = st.filPendingCount === fil.length ? `âœ” Validar todas (${st.filPendingCount})` : `âœ” Validar pendientes (${st.filPendingCount})`;
   btnDesval.style.display = st.filValidatedCount > 0 ? '' : 'none';
-  btnDesval.textContent = st.filValidatedCount === fil.length ? `↩ Desvalidar todas (${st.filValidatedCount})` : `↩ Desvalidar validadas (${st.filValidatedCount})`;
+  btnDesval.textContent = st.filValidatedCount === fil.length ? `â†© Desvalidar todas (${st.filValidatedCount})` : `â†© Desvalidar validadas (${st.filValidatedCount})`;
 
   document.getElementById("filter-count").textContent = fil.length + " reservas";
   const pctR = allReservas.length > 0 ? (fil.length / allReservas.length * 100).toFixed(1) : 0;
@@ -2096,7 +2371,7 @@ function goToReserva(idx) {
   }, 100);
 }
 
-// ─── INDIVIDUAL DETAIL ───
+// â”€â”€â”€ INDIVIDUAL DETAIL â”€â”€â”€
 function viewDetail(idx) {
   currentDetailIdx = idx;
   const r=allReservas.find(x=>x.idx===idx); if(!r)return;
@@ -2166,7 +2441,7 @@ function viewDetail(idx) {
   document.getElementById("nav-detail").style.display="block"; showScreen("detail");
 }
 
-// ─── CONSOLIDATED GRID ───
+// â”€â”€â”€ CONSOLIDATED GRID â”€â”€â”€
 let _alojCache = null;
 function invalidateAlojCache() { _alojCache = null; }
 function getAlojamientos() {
@@ -2286,7 +2561,7 @@ function renderConsolGrid() {
   document.getElementById("aloj-grid").innerHTML = cardsHTML;
 }
 
-// ─── CONSOLIDATED DETAIL ───
+// â”€â”€â”€ CONSOLIDATED DETAIL â”€â”€â”€
 function buildComPlatRows(calcs) {
   const groups = {};
   calcs.forEach(x => {
@@ -2604,7 +2879,7 @@ function viewConsolDetail(alojName) {
             </div>
             ${_previewPref !== null
               ? `<div style="font-size:12px;color:#9ca3af;">
-                  ${_previewPref ? 'ðŸ‘ Se mostrará previsualización' : 'ðŸ–¨ Se imprimirá directamente'}
+                  ${_previewPref ? '👁 Se mostrará previsualización' : '🖨 Se imprimirá directamente'}
                   &nbsp;·&nbsp; <a href="#" onclick="resetPreviewPref();return false;" style="color:#4f8cff;">Cambiar</a>
                 </div>`
               : `<div id="preview-options" style="display:flex;gap:16px;align-items:center;">
@@ -2630,7 +2905,7 @@ function viewConsolDetail(alojName) {
   showScreen("consoldetail");
 }
 
-// ─── PRINT PREFERENCES ───
+// â”€â”€â”€ PRINT PREFERENCES â”€â”€â”€
 let _previewPref = null; // null = show options, true = always preview, false = never preview
 try { const v = localStorage.getItem('liq-preview-pref'); if (v !== null) _previewPref = v === 'true'; } catch(e) {}
 
@@ -2821,14 +3096,14 @@ function printConsolDirect() {
   }, 100);
 }
 
-// ─── CONFIG MODAL ───
+// â”€â”€â”€ CONFIG MODAL â”€â”€â”€
 function switchTab(tabId, btn) {
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".modal-tab").forEach(t => t.classList.remove("active"));
   document.getElementById(tabId).classList.add("active"); btn.classList.add("active");
 }
 function openConfigModal() { renderConfigModal(); document.getElementById("config-modal").style.display = "flex"; }
-function closeConfigModal() { document.getElementById("config-modal").style.display = "none"; rebuildSelectCache(); invalidateCache(); renderTable(); }
+function closeConfigModal() { document.getElementById("config-modal").style.display = "none"; rebuildSelectCache(); invalidateCache(); renderTable(); scheduleGlobalConfigSave(); }
 
 function buildOS(title, desc, vals, unit, addId, addFn, delFn) {
   const items = vals.map((v, i) => `<div class="option-item"><span class="val">${v}${unit}</span>
@@ -2876,11 +3151,11 @@ function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);con
   if(list.some(x=>Math.abs(x-v)<0.001)){alert("Ya existe.");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}
 function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal();}
 
-// ─── SEARCHABLE COMBO SYSTEM ───
+// â”€â”€â”€ SEARCHABLE COMBO SYSTEM â”€â”€â”€
 const comboState = { platform: { selected: new Set(), options: [] }, aloj: { selected: new Set(), options: [] } };
 const comboLabels = { platform: 'Todas las plataformas', aloj: 'Todos los alojamientos' };
 
-// ─── MONTH PICKER STATE ───
+// â”€â”€â”€ MONTH PICKER STATE â”€â”€â”€
 const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const MONTH_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let _mpYear = null, _mpMonth = null; // null = all
@@ -2936,7 +3211,7 @@ function renderMonthPickerDD() {
   dd.innerHTML = `
     <div class="mp-years">${yearsHtml}</div>
     <div class="mp-grid">${monthsHtml}</div>
-    ${_mpYear !== null || _mpMonth !== null ? `<button class="mp-all" onclick="event.stopPropagation();clearMonthFilter()">✕ Quitar filtro de fecha</button>` : ''}
+    ${_mpYear !== null || _mpMonth !== null ? `<button class="mp-all" onclick="event.stopPropagation();clearMonthFilter()">âœ• Quitar filtro de fecha</button>` : ''}
   `;
 }
 
@@ -2986,7 +3261,7 @@ function _mpBtnHtml(arrows) {
       + '<span class="mp-nav">'
       + '<button class="mp-arrow" onclick="event.stopPropagation();mpNext()">&#8250;</button>'
       + '</span>'
-      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">✕</span>' };
+      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">âœ•</span>' };
   } else if (_mpYear !== null) {
     return { active: true, html: '<span class="mp-nav">'
       + '<button class="mp-arrow" onclick="event.stopPropagation();mpPrev()">&#8249;</button>'
@@ -2995,7 +3270,7 @@ function _mpBtnHtml(arrows) {
       + '<span class="mp-nav">'
       + '<button class="mp-arrow" onclick="event.stopPropagation();mpNext()">&#8250;</button>'
       + '</span>'
-      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">✕</span>' };
+      + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">âœ•</span>' };
   }
   return { active: false, html: null };
 }
@@ -3136,12 +3411,12 @@ function clearCombo(id) {
   invalidateFilterCache(); _currentPage = 1; renderTable();
 }
 
-// ─── SIMPLE COMBO SYSTEM (for status, sort, sortdir) ───
+// â”€â”€â”€ SIMPLE COMBO SYSTEM (for status, sort, sortdir) â”€â”€â”€
 const simpleComboState = {
   status: { value: 'all', label: 'Todos los estados' },
   sort: { value: 'idx', label: 'Orden original' },
   sortdir: { value: 'asc', label: '&#8593;' },
-  consolsort: { value: 'name', label: 'Nombre A→Z' }
+  consolsort: { value: 'name', label: 'Nombre A↑Z' }
 };
 const simpleComboOptions = {
   status: [
@@ -3176,8 +3451,8 @@ const simpleComboOptions = {
     { value: 'desc', label: '&#8595; Descendente' }
   ],
   consolsort: [
-    { value: 'name', label: 'Nombre A→Z' },
-    { value: 'name-desc', label: 'Nombre Z→A' },
+    { value: 'name', label: 'Nombre A↑Z' },
+    { value: 'name-desc', label: 'Nombre Z↑A' },
     { value: 'reservas-desc', label: 'Más reservas' },
     { value: 'reservas-asc', label: 'Menos reservas' },
     { value: 'liq-desc', label: 'Mayor liquidación' },
@@ -3226,7 +3501,7 @@ function selectSimpleCombo(id, value) {
     }
   } else if (id === 'consolsort') {
     if (value === 'name') {
-      input.value = ''; input.placeholder = 'Nombre A→Z'; wrap.classList.remove('has-value');
+      input.value = ''; input.placeholder = 'Nombre A↑Z'; wrap.classList.remove('has-value');
     } else {
       input.value = opt.label; wrap.classList.add('has-value');
     }

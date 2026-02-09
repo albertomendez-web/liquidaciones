@@ -1639,11 +1639,8 @@ function getConsolDeductions(alojName) {
   var m = getConsolMaint(alojName);
   var extras = getConsolExtras(alojName);
   var maintBase = m.enabled ? m.amount : 0;
-  var maintIVA = maintBase * IVA_SUBTOTAL;
   var extrasTotal = extras.reduce(function(s,e){ return s + e.amount; }, 0);
-  var extrasIVA = extrasTotal * IVA_SUBTOTAL;
-  return { maintBase: maintBase, maintIVA: maintIVA, extrasTotal: extrasTotal, extrasIVA: extrasIVA,
-    total: maintBase + maintIVA + extrasTotal + extrasIVA };
+  return { maintBase: maintBase, extrasTotal: extrasTotal, totalBase: maintBase + extrasTotal };
 }
 
 let allReservas = [], settings = {}, validated = new Set(), _lastFiltered = [];
@@ -3058,93 +3055,55 @@ function buildLimpRows(calcs) {
 }
 
 // === Consolidated monthly deductions management ===
-function buildPrintDeductionsHtml(alojName, sumLiq) {
-  var ded = getConsolDeductions(alojName);
+function buildPrintDeductionsHtml(alojName) {
   var maint = getConsolMaint(alojName);
   var extras = getConsolExtras(alojName);
-  var h = '<div class="liq-total"><span>TOTAL RESERVAS A LIQUIDAR</span><span>' + fmt(sumLiq) + ' \u20AC</span></div>';
-  if (ded.total > 0) {
-    h += '<div style="padding:8px 0;">';
-    h += '<div class="liq-row bold"><span style="color:#92400e;">Deducciones mensuales</span><span></span></div>';
-    if (maint.enabled) {
-      h += '<div class="liq-row"><span>Mantenimiento (' + fmt(maint.amount) + ' \u20AC + IVA 21%)</span><span class="neg">- ' + fmt(maint.amount + maint.amount * 0.21) + ' \u20AC</span></div>';
-    }
-    extras.forEach(function(ex) {
-      h += '<div class="liq-row"><span>' + ex.label + ' (' + fmt(ex.amount) + ' \u20AC + IVA 21%)</span><span class="neg">- ' + fmt(ex.amount + ex.amount * 0.21) + ' \u20AC</span></div>';
-    });
-    h += '</div>';
-    h += '<div class="liq-total"><span>TOTAL FINAL A LIQUIDAR</span><span>' + fmt(sumLiq - ded.total) + ' \u20AC</span></div>';
+  var h = '';
+  if (maint.enabled) {
+    h += '<div class="liq-row"><span>Mantenimiento</span><span class="neg">- ' + fmt(maint.amount) + ' \u20AC</span></div>';
   }
+  extras.forEach(function(ex) {
+    h += '<div class="liq-row"><span>' + ex.label + '</span><span class="neg">- ' + fmt(ex.amount) + ' \u20AC</span></div>';
+  });
   return h;
 }
 
-function buildConsolDeductionsHtml(alojName, sumLiq) {
+function buildConsolDeductionsHtml(alojName) {
   var maint = getConsolMaint(alojName);
   var extras = getConsolExtras(alojName);
-  var ded = getConsolDeductions(alojName);
   var esc = alojName.replace(/'/g, "\\'");
   var maintSelOpts = maintenanceOptions.map(function(o) {
     return '<option value="'+o+'"'+(o===maint.amount?' selected':'')+'>'+o+' \u20AC</option>';
   }).join('');
 
-  var borderRadius = ded.total > 0 ? '10px 10px 0 0' : '10px';
-  var html = '<div class="consol-total" style="margin-bottom:0;border-radius:'+borderRadius+'"><span>TOTAL RESERVAS A LIQUIDAR</span><span>'+fmt(sumLiq)+' \u20AC</span></div>';
+  var html = '';
 
-  if (ded.total > 0 || maint.enabled || extras.length > 0) {
-    html += '<div style="background:#fff8f0;border:2px solid #f59e0b;border-top:none;border-radius:0 0 10px 10px;padding:12px 16px;margin-bottom:16px;">';
-    html += '<div style="font-size:12px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">Deducciones mensuales</div>';
+  // Maintenance row
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;">';
+  html += '<div style="display:flex;align-items:center;gap:8px;">';
+  html += '<button onclick="toggleConsolMaint(\''+esc+'\')" style="width:20px;height:20px;border-radius:4px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">'+(maint.enabled?'&#10003;':'')+'</button>';
+  html += '<span style="font-size:13px;'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
+  if (maint.enabled) html += ' <select class="sel" onchange="changeConsolMaintAmount(\''+esc+'\',this.value)" style="font-size:11px;padding:3px 6px;">'+maintSelOpts+'</select>';
+  html += '</div>';
+  if (maint.enabled) html += '<span class="neg">- '+fmt(maint.amount)+' \u20AC</span>';
+  html += '</div>';
 
-    // Maintenance row
-    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #fde68a;">';
+  // Extra concepts
+  extras.forEach(function(ex, ei) {
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;">';
     html += '<div style="display:flex;align-items:center;gap:8px;">';
-    html += '<button onclick="toggleConsolMaint(\''+esc+'\')" style="width:22px;height:22px;border-radius:4px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">'+(maint.enabled?'&#10003;':'')+'</button>';
-    html += '<span style="font-size:13px;'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
-    if (maint.enabled) html += ' <select class="sel" onchange="changeConsolMaintAmount(\''+esc+'\',this.value)" style="font-size:11px;padding:3px 6px;">'+maintSelOpts+'</select>';
+    html += '<button onclick="removeConsolExtra(\''+esc+'\','+ei+')" style="width:20px;height:20px;border-radius:4px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">&#10005;</button>';
+    html += '<span style="font-size:13px;">'+ex.label+'</span>';
     html += '</div>';
-    if (maint.enabled) {
-      html += '<div style="text-align:right;font-size:12px;">';
-      html += '<span style="color:#e53935;font-weight:600;">- '+fmt(ded.maintBase)+' \u20AC</span>';
-      html += '<span style="color:#9ca3af;margin-left:6px;font-size:11px;">(+IVA: - '+fmt(ded.maintIVA)+' \u20AC)</span>';
-      html += '</div>';
-    }
+    html += '<span class="neg">- '+fmt(ex.amount)+' \u20AC</span>';
     html += '</div>';
+  });
 
-    // Extra concepts
-    extras.forEach(function(ex, ei) {
-      var exIVA = ex.amount * 0.21;
-      html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid #fde68a;">';
-      html += '<div style="display:flex;align-items:center;gap:8px;">';
-      html += '<button onclick="removeConsolExtra(\''+esc+'\','+ei+')" style="width:22px;height:22px;border-radius:4px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">&#10005;</button>';
-      html += '<span style="font-size:13px;">'+ex.label+'</span>';
-      html += '</div>';
-      html += '<div style="text-align:right;font-size:12px;">';
-      html += '<span style="color:#e53935;font-weight:600;">- '+fmt(ex.amount)+' \u20AC</span>';
-      html += '<span style="color:#9ca3af;margin-left:6px;font-size:11px;">(+IVA: - '+fmt(exIVA)+' \u20AC)</span>';
-      html += '</div></div>';
-    });
+  // Add concept button
+  html += '<div class="no-print" style="padding:4px 0;">';
+  html += '<button onclick="addConsolExtra(\''+esc+'\')" style="font-size:11px;color:#3b82f6;background:none;border:1px dashed #93c5fd;border-radius:6px;padding:4px 10px;cursor:pointer;">+ A\u00f1adir concepto</button>';
+  html += '</div>';
 
-    // Add concept button
-    html += '<div class="no-print" style="padding:8px 0 4px;">';
-    html += '<button onclick="addConsolExtra(\''+esc+'\')" style="font-size:12px;color:#3b82f6;background:none;border:1px dashed #93c5fd;border-radius:6px;padding:5px 12px;cursor:pointer;">+ A\u00f1adir concepto</button>';
-    html += '</div>';
-
-    // Deduction total
-    if (ded.total > 0) {
-      html += '<div style="display:flex;justify-content:space-between;padding:8px 0 4px;font-weight:700;font-size:13px;border-top:2px solid #f59e0b;">';
-      html += '<span style="color:#92400e;">Total deducciones (IVA inc.)</span>';
-      html += '<span style="color:#e53935;">- '+fmt(ded.total)+' \u20AC</span>';
-      html += '</div>';
-    }
-    html += '</div>';
-  } else {
-    html += '<div class="no-print" style="padding:8px 16px;"><button onclick="addConsolExtra(\''+esc+'\')" style="font-size:12px;color:#3b82f6;background:none;border:1px dashed #93c5fd;border-radius:6px;padding:5px 12px;cursor:pointer;">+ A\u00f1adir concepto mensual</button></div>';
-  }
-
-  // Grand total
-  if (ded.total > 0) {
-    var grandTotal = sumLiq - ded.total;
-    html += '<div class="consol-total" style="background:'+(grandTotal>=0?'#0f1628':'#b71c1c')+'"><span>TOTAL FINAL A LIQUIDAR</span><span>'+fmt(grandTotal)+' \u20AC</span></div>';
-  }
   return html;
 }
 
@@ -3312,7 +3271,13 @@ function viewConsolDetail(alojName) {
     <td class="cc-acciones" style="${_cfs}"></td>
   </tr>`;
 
-  const _dedHtml = buildConsolDeductionsHtml(alojName, sumLiq);
+  const _dedHtml = buildConsolDeductionsHtml(alojName);
+  const _ded = getConsolDeductions(alojName);
+  const adjSub = sumSub - _ded.totalBase;
+  const avgIrpfRate = sumSub > 0 ? sumRet / sumSub : 0;
+  const adjRet = adjSub * avgIrpfRate;
+  const adjIva = adjSub * IVA_SUBTOTAL;
+  const adjLiq = adjSub - adjRet + adjIva;
   const content = `
     <div class="consol-container print-target" id="print-zone">
       <div class="consol-header">
@@ -3374,12 +3339,13 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
         ${buildPasarelaRows(calcs)}
         ${buildLimpRows(calcs)}
         <div class="consol-row"><span>Amenities</span><span class="neg">- ${fmt(sumAmen)} &#8364;</span></div>
-        <div class="consol-divider"></div>
-        <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(sumSub)} &#8364;</span></div>
-        ${buildIrpfRows(calcs)}
-        <div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(sumIva)} &#8364;</span></div>
-
         ${_dedHtml}
+        <div class="consol-divider"></div>
+        <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(adjSub)} &#8364;</span></div>
+        <div class="consol-row"><span>Retención IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
+        <div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
+
+        <div class="consol-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(adjLiq)} &#8364;</span></div>
         </div>
       </div>
     </div>
@@ -3516,7 +3482,13 @@ function buildPrintCards() {
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
 
-  const _printDedHtml = buildPrintDeductionsHtml(a.name, sumLiq);
+  const _printDed = getConsolDeductions(a.name);
+  const _printDedHtml = buildPrintDeductionsHtml(a.name);
+  const _pAdjSub = sumSub - _printDed.totalBase;
+  const _pAvgIrpf = sumSub > 0 ? sumRet / sumSub : 0;
+  const _pAdjRet = _pAdjSub * _pAvgIrpf;
+  const _pAdjIva = _pAdjSub * IVA_SUBTOTAL;
+  const _pAdjLiq = _pAdjSub - _pAdjRet + _pAdjIva;
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-header">
       <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
@@ -3527,12 +3499,14 @@ function buildPrintCards() {
       </div>
     </div>
     <div style="padding:8px 0;">
-      <div class="liq-row bold"><span>Subtotal</span><span>${fmt(sumSub)} &#8364;</span></div>
+      <div class="liq-row bold"><span>Subtotal reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
+      ${_printDedHtml}
       <div class="liq-divider"></div>
-      <div class="liq-row"><span>Retención IRPF</span><span class="neg">- ${fmt(sumRet)} &#8364;</span></div>
-      <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(sumIva)} &#8364;</span></div>
+      <div class="liq-row bold"><span>Subtotal ajustado</span><span>${fmt(_pAdjSub)} &#8364;</span></div>
+      <div class="liq-row"><span>Retención IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
+      <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>
-    ${_printDedHtml}
+    <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(_pAdjLiq)} &#8364;</span></div>
   </div>`;
 
   return { cardsHtml, summaryHtml };

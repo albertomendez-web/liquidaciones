@@ -149,22 +149,16 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-body { background: #fff; border-radius: 0 0 14px 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
 .consol-section-title { padding: 14px 28px 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; background: #f8f9fb; border-top: 2px solid #eef0f4; }
 .consol-section-title:first-child { border-top: none; }
-.consol-summary-block { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-top: 2px solid #e2e8f0; padding: 24px; }
-.consol-summary-inner { max-width: 680px; margin: 0 auto; }
-.consol-summary-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.consol-summary-title::before { content: ''; display: inline-block; width: 3px; height: 14px; background: #4f8cff; border-radius: 2px; }
-.consol-group { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); margin-bottom: 12px; overflow: hidden; border: 1px solid #e8ecf1; }
-.consol-group-header { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; padding: 10px 20px 6px; }
-.consol-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 20px; font-size: 13px; }
-.consol-row + .consol-row { border-top: 1px solid #f1f5f9; }
-.consol-row.sub { padding-left: 36px; font-size: 12px; color: #94a3b8; }
-.consol-row .neg { color: #e53935; font-weight: 500; font-variant-numeric: tabular-nums; }
-.consol-row .pos { color: #16a34a; font-weight: 500; font-variant-numeric: tabular-nums; }
+.consol-summary-block { padding: 0; }
+.consol-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 28px; font-size: 13px; }
+.consol-row:nth-child(even) { background: #fafbfc; }
+.consol-row.sub { padding-left: 44px; font-size: 12px; color: #6b7280; }
+.consol-row .neg { color: #e53935; font-variant-numeric: tabular-nums; }
+.consol-row .pos { color: #43a047; font-variant-numeric: tabular-nums; }
 .consol-row.bold { font-weight: 700; }
-.consol-row.bold .neg { font-weight: 700; }
-.consol-divider { display: none; }
-.consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; font-size: 16px; font-weight: 700; background: linear-gradient(135deg, #f0f4ff 0%, #e8ecf8 100%); border-radius: 10px; margin-bottom: 12px; border: 1px solid #c7d2fe; color: #1e293b; }
-.consol-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; font-size: 20px; font-weight: 800; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #fff; border-radius: 12px; letter-spacing: -0.01em; box-shadow: 0 4px 12px rgba(15,23,42,0.25); }
+.consol-divider { height: 1px; background: #eef0f4; margin: 4px 28px; }
+.consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; font-size: 15px; font-weight: 700; background: #f0f2f5; }
+.consol-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; font-size: 20px; font-weight: 700; background: #0f1628; color: #fff; border-radius: 0 0 14px 14px; }
 .consol-mini-table { margin: 0; width: 100%; table-layout: auto; }
 .consol-mini-table th { font-size: 10px; padding: 10px 8px; }
 .consol-mini-table td { font-size: 11px; padding: 8px 8px; }
@@ -243,17 +237,11 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* Summary rows */
   .consol-section-title { padding: 8px 16px 4px !important; font-size: 9px !important; }
-  .consol-summary-block { padding: 12px !important; background: #fff !important; border-top: 1px solid #ddd !important; }
-  .consol-summary-inner { max-width: none !important; }
-  .consol-summary-title { font-size: 9px !important; margin-bottom: 8px !important; }
-  .consol-group { box-shadow: none !important; border: 1px solid #ddd !important; margin-bottom: 6px !important; }
-  .consol-group-header { padding: 6px 12px 3px !important; font-size: 8px !important; }
-  .consol-row { padding: 4px 12px !important; font-size: 10px !important; }
-  .consol-row + .consol-row { border-top: 1px solid #eee !important; }
-  .consol-row.sub { padding-left: 24px !important; font-size: 9px !important; }
-  .consol-divider { display: none !important; }
-  .consol-subtotal { padding: 8px 12px !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; margin-bottom: 4px !important; }
-  .consol-total { padding: 12px 12px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; box-shadow: none !important; }
+  .consol-row { padding: 5px 16px !important; font-size: 10px !important; }
+  .consol-row.sub { padding-left: 28px !important; font-size: 9px !important; }
+  .consol-divider { margin: 2px 16px !important; }
+  .consol-subtotal { padding: 8px 16px !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-total { padding: 12px 16px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; }
 
   /* CRITICAL: keep summary + total together \u2014 never split across pages */
   .consol-summary-block { page-break-inside: avoid !important; break-inside: avoid !important; }
@@ -3335,40 +3323,26 @@ function viewConsolDetail(alojName) {
         </div>
 
         <div class="consol-summary-block">
-        <div class="consol-summary-inner">
-        <div class="consol-summary-title">Resumen Consolidado</div>
-
-        <div class="consol-group">
-          <div class="consol-group-header">Ingresos</div>
-          <div class="consol-row bold"><span>Total Reservas (IVA incluido)</span><span>${fmt(sumTotal)} &#8364;</span></div>
-${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border-top:1px dashed #f59e0b;padding:4px 20px;">
-            <div style="display:flex;justify-content:space-between;font-size:12px;color:#d97706;padding:2px 0;"><span>&#9888; Total original reservas</span><span>${fmt(sumOriginal)} &#8364;</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;color:#d97706;padding:2px 0;"><span>Conceptos especiales descontados</span><span style="color:#e53935;">- ${fmt(sumCE)} &#8364;</span></div>
-          </div>` : ''}
-          <div class="consol-row"><span>IVA Reservas (10%)</span><span class="neg">- ${fmt(sumTotal - sumBase)} &#8364;</span></div>
-          <div class="consol-row bold"><span>Base sin IVA</span><span>${fmt(sumBase)} &#8364;</span></div>
-        </div>
-
-        <div class="consol-group">
-          <div class="consol-group-header">Deducciones</div>
-          ${buildComPlatRows(calcs)}
-          ${buildGTCRows(calcs)}
-          ${buildPasarelaRows(calcs)}
-          ${buildLimpRows(calcs)}
-          <div class="consol-row"><span>Amenities</span><span class="neg">- ${fmt(sumAmen)} &#8364;</span></div>
-          ${_dedHtml}
-        </div>
-
+        <div class="consol-section-title">Resumen Consolidado</div>
+        <div class="consol-row bold"><span>Total Reservas (IVA incluido)</span><span>${fmt(sumTotal)} &#8364;</span></div>
+${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed #f59e0b;border-radius:6px;margin:4px 28px;padding:4px 12px;">
+          <div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>&#9888; Total original reservas</span><span>${fmt(sumOriginal)} &#8364;</span></div>
+          <div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>Conceptos especiales descontados</span><span class="neg">- ${fmt(sumCE)} &#8364;</span></div>
+        </div>` : ''}
+        <div class="consol-row"><span>IVA Reservas (10%)</span><span class="neg">- ${fmt(sumTotal - sumBase)} &#8364;</span></div>
+        <div class="consol-row bold"><span>Base sin IVA</span><span>${fmt(sumBase)} &#8364;</span></div>
+        <div class="consol-divider"></div>
+        ${buildComPlatRows(calcs)}
+        ${buildGTCRows(calcs)}
+        ${buildPasarelaRows(calcs)}
+        ${buildLimpRows(calcs)}
+        <div class="consol-row"><span>Amenities</span><span class="neg">- ${fmt(sumAmen)} &#8364;</span></div>
+        ${_dedHtml}
+        <div class="consol-divider"></div>
         <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(adjSub)} &#8364;</span></div>
-
-        <div class="consol-group">
-          <div class="consol-group-header">Impuestos y Retenciones</div>
-          <div class="consol-row"><span>Retención IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
-          <div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
-        </div>
-
+        <div class="consol-row"><span>Retención IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
+        <div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
         <div class="consol-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(adjLiq)} &#8364;</span></div>
-        </div>
         </div>
       </div>
     </div>
@@ -3691,7 +3665,18 @@ function buildAvailableMonths() {
     _mpAvailable[y][m] = (_mpAvailable[y][m] || 0) + 1;
   });
   _mpYears = Object.keys(_mpAvailable).map(Number).sort((a,b) => b-a);
-  _mpYear = null; _mpMonth = null;
+  // Default to current year + month if available
+  const now = new Date();
+  const curY = now.getFullYear(), curM = now.getMonth();
+  if (_mpAvailable[curY]) {
+    _mpYear = curY;
+    _mpMonth = _mpAvailable[curY][curM] !== undefined ? curM : null;
+  } else if (_mpYears.length > 0) {
+    _mpYear = _mpYears[0];
+    _mpMonth = null;
+  } else {
+    _mpYear = null; _mpMonth = null;
+  }
   updateMonthPickerBtn();
 }
 

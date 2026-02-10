@@ -629,7 +629,7 @@ tr.ce-highlighted { background:#fffdf5; }
     </div>
     <div class="modal-tabs">
       <button class="modal-tab active" onclick="switchTab('tab-plat',this)">Canal de Venta</button>
-      <button class="modal-tab" onclick="switchTab('tab-otros',this)">Servicio GTC / Limpieza</button>
+      <button class="modal-tab" onclick="switchTab('tab-otros',this)">Servicio GTC / Limpieza / Amenities / Mant.</button>
       <button class="modal-tab" onclick="switchTab('tab-pasarela',this)">Pasarela</button>
       <button class="modal-tab" onclick="switchTab('tab-impuestos',this)">Impuestos</button>
     </div>
@@ -668,9 +668,9 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.7.3';
-const APP_BUILD   = '2026-02-10T12:30:00';
-const APP_CHANGES = 'Renombrar Plataforma→Canal de Venta; reordenar secciones detalle y config; fix scroll jump';
+const APP_VERSION = '1.7.4';
+const APP_BUILD   = '2026-02-10T13:00:00';
+const APP_CHANGES = 'Tab config completo; fix toast versión; fix micro-vibración scroll';
 
 // Mostrar versión en sidebar + toast si nueva versión
 window.addEventListener('DOMContentLoaded', () => {
@@ -706,7 +706,7 @@ function showVersionToast(prevVersion) {
       toast.style.transform = 'translateY(0)';
     });
   });
-  setTimeout(() => closeVersionToast(), 8000);
+  setTimeout(() => closeVersionToast(), 12000);
 }
 function closeVersionToast() {
   const t = document.getElementById('version-toast');

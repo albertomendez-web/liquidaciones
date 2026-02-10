@@ -17,6 +17,20 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .nav-item:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
 .nav-item.active { color: #fff; font-weight: 600; background: rgba(255,255,255,0.08); border-left-color: #4f8cff; }
 .sidebar-footer { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: rgba(255,255,255,0.35); margin-top: auto; }
+.changelog-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center; }
+.changelog-modal { background:#fff; border-radius:16px; max-width:640px; width:90vw; max-height:80vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
+.changelog-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid #e5e7eb; }
+.changelog-header h3 { margin:0; font-size:18px; color:#1a2744; }
+.changelog-body { overflow-y:auto; padding:20px 24px; flex:1; }
+.cl-version { margin-bottom:20px; }
+.cl-version:last-child { margin-bottom:0; }
+.cl-version-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.cl-badge { background:#4f8cff; color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:20px; }
+.cl-badge.current { background:#43a047; }
+.cl-date { font-size:12px; color:#9ca3af; }
+.cl-changes { list-style:none; padding:0; margin:0; }
+.cl-changes li { font-size:13px; color:#4b5563; padding:3px 0 3px 18px; position:relative; line-height:1.5; }
+.cl-changes li::before { content:'•'; position:absolute; left:4px; color:#4f8cff; font-weight:700; }
 .main { margin-left: 250px; padding: 32px 40px; min-height: 100vh; }
 .card { background: #fff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); padding: 28px 32px; margin-bottom: 24px; }
 .upload-wrap { display: flex; align-items: center; justify-content: center; min-height: 70vh; }
@@ -406,6 +420,18 @@ tr.ce-highlighted { background:#fffdf5; }
     <span class="sync-text">Sincronizado</span>
   </div>
   <div class="sidebar-footer" id="version-indicator" style="cursor:pointer;" onclick="showVersionInfo()" title="Info de versión">v<span id="version-label"></span></div>
+  <div style="padding:0 24px 12px; font-size:11px;"><a href="#" onclick="event.preventDefault();showChangelog()" style="color:rgba(255,255,255,0.4);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">📋 Historial de cambios</a></div>
+</div>
+
+<!-- Changelog Modal -->
+<div class="changelog-overlay" id="changelog-overlay" onclick="if(event.target===this)closeChangelog()">
+  <div class="changelog-modal">
+    <div class="changelog-header">
+      <h3>📋 Historial de versiones</h3>
+      <button onclick="closeChangelog()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;padding:4px;">&times;</button>
+    </div>
+    <div class="changelog-body" id="changelog-body"></div>
+  </div>
 </div>
 
 <div class="main">
@@ -670,7 +696,104 @@ function clearSearchConsol() {
 
 const APP_VERSION = '1.7.4';
 const APP_BUILD   = '2026-02-10T13:00:00';
-const APP_CHANGES = 'Tab config completo; fix toast versión; fix micro-vibración scroll';
+const APP_CHANGES = 'Historial de versiones integrado; tab config completo; fix toast';
+
+const CHANGELOG = [
+  { version: '1.7.4', date: '2026-02-10', changes: [
+    'Historial de versiones integrado en la app con enlace en sidebar',
+    'Tab de configuración renombrado: Servicio GTC / Limpieza / Amenities / Mant.',
+    'Pestaña "Impuestos" separada para IRPF',
+    'Toast de nueva versión más duradero (12s)',
+    'Fix: toast no aparecía al no cambiar string de versión'
+  ]},
+  { version: '1.7.3', date: '2026-02-10', changes: [
+    'Renombrar "Plataforma" → "Canal de Venta" en cabeceras y detalle',
+    'Reordenar secciones: Canal de Venta → GTC/Limpieza → Pasarela → Impuestos',
+    'Fix: salto de scroll al hacer click con pocos resultados filtrados',
+    'Fix: micro-vibración DOM con overflow-anchor y DocumentFragment',
+    'Fix: IDs de panel CE corregidos en _patchSingleRow (ce-ppanel-)'
+  ]},
+  { version: '1.7.2', date: '2026-02-10', changes: [
+    'CE interactivo en vista consolidada (panel desplegable)',
+    'Sistema de prefijo de vista (p/c) para evitar conflictos de IDs',
+    'Toast de notificación de nueva versión al arrancar',
+    'Filtro mes/año por defecto al mes y año actual',
+    'Deducciones mensuales (mantenimiento + extras) antes del subtotal',
+    'Fix: limpieza e IRPF con valor 0€ no se aplicaban (bug falsy)',
+    'Fix: estilos consol-row mejorados'
+  ]},
+  { version: '1.7.1', date: '2026-02-09', changes: [
+    'Integración de propietarios desde Google Sheets con edición inline',
+    'Columnas renombradas: Canal de Venta, Gestión GTC, Pasarela de pago',
+    'Estado de validación ordenable en la tabla',
+    'Fix: filtrado por tab en configuración'
+  ]},
+  { version: '1.7.0', date: '2026-02-09', changes: [
+    'Conceptos Especiales (CE): panel inline con botón +/- por reserva',
+    'CE se descuenta del total antes de calcular comisiones',
+    'CE integrado en vista principal, consolidada, detalle e impresión',
+    'Persistencia de CE en Google Sheets (tab Configuracion)',
+    'Búsqueda mejorada: filtra también por importes y CE',
+    'Fix: cabeceras de columna CE con tooltip',
+    'Fix: comportamiento de click en botón CE',
+    'Fix: persistencia de autenticación Google entre sesiones'
+  ]},
+  { version: '1.6.1', date: '2026-02-09', changes: [
+    'Amenities configurables por reserva (no solo global)',
+    'Fix: tab Configuracion se filtraba incorrectamente en carga',
+    'Fix: estado de carga atascado al cambiar de fuente',
+    'Fix: correcciones de codificación UTF-8 en textos españoles'
+  ]},
+  { version: '1.6.0', date: '2026-02-09', changes: [
+    'Persistencia de configuración en pestaña "Configuracion" de Google Sheets',
+    'Auto-guardado de opciones globales y ajustes por reserva',
+    'Carga automática de configuración al conectar Google Sheets',
+    'Debounce inteligente para minimizar escrituras API'
+  ]},
+  { version: '1.5.1', date: '2026-02-09', changes: [
+    'Sincronización inmediata con indicadores visuales de estado',
+    'Búsqueda de texto global en todas las vistas',
+    'Mejoras en layout de columnas',
+    'Escritura de validaciones directamente en Google Sheets'
+  ]},
+  { version: '1.5.0', date: '2026-02-08', changes: [
+    'Write-back de estado de validación a Google Sheets',
+    'Detección automática de columna de validación',
+    'Operaciones batch para validar/desvalidar múltiples reservas',
+    'Paginación con delta-updates para rendimiento O(1)',
+    'Optimización de rendimiento para miles de reservas'
+  ]},
+  { version: '1.4.0', date: '2026-02-07', changes: [
+    'Vista consolidada por alojamiento con resumen financiero',
+    'Liquidación individual con desglose completo',
+    'Impresión optimizada de liquidaciones',
+    'Integración con Google Sheets vía OAuth'
+  ]},
+  { version: '1.3.0', date: '2026-02-06', changes: [
+    'Sistema de filtros combinados: plataforma, alojamiento, estado',
+    'Filtro por mes/año con selector visual',
+    'Ordenación por múltiples campos',
+    'Tarjetas de estadísticas con porcentajes filtrados'
+  ]},
+  { version: '1.2.0', date: '2026-02-05', changes: [
+    'Pasarela de pago configurable (Stripe/Booking)',
+    'Toggle de activación/desactivación por reserva',
+    'Modal de configuración con gestión de opciones',
+    'Cálculo de IVA sobre subtotal'
+  ]},
+  { version: '1.1.0', date: '2026-02-04', changes: [
+    'Cálculo de liquidación: comisiones, limpieza, IRPF',
+    'Vista de detalle individual por reserva',
+    'Validación de reservas con estado persistente',
+    'Exportación y carga de ficheros Excel'
+  ]},
+  { version: '1.0.0', date: '2026-02-03', changes: [
+    'Versión inicial: carga de ficheros Excel de reservas',
+    'Tabla de preliquidaciones con columnas configurables',
+    'Sidebar de navegación',
+    'Diseño responsive'
+  ]}
+];
 
 // Mostrar versión en sidebar + toast si nueva versión
 window.addEventListener('DOMContentLoaded', () => {
@@ -686,15 +809,21 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function showVersionToast(prevVersion) {
+  const entry = CHANGELOG.find(c => c.version === APP_VERSION);
+  const changesList = entry ? entry.changes.slice(0, 4).map(c => `<div style="font-size:11px;color:#cbd5e1;padding:2px 0 2px 12px;position:relative;line-height:1.4;"><span style="position:absolute;left:2px;color:#4f8cff;">•</span>${c}</div>`).join('') : `<div style="font-size:12px;color:#cbd5e1;">${APP_CHANGES}</div>`;
+  const moreCount = entry && entry.changes.length > 4 ? `<div style="font-size:11px;color:#64748b;margin-top:2px;">...y ${entry.changes.length - 4} más</div>` : '';
   const toast = document.createElement('div');
   toast.id = 'version-toast';
   toast.innerHTML = `
     <div style="display:flex;align-items:flex-start;gap:12px;">
       <span style="font-size:22px;line-height:1;">🚀</span>
       <div style="flex:1;min-width:0;">
-        <div style="font-weight:700;font-size:14px;margin-bottom:4px;">Actualización v${APP_VERSION}</div>
-        <div style="font-size:12px;color:#cbd5e1;line-height:1.4;">${APP_CHANGES}</div>
-        <div style="font-size:11px;color:#64748b;margin-top:4px;">Anterior: v${prevVersion}</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">Actualización v${APP_VERSION}</div>
+        ${changesList}${moreCount}
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+          <span style="font-size:11px;color:#64748b;">Anterior: v${prevVersion}</span>
+          <a href="#" onclick="event.preventDefault();closeVersionToast();showChangelog();" style="font-size:11px;color:#4f8cff;text-decoration:none;font-weight:600;">Ver historial completo →</a>
+        </div>
       </div>
       <button onclick="closeVersionToast()" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;padding:0;line-height:1;">&times;</button>
     </div>`;
@@ -716,9 +845,28 @@ function closeVersionToast() {
   setTimeout(() => t.remove(), 400);
 }
 function showVersionInfo() {
-  const buildDate = new Date(APP_BUILD);
-  const buildStr = buildDate.toLocaleDateString('es-ES', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' });
-  alert('Liquidaciones \u2014 Gestión de Reservas\n\nVersión: ' + APP_VERSION + '\nBuild: ' + buildStr + '\nCambios: ' + APP_CHANGES);
+  showChangelog();
+}
+
+function showChangelog() {
+  const body = document.getElementById('changelog-body');
+  body.innerHTML = CHANGELOG.map((v, i) => {
+    const isCurrent = v.version === APP_VERSION;
+    const items = v.changes.map(c => `<li>${c}</li>`).join('');
+    return `<div class="cl-version">
+      <div class="cl-version-header">
+        <span class="cl-badge${isCurrent ? ' current' : ''}">v${v.version}</span>
+        <span class="cl-date">${new Date(v.date + 'T12:00:00').toLocaleDateString('es-ES', {day:'2-digit', month:'long', year:'numeric'})}</span>
+        ${isCurrent ? '<span style="font-size:11px;color:#43a047;font-weight:600;">← actual</span>' : ''}
+      </div>
+      <ul class="cl-changes">${items}</ul>
+    </div>`;
+  }).join('');
+  document.getElementById('changelog-overlay').style.display = 'flex';
+}
+
+function closeChangelog() {
+  document.getElementById('changelog-overlay').style.display = 'none';
 }
 
 // \u2550\u2550\u2550 CONFIGURACIÓN GOOGLE \u2014 Sustituye con tus credenciales reales \u2550\u2550\u2550

@@ -471,11 +471,11 @@ tr.ce-highlighted { background:#fffdf5; }
 </div>
 
 <!-- AI Assistant -->
-<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" title="Asistente IA">🤖<span class="fab-badge" id="ai-badge"></span></button>
+<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" title="Asistente Histórico Reservas">🤖<span class="fab-badge" id="ai-badge"></span></button>
 <div class="ai-panel" id="ai-panel">
   <div class="ai-header">
     <span style="font-size:20px;">🤖</span>
-    <h3>Asistente Liquidaciones</h3>
+    <h3>Asistente Histórico Reservas</h3>
     <button class="ai-close" onclick="toggleAIPanel()">&times;</button>
   </div>
   <div class="ai-messages" id="ai-messages">
@@ -748,18 +748,19 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.8.0';
-const APP_BUILD   = '2026-02-10T23:53:00+01:00';
-const APP_CHANGES = 'Asistente IA integrado: chat con datos reales de reservas y liquidaciones';
+const APP_BUILD   = '2026-02-11T00:33:00+01:00';
+const APP_CHANGES = 'IA: contexto inteligente con reservas filtradas (max 200) + resúmenes globales completos';
 
 const CHANGELOG = [
-  { version: '1.8.0', date: '2026-02-10T23:53:00+01:00', changes: [
-    'Asistente IA integrado con botón flotante y panel lateral de chat',
-    'Responde solo con datos reales cargados (reservas, liquidaciones, importes)',
-    'Contexto automático: resúmenes por alojamiento, plataforma, mes + detalle completo',
-    'System prompt estricto anti-alucinaciones: solo datos, nunca inventa',
-    'API Key se guarda localmente en el navegador del usuario',
-    'Historial de conversación con contexto (últimos 20 mensajes)',
-    'Indicador de escritura animado mientras responde'
+  { version: '1.8.0', date: '2026-02-11T00:33:00+01:00', changes: [
+    'Asistente Histórico Reservas: chat IA integrado con botón flotante y panel lateral',
+    'Responde solo con datos reales cargados — nunca inventa cifras ni nombres',
+    'Contexto completo: resúmenes por alojamiento, plataforma, mes, edificio, atendido por, tipo reserva',
+    'Detalle por reserva: todos los campos del Sheet (ID, localizador, cliente, edificio, etc.)',
+    'Desglose de liquidación: base, comisiones, limpieza, amenities, CE, pasarela, subtotal',
+    'System prompt estricto anti-alucinaciones con referencia a campos disponibles',
+    'API Key se guarda localmente en el navegador (localStorage)',
+    'Contexto inteligente: resúmenes cubren 100% reservas, detalle usa filtros activos (max 200)'
   ]},
   { version: '1.7.5', date: '2026-02-10T09:07:00+01:00', changes: [
     'Changelog muestra día, hora y segundos en horario Madrid (+01:00)',
@@ -4381,88 +4382,127 @@ function _getAIKey() {
 function buildAIContext() {
   if (!allReservas || allReservas.length === 0) return 'No hay datos cargados.';
 
-  var totalReservas = allReservas.length;
-  var byAloj = {}, byPlat = {}, byMes = {};
-  var totalImporte = 0, totalLiq = 0, totalNoches = 0;
-  var validadas = 0, pendientes = 0;
+  var total = allReservas.length;
+  var byAloj = {}, byPlat = {}, byMes = {}, byEdificio = {}, byAtendido = {}, byTipo = {};
+  var sumImporte = 0, sumLiq = 0, sumNoches = 0, sumBase = 0;
+  var sumComPlat = 0, sumComGTC = 0, sumLimp = 0, sumAmen = 0, sumPas = 0, sumCE = 0;
+  var numVal = 0, numPend = 0;
 
   allReservas.forEach(function(r) {
     var c = getLiq(r);
-    totalImporte += c.total;
-    totalLiq += c.totalLiq;
-    totalNoches += (r.noches || 0);
-    if (r.validada) validadas++; else pendientes++;
+    var n = r._nights || 0;
+    sumImporte += c.total; sumLiq += c.totalLiq; sumNoches += n;
+    sumBase += c.baseSinIVA; sumComPlat += c.comPlat; sumComGTC += c.comGTC;
+    sumLimp += c.limp; sumAmen += c.amen; sumPas += c.comPas; sumCE += c.ceTotal;
+    if (validated.has(r.idx)) numVal++; else numPend++;
 
-    var a = r.aloj || 'Sin alojamiento';
-    if (!byAloj[a]) byAloj[a] = {n:0, importe:0, liq:0, noches:0};
-    byAloj[a].n++;
-    byAloj[a].importe += c.total;
-    byAloj[a].liq += c.totalLiq;
-    byAloj[a].noches += (r.noches || 0);
+    var a = r.alojamiento || 'Sin alojamiento';
+    if (!byAloj[a]) byAloj[a] = {n:0, imp:0, liq:0, noch:0, base:0};
+    byAloj[a].n++; byAloj[a].imp += c.total; byAloj[a].liq += c.totalLiq; byAloj[a].noch += n; byAloj[a].base += c.baseSinIVA;
 
     var p = r.plataforma || 'Desconocida';
-    if (!byPlat[p]) byPlat[p] = {n:0, importe:0, liq:0};
-    byPlat[p].n++;
-    byPlat[p].importe += c.total;
-    byPlat[p].liq += c.totalLiq;
+    if (!byPlat[p]) byPlat[p] = {n:0, imp:0, liq:0};
+    byPlat[p].n++; byPlat[p].imp += c.total; byPlat[p].liq += c.totalLiq;
 
-    var fE = r.fechaEntrada;
+    var fE = r._dEntrada;
     if (fE) {
-      var mes = '';
-      if (fE instanceof Date) mes = (fE.getMonth()+1).toString().padStart(2,'0') + '/' + fE.getFullYear();
-      else if (typeof fE === 'string' && fE.length >= 10) mes = fE.substring(3,10);
-      if (mes) {
-        if (!byMes[mes]) byMes[mes] = {n:0, importe:0, liq:0, noches:0};
-        byMes[mes].n++;
-        byMes[mes].importe += c.total;
-        byMes[mes].liq += c.totalLiq;
-        byMes[mes].noches += (r.noches || 0);
-      }
+      var mes = (fE.getMonth()+1).toString().padStart(2,'0') + '/' + fE.getFullYear();
+      if (!byMes[mes]) byMes[mes] = {n:0, imp:0, liq:0, noch:0};
+      byMes[mes].n++; byMes[mes].imp += c.total; byMes[mes].liq += c.totalLiq; byMes[mes].noch += n;
     }
+
+    var ed = r.edificio || 'Sin edificio';
+    if (!byEdificio[ed]) byEdificio[ed] = {n:0, imp:0};
+    byEdificio[ed].n++; byEdificio[ed].imp += c.total;
+
+    var at = r.atendidoPor || 'Sin asignar';
+    if (!byAtendido[at]) byAtendido[at] = {n:0, imp:0};
+    byAtendido[at].n++; byAtendido[at].imp += c.total;
+
+    var tp = r.tipoReserva || 'Sin tipo';
+    if (!byTipo[tp]) byTipo[tp] = {n:0, imp:0};
+    byTipo[tp].n++; byTipo[tp].imp += c.total;
   });
 
-  var ctx = '=== DATOS DE RESERVAS CARGADOS ===\n';
-  ctx += 'Total reservas: ' + totalReservas + '\n';
-  ctx += 'Validadas: ' + validadas + ' | Pendientes: ' + pendientes + '\n';
-  ctx += 'Total noches: ' + totalNoches + '\n';
-  ctx += 'Importe total (IVA inc.): ' + totalImporte.toFixed(2) + ' EUR\n';
-  ctx += 'Total a liquidar: ' + totalLiq.toFixed(2) + ' EUR\n\n';
+  var f = function(v){ return v.toFixed(2); };
+  var ctx = '=== RESUMEN GLOBAL ===\n';
+  ctx += 'Total reservas: ' + total + ' (Validadas: ' + numVal + ', Pendientes: ' + numPend + ')\n';
+  ctx += 'Total noches: ' + sumNoches + '\n';
+  ctx += 'Importe total reservas (IVA inc.): ' + f(sumImporte) + ' EUR\n';
+  ctx += 'Base sin IVA total: ' + f(sumBase) + ' EUR\n';
+  ctx += 'Comision canal total: ' + f(sumComPlat) + ' EUR\n';
+  ctx += 'Comision GTC total: ' + f(sumComGTC) + ' EUR\n';
+  ctx += 'Limpieza total: ' + f(sumLimp) + ' EUR\n';
+  ctx += 'Amenities total: ' + f(sumAmen) + ' EUR\n';
+  ctx += 'Pasarela total: ' + f(sumPas) + ' EUR\n';
+  ctx += 'Conceptos Especiales total: ' + f(sumCE) + ' EUR\n';
+  ctx += 'Total a liquidar: ' + f(sumLiq) + ' EUR\n\n';
 
-  ctx += '--- POR ALOJAMIENTO ---\n';
+  ctx += '=== POR ALOJAMIENTO ===\n';
   Object.keys(byAloj).sort().forEach(function(a) {
     var d = byAloj[a];
-    ctx += a + ': ' + d.n + ' reservas, ' + d.noches + ' noches, importe ' + d.importe.toFixed(2) + ' EUR, liquidar ' + d.liq.toFixed(2) + ' EUR\n';
+    ctx += a + ': ' + d.n + ' reservas, ' + d.noch + ' noches, importe(IVA) ' + f(d.imp) + ' EUR, base ' + f(d.base) + ' EUR, liquidar ' + f(d.liq) + ' EUR\n';
   });
 
-  ctx += '\n--- POR PLATAFORMA/CANAL ---\n';
+  ctx += '\n=== POR PLATAFORMA/CANAL DE VENTA ===\n';
   Object.keys(byPlat).sort().forEach(function(p) {
     var d = byPlat[p];
-    ctx += p + ': ' + d.n + ' reservas, importe ' + d.importe.toFixed(2) + ' EUR, liquidar ' + d.liq.toFixed(2) + ' EUR\n';
+    ctx += p + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR, liquidar ' + f(d.liq) + ' EUR\n';
   });
 
-  ctx += '\n--- POR MES ---\n';
+  ctx += '\n=== POR MES ===\n';
   Object.keys(byMes).sort().forEach(function(m) {
     var d = byMes[m];
-    ctx += m + ': ' + d.n + ' reservas, ' + d.noches + ' noches, importe ' + d.importe.toFixed(2) + ' EUR, liquidar ' + d.liq.toFixed(2) + ' EUR\n';
+    ctx += m + ': ' + d.n + ' reservas, ' + d.noch + ' noches, importe(IVA) ' + f(d.imp) + ' EUR, liquidar ' + f(d.liq) + ' EUR\n';
   });
 
-  ctx += '\n--- DETALLE RESERVAS ---\n';
-  ctx += 'ID | Cliente | Alojamiento | Plataforma | Entrada | Salida | Noches | Total_IVA | Base | ComCanal | ComGTC | Limpieza | Amenities | CE | Pasarela | ALiquidar | Estado\n';
-  allReservas.forEach(function(r) {
-    var c = getLiq(r);
-    var fE = r.fechaEntrada || '';
-    var fS = r.fechaSalida || '';
-    if (fE instanceof Date) fE = fE.toLocaleDateString('es-ES');
-    if (fS instanceof Date) fS = fS.toLocaleDateString('es-ES');
-    ctx += [
-      r.id || '-', (r.cliente||'-').substring(0,30), (r.aloj||'-').substring(0,25),
-      r.plataforma||'-', fE, fS, r.noches||0,
-      c.total.toFixed(2), c.base.toFixed(2), c.comPlataforma.toFixed(2),
-      c.comGTC.toFixed(2), c.limpieza.toFixed(2), c.amenities.toFixed(2),
-      (c.ceTotal||0).toFixed(2), c.comPasarela.toFixed(2),
-      c.totalLiq.toFixed(2), r.validada?'V':'P'
-    ].join(' | ') + '\n';
+  ctx += '\n=== POR EDIFICIO ===\n';
+  Object.keys(byEdificio).sort().forEach(function(e) {
+    var d = byEdificio[e];
+    ctx += e + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR\n';
   });
+
+  ctx += '\n=== POR ATENDIDO POR ===\n';
+  Object.keys(byAtendido).sort().forEach(function(a) {
+    var d = byAtendido[a];
+    ctx += a + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR\n';
+  });
+
+  ctx += '\n=== POR TIPO DE RESERVA ===\n';
+  Object.keys(byTipo).sort().forEach(function(t) {
+    var d = byTipo[t];
+    ctx += t + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR\n';
+  });
+
+  // Detail: use FILTERED rows (what user sees) instead of all, max 200
+  var filtered = (typeof getFilteredSorted === 'function') ? getFilteredSorted() : allReservas;
+  var maxDetail = 200;
+  var detailRows = filtered.slice(0, maxDetail);
+  var filteredTotal = filtered.length;
+  ctx += '\n=== DETALLE RESERVAS ';
+  if (filteredTotal < total) {
+    ctx += '(FILTRO ACTIVO: ' + filteredTotal + ' de ' + total + ' reservas';
+  } else {
+    ctx += '(' + total + ' reservas totales';
+  }
+  ctx += ', mostrando ' + detailRows.length + ') ===\n';
+  ctx += 'ID | Localizador | Cliente | Alojamiento | Edificio | Plataforma | AtendidoPor | TipoReserva | Entrada | Salida | Noches | ImporteIVA | BaseSinIVA | ComCanal | ComGTC | Limpieza | Amenities | CE | Pasarela | Subtotal | ALiquidar | Estado\n';
+  for (var i = 0; i < detailRows.length; i++) {
+    var r = detailRows[i];
+    var c = getLiq(r);
+    ctx += [
+      r.id||'-', r.localizador||'-', (r.cliente||'-').substring(0,25), (r.alojamiento||'-').substring(0,20),
+      (r.edificio||'-').substring(0,15), r.plataforma||'-', (r.atendidoPor||'-').substring(0,15),
+      (r.tipoReserva||'-').substring(0,10),
+      r._fmtEntrada||'-', r._fmtSalida||'-', r._nights||0,
+      f(c.total), f(c.baseSinIVA), f(c.comPlat), f(c.comGTC),
+      f(c.limp), f(c.amen), f(c.ceTotal||0), f(c.comPas),
+      f(c.sub), f(c.totalLiq), validated.has(r.idx)?'Validada':'Pendiente'
+    ].join(' | ') + '\n';
+  }
+  if (filteredTotal > maxDetail) {
+    ctx += '... (' + (filteredTotal - maxDetail) + ' reservas mas no incluidas en detalle, pero SI contabilizadas en los resumenes globales)\n';
+  }
 
   return ctx;
 }
@@ -4502,7 +4542,7 @@ async function sendAIMessage() {
   if (!text) return;
 
   if (!allReservas || allReservas.length === 0) {
-    _addAIMsg('error', 'Primero carga un fichero de reservas para poder responder preguntas.');
+    _addAIMsg('error', 'Primero carga las reservas desde Google Sheets o Excel para poder responder preguntas.');
     return;
   }
 
@@ -4519,17 +4559,26 @@ async function sendAIMessage() {
 
   try {
     var context = buildAIContext();
-    var sysPrompt = 'Eres el asistente de datos de "Liquidaciones GTC", una aplicación de gestión de reservas vacacionales.\n\n' +
+    var sysPrompt = 'Eres el "Asistente Histórico Reservas" de la aplicación Liquidaciones GTC, una herramienta de gestión de reservas vacacionales.\n\n' +
       'REGLAS ESTRICTAS:\n' +
       '1. SOLO puedes responder basándote en los datos proporcionados abajo. NUNCA inventes cifras, fechas, nombres de clientes, alojamientos ni importes.\n' +
       '2. Si no tienes la información para responder, di: "No tengo esa información en los datos cargados."\n' +
       '3. NUNCA des consejos financieros, legales ni fiscales. Solo reporta datos.\n' +
       '4. Responde siempre en español.\n' +
       '5. Sé conciso y directo. Usa cifras exactas con 2 decimales y el símbolo €.\n' +
-      '6. Si te preguntan por porcentajes o comparativas, calcula solo con los datos disponibles.\n' +
-      '7. Cuando cites importes, especifica si son con IVA incluido o sin IVA (base).\n' +
-      '8. NUNCA accedas a información externa. Solo los datos de abajo.\n' +
-      '9. Si te preguntan algo que no son datos (chistes, opiniones, etc.), responde amablemente que solo puedes responder sobre los datos de reservas.\n\n' +
+      '6. Cuando cites importes, especifica si son con IVA incluido o sin IVA (base).\n' +
+      '7. NUNCA accedas a información externa. Solo los datos de abajo.\n' +
+      '8. Si te preguntan algo que no son datos de reservas, responde amablemente que solo puedes responder sobre los datos de reservas cargados.\n' +
+      '9. Los resúmenes (por alojamiento, plataforma, mes, edificio, atendido por, tipo) son EXACTOS y cubren TODAS las reservas.\n' +
+      '10. El detalle individual muestra las reservas que el usuario tiene filtradas en pantalla (máximo 200). Los totales de los resúmenes siempre incluyen TODAS las reservas.\n' +
+      '11. Si el usuario necesita datos específicos de reservas individuales y hay muchas, sugiérele que filtre en la tabla (por alojamiento, plataforma, mes...) y vuelva a preguntar, así tendrás el detalle exacto.\n\n' +
+      'CAMPOS DISPONIBLES POR RESERVA:\n' +
+      '- ID Reserva, Localizador, Cliente, Alojamiento, Edificio, Plataforma (canal de venta)\n' +
+      '- Atendido Por, Tipo Reserva, Origen Marketing, Observaciones\n' +
+      '- Fecha Entrada, Fecha Salida, Noches\n' +
+      '- Importe total (IVA inc.), Base sin IVA\n' +
+      '- Comisión Canal de Venta, Comisión GTC, Limpieza, Amenities, Conceptos Especiales, Pasarela\n' +
+      '- Subtotal, Total a Liquidar, Estado (Validada/Pendiente)\n\n' +
       'DATOS ACTUALES:\n' + context;
 
     var messages = _aiHistory.slice(-20);

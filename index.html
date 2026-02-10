@@ -801,8 +801,15 @@ const CHANGELOG = [
 window.addEventListener('DOMContentLoaded', () => {
   const vl = document.getElementById('version-label');
   if (vl) {
-    const bd = new Date(APP_BUILD);
-    const bStr = bd.toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit', timeZone:'Europe/Madrid'});
+    // Record actual deploy time (first load of this version)
+    const deployKey = 'app-deploy-time-' + APP_VERSION;
+    let deployTime = localStorage.getItem(deployKey);
+    if (!deployTime) {
+      deployTime = new Date().toISOString();
+      localStorage.setItem(deployKey, deployTime);
+    }
+    const bd = new Date(deployTime);
+    const bStr = bd.toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Europe/Madrid'});
     vl.textContent = APP_VERSION + ' (' + bStr + ')';
   }
   try {
@@ -862,7 +869,7 @@ function showChangelog() {
     return `<div class="cl-version">
       <div class="cl-version-header">
         <span class="cl-badge${isCurrent ? ' current' : ''}">v${v.version}</span>
-        <span class="cl-date">${new Date(v.date).toLocaleDateString('es-ES', {day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', timeZone:'Europe/Madrid'})}</span>
+        <span class="cl-date">${new Date(v.date).toLocaleDateString('es-ES', {day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Europe/Madrid'})}</span>
         ${isCurrent ? '<span style="font-size:11px;color:#43a047;font-weight:600;">← actual</span>' : ''}
       </div>
       <ul class="cl-changes">${items}</ul>

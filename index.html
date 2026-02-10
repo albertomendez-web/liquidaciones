@@ -695,26 +695,27 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.7.4';
-const APP_BUILD   = '2026-02-10T15:00:00+01:00';
-const APP_CHANGES = 'Historial de versiones integrado; tab config completo; fix toast';
+const APP_BUILD   = '2026-02-10T08:30:00+01:00';
+const APP_CHANGES = 'Historial con hora Madrid; fix doble-click buscador; modal config estable';
 
 const CHANGELOG = [
-  { version: '1.7.4', date: '2026-02-10T14:30:00+01:00', changes: [
+  { version: '1.7.4', date: '2026-02-10T08:30:00+01:00', changes: [
     'Historial de versiones integrado en la app con enlace en sidebar',
     'Tab de configuración renombrado: Servicio GTC / Limpieza / Amenities / Mant.',
     'Pestaña "Impuestos" separada para IRPF',
     'Toast de nueva versión más duradero (12s)',
     'Fix: toast no aparecía al no cambiar string de versión',
     'Fix: doble-click necesario tras buscar (search input cambiaba de ancho)',
-    'Fix: micro-vibración DOM con overflow-anchor y DocumentFragment'
+    'Fix: micro-vibración DOM con overflow-anchor y DocumentFragment',
+    'Fix: modal config estable (min-height)'
   ]},
-  { version: '1.7.3', date: '2026-02-10T12:30:00+01:00', changes: [
+  { version: '1.7.3', date: '2026-02-10T08:00:00+01:00', changes: [
     'Renombrar "Plataforma" → "Canal de Venta" en cabeceras y detalle',
     'Reordenar secciones: Canal de Venta → GTC/Limpieza → Pasarela → Impuestos',
     'Fix: salto de scroll al hacer click con pocos resultados filtrados',
     'Fix: IDs de panel CE corregidos en _patchSingleRow (ce-ppanel-)'
   ]},
-  { version: '1.7.2', date: '2026-02-10T01:00:00+01:00', changes: [
+  { version: '1.7.2', date: '2026-02-10T07:20:00+01:00', changes: [
     'CE interactivo en vista consolidada (panel desplegable)',
     'Sistema de prefijo de vista (p/c) para evitar conflictos de IDs',
     'Toast de notificación de nueva versión al arrancar',
@@ -729,7 +730,7 @@ const CHANGELOG = [
     'Estado de validación ordenable en la tabla',
     'Fix: filtrado por tab en configuración'
   ]},
-  { version: '1.7.0', date: '2026-02-09T17:30:00+01:00', changes: [
+  { version: '1.7.0', date: '2026-02-09T18:40:00+01:00', changes: [
     'Conceptos Especiales (CE): panel inline con botón +/- por reserva',
     'CE se descuenta del total antes de calcular comisiones',
     'CE integrado en vista principal, consolidada, detalle e impresión',
@@ -739,50 +740,50 @@ const CHANGELOG = [
     'Fix: comportamiento de click en botón CE',
     'Fix: persistencia de autenticación Google entre sesiones'
   ]},
-  { version: '1.6.1', date: '2026-02-09T16:20:00+01:00', changes: [
+  { version: '1.6.1', date: '2026-02-09T16:23:00+01:00', changes: [
     'Amenities configurables por reserva (no solo global)',
     'Fix: tab Configuracion se filtraba incorrectamente en carga',
     'Fix: estado de carga atascado al cambiar de fuente',
     'Fix: correcciones de codificación UTF-8 en textos españoles'
   ]},
-  { version: '1.6.0', date: '2026-02-09T14:20:00+01:00', changes: [
+  { version: '1.6.0', date: '2026-02-09T14:21:00+01:00', changes: [
     'Persistencia de configuración en pestaña "Configuracion" de Google Sheets',
     'Auto-guardado de opciones globales y ajustes por reserva',
     'Carga automática de configuración al conectar Google Sheets',
     'Debounce inteligente para minimizar escrituras API'
   ]},
-  { version: '1.5.1', date: '2026-02-09T05:00:00+01:00', changes: [
+  { version: '1.5.1', date: '2026-02-09T06:00:00+01:00', changes: [
     'Sincronización inmediata con indicadores visuales de estado',
     'Búsqueda de texto global en todas las vistas',
     'Mejoras en layout de columnas',
     'Escritura de validaciones directamente en Google Sheets'
   ]},
-  { version: '1.5.0', date: '2026-02-08T18:00:00+01:00', changes: [
+  { version: '1.5.0', date: '2026-02-08T19:00:00+01:00', changes: [
     'Write-back de estado de validación a Google Sheets',
     'Detección automática de columna de validación',
     'Operaciones batch para validar/desvalidar múltiples reservas',
     'Paginación con delta-updates para rendimiento O(1)',
     'Optimización de rendimiento para miles de reservas'
   ]},
-  { version: '1.4.0', date: '2026-02-07T18:00:00+01:00', changes: [
+  { version: '1.4.0', date: '2026-02-07T19:00:00+01:00', changes: [
     'Vista consolidada por alojamiento con resumen financiero',
     'Liquidación individual con desglose completo',
     'Impresión optimizada de liquidaciones',
     'Integración con Google Sheets vía OAuth'
   ]},
-  { version: '1.3.0', date: '2026-02-06T18:00:00+01:00', changes: [
+  { version: '1.3.0', date: '2026-02-06T19:00:00+01:00', changes: [
     'Sistema de filtros combinados: plataforma, alojamiento, estado',
     'Filtro por mes/año con selector visual',
     'Ordenación por múltiples campos',
     'Tarjetas de estadísticas con porcentajes filtrados'
   ]},
-  { version: '1.2.0', date: '2026-02-05T18:00:00+01:00', changes: [
+  { version: '1.2.0', date: '2026-02-05T19:00:00+01:00', changes: [
     'Pasarela de pago configurable (Stripe/Booking)',
     'Toggle de activación/desactivación por reserva',
     'Modal de configuración con gestión de opciones',
     'Cálculo de IVA sobre subtotal'
   ]},
-  { version: '1.1.0', date: '2026-02-04T18:00:00+01:00', changes: [
+  { version: '1.1.0', date: '2026-02-04T19:00:00+01:00', changes: [
     'Cálculo de liquidación: comisiones, limpieza, IRPF',
     'Vista de detalle individual por reserva',
     'Validación de reservas con estado persistente',

@@ -400,6 +400,35 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .ce-panel-summary .ce-sum-val { font-size:16px;font-weight:700;color:#d97706;margin-top:4px; }
 tr.ce-highlighted { background:#fffdf5; }
 @media print { .ce-panel-row,.col-ce,.cc-ce,.ce-highlighted { display:none!important;background:transparent!important; } }
+/* === AI ASSISTANT === */
+.ai-fab { position:fixed; bottom:24px; right:24px; width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#4f8cff,#3b6de0); color:#fff; border:none; font-size:24px; cursor:pointer; box-shadow:0 4px 16px rgba(79,140,255,0.4); z-index:90; display:flex; align-items:center; justify-content:center; transition:transform 0.2s,box-shadow 0.2s; }
+.ai-fab:hover { transform:scale(1.08); box-shadow:0 6px 24px rgba(79,140,255,0.5); }
+.ai-fab .fab-badge { position:absolute; top:-2px; right:-2px; width:14px; height:14px; background:#43a047; border-radius:50%; border:2px solid #fff; display:none; }
+.ai-panel { position:fixed; right:-420px; top:0; bottom:0; width:400px; background:#fff; box-shadow:-4px 0 24px rgba(0,0,0,0.12); z-index:95; display:flex; flex-direction:column; transition:right 0.3s cubic-bezier(0.16,1,0.3,1); }
+.ai-panel.open { right:0; }
+.ai-header { padding:16px 20px; background:linear-gradient(135deg,#0f1628,#1a2744); color:#fff; display:flex; align-items:center; gap:12px; }
+.ai-header h3 { margin:0; font-size:15px; font-weight:600; flex:1; }
+.ai-header .ai-close { background:none; border:none; color:rgba(255,255,255,0.6); font-size:20px; cursor:pointer; padding:4px; }
+.ai-header .ai-close:hover { color:#fff; }
+.ai-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; }
+.ai-msg { max-width:88%; padding:10px 14px; border-radius:14px; font-size:13px; line-height:1.5; word-wrap:break-word; }
+.ai-msg.user { align-self:flex-end; background:#4f8cff; color:#fff; border-bottom-right-radius:4px; }
+.ai-msg.assistant { align-self:flex-start; background:#f1f3f5; color:#1a2744; border-bottom-left-radius:4px; }
+.ai-msg.assistant strong { font-weight:700; }
+.ai-msg.system { align-self:center; background:transparent; color:#9ca3af; font-size:11px; text-align:center; padding:4px; }
+.ai-msg.error { align-self:center; background:#fef2f2; color:#dc2626; font-size:12px; text-align:center; border-radius:8px; }
+.ai-input-wrap { padding:12px 16px; border-top:1px solid #eef0f4; display:flex; gap:8px; background:#fff; }
+.ai-input-wrap textarea { flex:1; border:1.5px solid #dde1e8; border-radius:10px; padding:10px 12px; font-size:13px; font-family:inherit; resize:none; outline:none; min-height:20px; max-height:100px; line-height:1.4; }
+.ai-input-wrap textarea:focus { border-color:#4f8cff; }
+.ai-input-wrap button { background:#4f8cff; color:#fff; border:none; border-radius:10px; padding:0 16px; cursor:pointer; font-size:14px; font-weight:600; transition:background 0.2s; }
+.ai-input-wrap button:hover { background:#3b6de0; }
+.ai-input-wrap button:disabled { background:#a0c4ff; cursor:not-allowed; }
+.ai-typing { display:flex; gap:4px; padding:8px 14px; }
+.ai-typing span { width:7px; height:7px; background:#9ca3af; border-radius:50%; animation:aiDot 1.4s infinite; }
+.ai-typing span:nth-child(2) { animation-delay:0.2s; }
+.ai-typing span:nth-child(3) { animation-delay:0.4s; }
+@keyframes aiDot { 0%,80%,100%{opacity:0.3;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
+@media print { .ai-fab,.ai-panel { display:none!important; } }
 </style>
 <style id="col-visibility-style"></style>
 <style id="consol-col-visibility-style"></style>
@@ -438,6 +467,23 @@ tr.ce-highlighted { background:#fffdf5; }
       <button onclick="closeChangelog()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;padding:4px;">&times;</button>
     </div>
     <div class="changelog-body" id="changelog-body"></div>
+  </div>
+</div>
+
+<!-- AI Assistant -->
+<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" title="Asistente IA">🤖<span class="fab-badge" id="ai-badge"></span></button>
+<div class="ai-panel" id="ai-panel">
+  <div class="ai-header">
+    <span style="font-size:20px;">🤖</span>
+    <h3>Asistente Liquidaciones</h3>
+    <button class="ai-close" onclick="toggleAIPanel()">&times;</button>
+  </div>
+  <div class="ai-messages" id="ai-messages">
+    <div class="ai-msg system">Pregúntame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.</div>
+  </div>
+  <div class="ai-input-wrap">
+    <textarea id="ai-input" placeholder="Escribe tu pregunta..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAIMessage();}"></textarea>
+    <button id="ai-send" onclick="sendAIMessage()">Enviar</button>
   </div>
 </div>
 
@@ -701,11 +747,20 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.7.5';
-const APP_BUILD   = '2026-02-10T09:07:00+01:00';
-const APP_CHANGES = 'Fix sombra lateral al abrir CE; scrollbar permanente fino y transparente';
+const APP_VERSION = '1.8.0';
+const APP_BUILD   = '2026-02-10T23:53:00+01:00';
+const APP_CHANGES = 'Asistente IA integrado: chat con datos reales de reservas y liquidaciones';
 
 const CHANGELOG = [
+  { version: '1.8.0', date: '2026-02-10T23:53:00+01:00', changes: [
+    'Asistente IA integrado con botón flotante y panel lateral de chat',
+    'Responde solo con datos reales cargados (reservas, liquidaciones, importes)',
+    'Contexto automático: resúmenes por alojamiento, plataforma, mes + detalle completo',
+    'System prompt estricto anti-alucinaciones: solo datos, nunca inventa',
+    'API Key se guarda localmente en el navegador del usuario',
+    'Historial de conversación con contexto (últimos 20 mensajes)',
+    'Indicador de escritura animado mientras responde'
+  ]},
   { version: '1.7.5', date: '2026-02-10T09:07:00+01:00', changes: [
     'Changelog muestra día, hora y segundos en horario Madrid (+01:00)',
     'Sidebar muestra hora real del deploy (primer acceso a la versión), no hora de build',
@@ -4297,6 +4352,238 @@ document.querySelectorAll('.combo-input').forEach(input => {
     if (e.key === 'Escape') { list.classList.remove('open'); this.blur(); }
   });
 });
+
+// ═══ AI ASSISTANT ═══
+var _aiPanelOpen = false;
+var _aiHistory = [];
+var _aiProcessing = false;
+
+function toggleAIPanel() {
+  _aiPanelOpen = !_aiPanelOpen;
+  document.getElementById('ai-panel').classList.toggle('open', _aiPanelOpen);
+  if (_aiPanelOpen) {
+    document.getElementById('ai-badge').style.display = 'none';
+    setTimeout(function(){ document.getElementById('ai-input').focus(); }, 300);
+  }
+}
+
+function _getAIKey() {
+  var key = localStorage.getItem('ai-api-key');
+  if (!key) {
+    key = prompt('Introduce tu API Key de Anthropic para activar el asistente IA.\n\nLa clave se guarda localmente en tu navegador y nunca se comparte.\n\nPuedes obtenerla en: console.anthropic.com');
+    if (key && key.trim()) {
+      localStorage.setItem('ai-api-key', key.trim());
+    } else { return null; }
+  }
+  return key;
+}
+
+function buildAIContext() {
+  if (!allReservas || allReservas.length === 0) return 'No hay datos cargados.';
+
+  var totalReservas = allReservas.length;
+  var byAloj = {}, byPlat = {}, byMes = {};
+  var totalImporte = 0, totalLiq = 0, totalNoches = 0;
+  var validadas = 0, pendientes = 0;
+
+  allReservas.forEach(function(r) {
+    var c = getLiq(r);
+    totalImporte += c.total;
+    totalLiq += c.totalLiq;
+    totalNoches += (r.noches || 0);
+    if (r.validada) validadas++; else pendientes++;
+
+    var a = r.aloj || 'Sin alojamiento';
+    if (!byAloj[a]) byAloj[a] = {n:0, importe:0, liq:0, noches:0};
+    byAloj[a].n++;
+    byAloj[a].importe += c.total;
+    byAloj[a].liq += c.totalLiq;
+    byAloj[a].noches += (r.noches || 0);
+
+    var p = r.plataforma || 'Desconocida';
+    if (!byPlat[p]) byPlat[p] = {n:0, importe:0, liq:0};
+    byPlat[p].n++;
+    byPlat[p].importe += c.total;
+    byPlat[p].liq += c.totalLiq;
+
+    var fE = r.fechaEntrada;
+    if (fE) {
+      var mes = '';
+      if (fE instanceof Date) mes = (fE.getMonth()+1).toString().padStart(2,'0') + '/' + fE.getFullYear();
+      else if (typeof fE === 'string' && fE.length >= 10) mes = fE.substring(3,10);
+      if (mes) {
+        if (!byMes[mes]) byMes[mes] = {n:0, importe:0, liq:0, noches:0};
+        byMes[mes].n++;
+        byMes[mes].importe += c.total;
+        byMes[mes].liq += c.totalLiq;
+        byMes[mes].noches += (r.noches || 0);
+      }
+    }
+  });
+
+  var ctx = '=== DATOS DE RESERVAS CARGADOS ===\n';
+  ctx += 'Total reservas: ' + totalReservas + '\n';
+  ctx += 'Validadas: ' + validadas + ' | Pendientes: ' + pendientes + '\n';
+  ctx += 'Total noches: ' + totalNoches + '\n';
+  ctx += 'Importe total (IVA inc.): ' + totalImporte.toFixed(2) + ' EUR\n';
+  ctx += 'Total a liquidar: ' + totalLiq.toFixed(2) + ' EUR\n\n';
+
+  ctx += '--- POR ALOJAMIENTO ---\n';
+  Object.keys(byAloj).sort().forEach(function(a) {
+    var d = byAloj[a];
+    ctx += a + ': ' + d.n + ' reservas, ' + d.noches + ' noches, importe ' + d.importe.toFixed(2) + ' EUR, liquidar ' + d.liq.toFixed(2) + ' EUR\n';
+  });
+
+  ctx += '\n--- POR PLATAFORMA/CANAL ---\n';
+  Object.keys(byPlat).sort().forEach(function(p) {
+    var d = byPlat[p];
+    ctx += p + ': ' + d.n + ' reservas, importe ' + d.importe.toFixed(2) + ' EUR, liquidar ' + d.liq.toFixed(2) + ' EUR\n';
+  });
+
+  ctx += '\n--- POR MES ---\n';
+  Object.keys(byMes).sort().forEach(function(m) {
+    var d = byMes[m];
+    ctx += m + ': ' + d.n + ' reservas, ' + d.noches + ' noches, importe ' + d.importe.toFixed(2) + ' EUR, liquidar ' + d.liq.toFixed(2) + ' EUR\n';
+  });
+
+  ctx += '\n--- DETALLE RESERVAS ---\n';
+  ctx += 'ID | Cliente | Alojamiento | Plataforma | Entrada | Salida | Noches | Total_IVA | Base | ComCanal | ComGTC | Limpieza | Amenities | CE | Pasarela | ALiquidar | Estado\n';
+  allReservas.forEach(function(r) {
+    var c = getLiq(r);
+    var fE = r.fechaEntrada || '';
+    var fS = r.fechaSalida || '';
+    if (fE instanceof Date) fE = fE.toLocaleDateString('es-ES');
+    if (fS instanceof Date) fS = fS.toLocaleDateString('es-ES');
+    ctx += [
+      r.id || '-', (r.cliente||'-').substring(0,30), (r.aloj||'-').substring(0,25),
+      r.plataforma||'-', fE, fS, r.noches||0,
+      c.total.toFixed(2), c.base.toFixed(2), c.comPlataforma.toFixed(2),
+      c.comGTC.toFixed(2), c.limpieza.toFixed(2), c.amenities.toFixed(2),
+      (c.ceTotal||0).toFixed(2), c.comPasarela.toFixed(2),
+      c.totalLiq.toFixed(2), r.validada?'V':'P'
+    ].join(' | ') + '\n';
+  });
+
+  return ctx;
+}
+
+function _addAIMsg(role, text) {
+  var box = document.getElementById('ai-messages');
+  var div = document.createElement('div');
+  div.className = 'ai-msg ' + role;
+  if (role === 'assistant') {
+    var html = text
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+    div.innerHTML = html;
+  } else {
+    div.textContent = text;
+  }
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  return div;
+}
+
+function _showTyping() {
+  var box = document.getElementById('ai-messages');
+  var div = document.createElement('div');
+  div.className = 'ai-msg assistant'; div.id = 'ai-typing';
+  div.innerHTML = '<div class="ai-typing"><span></span><span></span><span></span></div>';
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+function _removeTyping() { var el = document.getElementById('ai-typing'); if(el) el.remove(); }
+
+async function sendAIMessage() {
+  if (_aiProcessing) return;
+  var input = document.getElementById('ai-input');
+  var text = input.value.trim();
+  if (!text) return;
+
+  if (!allReservas || allReservas.length === 0) {
+    _addAIMsg('error', 'Primero carga un fichero de reservas para poder responder preguntas.');
+    return;
+  }
+
+  var apiKey = _getAIKey();
+  if (!apiKey) return;
+
+  _addAIMsg('user', text);
+  input.value = ''; input.style.height = 'auto';
+  _aiHistory.push({role:'user', content:text});
+
+  _aiProcessing = true;
+  document.getElementById('ai-send').disabled = true;
+  _showTyping();
+
+  try {
+    var context = buildAIContext();
+    var sysPrompt = 'Eres el asistente de datos de "Liquidaciones GTC", una aplicación de gestión de reservas vacacionales.\n\n' +
+      'REGLAS ESTRICTAS:\n' +
+      '1. SOLO puedes responder basándote en los datos proporcionados abajo. NUNCA inventes cifras, fechas, nombres de clientes, alojamientos ni importes.\n' +
+      '2. Si no tienes la información para responder, di: "No tengo esa información en los datos cargados."\n' +
+      '3. NUNCA des consejos financieros, legales ni fiscales. Solo reporta datos.\n' +
+      '4. Responde siempre en español.\n' +
+      '5. Sé conciso y directo. Usa cifras exactas con 2 decimales y el símbolo €.\n' +
+      '6. Si te preguntan por porcentajes o comparativas, calcula solo con los datos disponibles.\n' +
+      '7. Cuando cites importes, especifica si son con IVA incluido o sin IVA (base).\n' +
+      '8. NUNCA accedas a información externa. Solo los datos de abajo.\n' +
+      '9. Si te preguntan algo que no son datos (chistes, opiniones, etc.), responde amablemente que solo puedes responder sobre los datos de reservas.\n\n' +
+      'DATOS ACTUALES:\n' + context;
+
+    var messages = _aiHistory.slice(-20);
+
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: sysPrompt,
+        messages: messages
+      })
+    });
+
+    _removeTyping();
+
+    if (!resp.ok) {
+      var errData = await resp.json().catch(function(){ return {}; });
+      if (resp.status === 401) {
+        localStorage.removeItem('ai-api-key');
+        _addAIMsg('error', 'API Key inválida. Se ha borrado. Vuelve a intentarlo.');
+      } else {
+        _addAIMsg('error', 'Error: ' + (errData.error && errData.error.message ? errData.error.message : resp.statusText));
+      }
+      _aiHistory.pop();
+    } else {
+      var data = await resp.json();
+      var reply = data.content.map(function(b){ return b.text||''; }).join('');
+      _aiHistory.push({role:'assistant', content:reply});
+      _addAIMsg('assistant', reply);
+    }
+  } catch(e) {
+    _removeTyping();
+    _addAIMsg('error', 'Error de conexión: ' + e.message);
+    _aiHistory.pop();
+  }
+
+  _aiProcessing = false;
+  document.getElementById('ai-send').disabled = false;
+  document.getElementById('ai-input').focus();
+}
+
+// Auto-resize AI textarea
+(function(){
+  var ta = document.getElementById('ai-input');
+  if(ta) ta.addEventListener('input', function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,100)+'px'; });
+})();
+// ═══ END AI ASSISTANT ═══
 </script>
 </body>
 </html>

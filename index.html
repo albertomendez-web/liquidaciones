@@ -697,20 +697,26 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.7.4';
-const APP_BUILD   = '2026-02-10T08:30:00+01:00';
-const APP_CHANGES = 'Historial con hora Madrid; fix doble-click buscador; modal config estable';
+const APP_VERSION = '1.7.5';
+const APP_BUILD   = '2026-02-10T08:50:00+01:00';
+const APP_CHANGES = 'Changelog con hora+seg Madrid; deploy time real en sidebar; anti-cache; modal estable';
 
 const CHANGELOG = [
+  { version: '1.7.5', date: '2026-02-10T08:50:00+01:00', changes: [
+    'Changelog muestra día, hora y segundos en horario Madrid (+01:00)',
+    'Sidebar muestra hora real del deploy (primer acceso a la versión), no hora de build',
+    'Meta tags anti-caché: navegador siempre pide versión fresca al servidor',
+    'Fix: modal config no salta al cambiar de tab (posición fija arriba + min-height)'
+  ]},
   { version: '1.7.4', date: '2026-02-10T08:30:00+01:00', changes: [
     'Historial de versiones integrado en la app con enlace en sidebar',
     'Tab de configuración renombrado: Servicio GTC / Limpieza / Amenities / Mant.',
     'Pestaña "Impuestos" separada para IRPF',
-    'Toast de nueva versión más duradero (12s)',
+    'Toast de nueva versión con lista de cambios y link a historial completo',
+    'Toast más duradero (12s)',
     'Fix: toast no aparecía al no cambiar string de versión',
-    'Fix: doble-click necesario tras buscar (search input cambiaba de ancho)',
-    'Fix: micro-vibración DOM con overflow-anchor y DocumentFragment',
-    'Fix: modal config estable (min-height, posición fija arriba)'
+    'Fix: doble-click necesario tras buscar (search input cambiaba de ancho al perder foco)',
+    'Fix: micro-vibración DOM con overflow-anchor y DocumentFragment'
   ]},
   { version: '1.7.3', date: '2026-02-10T08:00:00+01:00', changes: [
     'Renombrar "Plataforma" → "Canal de Venta" en cabeceras y detalle',

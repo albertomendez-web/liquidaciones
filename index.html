@@ -45,7 +45,7 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .search-clear { position: absolute; right: 6px; cursor: pointer; color: #9ca3af; font-size: 14px; line-height: 1; padding: 2px; }
 .search-clear:hover { color: #e53935; }
 .filter-sep { width: 1px; height: 24px; background: #e5e7eb; }
-.table-wrap { overflow-x: auto; overflow-y: auto; max-height: 75vh; overscroll-behavior: contain; }
+.table-wrap { overflow-x: auto; overflow-y: auto; max-height: 75vh; overscroll-behavior: contain; overflow-anchor: none; }
 table { width: 100%; border-collapse: collapse; }
 th { padding: 8px 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; border-bottom: 2px solid #eef0f4; text-align: center; white-space: nowrap; background: #f8f9fb; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 3; line-height: 1.35; vertical-align: middle; }
 th:hover { color: #4f8cff; }
@@ -2709,19 +2709,17 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
   var oldCePanel = document.getElementById('ce-ppanel-' + idx);
   var cePanelWasOpen = oldCePanel && oldCePanel.style.display !== 'none';
 
-  // Remove old CE panel
-  if (oldCePanel) oldCePanel.remove();
-
-  // Replace main row
-  row.replaceWith(newMainRow);
-
-  // Insert new CE panel after main row
+  // Batch all DOM mutations: use replaceWith to swap in one go
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(newMainRow);
   if (newCePanel) {
-    newMainRow.after(newCePanel);
     if (cePanelWasOpen) { newCePanel.style.display = ''; _openCEPanel = idx; _openCEView = 'p'; }
+    fragment.appendChild(newCePanel);
   }
+  if (oldCePanel) oldCePanel.remove();
+  row.replaceWith(fragment);
 
-  // Restore scroll position
+  // Restore scroll position synchronously
   if (wrap) wrap.scrollTop = scrollBefore; else window.scrollTo(0, scrollBefore);
 
   // Incremental stats update

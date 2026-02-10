@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Liquidaciones &mdash; Gestión de Reservas</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -707,7 +710,7 @@ const CHANGELOG = [
     'Fix: toast no aparecía al no cambiar string de versión',
     'Fix: doble-click necesario tras buscar (search input cambiaba de ancho)',
     'Fix: micro-vibración DOM con overflow-anchor y DocumentFragment',
-    'Fix: modal config estable (min-height)'
+    'Fix: modal config estable (min-height, posición fija arriba)'
   ]},
   { version: '1.7.3', date: '2026-02-10T08:00:00+01:00', changes: [
     'Renombrar "Plataforma" → "Canal de Venta" en cabeceras y detalle',
@@ -758,38 +761,39 @@ const CHANGELOG = [
     'Mejoras en layout de columnas',
     'Escritura de validaciones directamente en Google Sheets'
   ]},
-  { version: '1.5.0', date: '2026-02-08T19:00:00+01:00', changes: [
+  { version: '1.5.0', date: '2026-02-08T21:00:00+01:00', changes: [
     'Write-back de estado de validación a Google Sheets',
     'Detección automática de columna de validación',
     'Operaciones batch para validar/desvalidar múltiples reservas',
     'Paginación con delta-updates para rendimiento O(1)',
-    'Optimización de rendimiento para miles de reservas'
+    'Optimización de rendimiento para miles de reservas',
+    'Integración con Google Sheets vía OAuth',
+    'Deploy en GitHub Pages'
   ]},
-  { version: '1.4.0', date: '2026-02-07T19:00:00+01:00', changes: [
+  { version: '1.4.0', date: '2026-02-08T19:00:00+01:00', changes: [
     'Vista consolidada por alojamiento con resumen financiero',
     'Liquidación individual con desglose completo',
-    'Impresión optimizada de liquidaciones',
-    'Integración con Google Sheets vía OAuth'
+    'Impresión optimizada de liquidaciones'
   ]},
-  { version: '1.3.0', date: '2026-02-06T19:00:00+01:00', changes: [
+  { version: '1.3.0', date: '2026-02-08T17:00:00+01:00', changes: [
     'Sistema de filtros combinados: plataforma, alojamiento, estado',
     'Filtro por mes/año con selector visual',
     'Ordenación por múltiples campos',
     'Tarjetas de estadísticas con porcentajes filtrados'
   ]},
-  { version: '1.2.0', date: '2026-02-05T19:00:00+01:00', changes: [
+  { version: '1.2.0', date: '2026-02-08T15:00:00+01:00', changes: [
     'Pasarela de pago configurable (Stripe/Booking)',
     'Toggle de activación/desactivación por reserva',
     'Modal de configuración con gestión de opciones',
     'Cálculo de IVA sobre subtotal'
   ]},
-  { version: '1.1.0', date: '2026-02-04T19:00:00+01:00', changes: [
+  { version: '1.1.0', date: '2026-02-08T13:00:00+01:00', changes: [
     'Cálculo de liquidación: comisiones, limpieza, IRPF',
     'Vista de detalle individual por reserva',
     'Validación de reservas con estado persistente',
     'Exportación y carga de ficheros Excel'
   ]},
-  { version: '1.0.0', date: '2026-02-03T12:00:00+01:00', changes: [
+  { version: '1.0.0', date: '2026-02-08T11:00:00+01:00', changes: [
     'Versión inicial: carga de ficheros Excel de reservas',
     'Tabla de preliquidaciones con columnas configurables',
     'Sidebar de navegación',

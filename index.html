@@ -62,7 +62,7 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .search-clear { position: absolute; right: 6px; cursor: pointer; color: #9ca3af; font-size: 14px; line-height: 1; padding: 2px; }
 .search-clear:hover { color: #e53935; }
 .filter-sep { width: 1px; height: 24px; background: #e5e7eb; }
-.table-wrap { overflow-x: auto; overflow-y: auto; max-height: 75vh; overscroll-behavior: contain; overflow-anchor: none; }
+.table-wrap { overflow-x: auto; overflow-y: auto; max-height: 75vh; overscroll-behavior: contain; overflow-anchor: none; scrollbar-gutter: stable; }
 table { width: 100%; border-collapse: collapse; }
 th { padding: 8px 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; border-bottom: 2px solid #eef0f4; text-align: center; white-space: nowrap; background: #f8f9fb; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 3; line-height: 1.35; vertical-align: middle; }
 th:hover { color: #4f8cff; }
@@ -698,15 +698,16 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.7.5';
-const APP_BUILD   = '2026-02-10T08:50:00+01:00';
-const APP_CHANGES = 'Changelog con hora+seg Madrid; deploy time real en sidebar; anti-cache; modal estable';
+const APP_BUILD   = '2026-02-10T08:56:00+01:00';
+const APP_CHANGES = 'Changelog hora+seg Madrid; deploy time real; anti-cache; fix vibración CE; modal estable';
 
 const CHANGELOG = [
-  { version: '1.7.5', date: '2026-02-10T08:50:00+01:00', changes: [
+  { version: '1.7.5', date: '2026-02-10T08:56:00+01:00', changes: [
     'Changelog muestra día, hora y segundos en horario Madrid (+01:00)',
     'Sidebar muestra hora real del deploy (primer acceso a la versión), no hora de build',
     'Meta tags anti-caché: navegador siempre pide versión fresca al servidor',
-    'Fix: modal config no salta al cambiar de tab (posición fija arriba + min-height)'
+    'Fix: modal config no salta al cambiar de tab (posición fija arriba + min-height)',
+    'Fix: micro-vibración al abrir panel CE (scrollbar-gutter: stable)'
   ]},
   { version: '1.7.4', date: '2026-02-10T08:30:00+01:00', changes: [
     'Historial de versiones integrado en la app con enlace en sidebar',

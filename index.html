@@ -751,11 +751,11 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.1';
-const APP_BUILD   = '2026-02-11T01:07:00+01:00';
-const APP_CHANGES = 'Fix: CE eliminar sin flash — quita DOM + actualiza resumen sin re-render';
+const APP_BUILD   = '2026-02-11T01:12:00+01:00';
+const APP_CHANGES = 'Fix: CE eliminar sin flash — actualiza celdas directamente sin reconstruir panel';
 
 const CHANGELOG = [
-  { version: '1.9.1', date: '2026-02-11T01:07:00+01:00', changes: [
+  { version: '1.9.1', date: '2026-02-11T01:12:00+01:00', changes: [
     'CE: eliminar concepto con animación slide-out sin flash ni re-render',
     'CE: añadir concepto con animación slide-in + auto-focus',
     'Texto: "Totales" → "Reservas Totales" en barra de totales'
@@ -2615,15 +2615,36 @@ function removeCEItem(idx, itemIdx, view) {
     row.addEventListener('animationend', function() {
       row.remove();
       s.conceptosEspeciales.splice(itemIdx, 1);
-      // Update data + row without full panel re-render
+      // Update cache
       var oldC = getLiq(allReservas[idx]);
       invalidateCache(idx);
       var newC = getLiq(allReservas[idx]);
       if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-      _patchSingleRow(idx, oldC, newC);
-      scheduleReservaConfigSave(idx);
-      // Update just the summary numbers in the CE panel
+      // Patch only the changed cells in the main table row (no full rebuild)
+      var mainRow = document.getElementById('row-' + idx);
+      if (mainRow) {
+        var ceCel = mainRow.querySelector('.col-ce');
+        if (ceCel) ceCel.innerHTML = _buildCEButton(idx, newC, v);
+        var liqCel = mainRow.querySelector('.col-totalLiquidar');
+        if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' &#8364;';
+        var subCel = mainRow.querySelector('.col-subtotal');
+        if (subCel) subCel.innerHTML = fmt(newC.sub) + ' &#8364;';
+        var baseCel = mainRow.querySelector('.col-baseSinIVA');
+        if (baseCel) baseCel.innerHTML = fmt(newC.baseSinIVA) + ' &#8364;';
+      }
+      // Update summary numbers in CE panel
       _refreshCESummary(idx, v);
+      // Update footer stats
+      var st = _cachedFilteredStats;
+      if (st && oldC && newC) {
+        st.fL += (newC.totalLiq - oldC.totalLiq);
+        st.tLiq += (newC.totalLiq - oldC.totalLiq);
+        st.tCE += (newC.ceTotal - oldC.ceTotal);
+        st.tSub += (newC.sub - oldC.sub);
+        st.tBase += (newC.baseSinIVA - oldC.baseSinIVA);
+        _renderStatsFromCache(_lastFiltered, st);
+      }
+      scheduleReservaConfigSave(idx);
     }, {once:true});
   } else {
     s.conceptosEspeciales.splice(itemIdx, 1);

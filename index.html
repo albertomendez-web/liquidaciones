@@ -753,15 +753,18 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.6';
-const APP_BUILD   = '2026-02-11T11:27:00+01:00';
-const APP_CHANGES = 'Tabla: pasarela toggle y selectores sin salto — actualización directa de celdas';
+const APP_BUILD   = '2026-02-11T11:45:00+01:00';
+const APP_CHANGES = 'Detalle: mantenimiento + extras completo; fix persistencia; pasarela sin salto';
 
 const CHANGELOG = [
-  { version: '1.9.6', date: '2026-02-11T11:27:00+01:00', changes: [
-    'Tabla: toggle pasarela sin salto — actualiza solo celdas afectadas sin reconstruir fila',
-    'Tabla: cambiar cualquier selector (comisión, limpieza, etc.) sin salto',
-    'Columna pasarela con ancho mínimo estable para evitar redimensionado',
-    'Footer totales actualizados incrementalmente al cambiar settings'
+  { version: '1.9.6', date: '2026-02-11T11:45:00+01:00', changes: [
+    'Detalle reserva: mantenimiento completo con checkbox y selector (igual que liquidación)',
+    'Detalle reserva: conceptos extra con añadir/eliminar (igual que liquidación)',
+    'Fix persistencia: save lock impide race condition entre guardados simultáneos',
+    'Fix persistencia: beforeunload guarda cambios pendientes al cerrar/recargar página',
+    'Fix persistencia: valores de amenities ya no se pierden al cambiar opciones',
+    'Tabla: toggle pasarela y selectores sin salto — actualización directa de celdas',
+    'Textos: Amenities → "sin IVA", Mantenimiento → "Sin IVA (Mensual/apartamento)"'
   ]},
   { version: '1.9.5', date: '2026-02-11T11:24:00+01:00', changes: [
     'Detalle: mantenimiento sin checkbox ni selector — muestra solo el valor configurado',
@@ -1568,6 +1571,7 @@ async function loadPropietariosTab(sheetId) {
   } catch(e) { console.warn('Error loading Propietarios tab:', e); }
 }
 let _configLoaded = false; // true after config has been loaded/created for current sheet
+let _configSaving = false; // lock to prevent concurrent saves
 
 // Debounce timers for saving
 let _globalConfigSaveTimer = null;
@@ -1586,6 +1590,37 @@ function scheduleReservaConfigSave(idx) {
   if (_reservaConfigSaveTimer) clearTimeout(_reservaConfigSaveTimer);
   _reservaConfigSaveTimer = setTimeout(flushReservaConfigSaves, 1000);
 }
+
+// Flush all pending saves immediately (for beforeunload)
+function flushAllPendingSaves() {
+  if (_globalConfigSaveTimer) { clearTimeout(_globalConfigSaveTimer); _globalConfigSaveTimer = null; }
+  if (_reservaConfigSaveTimer) { clearTimeout(_reservaConfigSaveTimer); _reservaConfigSaveTimer = null; }
+  if (!_sheetSource || !_googleToken || !_configLoaded) return;
+  // Use synchronous XHR as last resort on page unload
+  try {
+    var data = buildFullConfigTabData();
+    var url = 'https://sheets.googleapis.com/v4/spreadsheets/' + _sheetSource.id + '/values/' + CONFIG_TAB_NAME + '!A1:I10000?valueInputOption=RAW';
+    var clearUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + _sheetSource.id + '/values/' + CONFIG_TAB_NAME + '!A1:I10000:clear';
+    // Clear
+    var xhr1 = new XMLHttpRequest();
+    xhr1.open('POST', clearUrl, false);
+    xhr1.setRequestHeader('Authorization', 'Bearer ' + _googleToken);
+    xhr1.setRequestHeader('Content-Type', 'application/json');
+    xhr1.send('{}');
+    // Write
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open('PUT', url, false);
+    xhr2.setRequestHeader('Authorization', 'Bearer ' + _googleToken);
+    xhr2.setRequestHeader('Content-Type', 'application/json');
+    xhr2.send(JSON.stringify({ values: data }));
+    console.log('[Config] Emergency save on unload: ' + data.length + ' rows');
+  } catch(e) { console.warn('[Config] Emergency save failed:', e); }
+}
+window.addEventListener('beforeunload', function(e) {
+  if (_globalConfigSaveTimer || _reservaConfigSaveTimer || _pendingReservaConfigSaves.size > 0) {
+    flushAllPendingSaves();
+  }
+});
 
 // Build global config data as key-value rows
 function buildGlobalConfigRows() {
@@ -1801,7 +1836,7 @@ function applyConfigFromRows(rows) {
       if (cpCol !== undefined) { var v = rows[i][cpCol]; if (v !== undefined && v !== '') s.comPlataforma = parseFloat(v); }
       if (cgCol !== undefined) { var v = rows[i][cgCol]; if (v !== undefined && v !== '') s.comGTC = parseFloat(v); }
       if (lmCol !== undefined) { var v = rows[i][lmCol]; if (v !== undefined && v !== '') s.limpieza = parseFloat(v); }
-      if (amCol !== undefined) { var v = rows[i][amCol]; if (v !== undefined && v !== '') { var av = parseFloat(v); if (!isNaN(av) && amenitiesOptions.some(function(o){return Math.abs(o-av)<0.001;})) s.amenities = av; } }
+      if (amCol !== undefined) { var v = rows[i][amCol]; if (v !== undefined && v !== '') { var av = parseFloat(v); if (!isNaN(av)) s.amenities = av; } }
       if (irCol !== undefined) { var v = rows[i][irCol]; if (v !== undefined && v !== '') s.irpf = parseFloat(v); }
       if (paCol !== undefined) { var v = rows[i][paCol]; if (v !== undefined && v !== '') s.pasarela = String(v).trim() === 'true'; }
       if (prCol !== undefined) { var v = rows[i][prCol]; if (v !== undefined && v !== '') s.pasarelaRate = parseFloat(v); }
@@ -1810,17 +1845,6 @@ function applyConfigFromRows(rows) {
       applied++;
     }
     console.log('[Config] Applied per-reservation settings: ' + applied + ' reservas');
-
-    // Sanitize: reset any amenities value that isn't in amenitiesOptions
-    var sanitized = 0;
-    allReservas.forEach(function(r) {
-      var s = settings[r.idx];
-      if (s && s.amenities !== undefined && !amenitiesOptions.some(function(o){return Math.abs(o-s.amenities)<0.001;})) {
-        s.amenities = amenitiesOptions[0];
-        sanitized++;
-      }
-    });
-    if (sanitized > 0) console.log('[Config] Sanitized ' + sanitized + ' reservas with invalid amenities value');
   }
 
   // Rebuild caches after applying config
@@ -1831,8 +1855,13 @@ function applyConfigFromRows(rows) {
 // Save full global config to sheet
 async function saveGlobalConfigToSheet() {
   if (!_sheetSource || !_googleToken || !_configLoaded) return;
+  if (_configSaving) { scheduleGlobalConfigSave(); return; } // retry if busy
+  _configSaving = true;
   updateSyncIndicator('syncing');
   try {
+    // Also flush any pending reserva saves in same write
+    _pendingReservaConfigSaves.clear();
+    if (_reservaConfigSaveTimer) { clearTimeout(_reservaConfigSaveTimer); _reservaConfigSaveTimer = null; }
     var data = buildFullConfigTabData();
     await gapi.client.sheets.spreadsheets.values.clear({
       spreadsheetId: _sheetSource.id,
@@ -1849,6 +1878,8 @@ async function saveGlobalConfigToSheet() {
   } catch(e) {
     console.error('[Config] Error saving config:', e);
     updateSyncIndicator('error');
+  } finally {
+    _configSaving = false;
   }
 }
 
@@ -1856,6 +1887,8 @@ async function saveGlobalConfigToSheet() {
 async function flushReservaConfigSaves() {
   if (!_sheetSource || !_googleToken || !_configLoaded) return;
   if (_pendingReservaConfigSaves.size === 0) return;
+  if (_configSaving) { scheduleReservaConfigSave([..._pendingReservaConfigSaves][0]); return; } // retry if busy
+  _configSaving = true;
 
   var indices = [..._pendingReservaConfigSaves];
   _pendingReservaConfigSaves.clear();
@@ -1878,6 +1911,8 @@ async function flushReservaConfigSaves() {
   } catch(e) {
     console.error('[Config] Error saving reserva config:', e);
     updateSyncIndicator('error');
+  } finally {
+    _configSaving = false;
   }
 }
 
@@ -2136,7 +2171,7 @@ function calcLiquidacion(r, s) {
   }
   const limp = s.limpieza !== undefined ? s.limpieza : cleaningOptions[0];
   const rawAmen = s.amenities;
-  const amen = (rawAmen !== undefined && amenitiesOptions.some(function(o){return Math.abs(o-rawAmen)<0.001;})) ? rawAmen : amenitiesOptions[0];
+  const amen = (rawAmen !== undefined && !isNaN(rawAmen)) ? rawAmen : amenitiesOptions[0];
   const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
   const irpfRate = s.irpf !== undefined ? s.irpf : irpfOptions[0]/100;
   const iva = sub * IVA_SUBTOTAL, ret = sub * irpfRate;
@@ -3302,10 +3337,33 @@ function viewDetail(idx) {
   } else if(c.comPas > 0) {
     rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
   }
-  // Maintenance row (per-alojamiento) — below pasarela
+  // Maintenance row (per-alojamiento) — checkbox + selector like consol view
   const maint = getConsolMaint(r.alojamiento);
-  if(maint.enabled && maint.amount > 0) {
+  const escAloj = r.alojamiento.replace(/'/g, "\\'");
+  const maintSelOpts = maintenanceOptions.map(o => `<option value="${o}"${o===maint.amount?' selected':''}>${o} \u20AC</option>`).join('');
+  if(!isV) {
+    const chk = `<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid ${maint.enabled?'#16a34a':'#d1d5db'};background:${maint.enabled?'#16a34a':'#fff'};color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaintDetail('${escAloj}',${idx})">${maint.enabled?'&#10003;':''}</span>`;
+    const selM = maint.enabled ? ` <select class="sel no-print" onchange="changeConsolMaintAmountDetail('${escAloj}',this.value,${idx})" style="font-size:12px;padding:3px 6px;">${maintSelOpts}</select>` : '';
+    const labelStyle = maint.enabled ? '' : 'color:#9ca3af;text-decoration:line-through;';
+    const maintLabel = `<span style="display:flex;align-items:center;gap:8px;">${chk}<span style="${labelStyle}">Mantenimiento</span>${selM}</span>`;
+    rows.push({l:maintLabel, v: maint.enabled ? -maint.amount : 0, neg:maint.enabled, leftcustom:!maint.enabled && true, custom: !maint.enabled});
+  } else if(maint.enabled && maint.amount > 0) {
     rows.push({l:'Mantenimiento',v:-maint.amount,neg:true});
+  }
+  // Extra concepts (per-alojamiento) — matching consol view
+  const extras = getConsolExtras(r.alojamiento);
+  extras.forEach((ex, ei) => {
+    if(!isV) {
+      const delBtn = `<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeConsolExtraDetail('${escAloj}',${ei},${idx})">&#10005;</span>`;
+      const exLabel = `<span style="display:flex;align-items:center;gap:8px;">${delBtn}${ex.label}</span>`;
+      rows.push({l:exLabel,v:-ex.amount,neg:true});
+    } else {
+      rows.push({l:ex.label,v:-ex.amount,neg:true});
+    }
+  });
+  // Add concept button (no-print, only if not validated)
+  if(!isV) {
+    rows.push({custom:true,l:`<button class="no-print" onclick="addConsolExtraDetail('${escAloj}',${idx})" style="font-size:11px;color:#3b82f6;background:none;border:1px dashed #93c5fd;border-radius:5px;padding:3px 10px;cursor:pointer;">+ A\u00f1adir concepto</button>`});
   }
   rows.push({div:true},
     {l:"Subtotal",v:c.sub,bold:true},
@@ -3647,6 +3705,30 @@ function removeConsolExtra(alojName, idx) {
   if (idx >= 0 && idx < extras.length) { extras.splice(idx, 1); }
   scheduleGlobalConfigSave();
   viewConsolDetail(alojName);
+}
+// Detail view variants — same data, refresh detail instead of consol
+function toggleConsolMaintDetail(alojName, reservaIdx) {
+  var m = getConsolMaint(alojName); m.enabled = !m.enabled;
+  scheduleGlobalConfigSave(); viewDetail(reservaIdx);
+}
+function changeConsolMaintAmountDetail(alojName, val, reservaIdx) {
+  var m = getConsolMaint(alojName); m.amount = parseFloat(val) || maintenanceOptions[0];
+  scheduleGlobalConfigSave(); viewDetail(reservaIdx);
+}
+function addConsolExtraDetail(alojName, reservaIdx) {
+  var label = prompt('Nombre del concepto:');
+  if (!label || !label.trim()) return;
+  var amountStr = prompt('Importe base (sin IVA) en \u20AC:');
+  var amount = parseFloat((amountStr||'').replace(',','.'));
+  if (isNaN(amount) || amount <= 0) { alert('Importe no válido'); return; }
+  var extras = getConsolExtras(alojName);
+  extras.push({ label: label.trim(), amount: amount });
+  scheduleGlobalConfigSave(); viewDetail(reservaIdx);
+}
+function removeConsolExtraDetail(alojName, ei, reservaIdx) {
+  var extras = getConsolExtras(alojName);
+  if (ei >= 0 && ei < extras.length) { extras.splice(ei, 1); }
+  scheduleGlobalConfigSave(); viewDetail(reservaIdx);
 }
 
 function viewConsolDetail(alojName) {
@@ -4134,9 +4216,9 @@ function renderConfigModal() {
     '<hr class="section-divider">' +
     buildOS("Limpieza","\u20AC sin IVA",cleaningOptions," \u20AC","add-cl","addCL","delCL") +
     '<hr class="section-divider">' +
-    buildOS("Amenities","Coste fijo por reserva en \u20AC",amenitiesOptions," \u20AC","add-am","addAM","delAM") +
+    buildOS("Amenities","Coste fijo por reserva en \u20AC sin IVA",amenitiesOptions," \u20AC","add-am","addAM","delAM") +
     '<hr class="section-divider">' +
-    buildOS("Mantenimiento mensual","Importe base (+ 21% IVA) por liquidación",maintenanceOptions," \u20AC","add-mt","addMT","delMT");
+    buildOS("Mantenimiento mensual","Sin IVA (Mensual/apartamento)",maintenanceOptions," \u20AC","add-mt","addMT","delMT");
   document.getElementById("tab-impuestos").innerHTML =
     buildOS("Retención IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR");
 }

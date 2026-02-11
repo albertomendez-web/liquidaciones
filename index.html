@@ -751,11 +751,15 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.3';
-const APP_BUILD   = '2026-02-11T11:06:00+01:00';
-const APP_CHANGES = 'Detalle: mantenimiento con selector, pasarela a la izquierda, imprimir solo si validada';
+const APP_VERSION = '1.9.4';
+const APP_BUILD   = '2026-02-11T11:14:00+01:00';
+const APP_CHANGES = 'Detalle: pasarela en una fila con toggle inline, mantenimiento debajo';
 
 const CHANGELOG = [
+  { version: '1.9.4', date: '2026-02-11T11:14:00+01:00', changes: [
+    'Detalle: pasarela en una sola fila — toggle inline junto al label y selector, sin salto',
+    'Detalle: mantenimiento reubicado debajo de pasarela'
+  ]},
   { version: '1.9.3', date: '2026-02-11T11:06:00+01:00', changes: [
     'Detalle reserva: añadida opción de Mantenimiento con checkbox y selector de importe',
     'Detalle reserva: Pasarela Stripe/Booking posicionada a la izquierda',
@@ -3214,7 +3218,21 @@ function viewDetail(idx) {
     {l:limpLabel,v:-c.limp,neg:true},
     {l:amenLabel,v:-c.amen,neg:true},{div:true}
   );
-  // Maintenance row (per-alojamiento)
+  // Pasarela row — single line with toggle inline
+  if(!isV){
+    const toggleHtml = `<div style="display:inline-flex;align-items:center;gap:8px;margin-left:8px;">` +
+      `<div class="toggle" onclick="togglePasarela(${r.idx});viewDetail(${r.idx})"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>` +
+      `<span style="font-size:12px;color:#6b7280;">${s.pasarela?'Activada':'Desactivada'}</span></div>`;
+    if(s.pasarela){
+      const pasLabel = `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true) + toggleHtml;
+      rows.push({l:pasLabel,v:-c.comPas,neg:true});
+    } else {
+      rows.push({l:`Pasarela ${pasL} ${toggleHtml}`,v:0,leftcustom:true});
+    }
+  } else if(s.pasarela) {
+    rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
+  }
+  // Maintenance row (per-alojamiento) — below pasarela
   const maint = getConsolMaint(r.alojamiento);
   if(!isV) {
     const maintSelOpts = maintenanceOptions.map(o => `<option value="${o}" ${o===maint.amount?'selected':''}>${o} &#8364;</option>`).join('');
@@ -3229,20 +3247,6 @@ function viewDetail(idx) {
     else rows.push({l:maintLabel,v:0,leftcustom:true});
   } else if(maint.enabled) {
     rows.push({l:'Mantenimiento',v:-maint.amount,neg:true});
-  }
-  rows.push({div:true});
-  if(s.pasarela){
-    const pasLabel = isV ? `Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`
-      : `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true);
-    rows.push({l:pasLabel,v:-c.comPas,neg:true});
-  }
-  // Pasarela toggle row — left aligned
-  if(!isV){
-    const toggleHtml = `<div style="display:inline-flex;align-items:center;gap:8px;margin-left:6px;">` +
-      `<div class="toggle" onclick="togglePasarela(${r.idx});viewDetail(${r.idx})"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>` +
-      `<span style="font-size:12px;color:#6b7280;">${s.pasarela?'Activada':'Desactivada'}</span></div>`;
-    if(!s.pasarela) rows.push({l:`Pasarela ${pasL} ${toggleHtml}`,v:0,leftcustom:true});
-    else rows.push({l:`${toggleHtml}`,v:0,leftcustom:true});
   }
   rows.push({div:true},
     {l:"Subtotal",v:c.sub,bold:true},

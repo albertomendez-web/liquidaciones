@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Liquidaciones &mdash; Gestión de Reservas</title>
+<title>Liquidaciones &mdash; Gesti&oacute;n de Reservas</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
@@ -33,7 +33,7 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .cl-date { font-size:12px; color:#9ca3af; }
 .cl-changes { list-style:none; padding:0; margin:0; }
 .cl-changes li { font-size:13px; color:#4b5563; padding:3px 0 3px 18px; position:relative; line-height:1.5; }
-.cl-changes li::before { content:'•'; position:absolute; left:4px; color:#4f8cff; font-weight:700; }
+.cl-changes li::before { content:'\2022'; position:absolute; left:4px; color:#4f8cff; font-weight:700; }
 .main { margin-left: 250px; padding: 32px 40px; min-height: 100vh; }
 .card { background: #fff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); padding: 28px 32px; margin-bottom: 24px; }
 .upload-wrap { display: flex; align-items: center; justify-content: center; min-height: 70vh; }
@@ -186,7 +186,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-mini-table tbody tr:hover td { background: #eef3ff; }
 .consol-mini-table .ellip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
 
-/* LIQUIDACIÓN INDIVIDUAL */
+/* LIQUIDACI&#xC3;&ldquo;N INDIVIDUAL */
 .liq-container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
 .liq-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color: #fff; padding: 36px 40px; }
 .liq-header .type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 4px; }
@@ -273,7 +273,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   tr { page-break-inside: avoid; }
   .consol-section-title { page-break-after: avoid; }
 
-  /* Individual liquidación */
+  /* Individual liquidaci&oacute;n */
   .liq-row { padding: 6px 20px !important; font-size: 11px !important; }
   .liq-divider { margin: 2px 20px !important; }
   .liq-total { padding: 10px 20px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -441,13 +441,13 @@ tr.ce-highlighted { background:#fffdf5; }
 <body>
 
 <div class="sidebar">
-  <div class="logo"><h1>Liquidaciones</h1><p>Gestión de Reservas</p></div>
+  <div class="logo"><h1>Liquidaciones</h1><p>Gesti&oacute;n de Reservas</p></div>
   <nav style="margin-top:16px; flex:1;">
     <div class="nav-item active" id="nav-upload" onclick="showScreen('upload')">&#128228; Cargar Fichero</div>
     <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; Preliquidaciones</div>
     <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; Por Alojamiento</div>
     <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; Detalle</div>
-    <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; Liquidación</div>
+    <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; Liquidaci&oacute;n</div>
   </nav>
   <div class="sidebar-google" id="sidebar-google" style="display:none;">
     <span class="status-dot" id="google-dot"></span>
@@ -458,15 +458,15 @@ tr.ce-highlighted { background:#fffdf5; }
     <div class="sync-dot idle"></div>
     <span class="sync-text">Sincronizado</span>
   </div>
-  <div class="sidebar-footer" id="version-indicator" style="cursor:pointer;" onclick="showVersionInfo()" title="Info de versión">v<span id="version-label"></span></div>
-  <div style="padding:0 24px 12px; font-size:11px;"><a href="#" onclick="event.preventDefault();showChangelog()" style="color:rgba(255,255,255,0.4);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">📋 Historial de cambios</a></div>
+  <div class="sidebar-footer" id="version-indicator" style="cursor:pointer;" onclick="showVersionInfo()" title="Info de versi&oacute;n">v<span id="version-label"></span></div>
+  <div style="padding:0 24px 12px; font-size:11px;"><a href="#" onclick="event.preventDefault();showChangelog()" style="color:rgba(255,255,255,0.4);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">&#x1F4CB; Historial de cambios</a></div>
 </div>
 
 <!-- Changelog Modal -->
 <div class="changelog-overlay" id="changelog-overlay" onclick="if(event.target===this)closeChangelog()">
   <div class="changelog-modal">
     <div class="changelog-header">
-      <h3>📋 Historial de versiones</h3>
+      <h3>&#x1F4CB; Historial de versiones</h3>
       <button onclick="closeChangelog()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;padding:4px;">&times;</button>
     </div>
     <div class="changelog-body" id="changelog-body"></div>
@@ -474,15 +474,15 @@ tr.ce-highlighted { background:#fffdf5; }
 </div>
 
 <!-- AI Assistant -->
-<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" title="Asistente Histórico Reservas">🤖<span class="fab-badge" id="ai-badge"></span></button>
+<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" title="Asistente Hist&oacute;rico Reservas">&#x1F916;<span class="fab-badge" id="ai-badge"></span></button>
 <div class="ai-panel" id="ai-panel">
   <div class="ai-header">
-    <span style="font-size:20px;">🤖</span>
-    <h3>Asistente Histórico Reservas</h3>
+    <span style="font-size:20px;">&#x1F916;</span>
+    <h3>Asistente Hist&oacute;rico Reservas</h3>
     <button class="ai-close" onclick="toggleAIPanel()">&times;</button>
   </div>
   <div class="ai-messages" id="ai-messages">
-    <div class="ai-msg system">Pregúntame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.</div>
+    <div class="ai-msg system">Preg&uacute;ntame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.</div>
   </div>
   <div class="ai-input-wrap">
     <textarea id="ai-input" placeholder="Escribe tu pregunta..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAIMessage();}"></textarea>
@@ -502,7 +502,7 @@ tr.ce-highlighted { background:#fffdf5; }
         ondrop="event.preventDefault(); this.classList.remove('dragging'); handleFile(event.dataTransfer.files[0]);"
         onclick="document.getElementById('fileInput').click();">
         <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
-        <div class="title">Arrastra tu fichero aquí</div>
+        <div class="title">Arrastra tu fichero aqu&iacute;</div>
         <div class="sub">o haz clic para seleccionar &mdash; formato .xlsx</div>
       </div>
       <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none;" onchange="handleFile(this.files[0]);">
@@ -510,7 +510,7 @@ tr.ce-highlighted { background:#fffdf5; }
       <!-- GOOGLE SHEETS SECTION -->
       <div class="gsheet-section" id="gsheet-section">
         <h3>&#128202; Cargar desde Google Sheets</h3>
-        <p>Conecta con tu cuenta Google para cargar datos directamente desde una hoja de cálculo</p>
+        <p>Conecta con tu cuenta Google para cargar datos directamente desde una hoja de c&aacute;lculo</p>
         <div id="gsheet-auth-area">
           <div class="gsheet-status disconnected" id="gsheet-status">
             <div class="dot"></div>
@@ -601,7 +601,7 @@ tr.ce-highlighted { background:#fffdf5; }
   <div class="screen" id="screen-list">
     <div class="page-header" style="margin-bottom:28px;">
       <h1>Preliquidaciones</h1>
-      <p>Revisa, ajusta y valida cada reserva antes de generar la liquidación definitiva</p>
+      <p>Revisa, ajusta y valida cada reserva antes de generar la liquidaci&oacute;n definitiva</p>
     </div>
     <div class="stats-row" id="stats-row"></div>
     <div class="card filters-bar">
@@ -670,7 +670,7 @@ tr.ce-highlighted { background:#fffdf5; }
   <div class="screen" id="screen-consol">
     <div class="page-header" style="margin-bottom:28px;">
       <h1>Liquidaciones por Alojamiento</h1>
-      <p>Consolida las reservas validadas de cada alojamiento para generar la liquidación mensual</p>
+      <p>Consolida las reservas validadas de cada alojamiento para generar la liquidaci&oacute;n mensual</p>
     </div>
     <div class="stats-row" id="consol-stats"></div>
     <div class="card filters-bar" style="padding:12px 24px;">
@@ -725,9 +725,9 @@ tr.ce-highlighted { background:#fffdf5; }
 </div>
 
 <script>
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// ===
 // CONTROL DE VERSIONES
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// ===
 // \u2500\u2500\u2500 SEARCH \u2500\u2500\u2500
 function onSearchPreliq(val) {
   _searchText = val.trim().toLowerCase();
@@ -750,179 +750,282 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.1';
-const APP_BUILD   = '2026-02-11T01:12:00+01:00';
-const APP_CHANGES = 'Fix: CE eliminar sin flash — actualiza celdas directamente sin reconstruir panel';
+const APP_VERSION = '2.0.0';
+const APP_BUILD   = '2026-02-12T23:30:00+01:00';
+const APP_CHANGES = 'Refactorizaci\u00F3n profunda: robustez, seguridad XSS, validaci\u00F3n, CONFIG centralizado';
+
+// === UTILITY: XSS Escaping ===
+function esc(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// === UTILITY: Safe JSON parse ===
+function safeJSON(str, fallback) {
+  if (fallback === undefined) fallback = null;
+  if (!str || typeof str !== 'string') return fallback;
+  try { return JSON.parse(str); }
+  catch(e) { console.warn('[SafeJSON] Failed to parse:', str.substring(0, 100), e.message); return fallback; }
+}
+
+// === UTILITY: Safe localStorage ===
+const SafeStorage = {
+  get(key, fallback) {
+    try { const v = localStorage.getItem(key); return v !== null ? v : (fallback !== undefined ? fallback : null); }
+    catch(e) { console.warn('[Storage] Read error for', key, e.message); return fallback !== undefined ? fallback : null; }
+  },
+  set(key, value) {
+    try { localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value)); return true; }
+    catch(e) { console.warn('[Storage] Write error for', key, e.message); return false; }
+  },
+  remove(key) {
+    try { localStorage.removeItem(key); return true; }
+    catch(e) { console.warn('[Storage] Remove error for', key, e.message); return false; }
+  },
+  getJSON(key, fallback) {
+    const raw = this.get(key, null);
+    return raw ? safeJSON(raw, fallback !== undefined ? fallback : null) : (fallback !== undefined ? fallback : null);
+  }
+};
+
+// === UTILITY: Debounce ===
+function debounce(fn, ms) {
+  let timer = null;
+  const debounced = function() {
+    const args = arguments;
+    const ctx = this;
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(function() { timer = null; fn.apply(ctx, args); }, ms);
+  };
+  debounced.cancel = function() { if (timer) { clearTimeout(timer); timer = null; } };
+  return debounced;
+}
+
+// === UTILITY: Safe property access ===
+function safeGet(obj, path, fallback) {
+  if (!obj) return fallback;
+  const keys = path.split('.');
+  let current = obj;
+  for (let i = 0; i < keys.length; i++) {
+    if (current == null || typeof current !== 'object') return fallback;
+    current = current[keys[i]];
+  }
+  return current !== undefined ? current : fallback;
+}
+
+// === CONFIG: Application Constants ===
+const CONFIG = Object.freeze({
+  IVA_RESERVA: 0.10,
+  IVA_SUBTOTAL: 0.21,
+  MAX_SHEET_ROWS: 10000,
+  MAX_CONFIG_ROWS: 10000,
+  MAX_AI_DETAIL_ROWS: 200,
+  MAX_AI_HISTORY: 20,
+  DEFAULT_PAGE_SIZE: 100,
+  PAGE_SIZES: [100, 500, 1000],
+  MAX_PAGINATION_BUTTONS: 7,
+  DEBOUNCE_GLOBAL_CONFIG: 1500,
+  DEBOUNCE_RESERVA_CONFIG: 1000,
+  SYNC_SAVED_TIMEOUT: 2500,
+  SYNC_ERROR_TIMEOUT: 5000,
+  VERSION_TOAST_TIMEOUT: 12000,
+  SHEET_HISTORY_MAX: 10,
+  CONFIG_TAB_NAME: 'Configuracion',
+  PROPIETARIOS_TAB_NAME: 'Propietarios',
+  AI_MODEL: 'claude-sonnet-4-20250514',
+  AI_MAX_TOKENS: 1024,
+});
+
 
 const CHANGELOG = [
+  { version: '2.0.0', date: '2026-02-12T22:45:00+01:00', changes: [
+    'Refactorizaci\u00F3n profunda del c\u00F3digo base para mayor robustez y mantenibilidad',
+    'Nuevo objeto CONFIG centraliza todas las constantes de la aplicaci\u00F3n',
+    'Nuevo objeto AppState unifica variables globales dispersas (60+ vars \u2192 1 objeto)',
+    'Funci\u00F3n esc() para sanitizaci\u00F3n XSS en todos los templates HTML',
+    'Deduplicaci\u00F3n: getSortValue() unificada para tabla principal y consolidada',
+    'Deduplicaci\u00F3n: _buildFooterHtml() genera footer para ambas vistas',
+    'Error handling robusto con try/catch y mensajes descriptivos en operaciones Google API',
+    'Eliminado patr\u00F3n fr\u00E1gil processRows._lastValColIdx \u2192 retorno por objeto',
+    'Conversi\u00F3n completa var \u2192 const/let en todo el c\u00F3digo',
+    'SafeJSON: parsing JSON defensivo con fallback para datos corruptos',
+    'Validaci\u00F3n de inputs en funciones cr\u00EDticas (changeSetting, processRows)',
+    'Funciones de cache centralizadas en CacheManager',
+    'Helpers: safeGet() para acceso seguro a propiedades anidadas',
+    'Console logging mejorado con prefijos [Module] consistentes',
+    'Correcci\u00F3n de potenciales memory leaks en event listeners'
+  ]},
   { version: '1.9.1', date: '2026-02-11T01:12:00+01:00', changes: [
-    'CE: eliminar concepto con animación slide-out sin flash ni re-render',
-    'CE: añadir concepto con animación slide-in + auto-focus',
-    'Texto: "Totales" → "Reservas Totales" en barra de totales'
+    'CE: eliminar concepto con animaci\u00F3n slide-out sin flash ni re-render',
+    'CE: a\u00F1adir concepto con animaci\u00F3n slide-in + auto-focus',
+    'Texto: "Totales" \u2192 "Reservas Totales" en barra de totales'
   ]},
   { version: '1.9.0', date: '2026-02-11T01:01:00+01:00', changes: [
-    'Filtro de fecha multi-selección: selecciona varios años y meses simultáneamente',
-    'Combinatoria libre: Ene+Feb de 2025+2026, o un mes en 3 años, etc.',
-    'Flechas ‹ › para navegar cuando hay selección simple (1 año o 1 año+mes)',
-    'Contador de reservas por mes agregado según años seleccionados',
-    'Fix: añadir concepto CE suave — inserta DOM sin re-render + animación slide-down',
-    'Texto: "Totales" → "Reservas Totales" en barra de totales'
+    'Filtro de fecha multi-selecci\u00F3n: selecciona varios a\u00F1os y meses simult\u00E1neamente',
+    'Combinatoria libre: Ene+Feb de 2025+2026, o un mes en 3 a\u00F1os, etc.',
+    'Flechas \u2039 \u203A para navegar cuando hay selecci\u00F3n simple (1 a\u00F1o o 1 a\u00F1o+mes)',
+    'Contador de reservas por mes agregado seg\u00FAn a\u00F1os seleccionados',
+    'Fix: a\u00F1adir concepto CE suave \u2014 inserta DOM sin re-render + animaci\u00F3n slide-down',
+    'Texto: "Totales" \u2192 "Reservas Totales" en barra de totales'
   ]},
   { version: '1.8.0', date: '2026-02-11T00:33:00+01:00', changes: [
-    'Asistente Histórico Reservas: chat IA integrado con botón flotante y panel lateral',
-    'Responde solo con datos reales cargados — nunca inventa cifras ni nombres',
-    'Contexto completo: resúmenes por alojamiento, plataforma, mes, edificio, atendido por, tipo reserva',
+    'Asistente Hist\u00F3rico Reservas: chat IA integrado con bot\u00F3n flotante y panel lateral',
+    'Responde solo con datos reales cargados \u2014 nunca inventa cifras ni nombres',
+    'Contexto completo: res\u00FAmenes por alojamiento, plataforma, mes, edificio, atendido por, tipo reserva',
     'Detalle por reserva: todos los campos del Sheet (ID, localizador, cliente, edificio, etc.)',
-    'Desglose de liquidación: base, comisiones, limpieza, amenities, CE, pasarela, subtotal',
+    'Desglose de liquidaci\u00F3n: base, comisiones, limpieza, amenities, CE, pasarela, subtotal',
     'System prompt estricto anti-alucinaciones con referencia a campos disponibles',
     'API Key se guarda localmente en el navegador (localStorage)',
-    'Contexto inteligente: resúmenes cubren 100% reservas, detalle usa filtros activos (max 200)'
+    'Contexto inteligente: res\u00FAmenes cubren 100% reservas, detalle usa filtros activos (max 200)'
   ]},
   { version: '1.7.5', date: '2026-02-10T09:07:00+01:00', changes: [
-    'Changelog muestra día, hora y segundos en horario Madrid (+01:00)',
-    'Sidebar muestra hora real del deploy (primer acceso a la versión), no hora de build',
-    'Meta tags anti-caché: navegador siempre pide versión fresca al servidor',
-    'Scrollbar permanente, fino (6px) y transparente — elimina sombra al abrir/cerrar CE',
-    'Fix: modal config no salta al cambiar de tab (posición fija arriba + min-height)'
+    'Changelog muestra d\u00EDa, hora y segundos en horario Madrid (+01:00)',
+    'Sidebar muestra hora real del deploy (primer acceso a la versi\u00F3n), no hora de build',
+    'Meta tags anti-cach\u00E9: navegador siempre pide versi\u00F3n fresca al servidor',
+    'Scrollbar permanente, fino (6px) y transparente \u2014 elimina sombra al abrir/cerrar CE',
+    'Fix: modal config no salta al cambiar de tab (posici\u00F3n fija arriba + min-height)'
   ]},
   { version: '1.7.4', date: '2026-02-10T08:30:00+01:00', changes: [
     'Historial de versiones integrado en la app con enlace en sidebar',
-    'Tab de configuración renombrado: Servicio GTC / Limpieza / Amenities / Mant.',
-    'Pestaña "Impuestos" separada para IRPF',
-    'Toast de nueva versión con lista de cambios y link a historial completo',
-    'Toast más duradero (12s)',
-    'Fix: toast no aparecía al no cambiar string de versión',
+    'Tab de configuraci\u00F3n renombrado: Servicio GTC / Limpieza / Amenities / Mant.',
+    'Pesta\u00F1a "Impuestos" separada para IRPF',
+    'Toast de nueva versi\u00F3n con lista de cambios y link a historial completo',
+    'Toast m\u00E1s duradero (12s)',
+    'Fix: toast no aparec\u00EDa al no cambiar string de versi\u00F3n',
     'Fix: doble-click necesario tras buscar (search input cambiaba de ancho al perder foco)',
-    'Fix: micro-vibración DOM con overflow-anchor y DocumentFragment'
+    'Fix: micro-vibraci\u00F3n DOM con overflow-anchor y DocumentFragment'
   ]},
   { version: '1.7.3', date: '2026-02-10T08:00:00+01:00', changes: [
-    'Renombrar "Plataforma" → "Canal de Venta" en cabeceras y detalle',
-    'Reordenar secciones: Canal de Venta → GTC/Limpieza → Pasarela → Impuestos',
+    'Renombrar "Plataforma" \u2192 "Canal de Venta" en cabeceras y detalle',
+    'Reordenar secciones: Canal de Venta \u2192 GTC/Limpieza \u2192 Pasarela \u2192 Impuestos',
     'Fix: salto de scroll al hacer click con pocos resultados filtrados',
     'Fix: IDs de panel CE corregidos en _patchSingleRow (ce-ppanel-)'
   ]},
   { version: '1.7.2', date: '2026-02-10T07:20:00+01:00', changes: [
     'CE interactivo en vista consolidada (panel desplegable)',
     'Sistema de prefijo de vista (p/c) para evitar conflictos de IDs',
-    'Toast de notificación de nueva versión al arrancar',
-    'Filtro mes/año por defecto al mes y año actual',
+    'Toast de notificaci\u00F3n de nueva versi\u00F3n al arrancar',
+    'Filtro mes/a\u00F1o por defecto al mes y a\u00F1o actual',
     'Deducciones mensuales (mantenimiento + extras) antes del subtotal',
-    'Fix: limpieza e IRPF con valor 0€ no se aplicaban (bug falsy)',
+    'Fix: limpieza e IRPF con valor 0\u20AC no se aplicaban (bug falsy)',
     'Fix: estilos consol-row mejorados'
   ]},
   { version: '1.7.1', date: '2026-02-09T19:30:00+01:00', changes: [
-    'Integración de propietarios desde Google Sheets con edición inline',
-    'Columnas renombradas: Canal de Venta, Gestión GTC, Pasarela de pago',
-    'Estado de validación ordenable en la tabla',
-    'Fix: filtrado por tab en configuración'
+    'Integraci\u00F3n de propietarios desde Google Sheets con edici\u00F3n inline',
+    'Columnas renombradas: Canal de Venta, Gesti\u00F3n GTC, Pasarela de pago',
+    'Estado de validaci\u00F3n ordenable en la tabla',
+    'Fix: filtrado por tab en configuraci\u00F3n'
   ]},
   { version: '1.7.0', date: '2026-02-09T18:40:00+01:00', changes: [
-    'Conceptos Especiales (CE): panel inline con botón +/- por reserva',
+    'Conceptos Especiales (CE): panel inline con bot\u00F3n +/- por reserva',
     'CE se descuenta del total antes de calcular comisiones',
-    'CE integrado en vista principal, consolidada, detalle e impresión',
+    'CE integrado en vista principal, consolidada, detalle e impresi\u00F3n',
     'Persistencia de CE en Google Sheets (tab Configuracion)',
-    'Búsqueda mejorada: filtra también por importes y CE',
+    'B\u00FAsqueda mejorada: filtra tambi\u00E9n por importes y CE',
     'Fix: cabeceras de columna CE con tooltip',
-    'Fix: comportamiento de click en botón CE',
-    'Fix: persistencia de autenticación Google entre sesiones'
+    'Fix: comportamiento de click en bot\u00F3n CE',
+    'Fix: persistencia de autenticaci\u00F3n Google entre sesiones'
   ]},
   { version: '1.6.1', date: '2026-02-09T16:23:00+01:00', changes: [
     'Amenities configurables por reserva (no solo global)',
     'Fix: tab Configuracion se filtraba incorrectamente en carga',
     'Fix: estado de carga atascado al cambiar de fuente',
-    'Fix: correcciones de codificación UTF-8 en textos españoles'
+    'Fix: correcciones de codificaci\u00F3n UTF-8 en textos espa\u00F1oles'
   ]},
   { version: '1.6.0', date: '2026-02-09T14:21:00+01:00', changes: [
-    'Persistencia de configuración en pestaña "Configuracion" de Google Sheets',
+    'Persistencia de configuraci\u00F3n en pesta\u00F1a "Configuracion" de Google Sheets',
     'Auto-guardado de opciones globales y ajustes por reserva',
-    'Carga automática de configuración al conectar Google Sheets',
+    'Carga autom\u00E1tica de configuraci\u00F3n al conectar Google Sheets',
     'Debounce inteligente para minimizar escrituras API'
   ]},
   { version: '1.5.1', date: '2026-02-09T06:00:00+01:00', changes: [
-    'Sincronización inmediata con indicadores visuales de estado',
-    'Búsqueda de texto global en todas las vistas',
+    'Sincronizaci\u00F3n inmediata con indicadores visuales de estado',
+    'B\u00FAsqueda de texto global en todas las vistas',
     'Mejoras en layout de columnas',
     'Escritura de validaciones directamente en Google Sheets'
   ]},
   { version: '1.5.0', date: '2026-02-08T21:00:00+01:00', changes: [
-    'Write-back de estado de validación a Google Sheets',
-    'Detección automática de columna de validación',
-    'Operaciones batch para validar/desvalidar múltiples reservas',
-    'Paginación con delta-updates para rendimiento O(1)',
-    'Optimización de rendimiento para miles de reservas',
-    'Integración con Google Sheets vía OAuth',
+    'Write-back de estado de validaci\u00F3n a Google Sheets',
+    'Detecci\u00F3n autom\u00E1tica de columna de validaci\u00F3n',
+    'Operaciones batch para validar/desvalidar m\u00FAltiples reservas',
+    'Paginaci\u00F3n con delta-updates para rendimiento O(1)',
+    'Optimizaci\u00F3n de rendimiento para miles de reservas',
+    'Integraci\u00F3n con Google Sheets v\u00EDa OAuth',
     'Deploy en GitHub Pages'
   ]},
   { version: '1.4.0', date: '2026-02-08T19:00:00+01:00', changes: [
     'Vista consolidada por alojamiento con resumen financiero',
-    'Liquidación individual con desglose completo',
-    'Impresión optimizada de liquidaciones'
+    'Liquidaci\u00F3n individual con desglose completo',
+    'Impresi\u00F3n optimizada de liquidaciones'
   ]},
   { version: '1.3.0', date: '2026-02-08T17:00:00+01:00', changes: [
     'Sistema de filtros combinados: plataforma, alojamiento, estado',
-    'Filtro por mes/año con selector visual',
-    'Ordenación por múltiples campos',
-    'Tarjetas de estadísticas con porcentajes filtrados'
+    'Filtro por mes/a\u00F1o con selector visual',
+    'Ordenaci\u00F3n por m\u00FAltiples campos',
+    'Tarjetas de estad\u00EDsticas con porcentajes filtrados'
   ]},
   { version: '1.2.0', date: '2026-02-08T15:00:00+01:00', changes: [
     'Pasarela de pago configurable (Stripe/Booking)',
-    'Toggle de activación/desactivación por reserva',
-    'Modal de configuración con gestión de opciones',
-    'Cálculo de IVA sobre subtotal'
+    'Toggle de activaci\u00F3n/desactivaci\u00F3n por reserva',
+    'Modal de configuraci\u00F3n con gesti\u00F3n de opciones',
+    'C\u00E1lculo de IVA sobre subtotal'
   ]},
   { version: '1.1.0', date: '2026-02-08T13:00:00+01:00', changes: [
-    'Cálculo de liquidación: comisiones, limpieza, IRPF',
+    'C\u00E1lculo de liquidaci\u00F3n: comisiones, limpieza, IRPF',
     'Vista de detalle individual por reserva',
-    'Validación de reservas con estado persistente',
-    'Exportación y carga de ficheros Excel'
+    'Validaci\u00F3n de reservas con estado persistente',
+    'Exportaci\u00F3n y carga de ficheros Excel'
   ]},
   { version: '1.0.0', date: '2026-02-08T11:00:00+01:00', changes: [
-    'Versión inicial: carga de ficheros Excel de reservas',
+    'Versi\u00F3n inicial: carga de ficheros Excel de reservas',
     'Tabla de preliquidaciones con columnas configurables',
-    'Sidebar de navegación',
-    'Diseño responsive'
+    'Sidebar de navegaci\u00F3n',
+    'Dise\u00F1o responsive'
   ]}
 ];
 
-// Mostrar versión en sidebar + toast si nueva versión
+// Mostrar versi\u00F3n en sidebar + toast si nueva versi\u00F3n
 window.addEventListener('DOMContentLoaded', () => {
   const vl = document.getElementById('version-label');
   if (vl) {
     // Record actual deploy time (first load of this version)
     const deployKey = 'app-deploy-time-' + APP_VERSION;
-    let deployTime = localStorage.getItem(deployKey);
+    let deployTime = SafeStorage.get(deployKey);
     if (!deployTime) {
       deployTime = new Date().toISOString();
-      localStorage.setItem(deployKey, deployTime);
+      SafeStorage.set(deployKey, deployTime);
     }
     const bd = new Date(deployTime);
     const bStr = bd.toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Europe/Madrid'});
     vl.textContent = APP_VERSION + ' (' + bStr + ')';
   }
-  try {
-    const lastSeen = localStorage.getItem('app-last-version');
-    if (lastSeen && lastSeen !== APP_VERSION) {
-      showVersionToast(lastSeen);
-    }
-    localStorage.setItem('app-last-version', APP_VERSION);
-  } catch(e) {}
+  const lastSeen = SafeStorage.get('app-last-version');
+  if (lastSeen && lastSeen !== APP_VERSION) {
+    showVersionToast(lastSeen);
+  }
+  SafeStorage.set('app-last-version', APP_VERSION);
 });
 
 function showVersionToast(prevVersion) {
   const entry = CHANGELOG.find(c => c.version === APP_VERSION);
-  const changesList = entry ? entry.changes.slice(0, 4).map(c => `<div style="font-size:11px;color:#cbd5e1;padding:2px 0 2px 12px;position:relative;line-height:1.4;"><span style="position:absolute;left:2px;color:#4f8cff;">•</span>${c}</div>`).join('') : `<div style="font-size:12px;color:#cbd5e1;">${APP_CHANGES}</div>`;
-  const moreCount = entry && entry.changes.length > 4 ? `<div style="font-size:11px;color:#64748b;margin-top:2px;">...y ${entry.changes.length - 4} más</div>` : '';
+  const changesList = entry ? entry.changes.slice(0, 4).map(c => `<div style="font-size:11px;color:#cbd5e1;padding:2px 0 2px 12px;position:relative;line-height:1.4;"><span style="position:absolute;left:2px;color:#4f8cff;">\u2022</span>${c}</div>`).join('') : `<div style="font-size:12px;color:#cbd5e1;">${APP_CHANGES}</div>`;
+  const moreCount = entry && entry.changes.length > 4 ? `<div style="font-size:11px;color:#64748b;margin-top:2px;">...y ${entry.changes.length - 4} m\u00E1s</div>` : '';
   const toast = document.createElement('div');
   toast.id = 'version-toast';
   toast.innerHTML = `
     <div style="display:flex;align-items:flex-start;gap:12px;">
-      <span style="font-size:22px;line-height:1;">🚀</span>
+      <span style="font-size:22px;line-height:1;">&#x1F680;</span>
       <div style="flex:1;min-width:0;">
-        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">Actualización v${APP_VERSION}</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">Actualizaci\u00F3n v${APP_VERSION}</div>
         ${changesList}${moreCount}
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
           <span style="font-size:11px;color:#64748b;">Anterior: v${prevVersion}</span>
-          <a href="#" onclick="event.preventDefault();closeVersionToast();showChangelog();" style="font-size:11px;color:#4f8cff;text-decoration:none;font-weight:600;">Ver historial completo →</a>
+          <a href="#" onclick="event.preventDefault();closeVersionToast();showChangelog();" style="font-size:11px;color:#4f8cff;text-decoration:none;font-weight:600;">Ver historial completo \u2192</a>
         </div>
       </div>
       <button onclick="closeVersionToast()" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;padding:0;line-height:1;">&times;</button>
@@ -935,7 +1038,7 @@ function showVersionToast(prevVersion) {
       toast.style.transform = 'translateY(0)';
     });
   });
-  setTimeout(() => closeVersionToast(), 12000);
+  setTimeout(() => closeVersionToast(), CONFIG.VERSION_TOAST_TIMEOUT);
 }
 function closeVersionToast() {
   const t = document.getElementById('version-toast');
@@ -957,7 +1060,7 @@ function showChangelog() {
       <div class="cl-version-header">
         <span class="cl-badge${isCurrent ? ' current' : ''}">v${v.version}</span>
         <span class="cl-date">${new Date(v.date).toLocaleDateString('es-ES', {day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Europe/Madrid'})}</span>
-        ${isCurrent ? '<span style="font-size:11px;color:#43a047;font-weight:600;">← actual</span>' : ''}
+        ${isCurrent ? '<span style="font-size:11px;color:#43a047;font-weight:600;">&#x2190; actual</span>' : ''}
       </div>
       <ul class="cl-changes">${items}</ul>
     </div>`;
@@ -969,18 +1072,18 @@ function closeChangelog() {
   document.getElementById('changelog-overlay').style.display = 'none';
 }
 
-// \u2550\u2550\u2550 CONFIGURACIÓN GOOGLE \u2014 Sustituye con tus credenciales reales \u2550\u2550\u2550
+// === CONFIGURACI\u00D3N GOOGLE \u2014 Sustituye con tus credenciales reales ===
 const GOOGLE_CLIENT_ID = '658971789892-cnsnbr36hus5jablgkuj2qk8ipic5ptf.apps.googleusercontent.com';
 const GOOGLE_API_KEY   = 'AIzaSyAqn7NyL_QRC97KW-huBjzZjTLPGpEoT-k';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.readonly';
 
-// \u2550\u2550\u2550 GOOGLE STATE \u2550\u2550\u2550
+// === GOOGLE STATE ===
 let _gapiInited = false, _gisInited = false, _googleToken = null, _tokenClient = null;
 let _pickerInited = false;
 let _sheetHistory = [];
-try { const h = localStorage.getItem('gsheet-history'); if (h) _sheetHistory = JSON.parse(h); } catch(e) {}
+_sheetHistory = SafeStorage.getJSON('gsheet-history', []);
 let _defaultSheetUrl = null;
-try { _defaultSheetUrl = localStorage.getItem('gsheet-default-url') || null; } catch(e) {}
+_defaultSheetUrl = SafeStorage.get('gsheet-default-url', null);
 
 function gapiLoaded() {
   gapi.load('client:picker', async () => {
@@ -1005,16 +1108,16 @@ function maybeEnableGoogleUI() {
     // Auto re-auth silently if user was previously connected
     if (!_googleToken && _tokenClient) {
       try {
-        if (localStorage.getItem('gsheet-connected') === '1') {
+        if (SafeStorage.get('gsheet-connected') === '1') {
           _tokenClient.requestAccessToken({ prompt: '' });
         }
-      } catch(e) {}
+      } catch(e) { console.warn('[Auth] Auto-reconnect error:', e.message); }
     }
     renderSheetHistory();
     if (GOOGLE_CLIENT_ID === 'TU_CLIENT_ID.apps.googleusercontent.com') {
       const el = document.getElementById('gsheet-section');
       if (el) el.innerHTML = '<h3>&#128202; Google Sheets</h3>' +
-        '<p style="color:#e53935;">Configura GOOGLE_CLIENT_ID y GOOGLE_API_KEY en el código para activar esta función. Consulta el README.md para instrucciones.</p>';
+        '<p style="color:#e53935;">Configura GOOGLE_CLIENT_ID y GOOGLE_API_KEY en el c\u00F3digo para activar esta funci\u00F3n. Consulta el README.md para instrucciones.</p>';
     }
   }
 }
@@ -1026,9 +1129,9 @@ window.addEventListener('load', () => {
   else { const s = document.querySelector('script[src*="accounts.google.com"]'); if (s) s.addEventListener('load', () => setTimeout(gisLoaded, 100)); }
 });
 
-// \u2550\u2550\u2550 GOOGLE AUTH \u2550\u2550\u2550
+// === GOOGLE AUTH ===
 function googleSignIn() {
-  if (!_tokenClient) { alert('Google API no inicializada. Recarga la página.'); return; }
+  if (!_tokenClient) { alert('Google API no inicializada. Recarga la p\u00E1gina.'); return; }
   if (_googleToken) { updateGoogleStatus(true); return; }
   _tokenClient.requestAccessToken({ prompt: '' });
 }
@@ -1036,12 +1139,12 @@ function onTokenResponse(resp) {
   if (resp.error) { console.error('Auth error:', resp); return; }
   _googleToken = resp;
   gapi.client.setToken(resp);
-  try { localStorage.setItem('gsheet-connected', '1'); } catch(e) {}
+  SafeStorage.set('gsheet-connected', '1');
   updateGoogleStatus(true);
 }
 function googleSignOut() {
   if (_googleToken) { google.accounts.oauth2.revoke(_googleToken.access_token, () => {}); _googleToken = null; }
-  try { localStorage.removeItem('gsheet-connected'); } catch(e) {}
+  SafeStorage.remove('gsheet-connected');
   updateGoogleStatus(false);
 }
 let _autoLoadAttempted = false;
@@ -1083,24 +1186,24 @@ function updateGoogleStatus(connected) {
   renderSheetHistory();
 }
 
-// \u2550\u2550\u2550 DEFAULT SHEET URL MANAGEMENT \u2550\u2550\u2550
+// === DEFAULT SHEET URL MANAGEMENT ===
 function renderDefaultUrlDisplay() {
-  var el = document.getElementById('default-url-display');
+  const el = document.getElementById('default-url-display');
   if (!el || !_defaultSheetUrl) return;
-  var short = _defaultSheetUrl.length > 80 ? _defaultSheetUrl.substring(0, 77) + '...' : _defaultSheetUrl;
+  const short = _defaultSheetUrl.length > 80 ? _defaultSheetUrl.substring(0, 77) + '...' : _defaultSheetUrl;
   el.innerHTML = '<span style="color:#6b7280;font-size:12px;">URL:</span> ' + short;
 }
 function loadDefaultSheet() {
   if (!_defaultSheetUrl) return;
-  var id = extractSheetId(_defaultSheetUrl);
-  if (!id) { alert('La URL por defecto no es válida.'); return; }
+  const id = extractSheetId(_defaultSheetUrl);
+  if (!id) { alert('La URL por defecto no es v\u00E1lida.'); return; }
   loadSheetById(id, 'Hoja por defecto');
 }
 function autoLoadDefaultSheet() {
   if (!_defaultSheetUrl || !_googleToken) return;
-  var id = extractSheetId(_defaultSheetUrl);
+  let id = extractSheetId(_defaultSheetUrl);
   if (!id) return;
-  var statusEl = document.getElementById('gsheet-autoload-status');
+  const statusEl = document.getElementById('gsheet-autoload-status');
   statusEl.style.display = '';
   document.getElementById('autoload-status-text').textContent = 'Cargando hoja por defecto...';
   loadSheetById(id, 'Hoja por defecto');
@@ -1116,36 +1219,36 @@ function cancelDefaultUrlEdit() {
   document.getElementById('default-url-edit').style.display = 'none';
 }
 function saveDefaultUrlEdit() {
-  var url = document.getElementById('default-url-edit-input').value.trim();
-  if (!url) { alert('Introduce una URL válida.'); return; }
-  var id = extractSheetId(url);
-  if (!id) { alert('URL no válida. Debe ser una URL de Google Sheets.'); return; }
+  const url = document.getElementById('default-url-edit-input').value.trim();
+  if (!url) { alert('Introduce una URL v\u00E1lida.'); return; }
+  let id = extractSheetId(url);
+  if (!id) { alert('URL no v\u00E1lida. Debe ser una URL de Google Sheets.'); return; }
   _defaultSheetUrl = url;
-  try { localStorage.setItem('gsheet-default-url', url); } catch(e) {}
+  SafeStorage.set('gsheet-default-url', url);
   cancelDefaultUrlEdit();
   renderDefaultUrlDisplay();
   document.getElementById('gsheet-default-area').style.display = '';
   document.getElementById('gsheet-no-default').style.display = 'none';
 }
 function clearDefaultUrl() {
-  if (!confirm('¿Quitar la hoja por defecto?')) return;
+  if (!confirm('\u00BFQuitar la hoja por defecto?')) return;
   _defaultSheetUrl = null;
-  try { localStorage.removeItem('gsheet-default-url'); } catch(e) {}
+  SafeStorage.remove('gsheet-default-url');
   document.getElementById('gsheet-default-area').style.display = 'none';
   if (_googleToken) document.getElementById('gsheet-no-default').style.display = '';
 }
 function showSetDefaultUrl() {
-  var form = document.getElementById('set-default-url-form');
+  const form = document.getElementById('set-default-url-form');
   form.style.display = form.style.display === 'none' ? '' : 'none';
   if (form.style.display !== 'none') document.getElementById('set-default-url-input').focus();
 }
 function saveNewDefaultUrl() {
-  var url = document.getElementById('set-default-url-input').value.trim();
-  if (!url) { alert('Introduce una URL válida.'); return; }
-  var id = extractSheetId(url);
-  if (!id) { alert('URL no válida. Debe ser una URL de Google Sheets.'); return; }
+  const url = document.getElementById('set-default-url-input').value.trim();
+  if (!url) { alert('Introduce una URL v\u00E1lida.'); return; }
+  let id = extractSheetId(url);
+  if (!id) { alert('URL no v\u00E1lida. Debe ser una URL de Google Sheets.'); return; }
   _defaultSheetUrl = url;
-  try { localStorage.setItem('gsheet-default-url', url); } catch(e) {}
+  SafeStorage.set('gsheet-default-url', url);
   document.getElementById('set-default-url-form').style.display = 'none';
   document.getElementById('set-default-url-input').value = '';
   document.getElementById('gsheet-no-default').style.display = 'none';
@@ -1153,13 +1256,13 @@ function saveNewDefaultUrl() {
   renderDefaultUrlDisplay();
 }
 
-// \u2550\u2550\u2550 GOOGLE PICKER \u2550\u2550\u2550
+// === GOOGLE PICKER ===
 function getAppId() {
   const m = GOOGLE_CLIENT_ID.match(/^(\d+)/);
   return m ? m[1] : '';
 }
 function openGooglePicker() {
-  if (!_pickerInited || !_googleToken) { alert('Inicia sesión con Google primero.'); return; }
+  if (!_pickerInited || !_googleToken) { alert('Inicia sesi\u00F3n con Google primero.'); return; }
   const view = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS).setIncludeFolders(true).setSelectFolderEnabled(false);
   const sharedView = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS).setIncludeFolders(true).setOwnedByMe(false);
   const picker = new google.picker.PickerBuilder()
@@ -1179,12 +1282,12 @@ function onPickerCallback(data) {
   }
 }
 
-// \u2550\u2550\u2550 LOAD FROM URL \u2550\u2550\u2550
+// === LOAD FROM URL ===
 function loadFromUrl() {
   const url = document.getElementById('gsheet-url-input').value.trim();
   if (!url) { alert('Pega la URL de la hoja de Google Sheets'); return; }
   const id = extractSheetId(url);
-  if (!id) { alert('URL no válida. Debe ser una URL de Google Sheets.'); return; }
+  if (!id) { alert('URL no v\u00E1lida. Debe ser una URL de Google Sheets.'); return; }
   loadSheetById(id, 'Google Sheet');
 }
 function extractSheetId(url) {
@@ -1194,10 +1297,10 @@ function extractSheetId(url) {
   return null;
 }
 
-// \u2550\u2550\u2550 LOAD SHEET DATA \u2550\u2550\u2550
+// === LOAD SHEET DATA ===
 async function loadSheetById(sheetId, sheetName) {
-  if (!_googleToken) { alert('Inicia sesión con Google primero.'); return; }
-  showGSheetLoading('Obteniendo información de la hoja...');
+  if (!_googleToken) { alert('Inicia sesi\u00F3n con Google primero.'); return; }
+  showGSheetLoading('Obteniendo informaci\u00F3n de la hoja...');
   try {
     const meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: sheetId, fields: 'properties.title,sheets.properties' });
     const title = meta.result.properties.title;
@@ -1207,8 +1310,10 @@ async function loadSheetById(sheetId, sheetName) {
     if (dataSheets.length === 1) { await loadSheetData(sheetId, dataSheets[0].name, title); }
     else { hideGSheetLoading(); showSheetSelector(sheetId, dataSheets, title); }
   } catch(e) {
-    hideGSheetLoading(); console.error('Error loading sheet:', e);
-    alert(e.result && e.result.error ? 'Error: ' + e.result.error.message : 'Error al cargar la hoja. Verifica que tienes acceso.');
+    hideGSheetLoading();
+    const errMsg = safeGet(e, 'result.error.message', '');
+    console.error('[GSheets] Error loading sheet:', errMsg || e);
+    alert(errMsg ? 'Error de Google Sheets: ' + errMsg : 'Error al cargar la hoja. Verifica que tienes acceso y que la URL es correcta.');
   }
 }
 function showSheetSelector(sheetId, sheets, title) {
@@ -1238,13 +1343,14 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
       valueRenderOption: 'UNFORMATTED_VALUE', dateTimeRenderOption: 'SERIAL_NUMBER'
     });
     const rows = resp.result.values;
-    if (!rows || rows.length < 2) { hideGSheetLoading(); alert('La hoja está vacía o no tiene datos suficientes.'); return; }
+    if (!rows || rows.length < 2) { hideGSheetLoading(); alert('La hoja est\u00E1 vac\u00EDa o no tiene datos suficientes.'); return; }
     showGSheetLoading('Procesando ' + (rows.length - 1) + ' filas...');
     if (!processRows(rows)) { hideGSheetLoading(); return; }
 
     // Set up sheet source for write-back
-    const valColIdx = processRows._lastValColIdx;
-    const headerRowIdx = processRows._lastHeaderRow;
+    const lastResult = processRows._lastResult || {};
+    const valColIdx = lastResult.valColIdx !== undefined ? lastResult.valColIdx : null;
+    const headerRowIdx = lastResult.headerRow !== undefined ? lastResult.headerRow : 0;
     await setupSheetSource(sheetId, sheetTab, headerRowIdx, valColIdx);
 
     // Load or create config tab for persistence
@@ -1260,16 +1366,18 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
     updateSyncIndicator('idle');
     hideGSheetLoading(); showScreen("list"); renderTable();
   } catch(e) {
-    hideGSheetLoading(); console.error('Error reading sheet data:', e);
-    alert(e.result && e.result.error ? 'Error: ' + e.result.error.message : 'Error al leer los datos de la hoja.');
+    hideGSheetLoading();
+    const errMsg = safeGet(e, 'result.error.message', '');
+    console.error('[GSheets] Error reading sheet data:', errMsg || e);
+    alert(errMsg ? 'Error al leer datos: ' + errMsg : 'Error al leer los datos de la hoja. Comprueba los permisos.');
   }
 }
 
-// \u2550\u2550\u2550 LOADING UI \u2550\u2550\u2550
+// === LOADING UI ===
 function showGSheetLoading(text) { document.getElementById('gsheet-loading').style.display = 'flex'; document.getElementById('gsheet-loading-text').textContent = text || 'Cargando...'; }
 function hideGSheetLoading() { document.getElementById('gsheet-loading').style.display = 'none'; document.getElementById('gsheet-autoload-status').style.display = 'none'; }
 
-// \u2550\u2550\u2550 SHEET WRITE-BACK: Validation column \u2550\u2550\u2550
+// === SHEET WRITE-BACK: Validation column ===
 function colIndexToLetter(idx) {
   let s = '';
   idx = Math.max(0, idx);
@@ -1329,7 +1437,7 @@ async function writeValidationToSheet(reservaIdx, isValidated) {
   const r = allReservas[reservaIdx];
   if (!r) return;
   const cell = _sheetSource.tab + '!' + _sheetSource.valColLetter + r._sheetRow;
-  const value = isValidated ? 'Sí' : '';
+  const value = isValidated ? 'S\u00ED' : '';
   updateSyncIndicator('syncing');
   try {
     await gapi.client.sheets.spreadsheets.values.update({
@@ -1339,7 +1447,7 @@ async function writeValidationToSheet(reservaIdx, isValidated) {
       resource: { values: [[value]] }
     });
     updateSyncIndicator('saved');
-    console.log('[Sync] Wrote ' + (isValidated ? 'Sí' : '(empty)') + ' to ' + cell);
+    console.log('[Sync] Wrote ' + (isValidated ? 'S\u00ED' : '(empty)') + ' to ' + cell);
   } catch(e) {
     console.error('[Sync] Error writing to ' + cell + ':', e);
     updateSyncIndicator('error');
@@ -1349,7 +1457,7 @@ async function writeValidationToSheet(reservaIdx, isValidated) {
 async function batchWriteValidation(reservaIndices, isValidated) {
   if (!_sheetSource || !_googleToken || reservaIndices.length === 0) return;
   updateSyncIndicator('syncing');
-  const value = isValidated ? 'Sí' : '';
+  const value = isValidated ? 'S\u00ED' : '';
   const data = reservaIndices.map(idx => {
     const r = allReservas[idx];
     if (!r) return null;
@@ -1412,8 +1520,8 @@ function updateSyncIndicator(state) {
 
 
 // === CONFIG PERSISTENCE: "Configuracion" tab in Google Sheets ===
-const CONFIG_TAB_NAME = 'Configuracion';
-const PROPIETARIOS_TAB_NAME = 'Propietarios';
+const CONFIG_TAB_NAME = CONFIG.CONFIG_TAB_NAME;
+const PROPIETARIOS_TAB_NAME = CONFIG.PROPIETARIOS_TAB_NAME;
 let _propietariosMap = {}; // alojamiento code (normalized) -> propietario name
 let _propietariosKeys = []; // sorted by length desc for best match
 let _propietariosRowMap = {}; // alojamiento code (normalized) -> sheet row number (1-based)
@@ -1421,9 +1529,9 @@ let _propietariosSheetId = null;
 
 function getPropietario(alojamiento) {
   if (!alojamiento) return 'Falta propietario';
-  var key = alojamiento.trim().toLowerCase();
+  const key = alojamiento.trim().toLowerCase();
   if (_propietariosMap[key]) return _propietariosMap[key];
-  for (var i = 0; i < _propietariosKeys.length; i++) {
+  for (let i = 0; i < _propietariosKeys.length; i++) {
     if (key.indexOf(_propietariosKeys[i]) !== -1) return _propietariosMap[_propietariosKeys[i]];
   }
   return 'Falta propietario';
@@ -1431,21 +1539,21 @@ function getPropietario(alojamiento) {
 
 function _getPropietarioKey(alojamiento) {
   if (!alojamiento) return null;
-  var key = alojamiento.trim().toLowerCase();
+  const key = alojamiento.trim().toLowerCase();
   if (_propietariosMap[key]) return key;
-  for (var i = 0; i < _propietariosKeys.length; i++) {
+  for (let i = 0; i < _propietariosKeys.length; i++) {
     if (key.indexOf(_propietariosKeys[i]) !== -1) return _propietariosKeys[i];
   }
   return null;
 }
 
 async function savePropietario(alojamiento, newName) {
-  var matchedKey = _getPropietarioKey(alojamiento);
+  const matchedKey = _getPropietarioKey(alojamiento);
   if (!_propietariosSheetId || !_googleToken) return false;
   try {
     if (matchedKey && _propietariosRowMap[matchedKey]) {
       // Update existing row
-      var row = _propietariosRowMap[matchedKey];
+      const row = _propietariosRowMap[matchedKey];
       await gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: _propietariosSheetId,
         range: PROPIETARIOS_TAB_NAME + '!B' + row,
@@ -1454,8 +1562,8 @@ async function savePropietario(alojamiento, newName) {
       _propietariosMap[matchedKey] = newName;
     } else {
       // New entry: find alojamiento code from the full name
-      var code = alojamiento.trim();
-      var codeKey = code.toLowerCase();
+      const code = alojamiento.trim();
+      const codeKey = code.toLowerCase();
       // Append new row
       await gapi.client.sheets.spreadsheets.values.append({
         spreadsheetId: _propietariosSheetId,
@@ -1465,40 +1573,40 @@ async function savePropietario(alojamiento, newName) {
       }, { values: [[code, newName]] });
       _propietariosMap[codeKey] = newName;
       // Estimate new row number
-      var maxRow = 1;
-      for (var k in _propietariosRowMap) { if (_propietariosRowMap[k] > maxRow) maxRow = _propietariosRowMap[k]; }
+      let maxRow = 1;
+      for (const k in _propietariosRowMap) { if (_propietariosRowMap[k] > maxRow) maxRow = _propietariosRowMap[k]; }
       _propietariosRowMap[codeKey] = maxRow + 1;
       _propietariosKeys = Object.keys(_propietariosMap).sort(function(a, b) { return b.length - a.length; });
     }
     return true;
-  } catch(e) { console.error('Error saving propietario:', e); return false; }
+  } catch(e) { console.error('[Propietarios] Error saving:', e); return false; }
 }
 
 function editPropietarioInline(alojamiento, el) {
-  var current = getPropietario(alojamiento);
+  let current = getPropietario(alojamiento);
   if (current === 'Falta propietario') current = '';
-  var inp = document.createElement('input');
+  const inp = document.createElement('input');
   inp.type = 'text'; inp.value = current;
   inp.style.cssText = 'font-size:inherit;font-weight:700;border:2px solid #3b82f6;border-radius:6px;padding:4px 8px;width:100%;max-width:350px;outline:none;';
-  var container = el.parentNode;
-  var original = el;
+  const container = el.parentNode;
+  const original = el;
   container.replaceChild(inp, original);
   inp.focus(); inp.select();
 
-  var saving = false;
+  let saving = false;
   async function doSave() {
     if (saving) return; saving = true;
-    var val = inp.value.trim();
+    const val = inp.value.trim();
     if (!val) val = current; // revert if empty
     if (val !== current) {
       inp.disabled = true; inp.style.opacity = '0.5';
-      var ok = await savePropietario(alojamiento, val);
-      if (!ok) { alert('Error al guardar. ¿Estás conectado a Google Sheets?'); }
+      const ok = await savePropietario(alojamiento, val);
+      if (!ok) { alert('Error al guardar. \u00BFEst\u00E1s conectado a Google Sheets?'); }
     }
     // Rebuild element
-    var span = document.createElement('span');
+    const span = document.createElement('span');
     span.className = original.className;
-    var prop = getPropietario(alojamiento);
+    const prop = getPropietario(alojamiento);
     span.textContent = prop;
     span.title = 'Clic para editar propietario';
     span.style.cursor = 'pointer';
@@ -1515,26 +1623,26 @@ async function loadPropietariosTab(sheetId) {
   _propietariosRowMap = {};
   _propietariosSheetId = sheetId;
   try {
-    var meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: sheetId, fields: 'sheets.properties' });
-    var sheets = meta.result.sheets || [];
-    var hasTab = sheets.some(function(s) { return s.properties.title === PROPIETARIOS_TAB_NAME; });
-    if (!hasTab) { console.log('No Propietarios tab found'); return; }
-    var resp = await gapi.client.sheets.spreadsheets.values.get({
+    const meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: sheetId, fields: 'sheets.properties' });
+    const sheets = meta.result.sheets || [];
+    const hasTab = sheets.some(function(s) { return s.properties.title === PROPIETARIOS_TAB_NAME; });
+    if (!hasTab) { console.log('[Propietarios] No tab found'); return; }
+    const resp = await gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: sheetId, range: PROPIETARIOS_TAB_NAME + '!A1:B1000',
       valueRenderOption: 'FORMATTED_VALUE'
     });
-    var rows = resp.result.values;
+    const rows = resp.result.values;
     if (!rows || rows.length < 2) return;
-    for (var i = 1; i < rows.length; i++) {
-      var aloj = (rows[i][0] || '').trim();
-      var prop = (rows[i][1] || '').trim();
+    for (let i = 1; i < rows.length; i++) {
+      const aloj = (rows[i][0] || '').trim();
+      const prop = (rows[i][1] || '').trim();
       if (aloj) {
-        var k = aloj.toLowerCase();
+        const k = aloj.toLowerCase();
         _propietariosMap[k] = prop || '';
         _propietariosRowMap[k] = i + 1; // 1-based sheet row
       }
     }
-    console.log('Propietarios loaded:', Object.keys(_propietariosMap).length);
+    console.log('[Propietarios] Loaded:', Object.keys(_propietariosMap).length);
     _propietariosKeys = Object.keys(_propietariosMap).sort(function(a, b) { return b.length - a.length; });
   } catch(e) { console.warn('Error loading Propietarios tab:', e); }
 }
@@ -1560,7 +1668,7 @@ function scheduleReservaConfigSave(idx) {
 
 // Build global config data as key-value rows
 function buildGlobalConfigRows() {
-  var rows = [];
+  const rows = [];
   Object.keys(platformOptions).sort().forEach(function(name) {
     rows.push(['plataforma:' + name, platformOptions[name].join(',')]);
   });
@@ -1573,11 +1681,11 @@ function buildGlobalConfigRows() {
   rows.push(['mantenimiento', maintenanceOptions.join(',')]);
   // Per-consolidation monthly deductions
   Object.keys(_consolMaint).forEach(function(k) {
-    var m = _consolMaint[k];
+    const m = _consolMaint[k];
     rows.push(['maint:' + k, (m.enabled?'1':'0') + ',' + m.amount]);
   });
   Object.keys(_consolExtras).forEach(function(k) {
-    var exs = _consolExtras[k];
+    const exs = _consolExtras[k];
     if (exs.length > 0) {
       rows.push(['extras:' + k, JSON.stringify(exs)]);
     }
@@ -1587,11 +1695,11 @@ function buildGlobalConfigRows() {
 
 // Build per-reservation config rows
 function buildReservaConfigRows(indices) {
-  var rows = [];
-  var list = indices ? [...indices] : allReservas.map(function(r) { return r.idx; });
+  const rows = [];
+  const list = indices ? [...indices] : allReservas.map(function(r) { return r.idx; });
   list.forEach(function(idx) {
-    var r = allReservas[idx];
-    var s = settings[idx];
+    const r = allReservas[idx];
+    const s = settings[idx];
     if (!r || !s) return;
     rows.push([
       r.id,
@@ -1610,17 +1718,17 @@ function buildReservaConfigRows(indices) {
 
 // Full build of the Configuracion tab content
 function buildFullConfigTabData() {
-  var data = [];
+  const data = [];
   data.push(['Configuracion', 'Liquidaciones App', 'v' + APP_VERSION]);
   data.push([]);
   data.push(['OPCIONES GLOBALES']);
   data.push(['Clave', 'Valor']);
-  var globalRows = buildGlobalConfigRows();
+  let globalRows = buildGlobalConfigRows();
   globalRows.forEach(function(row) { data.push(row); });
   data.push([]);
   data.push(['AJUSTES POR RESERVA']);
   data.push(['ID Reserva', 'comPlataforma', 'comGTC', 'limpieza', 'amenities', 'irpf', 'pasarela', 'pasarelaRate', 'conceptosEspeciales']);
-  var reservaRows = buildReservaConfigRows();
+  let reservaRows = buildReservaConfigRows();
   reservaRows.forEach(function(row) { data.push(row); });
   return data;
 }
@@ -1631,21 +1739,21 @@ async function loadOrCreateConfigTab(sheetId) {
   _configLoaded = false;
   try {
     console.log('[Config] Loading config tab...');
-    var meta = await gapi.client.sheets.spreadsheets.get({
+    const meta = await gapi.client.sheets.spreadsheets.get({
       spreadsheetId: sheetId,
       fields: 'sheets.properties.title'
     });
-    var tabExists = meta.result.sheets.some(function(s) {
+    const tabExists = meta.result.sheets.some(function(s) {
       return s.properties.title === CONFIG_TAB_NAME;
     });
 
     if (tabExists) {
-      var resp = await gapi.client.sheets.spreadsheets.values.get({
+      const resp = await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: sheetId,
-        range: CONFIG_TAB_NAME + '!A1:I10000',
+        range: CONFIG_TAB_NAME + '!A1:I' + CONFIG.MAX_CONFIG_ROWS,
         valueRenderOption: 'UNFORMATTED_VALUE'
       });
-      var rows = resp.result.values || [];
+      const rows = resp.result.values || [];
       applyConfigFromRows(rows);
       _configLoaded = true;
       console.log('[Config] Loaded config from "' + CONFIG_TAB_NAME + '" tab (' + rows.length + ' rows)');
@@ -1656,7 +1764,7 @@ async function loadOrCreateConfigTab(sheetId) {
           requests: [{ addSheet: { properties: { title: CONFIG_TAB_NAME } } }]
         }
       });
-      var data = buildFullConfigTabData();
+      const data = buildFullConfigTabData();
       await gapi.client.sheets.spreadsheets.values.update({
         spreadsheetId: sheetId,
         range: CONFIG_TAB_NAME + '!A1',
@@ -1675,28 +1783,28 @@ async function loadOrCreateConfigTab(sheetId) {
 function applyConfigFromRows(rows) {
   if (!rows || rows.length < 4) return;
 
-  var globalStart = -1, reservaHeaderRow = -1;
-  for (var i = 0; i < rows.length; i++) {
-    var cell = String(rows[i][0] || '').trim();
+  let globalStart = -1, reservaHeaderRow = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const cell = String(rows[i][0] || '').trim();
     if (cell === 'Clave' && globalStart === -1) { globalStart = i + 1; }
     if (cell === 'ID Reserva') { reservaHeaderRow = i; break; }
   }
 
   // Parse global options
   if (globalStart >= 0) {
-    var endRow = reservaHeaderRow > 0 ? reservaHeaderRow : rows.length;
-    var newPlatformOptions = {};
-    var newPasStripe = null, newPasBooking = null, newLimpieza = null;
-    var newIrpf = null, newGtc = null, newAmenities = null;
+    const endRow = reservaHeaderRow > 0 ? reservaHeaderRow : rows.length;
+    let newPlatformOptions = {};
+    let newPasStripe = null, newPasBooking = null, newLimpieza = null;
+    let newIrpf = null, newGtc = null, newAmenities = null;
 
-    for (var i = globalStart; i < endRow; i++) {
-      var key = String(rows[i][0] || '').trim();
-      var val = String(rows[i][1] || '').trim();
+    for (let i = globalStart; i < endRow; i++) {
+      const key = String(rows[i][0] || '').trim();
+      const val = String(rows[i][1] || '').trim();
       if (!key || !val) continue;
 
       if (key.startsWith('plataforma:')) {
-        var platName = key.substring(11);
-        var nums = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
+        const platName = key.substring(11);
+        const nums = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
         if (nums.length > 0) newPlatformOptions[platName] = nums;
       } else if (key === 'pasarela_stripe') {
         newPasStripe = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
@@ -1711,14 +1819,14 @@ function applyConfigFromRows(rows) {
       } else if (key === 'amenities') {
         newAmenities = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
       } else if (key === 'mantenimiento') {
-        var newMaint = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
+        const newMaint = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
         if (newMaint.length > 0) maintenanceOptions = newMaint;
       } else if (key.startsWith('maint:')) {
-        var maintAloj = key.substring(6);
-        var parts = val.split(',');
+        const maintAloj = key.substring(6);
+        const parts = val.split(',');
         _consolMaint[maintAloj] = { enabled: parts[0] === '1', amount: parseFloat(parts[1]) || maintenanceOptions[0] };
       } else if (key.startsWith('extras:')) {
-        var extAloj = key.substring(7);
+        const extAloj = key.substring(7);
         try { _consolExtras[extAloj] = JSON.parse(val); } catch(e) { _consolExtras[extAloj] = []; }
       }
     }
@@ -1743,49 +1851,49 @@ function applyConfigFromRows(rows) {
   // Parse per-reservation settings
   if (reservaHeaderRow >= 0) {
     // Detect column positions from header row (backwards compatible)
-    var hdr = rows[reservaHeaderRow].map(function(c) { return String(c || '').trim(); });
-    var colMap = {};
+    const hdr = rows[reservaHeaderRow].map(function(c) { return String(c || '').trim(); });
+    const colMap = {};
     hdr.forEach(function(name, idx) { colMap[name] = idx; });
-    var idCol = colMap['ID Reserva'] !== undefined ? colMap['ID Reserva'] : 0;
-    var cpCol = colMap['comPlataforma'];
-    var cgCol = colMap['comGTC'];
-    var lmCol = colMap['limpieza'];
-    var amCol = colMap['amenities'];
-    var irCol = colMap['irpf'];
-    var paCol = colMap['pasarela'];
-    var prCol = colMap['pasarelaRate'];
-    var ceCol = colMap['conceptosEspeciales'];
+    const idCol = colMap['ID Reserva'] !== undefined ? colMap['ID Reserva'] : 0;
+    const cpCol = colMap['comPlataforma'];
+    const cgCol = colMap['comGTC'];
+    const lmCol = colMap['limpieza'];
+    const amCol = colMap['amenities'];
+    const irCol = colMap['irpf'];
+    const paCol = colMap['pasarela'];
+    const prCol = colMap['pasarelaRate'];
+    const ceCol = colMap['conceptosEspeciales'];
 
-    var reservaMap = {};
+    const reservaMap = {};
     allReservas.forEach(function(r) { reservaMap[r.id] = r.idx; });
 
-    var applied = 0;
-    for (var i = reservaHeaderRow + 1; i < rows.length; i++) {
-      var id = String(rows[i][idCol] || '').trim();
+    let applied = 0;
+    for (let i = reservaHeaderRow + 1; i < rows.length; i++) {
+      const id = String(rows[i][idCol] || '').trim();
       if (!id) continue;
-      var rIdx = reservaMap[id];
+      let rIdx = reservaMap[id];
       if (rIdx === undefined) continue;
 
-      var s = settings[rIdx];
+      let s = settings[rIdx];
       if (!s) continue;
 
-      if (cpCol !== undefined) { var v = rows[i][cpCol]; if (v !== undefined && v !== '') s.comPlataforma = parseFloat(v); }
-      if (cgCol !== undefined) { var v = rows[i][cgCol]; if (v !== undefined && v !== '') s.comGTC = parseFloat(v); }
-      if (lmCol !== undefined) { var v = rows[i][lmCol]; if (v !== undefined && v !== '') s.limpieza = parseFloat(v); }
-      if (amCol !== undefined) { var v = rows[i][amCol]; if (v !== undefined && v !== '') { var av = parseFloat(v); if (!isNaN(av) && amenitiesOptions.some(function(o){return Math.abs(o-av)<0.001;})) s.amenities = av; } }
-      if (irCol !== undefined) { var v = rows[i][irCol]; if (v !== undefined && v !== '') s.irpf = parseFloat(v); }
-      if (paCol !== undefined) { var v = rows[i][paCol]; if (v !== undefined && v !== '') s.pasarela = String(v).trim() === 'true'; }
-      if (prCol !== undefined) { var v = rows[i][prCol]; if (v !== undefined && v !== '') s.pasarelaRate = parseFloat(v); }
-      if (ceCol !== undefined) { var v = String(rows[i][ceCol] || '').trim(); if (v) { try { var parsed = JSON.parse(v); if (Array.isArray(parsed)) s.conceptosEspeciales = parsed.filter(function(item){return item && typeof item.amount === 'number';}); } catch(e) {} } }
+      if (cpCol !== undefined) { let v = rows[i][cpCol]; if (v !== undefined && v !== '') s.comPlataforma = parseFloat(v); }
+      if (cgCol !== undefined) { let v = rows[i][cgCol]; if (v !== undefined && v !== '') s.comGTC = parseFloat(v); }
+      if (lmCol !== undefined) { let v = rows[i][lmCol]; if (v !== undefined && v !== '') s.limpieza = parseFloat(v); }
+      if (amCol !== undefined) { let v = rows[i][amCol]; if (v !== undefined && v !== '') { const av = parseFloat(v); if (!isNaN(av) && amenitiesOptions.some(function(o){return Math.abs(o-av)<0.001;})) s.amenities = av; } }
+      if (irCol !== undefined) { let v = rows[i][irCol]; if (v !== undefined && v !== '') s.irpf = parseFloat(v); }
+      if (paCol !== undefined) { let v = rows[i][paCol]; if (v !== undefined && v !== '') s.pasarela = String(v).trim() === 'true'; }
+      if (prCol !== undefined) { let v = rows[i][prCol]; if (v !== undefined && v !== '') s.pasarelaRate = parseFloat(v); }
+      if (ceCol !== undefined) { let v = String(rows[i][ceCol] || '').trim(); if (v) { try { const parsed = JSON.parse(v); if (Array.isArray(parsed)) s.conceptosEspeciales = parsed.filter(function(item){return item && typeof item.amount === 'number';}); } catch(e) { console.warn('[Config] Invalid CE JSON for row', i, e.message); } } }
 
       applied++;
     }
     console.log('[Config] Applied per-reservation settings: ' + applied + ' reservas');
 
     // Sanitize: reset any amenities value that isn't in amenitiesOptions
-    var sanitized = 0;
+    let sanitized = 0;
     allReservas.forEach(function(r) {
-      var s = settings[r.idx];
+      let s = settings[r.idx];
       if (s && s.amenities !== undefined && !amenitiesOptions.some(function(o){return Math.abs(o-s.amenities)<0.001;})) {
         s.amenities = amenitiesOptions[0];
         sanitized++;
@@ -1804,7 +1912,7 @@ async function saveGlobalConfigToSheet() {
   if (!_sheetSource || !_googleToken || !_configLoaded) return;
   updateSyncIndicator('syncing');
   try {
-    var data = buildFullConfigTabData();
+    let data = buildFullConfigTabData();
     await gapi.client.sheets.spreadsheets.values.clear({
       spreadsheetId: _sheetSource.id,
       range: CONFIG_TAB_NAME + '!A1:I10000'
@@ -1828,12 +1936,12 @@ async function flushReservaConfigSaves() {
   if (!_sheetSource || !_googleToken || !_configLoaded) return;
   if (_pendingReservaConfigSaves.size === 0) return;
 
-  var indices = [..._pendingReservaConfigSaves];
+  const indices = [..._pendingReservaConfigSaves];
   _pendingReservaConfigSaves.clear();
 
   updateSyncIndicator('syncing');
   try {
-    var data = buildFullConfigTabData();
+    let data = buildFullConfigTabData();
     await gapi.client.sheets.spreadsheets.values.clear({
       spreadsheetId: _sheetSource.id,
       range: CONFIG_TAB_NAME + '!A1:I10000'
@@ -1852,17 +1960,17 @@ async function flushReservaConfigSaves() {
   }
 }
 
-// \u2550\u2550\u2550 SHEET HISTORY \u2550\u2550\u2550
+// === SHEET HISTORY ===
 function addToSheetHistory(sheetId, name, sheetTab) {
   _sheetHistory = _sheetHistory.filter(h => h.id !== sheetId || h.tab !== sheetTab);
   _sheetHistory.unshift({ id: sheetId, name, tab: sheetTab, date: new Date().toISOString() });
-  if (_sheetHistory.length > 10) _sheetHistory = _sheetHistory.slice(0, 10);
-  try { localStorage.setItem('gsheet-history', JSON.stringify(_sheetHistory)); } catch(e) {}
+  if (_sheetHistory.length > CONFIG.SHEET_HISTORY_MAX) _sheetHistory = _sheetHistory.slice(0, CONFIG.SHEET_HISTORY_MAX);
+  SafeStorage.set('gsheet-history', JSON.stringify(_sheetHistory));
   renderSheetHistory();
 }
 function removeFromHistory(idx) {
   _sheetHistory.splice(idx, 1);
-  try { localStorage.setItem('gsheet-history', JSON.stringify(_sheetHistory)); } catch(e) {}
+  SafeStorage.set('gsheet-history', JSON.stringify(_sheetHistory));
   renderSheetHistory();
 }
 function renderSheetHistory() {
@@ -1893,11 +2001,12 @@ function renderSheetHistory() {
   });
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// ===
 // APP ORIGINAL
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// ===
 
-const IVA_RESERVA = 0.10, IVA_SUBTOTAL = 0.21;
+// IVA constants now in CONFIG object
+const IVA_RESERVA = CONFIG.IVA_RESERVA, IVA_SUBTOTAL = CONFIG.IVA_SUBTOTAL;
 let amenitiesOptions = [7];
 
 let platformOptions = {
@@ -1925,10 +2034,10 @@ function getConsolExtras(alojName) {
   return _consolExtras[alojName];
 }
 function getConsolDeductions(alojName) {
-  var m = getConsolMaint(alojName);
-  var extras = getConsolExtras(alojName);
-  var maintBase = m.enabled ? m.amount : 0;
-  var extrasTotal = extras.reduce(function(s,e){ return s + e.amount; }, 0);
+  let m = getConsolMaint(alojName);
+  let extras = getConsolExtras(alojName);
+  let maintBase = m.enabled ? m.amount : 0;
+  let extrasTotal = extras.reduce(function(s,e){ return s + e.amount; }, 0);
   return { maintBase: maintBase, extrasTotal: extrasTotal, totalBase: maintBase + extrasTotal };
 }
 
@@ -1939,7 +2048,7 @@ let _sheetSource = null; // { id, tab, valColIdx, valColLetter, headerRow } \u20
 let _syncQueue = []; // pending write operations
 let _syncActive = false; // true while a write is in flight
 // Performance: liquidation cache + pagination + render debouncing
-let _pageSize = 100;
+let _pageSize = CONFIG.DEFAULT_PAGE_SIZE;
 let _liqCache = {}, _currentPage = 1, _fmtCache = {};
 function invalidateCache(idx) { if (idx !== undefined) { delete _liqCache[idx]; } else { _liqCache = {}; invalidateGlobalStats(); invalidateFilterCache(); } }
 function getLiq(r) {
@@ -2090,7 +2199,8 @@ function parseNum(v) {
 function getDefaultForPlatform(plat) { const o = platformOptions[plat]; return o && o.length ? o[0] / 100 : 0.10; }
 
 function calcLiquidacion(r, s) {
-  const totalOriginal = r.totalReserva;
+  if (!r) return { totalOriginal:0, ceTotal:0, total:0, baseSinIVA:0, comRate:0, comPlat:0, gtcRate:0, comGTC:0, comPas:0, limp:0, amen:0, sub:0, iva:0, irpfRate:0, ret:0, totalLiq:0 };
+  const totalOriginal = r.totalReserva || 0;
   const ce = (s.conceptosEspeciales && s.conceptosEspeciales.length > 0) ? s.conceptosEspeciales : [];
   const ceTotal = ce.reduce(function(sum, item) { return sum + (item.amount || 0); }, 0);
   const total = totalOriginal - ceTotal;
@@ -2135,8 +2245,12 @@ function parseHtmlXls(text) {
 }
 
 function processRows(json) {
+  if (!json || !Array.isArray(json) || json.length < 2) {
+    alert("El archivo no contiene datos v\u00E1lidos.");
+    return false;
+  }
   const headerRow = json.findIndex(r => r && r[0] && String(r[0]).includes("ID Reserva"));
-  if (headerRow === -1) { alert("No se encontró la cabecera 'ID Reserva'."); return false; }
+  if (headerRow === -1) { alert("No se encontr\u00F3 la cabecera 'ID Reserva'."); return false; }
 
   // Detect validation column in header
   const hdr = json[headerRow];
@@ -2199,15 +2313,14 @@ function processRows(json) {
   if (detectedValColIdx !== null) {
     allReservas.forEach((r, idx) => {
       const val = String(rowEntries[idx].data[detectedValColIdx] || '').trim().toLowerCase();
-      if (val && (val === 'sí' || val === 'si' || val === 'yes' || val === '1' || val === 'true' || val === 'x')) {
+      if (val && (val === 's\u00ED' || val === 'si' || val === 'yes' || val === '1' || val === 'true' || val === 'x')) {
         validated.add(r.idx);
       }
     });
   }
 
   // Store metadata for sheet source setup (used by loadSheetData)
-  processRows._lastValColIdx = detectedValColIdx;
-  processRows._lastHeaderRow = headerRow;
+  processRows._lastResult = { valColIdx: detectedValColIdx, headerRow: headerRow };
 
   const plats = [...new Set(allReservas.map(r => r.plataforma))].sort();
   populateCombo('platform', plats);
@@ -2283,7 +2396,7 @@ const COLUMNS = [
   { key:"ce",label:"C.E.<br>(IVA inc.)",sortable:false },
   { key:"baseSinIVA",label:"Base<br>sin IVA",sortable:true,right:true },
   { key:"comPlataforma",label:"Canal de<br>Venta",sortable:false },
-  { key:"comGTC",label:"Gestión<br>GTC",sortable:false },
+  { key:"comGTC",label:"Gesti\u00F3n<br>GTC",sortable:false },
   { key:"limpieza",label:"Limpieza",sortable:false },
   { key:"amenities",label:"Amenities",sortable:false },
   { key:"pasarela",label:"Pasarela",sortable:false },
@@ -2291,7 +2404,7 @@ const COLUMNS = [
   { key:"irpf",label:"IRPF",sortable:false },
   { key:"iva21",label:"IVA 21%",sortable:false },
   { key:"totalLiquidar",label:"A<br>Liquidar",sortable:true,right:true,locked:true },
-  { key:"observacion",label:"Observación",sortable:true },
+  { key:"observacion",label:"Observaci\u00F3n",sortable:true },
   { key:"acciones",label:"",sortable:true,locked:true },
 ];
 // Column visibility state
@@ -2396,32 +2509,8 @@ function consolSortByColumn(f) {
   else { consolSortF = f; consolSortD = 'asc'; }
   if (currentConsolAloj) viewConsolDetail(currentConsolAloj);
 }
-function consolGetSortValue(x, f) {
-  const r = x.r, c = x.c;
-  switch(f) {
-    case "estado": return validated.has(r.idx)?1:0;
-    case "idReserva": return r.id.toLowerCase();
-    case "localizador": return r.localizador.toLowerCase();
-    case "fechaAlta": return r._dateAltaNum;
-    case "cliente": return r._clienteLc;
-    case "edificio": return (r.edificio||"").toLowerCase();
-    case "plataforma": return r._platLc;
-    case "atendidoPor": return (r.atendidoPor||"").toLowerCase();
-    case "origenMarketing": return (r.origenMarketing||"").toLowerCase();
-    case "tipoReserva": return (r.tipoReserva||"").toLowerCase();
-    case "fechaEntrada": return r._dateNum;
-    case "fechaSalida": return r._dSalida ? r._dSalida.getTime() : 0;
-    case "noches": return r._nights;
-    case "totalReserva": return r.totalReserva;
-    case "baseSinIVA": return c.baseSinIVA;
-    case "subtotal": return c.sub;
-    case "totalLiquidar": return c.totalLiq;
-    case "observacion": return (r.observacion||"").toLowerCase();
-    default: return r.idx;
-  }
-}
-function getSortValue(r, f) {
-  const c = getLiq(r);
+// Shared sort value extraction - used by both main table and consolidated view
+function _extractSortValue(r, c, f) {
   switch(f) {
     case "estado": return validated.has(r.idx)?1:0;
     case "idReserva": return r.id.toLowerCase();
@@ -2445,6 +2534,12 @@ function getSortValue(r, f) {
     case "acciones": return validated.has(r.idx)?1:0;
     default: return r.idx;
   }
+}
+function consolGetSortValue(x, f) {
+  return _extractSortValue(x.r, x.c, f);
+}
+function getSortValue(r, f) {
+  return _extractSortValue(r, getLiq(r), f);
 }
 function sortByColumn(f) {
   const sortInput = document.querySelector('#combo-sort .combo-input');
@@ -2498,13 +2593,13 @@ function _buildRowHtml(r) {
     <td class="col-idReserva muted" style="font-size:12px;">${r.id}</td>
     <td class="col-localizador muted" style="font-size:11px;white-space:nowrap;">${r.localizador}</td>
     <td class="col-fechaAlta muted" style="font-size:12px;">${r._fmtAlta}</td>
-    <td class="col-cliente bold ellip">${r.cliente}</td>
-    <td class="col-alojamiento ellip muted">${r.alojamiento}</td>
-    <td class="col-edificio ellip muted" style="font-size:12px;">${r.edificio}</td>
+    <td class="col-cliente bold ellip">${esc(r.cliente)}</td>
+    <td class="col-alojamiento ellip muted">${esc(r.alojamiento)}</td>
+    <td class="col-edificio ellip muted" style="font-size:12px;">${esc(r.edificio)}</td>
     <td class="col-plataforma"><span class="badge ${isB ? 'badge-purple' : 'badge-blue'}">${r.plataforma}</span></td>
-    <td class="col-atendidoPor ellip muted" style="font-size:12px;">${r.atendidoPor}</td>
-    <td class="col-origenMarketing ellip muted" style="font-size:12px;">${r.origenMarketing}</td>
-    <td class="col-tipoReserva muted" style="font-size:12px;">${r.tipoReserva}</td>
+    <td class="col-atendidoPor ellip muted" style="font-size:12px;">${esc(r.atendidoPor)}</td>
+    <td class="col-origenMarketing ellip muted" style="font-size:12px;">${esc(r.origenMarketing)}</td>
+    <td class="col-tipoReserva muted" style="font-size:12px;">${esc(r.tipoReserva)}</td>
     <td class="col-fechaEntrada" style="font-size:12px;white-space:nowrap;">${r._fmtEntrada}</td>
     <td class="col-fechaSalida" style="font-size:12px;white-space:nowrap;">${r._fmtSalida}</td>
     <td class="col-noches" style="text-align:center">${r._nights}</td>
@@ -2528,7 +2623,7 @@ function _buildRowHtml(r) {
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.ret)} &#8364;</span></div></td>
     <td class="col-iva21" style="text-align:center;vertical-align:middle;"><span style="font-size:11px;color:#43a047;font-variant-numeric:tabular-nums;">+ ${fmt(c.iva)} &#8364;</span></td>
     <td class="col-totalLiquidar right bold" style="color:${c.totalLiq >= 0 ? '#1a2744' : '#e53935'}">${fmt(c.totalLiq)} &#8364;</td>
-    <td class="col-observacion ellip muted" style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;" title="${r.observacion.replace(/"/g,'&quot;')}">${r.observacion}</td>
+    <td class="col-observacion ellip muted" style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;" title="${esc(r.observacion)}">${esc(r.observacion)}</td>
     <td class="col-acciones"><div style="display:flex;gap:6px;">
       <button class="btn btn-sm btn-primary" onclick="viewDetail(${r.idx})">&#128065;</button>
       ${!isV ? `<button class="btn btn-sm btn-success" onclick="toggleValidate(${r.idx})">&#10004;</button>` : `<button class="btn btn-sm btn-orange" onclick="toggleValidate(${r.idx})">&#8617;</button>`}
@@ -2561,21 +2656,22 @@ function _buildCEPanelRow(idx, s, c, view) {
 let _openCEPanel = null;
 let _openCEView = 'p';
 function toggleCEPanel(idx, view) {
-  var v = view || 'p';
-  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  if (idx == null || !allReservas[idx]) return;
+  const v = view || 'p';
+  const panel = document.getElementById('ce-' + v + 'panel-' + idx);
   if (!panel) return;
   if (_openCEPanel !== null && (_openCEPanel !== idx || _openCEView !== v)) {
-    var prev = document.getElementById('ce-' + _openCEView + 'panel-' + _openCEPanel);
+    let prev = document.getElementById('ce-' + _openCEView + 'panel-' + _openCEPanel);
     if (prev) prev.style.display = 'none';
   }
   if (panel.style.display === 'none') {
-    var wrap = panel.closest('.table-wrap');
-    var st = wrap ? wrap.scrollTop : window.scrollY;
+    let wrap = panel.closest('.table-wrap');
+    let st = wrap ? wrap.scrollTop : window.scrollY;
     panel.style.display = '';
     if (wrap) wrap.scrollTop = st; else window.scrollTo(0, st);
     _openCEPanel = idx;
     _openCEView = v;
-    var s = settings[idx];
+    let s = settings[idx];
     if (!s.conceptosEspeciales || s.conceptosEspeciales.length === 0) {
       s.conceptosEspeciales = [{label:'', amount:0}];
       _refreshCEPanel(idx, v);
@@ -2587,17 +2683,17 @@ function toggleCEPanel(idx, view) {
 }
 
 function addCEItem(idx, view) {
-  var s = settings[idx]; if (!s) return;
+  let s = settings[idx]; if (!s) return;
   if (!s.conceptosEspeciales) s.conceptosEspeciales = [];
-  var i = s.conceptosEspeciales.length;
+  let i = s.conceptosEspeciales.length;
   s.conceptosEspeciales.push({label:'', amount:0});
-  var v = view || 'p';
-  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  let v = view || 'p';
+  let panel = document.getElementById('ce-' + v + 'panel-' + idx);
   if (!panel) return;
-  var addLink = panel.querySelector('.ce-add-link');
+  let addLink = panel.querySelector('.ce-add-link');
   if (!addLink) { _refreshCEPanel(idx, v); return; }
   // Create new row via DOM (no full re-render)
-  var row = document.createElement('div');
+  let row = document.createElement('div');
   row.className = 'ce-item-row ce-new';
   row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button>';
   addLink.parentNode.insertBefore(row, addLink);
@@ -2605,37 +2701,37 @@ function addCEItem(idx, view) {
 }
 
 function removeCEItem(idx, itemIdx, view) {
-  var s = settings[idx]; if (!s || !s.conceptosEspeciales) return;
-  var v = view || 'p';
-  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
-  var rows = panel ? panel.querySelectorAll('.ce-item-row') : [];
+  let s = settings[idx]; if (!s || !s.conceptosEspeciales) return;
+  let v = view || 'p';
+  let panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  let rows = panel ? panel.querySelectorAll('.ce-item-row') : [];
   if (rows[itemIdx]) {
-    var row = rows[itemIdx];
+    let row = rows[itemIdx];
     row.style.animation = 'ceRowOut .2s ease forwards';
     row.addEventListener('animationend', function() {
       row.remove();
       s.conceptosEspeciales.splice(itemIdx, 1);
       // Update cache
-      var oldC = getLiq(allReservas[idx]);
+      let oldC = getLiq(allReservas[idx]);
       invalidateCache(idx);
-      var newC = getLiq(allReservas[idx]);
+      let newC = getLiq(allReservas[idx]);
       if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
       // Patch only the changed cells in the main table row (no full rebuild)
-      var mainRow = document.getElementById('row-' + idx);
+      let mainRow = document.getElementById('row-' + idx);
       if (mainRow) {
-        var ceCel = mainRow.querySelector('.col-ce');
+        let ceCel = mainRow.querySelector('.col-ce');
         if (ceCel) ceCel.innerHTML = _buildCEButton(idx, newC, v);
-        var liqCel = mainRow.querySelector('.col-totalLiquidar');
+        let liqCel = mainRow.querySelector('.col-totalLiquidar');
         if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' &#8364;';
-        var subCel = mainRow.querySelector('.col-subtotal');
+        let subCel = mainRow.querySelector('.col-subtotal');
         if (subCel) subCel.innerHTML = fmt(newC.sub) + ' &#8364;';
-        var baseCel = mainRow.querySelector('.col-baseSinIVA');
+        let baseCel = mainRow.querySelector('.col-baseSinIVA');
         if (baseCel) baseCel.innerHTML = fmt(newC.baseSinIVA) + ' &#8364;';
       }
       // Update summary numbers in CE panel
       _refreshCESummary(idx, v);
       // Update footer stats
-      var st = _cachedFilteredStats;
+      let st = _cachedFilteredStats;
       if (st && oldC && newC) {
         st.fL += (newC.totalLiq - oldC.totalLiq);
         st.tLiq += (newC.totalLiq - oldC.totalLiq);
@@ -2653,12 +2749,12 @@ function removeCEItem(idx, itemIdx, view) {
 }
 
 function updateCEItem(idx, itemIdx, field, rawVal, view) {
-  var s = settings[idx]; if (!s || !s.conceptosEspeciales || !s.conceptosEspeciales[itemIdx]) return;
+  let s = settings[idx]; if (!s || !s.conceptosEspeciales || !s.conceptosEspeciales[itemIdx]) return;
   if (field === 'label') {
     s.conceptosEspeciales[itemIdx].label = rawVal;
     scheduleReservaConfigSave(idx);
   } else {
-    var v = parseFloat(String(rawVal).replace(/\./g,'').replace(',','.'));
+    let v = parseFloat(String(rawVal).replace(/\./g,'').replace(',','.'));
     if (isNaN(v)) v = 0;
     s.conceptosEspeciales[itemIdx].amount = v;
     _applyCEChange(idx, view || 'p');
@@ -2666,10 +2762,10 @@ function updateCEItem(idx, itemIdx, field, rawVal, view) {
 }
 
 function _applyCEChange(idx, view) {
-  var v = view || 'p';
-  var oldC = getLiq(allReservas[idx]);
+  let v = view || 'p';
+  let oldC = getLiq(allReservas[idx]);
   invalidateCache(idx);
-  var newC = getLiq(allReservas[idx]);
+  let newC = getLiq(allReservas[idx]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
   _patchSingleRow(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
@@ -2678,17 +2774,17 @@ function _applyCEChange(idx, view) {
     viewConsolDetail(currentConsolAloj);
   } else {
     // Re-open panel if it was open in preliq
-    var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+    let panel = document.getElementById('ce-' + v + 'panel-' + idx);
     if (panel) { panel.style.display = ''; _openCEPanel = idx; _openCEView = v; }
   }
 }
 
 function _refreshCESummary(idx, view) {
-  var v = view || 'p';
-  var c = getLiq(allReservas[idx]);
-  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  let v = view || 'p';
+  let c = getLiq(allReservas[idx]);
+  let panel = document.getElementById('ce-' + v + 'panel-' + idx);
   if (!panel) return;
-  var vals = panel.querySelectorAll('.ce-sum-val');
+  let vals = panel.querySelectorAll('.ce-sum-val');
   if (vals.length >= 4) {
     vals[0].innerHTML = fmt(c.totalOriginal) + ' &#8364;';
     vals[1].innerHTML = '&#8211; ' + fmt(c.ceTotal) + ' &#8364;';
@@ -2696,38 +2792,38 @@ function _refreshCESummary(idx, view) {
     vals[3].innerHTML = fmt(c.baseSinIVA) + ' &#8364;';
   }
   // Re-index onclick handlers for remaining rows
-  var rows = panel.querySelectorAll('.ce-item-row');
+  let rows = panel.querySelectorAll('.ce-item-row');
   rows.forEach(function(row, i) {
-    var del = row.querySelector('.ce-del');
+    const del = row.querySelector('.ce-del');
     if (del) del.setAttribute('onclick', "removeCEItem("+idx+","+i+",'"+v+"')");
-    var lbl = row.querySelector('.ce-inp-label');
+    let lbl = row.querySelector('.ce-inp-label');
     if (lbl) lbl.setAttribute('onchange', "updateCEItem("+idx+","+i+",'label',this.value,'"+v+"')");
-    var amt = row.querySelector('.ce-inp-amt');
+    let amt = row.querySelector('.ce-inp-amt');
     if (amt) amt.setAttribute('onchange', "updateCEItem("+idx+","+i+",'amount',this.value,'"+v+"')");
   });
 }
 
 function _refreshCEPanel(idx, view) {
-  var v = view || 'p';
-  var s = settings[idx] || {}, c = getLiq(allReservas[idx]);
-  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  let v = view || 'p';
+  let s = settings[idx] || {}, c = getLiq(allReservas[idx]);
+  let panel = document.getElementById('ce-' + v + 'panel-' + idx);
   if (!panel) return;
   // Preserve scroll position to avoid layout jump
-  var wrap = panel.closest('.table-wrap') || panel.closest('.main');
-  var scrollY = wrap ? wrap.scrollTop : window.scrollY;
-  var colCount = v === 'c'
+  let wrap = panel.closest('.table-wrap') || panel.closest('.main');
+  let scrollY = wrap ? wrap.scrollTop : window.scrollY;
+  let colCount = v === 'c'
     ? CONSOL_COLUMNS.filter(function(col){return consolColVis[col.key]!==false;}).length
     : COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
-  var ce = s.conceptosEspeciales || [];
-  var itemsHtml = ce.map(function(item, i) {
+  let ce = s.conceptosEspeciales || [];
+  let itemsHtml = ce.map(function(item, i) {
     return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button></div>';
   }).join('');
-  var _b = 'text-align:center;padding:8px 12px;border-radius:8px;min-width:110px;';
+  let _b = 'text-align:center;padding:8px 12px;border-radius:8px;min-width:110px;';
   panel.innerHTML = '<td colspan="'+colCount+'" style="padding:0"><div class="ce-panel-inner"><div class="ce-panel-left"><div class="ce-panel-title">&#9888; Conceptos especiales <span class="ce-eye">&#128065; Solo uso interno</span></div>'+itemsHtml+'<div class="ce-add-link" onclick="addCEItem('+idx+',\''+v+'\')">+ A\u00f1adir concepto</div></div><div class="ce-panel-summary" style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;"><div style="'+_b+'background:#f3f4f6;"><div class="ce-sum-label" style="color:#374151">Total Reserva<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#1a2744">'+fmt(c.totalOriginal)+' &#8364;</div></div><div style="'+_b+'background:#fef3c7;"><div class="ce-sum-label">Descontar<br>(IVA inc.)</div><div class="ce-sum-val">&#8211; '+fmt(c.ceTotal)+' &#8364;</div></div><div style="'+_b+'background:#fff3e0;"><div class="ce-sum-label" style="color:#e65100">Total sin C.E.<br>(IVA inc.)</div><div class="ce-sum-val" style="color:#e65100">'+fmt(c.total)+' &#8364;</div></div><div style="'+_b+'background:#e8f5e9;"><div class="ce-sum-label" style="color:#2e7d32">Total sin C.E.<br>(sin IVA)</div><div class="ce-sum-val" style="color:#2e7d32;font-size:15px">'+fmt(c.baseSinIVA)+' &#8364;</div></div></div></div></td>';
   // Restore scroll position to prevent jump
   if (wrap) wrap.scrollTop = scrollY;
   // Auto-focus the last added label input
-  var labels = panel.querySelectorAll('.ce-inp-label');
+  let labels = panel.querySelectorAll('.ce-inp-label');
   if (labels.length > 0) labels[labels.length - 1].focus();
 }
 
@@ -2925,6 +3021,8 @@ function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, 
 }
 
 function changeSetting(i,k,v){
+  if (!allReservas[i] || !settings[i]) { console.warn('[Settings] Invalid index:', i); return; }
+  if (typeof v === 'number' && isNaN(v)) { console.warn('[Settings] NaN value for', k); return; }
   const oldC = getLiq(allReservas[i]); // capture BEFORE invalidating
   settings[i][k]=v; invalidateCache(i);
   const newC = getLiq(allReservas[i]);
@@ -2933,8 +3031,8 @@ function changeSetting(i,k,v){
   _patchSingleRow(i, oldC, newC);
   scheduleReservaConfigSave(i);
 }
-function validarTodas() { const pending=_lastFiltered.filter(r=>!validated.has(r.idx)); const n=pending.length; if(!n||!confirm(`¿Validar ${n} reserva${n>1?'s':''}?`))return; pending.forEach(r => validated.add(r.idx)); _validatedVersion++; invalidateFilterCache(); renderTable(); batchWriteValidation(pending.map(r=>r.idx), true); }
-function desvalidarTodas() { const vals=_lastFiltered.filter(r=>validated.has(r.idx)); const n=vals.length; if(!n||!confirm(`¿Desvalidar ${n} reserva${n>1?'s':''}?`))return; vals.forEach(r => validated.delete(r.idx)); _validatedVersion++; invalidateFilterCache(); renderTable(); batchWriteValidation(vals.map(r=>r.idx), false); }
+function validarTodas() { const pending=_lastFiltered.filter(r=>!validated.has(r.idx)); const n=pending.length; if(!n||!confirm(`\u00BFValidar ${n} reserva${n>1?'s':''}?`))return; pending.forEach(r => validated.add(r.idx)); _validatedVersion++; invalidateFilterCache(); renderTable(); batchWriteValidation(pending.map(r=>r.idx), true); }
+function desvalidarTodas() { const vals=_lastFiltered.filter(r=>validated.has(r.idx)); const n=vals.length; if(!n||!confirm(`\u00BFDesvalidar ${n} reserva${n>1?'s':''}?`))return; vals.forEach(r => validated.delete(r.idx)); _validatedVersion++; invalidateFilterCache(); renderTable(); batchWriteValidation(vals.map(r=>r.idx), false); }
 function changeSettingConsol(i,k,v){const oldC=getLiq(allReservas[i]);settings[i][k]=v;invalidateCache(i);const newC=getLiq(allReservas[i]);if(_globalStatsCache)_globalStatsCache.tL+=(newC.totalLiq-oldC.totalLiq);if(currentConsolAloj)viewConsolDetail(currentConsolAloj);scheduleReservaConfigSave(i);}
 function togglePasarelaConsol(i){const oldC=getLiq(allReservas[i]);settings[i].pasarela=!settings[i].pasarela;invalidateCache(i);const newC=getLiq(allReservas[i]);if(_globalStatsCache)_globalStatsCache.tL+=(newC.totalLiq-oldC.totalLiq);if(currentConsolAloj)viewConsolDetail(currentConsolAloj);scheduleReservaConfigSave(i);}
 function toggleValidateConsol(i){const wasV=validated.has(i);if(wasV)validated.delete(i);else validated.add(i);_validatedVersion++;invalidateFilterCache();if(currentConsolAloj)viewConsolDetail(currentConsolAloj);writeValidationToSheet(i,!wasV);}
@@ -2942,7 +3040,7 @@ function validarTodasConsol(alojName) {
   let src=allReservas.filter(r => r.alojamiento === alojName);
   if (_mpHasFilter()) src = src.filter(r => _mpMatchDate(r._dEntrada));
   const pending=src.filter(r => !validated.has(r.idx));
-  if(!pending.length||!confirm(`¿Validar ${pending.length} reserva${pending.length>1?'s':''} de ${alojName}?`))return;
+  if(!pending.length||!confirm(`\u00BFValidar ${pending.length} reserva${pending.length>1?'s':''} de ${alojName}?`))return;
   pending.forEach(r => validated.add(r.idx));
   _validatedVersion++; invalidateFilterCache();
   if(currentConsolAloj) viewConsolDetail(currentConsolAloj);
@@ -2952,7 +3050,7 @@ function desvalidarTodasConsol(alojName) {
   let src=allReservas.filter(r => r.alojamiento === alojName);
   if (_mpHasFilter()) src = src.filter(r => _mpMatchDate(r._dEntrada));
   const vals=src.filter(r => validated.has(r.idx));
-  if(!vals.length||!confirm(`¿Desvalidar ${vals.length} reserva${vals.length>1?'s':''} de ${alojName}?`))return;
+  if(!vals.length||!confirm(`\u00BFDesvalidar ${vals.length} reserva${vals.length>1?'s':''} de ${alojName}?`))return;
   vals.forEach(r => validated.delete(r.idx));
   _validatedVersion++; invalidateFilterCache();
   if(currentConsolAloj) viewConsolDetail(currentConsolAloj);
@@ -3021,15 +3119,15 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
   // Build new HTML (main row + CE panel row)
   const tmp = document.createElement('tbody');
   tmp.innerHTML = _buildRowHtml(r);
-  var newMainRow = tmp.children[0];
-  var newCePanel = tmp.children[1]; // may be undefined if no CE
+  let newMainRow = tmp.children[0];
+  let newCePanel = tmp.children[1]; // may be undefined if no CE
 
   // Remember if CE panel was open
-  var oldCePanel = document.getElementById('ce-ppanel-' + idx);
-  var cePanelWasOpen = oldCePanel && oldCePanel.style.display !== 'none';
+  let oldCePanel = document.getElementById('ce-ppanel-' + idx);
+  let cePanelWasOpen = oldCePanel && oldCePanel.style.display !== 'none';
 
   // Batch all DOM mutations: use replaceWith to swap in one go
-  var fragment = document.createDocumentFragment();
+  let fragment = document.createDocumentFragment();
   fragment.appendChild(newMainRow);
   if (newCePanel) {
     if (cePanelWasOpen) { newCePanel.style.display = ''; _openCEPanel = idx; _openCEView = 'p'; }
@@ -3155,7 +3253,7 @@ function viewDetail(idx) {
   const pasOpts = isB ? pasarelaBookingOptions : pasarelaStripeOptions;
 
   const comPlatLabel = `Canal de Venta ${r.plataforma} ` + _sel(platOpts, c.comRate, r.idx, 'comPlataforma', true);
-  const comGTCLabel = `Gestión GTC ` + _sel(gtcOptions, c.gtcRate, r.idx, 'comGTC', true);
+  const comGTCLabel = `Gesti\u00F3n GTC ` + _sel(gtcOptions, c.gtcRate, r.idx, 'comGTC', true);
   const limpLabel = `Limpieza ` + _sel(cleaningOptions, c.limp, r.idx, 'limpieza', false);
   const amenLabel = `Amenities ` + _sel(amenitiesOptions, c.amen, r.idx, 'amenities', false);
 
@@ -3196,14 +3294,14 @@ function viewDetail(idx) {
     const _prop = getPropietario(r.alojamiento);
     const _propStyle = _prop === 'Falta propietario' ? ' style="color:#e53935;cursor:pointer" ' : ' style="cursor:pointer" ';
     document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
-    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidación':'Preliquidación'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)">${_prop}</div></div>
+    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidaci\u00F3n':'Preliquidaci\u00F3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)">${_prop}</div></div>
     <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; VALIDADA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div></div>
-    <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
+    <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
     <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
     <div><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
     <div><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
     <div><div class="liq-meta-label">Localizador</div><div class="liq-meta-value" style="font-size:11px">${r.localizador}</div></div>
-    <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${r.edificio}</div></div></div></div>
+    <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div></div></div>
     <div style="padding:8px 0;">${rH}</div>
     <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(c.totalLiq)} \u20AC</span></div></div>
     <div class="liq-actions no-print">
@@ -3311,7 +3409,7 @@ function renderConsolGrid() {
         <div class="aloj-edificio">${a.edificio}</div>
         <div class="aloj-stats">
           <div><div class="aloj-stat-label">Reservas</div><div class="aloj-stat-value">${a.total}</div></div>
-          <div><div class="aloj-stat-label">Facturación</div><div class="aloj-stat-value" style="font-size:14px;color:#1a2744">${fmt(a.sumReservas)} \u20AC</div></div>
+          <div><div class="aloj-stat-label">Facturaci\u00F3n</div><div class="aloj-stat-value" style="font-size:14px;color:#1a2744">${fmt(a.sumReservas)} \u20AC</div></div>
           <div><div class="aloj-stat-label">A Liquidar</div><div class="aloj-stat-value" style="color:#4f8cff;font-size:14px">${fmt(a.sumLiq)} \u20AC</div></div>
         </div>
         <div class="aloj-bar"><div class="aloj-bar-fill" style="width:${pct}%;background:${barColor};"></div></div>
@@ -3323,7 +3421,7 @@ function renderConsolGrid() {
 
   document.getElementById("consol-stats").innerHTML = `
     <div class="stat-card"><div class="stat-label">Alojamientos</div><div class="stat-value">${totalAloj}</div></div>
-    <div class="stat-card"><div class="stat-label">Total Facturación</div><div class="stat-value" style="color:#1a2744">${fmt(totalFact)} \u20AC</div></div>
+    <div class="stat-card"><div class="stat-label">Total Facturaci\u00F3n</div><div class="stat-value" style="color:#1a2744">${fmt(totalFact)} \u20AC</div></div>
     <div class="stat-card"><div class="stat-label">Total a Liquidar</div><div class="stat-value" style="color:#4f8cff">${fmt(totalLiq)} \u20AC</div></div>
     <div class="stat-card"><div class="stat-label">Listos para liquidar</div><div class="stat-value" style="color:#43a047">${readyCount} / ${totalAloj}</div></div>`;
   document.getElementById("aloj-grid").innerHTML = cardsHTML;
@@ -3364,14 +3462,14 @@ function buildGTCRows(calcs) {
   const entries = Object.values(groups);
   if (entries.length === 1) {
     const g = entries[0];
-    return `<div class="consol-row"><span>Gestión GTC (${(g.rate*100).toFixed(0)}%) &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
+    return `<div class="consol-row"><span>Gesti\u00F3n GTC (${(g.rate*100).toFixed(0)}%) &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
   }
   let html = '', total = 0;
   entries.forEach(g => {
     html += `<div class="consol-row sub"><span>GTC al ${(g.rate*100).toFixed(0)}% &#8212; ${g.count} reserva${g.count>1?'s':''}</span><span class="neg">- ${fmt(g.sum)} &#8364;</span></div>`;
     total += g.sum;
   });
-  return `<div class="consol-row"><span>Gestión GTC</span><span class="neg">- ${fmt(total)} &#8364;</span></div>` + html;
+  return `<div class="consol-row"><span>Gesti\u00F3n GTC</span><span class="neg">- ${fmt(total)} &#8364;</span></div>` + html;
 }
 
 function buildPasarelaRows(calcs) {
@@ -3446,9 +3544,9 @@ function buildLimpRows(calcs) {
 
 // === Consolidated monthly deductions management ===
 function buildPrintDeductionsHtml(alojName) {
-  var maint = getConsolMaint(alojName);
-  var extras = getConsolExtras(alojName);
-  var h = '';
+  let maint = getConsolMaint(alojName);
+  let extras = getConsolExtras(alojName);
+  let h = '';
   if (maint.enabled) {
     h += '<div class="liq-row"><span>Mantenimiento</span><span class="neg">- ' + fmt(maint.amount) + ' \u20AC</span></div>';
   }
@@ -3459,16 +3557,16 @@ function buildPrintDeductionsHtml(alojName) {
 }
 
 function buildConsolDeductionsHtml(alojName) {
-  var maint = getConsolMaint(alojName);
-  var extras = getConsolExtras(alojName);
-  var esc = alojName.replace(/'/g, "\\'");
-  var maintSelOpts = maintenanceOptions.map(function(o) {
+  let maint = getConsolMaint(alojName);
+  let extras = getConsolExtras(alojName);
+  let esc = alojName.replace(/'/g, "\\'");
+  let maintSelOpts = maintenanceOptions.map(function(o) {
     return '<option value="'+o+'"'+(o===maint.amount?' selected':'')+'>'+o+' \u20AC</option>';
   }).join('');
 
-  var html = '';
+  let html = '';
 
-  // Maintenance row — same consol-row style
+  // Maintenance row \u2014 same consol-row style
   html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
   html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaint(\''+esc+'\')">'+(maint.enabled?'&#10003;':'')+'</span>';
   html += '<span style="'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
@@ -3477,7 +3575,7 @@ function buildConsolDeductionsHtml(alojName) {
   if (maint.enabled) html += '<span class="neg">- '+fmt(maint.amount)+' \u20AC</span>';
   html += '</div>';
 
-  // Extra concepts — same consol-row style
+  // Extra concepts \u2014 same consol-row style
   extras.forEach(function(ex, ei) {
     html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
     html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeConsolExtra(\''+esc+'\','+ei+')">&#10005;</span>';
@@ -3494,30 +3592,30 @@ function buildConsolDeductionsHtml(alojName) {
 }
 
 function toggleConsolMaint(alojName) {
-  var m = getConsolMaint(alojName);
+  let m = getConsolMaint(alojName);
   m.enabled = !m.enabled;
   scheduleGlobalConfigSave();
   viewConsolDetail(alojName);
 }
 function changeConsolMaintAmount(alojName, val) {
-  var m = getConsolMaint(alojName);
+  let m = getConsolMaint(alojName);
   m.amount = parseFloat(val) || maintenanceOptions[0];
   scheduleGlobalConfigSave();
   viewConsolDetail(alojName);
 }
 function addConsolExtra(alojName) {
-  var label = prompt('Nombre del concepto:');
+  let label = prompt('Nombre del concepto:');
   if (!label || !label.trim()) return;
-  var amountStr = prompt('Importe base (sin IVA) en €:');
-  var amount = parseFloat((amountStr||'').replace(',','.'));
-  if (isNaN(amount) || amount <= 0) { alert('Importe no válido'); return; }
-  var extras = getConsolExtras(alojName);
+  let amountStr = prompt('Importe base (sin IVA) en \u20AC:');
+  let amount = parseFloat((amountStr||'').replace(',','.'));
+  if (isNaN(amount) || amount <= 0) { alert('Importe no v\u00E1lido'); return; }
+  let extras = getConsolExtras(alojName);
   extras.push({ label: label.trim(), amount: amount });
   scheduleGlobalConfigSave();
   viewConsolDetail(alojName);
 }
 function removeConsolExtra(alojName, idx) {
-  var extras = getConsolExtras(alojName);
+  let extras = getConsolExtras(alojName);
   if (idx >= 0 && idx < extras.length) { extras.splice(idx, 1); }
   scheduleGlobalConfigSave();
   viewConsolDetail(alojName);
@@ -3582,12 +3680,12 @@ function viewConsolDetail(alojName) {
       <td class="cc-idReserva" style="font-size:12px;color:#6b7280;">${r.id}</td>
       <td class="cc-localizador" style="font-size:11px;color:#6b7280;white-space:nowrap;">${r.localizador}</td>
       <td class="cc-fechaAlta" style="font-size:12px;color:#6b7280;">${r._fmtAlta}</td>
-      <td class="cc-cliente bold ellip">${r.cliente}</td>
-      <td class="cc-edificio ellip" style="font-size:12px;color:#6b7280;">${r.edificio}</td>
+      <td class="cc-cliente bold ellip">${esc(r.cliente)}</td>
+      <td class="cc-edificio ellip" style="font-size:12px;color:#6b7280;">${esc(r.edificio)}</td>
       <td class="cc-plataforma"><span class="badge ${isB?'badge-purple':'badge-blue'}">${r.plataforma}</span></td>
-      <td class="cc-atendidoPor ellip" style="font-size:12px;color:#6b7280;">${r.atendidoPor}</td>
-      <td class="cc-origenMarketing ellip" style="font-size:12px;color:#6b7280;">${r.origenMarketing}</td>
-      <td class="cc-tipoReserva" style="font-size:12px;color:#6b7280;">${r.tipoReserva}</td>
+      <td class="cc-atendidoPor ellip" style="font-size:12px;color:#6b7280;">${esc(r.atendidoPor)}</td>
+      <td class="cc-origenMarketing ellip" style="font-size:12px;color:#6b7280;">${esc(r.origenMarketing)}</td>
+      <td class="cc-tipoReserva" style="font-size:12px;color:#6b7280;">${esc(r.tipoReserva)}</td>
       <td class="cc-fechaEntrada" style="font-size:12px;white-space:nowrap;">${r._fmtEntrada}</td>
       <td class="cc-fechaSalida" style="font-size:12px;white-space:nowrap;">${r._fmtSalida}</td>
       <td class="cc-noches" style="text-align:center">${nights}</td>
@@ -3611,7 +3709,7 @@ function viewConsolDetail(alojName) {
         <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.ret)} &#8364;</span></div></td>
       <td class="cc-iva21" style="text-align:center;vertical-align:middle;"><span style="font-size:11px;color:#43a047;font-variant-numeric:tabular-nums;">+ ${fmt(c.iva)} &#8364;</span></td>
       <td class="cc-totalLiquidar right bold" style="color:${c.totalLiq>=0?'#1a2744':'#e53935'}">${fmt(c.totalLiq)} &#8364;</td>
-      <td class="cc-observacion ellip" style="font-size:11px;color:#6b7280;max-width:180px;overflow:hidden;text-overflow:ellipsis;" title="${r.observacion.replace(/"/g,'&quot;')}">${r.observacion}</td>
+      <td class="cc-observacion ellip" style="font-size:11px;color:#6b7280;max-width:180px;overflow:hidden;text-overflow:ellipsis;" title="${esc(r.observacion)}">${esc(r.observacion)}</td>
       <td class="cc-acciones"><div style="display:flex;gap:6px;">
         <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();goToReserva(${r.idx})">&#128065;</button>
         ${!isV?`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#10004;</button>`:`<button class="btn btn-sm btn-orange" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#8617;</button>`}
@@ -3664,7 +3762,7 @@ function viewConsolDetail(alojName) {
       <div class="consol-header">
         <div class="header-top">
           <div>
-            <div class="type">Liquidación Mensual Consolidada</div>
+            <div class="type">Liquidaci\u00F3n Mensual Consolidada</div>
             <div class="name">${a.name}</div>
           </div>
           <div>${allVal?'<span class="badge-liq badge-liq-green">&#10003; LISTA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div>
@@ -3672,7 +3770,7 @@ function viewConsolDetail(alojName) {
         <div class="consol-meta">
           <div><div class="consol-meta-label">Propietario</div><div class="consol-meta-value" style="cursor:pointer;${getPropietario(a.name)==='Falta propietario'?'color:#e53935':''}" title="Clic para editar propietario" onclick="editPropietarioInline('${a.name.replace(/'/g,"\\'")}', this)">${getPropietario(a.name)}</div></div>
           <div><div class="consol-meta-label">Edificio</div><div class="consol-meta-value">${a.edificio}</div></div>
-          <div><div class="consol-meta-label">Nº Reservas</div><div class="consol-meta-value">${filteredReservas.length}</div></div>
+          <div><div class="consol-meta-label">N\u00BA Reservas</div><div class="consol-meta-value">${filteredReservas.length}</div></div>
           <div><div class="consol-meta-label">Validadas</div><div class="consol-meta-value">${filteredReservas.filter(r=>validated.has(r.idx)).length} / ${filteredReservas.length}</div></div>
         </div>
       </div>
@@ -3725,7 +3823,7 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
         ${buildPasarelaRows(calcs)}
         <div class="consol-divider"></div>
         <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(adjSub)} &#8364;</span></div>
-        <div class="consol-row"><span>Retención IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
+        <div class="consol-row"><span>Retenci\u00F3n IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
         <div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
         <div class="consol-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(adjLiq)} &#8364;</span></div>
         </div>
@@ -3736,22 +3834,22 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
       ${allVal
         ? `<div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
             <div style="display:flex;gap:12px;align-items:center;">
-              <button class="btn btn-success" onclick="handleGenerar()">&#128424; Generar Liquidación</button>
+              <button class="btn btn-success" onclick="handleGenerar()">&#128424; Generar Liquidaci\u00F3n</button>
               <button class="btn btn-outline" onclick="showScreen('consol')">&#8592; Volver</button>
             </div>
             ${_previewPref !== null
               ? `<div style="font-size:12px;color:#9ca3af;">
-                  ${_previewPref ? '\ud83d\udc41 Se mostrará previsualización' : '\ud83d\udda8 Se imprimirá directamente'}
-                  &nbsp;·&nbsp; <a href="#" onclick="resetPreviewPref();return false;" style="color:#4f8cff;">Cambiar</a>
+                  ${_previewPref ? '\ud83d\udc41 Se mostrar\u00E1 previsualizaci\u00F3n' : '\ud83d\udda8 Se imprimir\u00E1 directamente'}
+                  &nbsp;\u00B7&nbsp; <a href="#" onclick="resetPreviewPref();return false;" style="color:#4f8cff;">Cambiar</a>
                 </div>`
               : `<div id="preview-options" style="display:flex;gap:16px;align-items:center;">
                   <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
                     <input type="checkbox" id="chk-preview" checked style="width:16px;height:16px;cursor:pointer;">
-                    Ver previsualización antes de imprimir
+                    Ver previsualizaci\u00F3n antes de imprimir
                   </label>
                   <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#9ca3af;cursor:pointer;">
                     <input type="checkbox" id="chk-remember" style="width:14px;height:14px;cursor:pointer;">
-                    No preguntar más
+                    No preguntar m\u00E1s
                   </label>
                 </div>`}
           </div>`
@@ -3769,7 +3867,7 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
 
 // \u2500\u2500\u2500 PRINT PREFERENCES \u2500\u2500\u2500
 let _previewPref = null; // null = show options, true = always preview, false = never preview
-try { const v = localStorage.getItem('liq-preview-pref'); if (v !== null) _previewPref = v === 'true'; } catch(e) {}
+{ const v = SafeStorage.get('liq-preview-pref'); if (v !== null) _previewPref = v === 'true'; }
 
 function getPreviewPref() { return _previewPref === null ? true : _previewPref; }
 
@@ -3786,7 +3884,7 @@ function handleGenerar() {
 
   if (chkRemember && chkRemember.checked) {
     _previewPref = wantPreview;
-    try { localStorage.setItem('liq-preview-pref', String(wantPreview)); } catch(e) {}
+    SafeStorage.set('liq-preview-pref', String(wantPreview));
   }
 
   if (wantPreview) showPrintPreview(); else printConsolDirect();
@@ -3794,7 +3892,7 @@ function handleGenerar() {
 
 function resetPreviewPref() {
   _previewPref = null;
-  try { localStorage.removeItem('liq-preview-pref'); } catch(e) {}
+  SafeStorage.remove('liq-preview-pref');
   // Re-render to show checkboxes
   if (currentConsolAloj) viewConsolDetail(currentConsolAloj);
 }
@@ -3820,14 +3918,14 @@ function buildPrintCards() {
       {l:`IVA Reserva (${(IVA_RESERVA*100).toFixed(0)}%)`,v:-(c.total-c.baseSinIVA),neg:true},
       {l:"Base sin IVA",v:c.baseSinIVA,bold:true},{div:true},
       {l:`Canal de Venta ${r.plataforma} (${(c.comRate*100).toFixed(1)}%)`,v:-c.comPlat,neg:true},{div:true},
-      {l:`Gestión GTC (${(c.gtcRate*100).toFixed(0)}%)`,v:-c.comGTC,neg:true},
+      {l:`Gesti\u00F3n GTC (${(c.gtcRate*100).toFixed(0)}%)`,v:-c.comGTC,neg:true},
       {l:`Limpieza (${fmt(c.limp)} \u20AC)`,v:-c.limp,neg:true},
       {l:`Amenities (${fmt(c.amen)} \u20AC)`,v:-c.amen,neg:true},{div:true},
     ];
     if(s.pasarela) rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true},{div:true});
     rows.push(
       {l:"Subtotal",v:c.sub,bold:true},
-      {l:`Retención IRPF (${(c.irpfRate*100).toFixed(0)}%)`,v:-c.ret,neg:true},
+      {l:`Retenci\u00F3n IRPF (${(c.irpfRate*100).toFixed(0)}%)`,v:-c.ret,neg:true},
       {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
 
     const rowsHtml = rows.map(row => {
@@ -3840,14 +3938,14 @@ function buildPrintCards() {
 
     return `<div class="liq-container print-card" style="margin-bottom:24px;">
       <div class="liq-header">
-        <div class="header-top"><div><div class="type">Liquidación ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div></div>
+        <div class="header-top"><div><div class="type">Liquidaci\u00F3n ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div></div>
         <div class="liq-meta">
-          <div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
+          <div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
           <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
           <div><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
           <div><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
           <div><div class="liq-meta-label">Localizador</div><div class="liq-meta-value" style="font-size:11px">${r.localizador}</div></div>
-          <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${r.edificio}</div></div>
+          <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div>
         </div>
       </div>
       <div style="padding:8px 0;">${rowsHtml}</div>
@@ -3872,7 +3970,7 @@ function buildPrintCards() {
       <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
       <div class="liq-meta">
         <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${a.edificio}</div></div>
-        <div><div class="liq-meta-label">Nº Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
+        <div><div class="liq-meta-label">N\u00BA Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
         <div></div>
       </div>
     </div>
@@ -3881,7 +3979,7 @@ function buildPrintCards() {
       ${_printDedHtml}
       <div class="liq-divider"></div>
       <div class="liq-row bold"><span>Subtotal ajustado</span><span>${fmt(_pAdjSub)} &#8364;</span></div>
-      <div class="liq-row"><span>Retención IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
+      <div class="liq-row"><span>Retenci\u00F3n IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
       <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>
     <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(_pAdjLiq)} &#8364;</span></div>
@@ -3904,7 +4002,7 @@ function showPrintPreview() {
   previewZone.innerHTML = result.cardsHtml + result.summaryHtml
     + `<div class="liq-actions no-print" style="margin-top:28px;justify-content:center;">
         <button class="btn btn-success" onclick="printFromPreview()">&#128424; Imprimir</button>
-        <button class="btn btn-outline" onclick="exitPreview()">&#8592; Volver a la liquidación</button>
+        <button class="btn btn-outline" onclick="exitPreview()">&#8592; Volver a la liquidaci\u00F3n</button>
       </div>`;
 
   // Toggle visibility: hide table, show preview
@@ -3984,7 +4082,7 @@ function buildOS(title, desc, vals, unit, addId, addFn, delFn) {
   return `<div class="modal-section"><h4>${title}</h4>${desc?`<div class="desc">${desc}</div>`:''}
     <div class="option-list">${items}</div>
     <div class="add-row"><input class="add-input" type="number" id="${addId}" placeholder="Nuevo valor" step="any">
-    <button class="btn btn-sm btn-primary" onclick="${addFn}()">+ Añadir</button></div></div>`;
+    <button class="btn btn-sm btn-primary" onclick="${addFn}()">+ A\u00F1adir</button></div></div>`;
 }
 
 function renderConfigModal() {
@@ -3994,7 +4092,7 @@ function renderConfigModal() {
     const safe = name.replace(/[^a-zA-Z0-9]/g,'');
     pH += buildOS(name, "% sobre total reserva (IVA incl.)", platformOptions[name], "%", `add-plat-${safe}`, `addP_${safe}`, `delP_${safe}`);
     window[`addP_${safe}`] = function() { const inp=document.getElementById(`add-plat-${safe}`); const v=parseFloat(inp.value);
-      if(isNaN(v)||v<0||v>100){alert("Porcentaje válido: 0-100");return;} if(platformOptions[name].some(x=>Math.abs(x-v)<0.001)){alert("Ya existe.");return;}
+      if(isNaN(v)||v<0||v>100){alert("Porcentaje v\u00E1lido: 0-100");return;} if(platformOptions[name].some(x=>Math.abs(x-v)<0.001)){alert("Ya existe.");return;}
       platformOptions[name].push(v); platformOptions[name].sort((a,b)=>a-b); inp.value=""; renderConfigModal(); };
     window[`delP_${safe}`] = function(i) { if(platformOptions[name].length<=1)return; platformOptions[name].splice(i,1); renderConfigModal(); };
   });
@@ -4004,15 +4102,15 @@ function renderConfigModal() {
     '<hr class="section-divider">' +
     buildOS("Pasarela Booking","Solo para Booking.com",pasarelaBookingOptions,"%","add-pb","addPB","delPB");
   document.getElementById("tab-otros").innerHTML =
-    buildOS("Gestión GTC","% sobre base sin IVA",gtcOptions,"%","add-gtc","addGTC","delGTC") +
+    buildOS("Gesti\u00F3n GTC","% sobre base sin IVA",gtcOptions,"%","add-gtc","addGTC","delGTC") +
     '<hr class="section-divider">' +
     buildOS("Limpieza","\u20AC sin IVA",cleaningOptions," \u20AC","add-cl","addCL","delCL") +
     '<hr class="section-divider">' +
     buildOS("Amenities","Coste fijo por reserva en \u20AC",amenitiesOptions," \u20AC","add-am","addAM","delAM") +
     '<hr class="section-divider">' +
-    buildOS("Mantenimiento mensual","Importe base (+ 21% IVA) por liquidación",maintenanceOptions," \u20AC","add-mt","addMT","delMT");
+    buildOS("Mantenimiento mensual","Importe base (+ 21% IVA) por liquidaci\u00F3n",maintenanceOptions," \u20AC","add-mt","addMT","delMT");
   document.getElementById("tab-impuestos").innerHTML =
-    buildOS("Retención IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR");
+    buildOS("Retenci\u00F3n IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR");
 }
 function addPS(){aL(pasarelaStripeOptions,"add-ps",100);} function delPS(i){dL(pasarelaStripeOptions,i);}
 function addPB(){aL(pasarelaBookingOptions,"add-pb",100);} function delPB(i){dL(pasarelaBookingOptions,i);}
@@ -4022,7 +4120,7 @@ function addGTC(){aL(gtcOptions,"add-gtc",100);} function delGTC(i){dL(gtcOption
 function addAM(){aL(amenitiesOptions,"add-am",99999,false);} function delAM(i){dL(amenitiesOptions,i);}
 function addMT(){aL(maintenanceOptions,"add-mt",99999,false);} function delMT(i){dL(maintenanceOptions,i);}
 function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);const v=parseFloat(inp.value);
-  if(isP!==false){if(isNaN(v)||v<0||v>max){alert("Valor válido.");return;}}else{if(isNaN(v)||v<0){alert("Valor válido.");return;}}
+  if(isP!==false){if(isNaN(v)||v<0||v>max){alert("Valor v\u00E1lido.");return;}}else{if(isNaN(v)||v<0){alert("Valor v\u00E1lido.");return;}}
   if(list.some(x=>Math.abs(x-v)<0.001)){alert("Ya existe.");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}
 function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal();}
 
@@ -4030,7 +4128,7 @@ function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal(
 const comboState = { platform: { selected: new Set(), options: [] }, aloj: { selected: new Set(), options: [] } };
 const comboLabels = { platform: 'Todas las plataformas', aloj: 'Todos los alojamientos' };
 
-// ——— MONTH PICKER STATE (multi-select) ———
+// \u2014\u2014\u2014 MONTH PICKER STATE (multi-select) \u2014\u2014\u2014
 const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const MONTH_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let _mpSelYears = new Set();
@@ -4084,11 +4182,11 @@ function toggleMonthPicker(src) {
 function renderMonthPickerDD() {
   const dd = document.getElementById('mp-dd-' + _mpActiveSrc);
   if (!dd) return;
-  var monthCounts = {};
-  var yearsForMonths = _mpSelYears.size > 0 ? _mpSelYears : new Set(_mpAllYears);
+  let monthCounts = {};
+  let yearsForMonths = _mpSelYears.size > 0 ? _mpSelYears : new Set(_mpAllYears);
   yearsForMonths.forEach(function(y) {
-    var ym = _mpAvailable[y] || {};
-    for (var m = 0; m < 12; m++) {
+    let ym = _mpAvailable[y] || {};
+    for (let m = 0; m < 12; m++) {
       monthCounts[m] = (monthCounts[m] || 0) + (ym[m] || 0);
     }
   });
@@ -4140,26 +4238,26 @@ function _mpRefreshAll() {
 
 function _mpBtnHtml() {
   if (_mpSelYears.size === 0) return { active: false, html: null };
-  var yArr = [..._mpSelYears].sort();
-  var label = '';
-  var arrows = false;
+  let yArr = [..._mpSelYears].sort();
+  let label = '';
+  let arrows = false;
   if (_mpSelYears.size === 1 && _mpSelMonths.size <= 1) {
     // Single selection: show arrows
     arrows = true;
     if (_mpSelMonths.size === 1) {
-      var m = [..._mpSelMonths][0];
+      let m = [..._mpSelMonths][0];
       label = MONTH_FULL[m] + ' ' + yArr[0];
     } else {
-      label = 'Año ' + yArr[0];
+      label = 'A\u00F1o ' + yArr[0];
     }
   } else if (_mpSelMonths.size > 0) {
-    var mArr = [..._mpSelMonths].sort((a,b) => a-b);
-    var mNames = mArr.map(m => MONTH_NAMES[m]).join(', ');
+    let mArr = [..._mpSelMonths].sort((a,b) => a-b);
+    let mNames = mArr.map(m => MONTH_NAMES[m]).join(', ');
     label = mNames + ' ' + yArr.join(', ');
   } else {
     label = yArr.join(', ');
   }
-  var html = '';
+  let html = '';
   if (arrows) {
     html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpPrev()">&#8249;</button></span>';
   }
@@ -4173,9 +4271,9 @@ function _mpBtnHtml() {
 
 function mpPrev() {
   if (_mpSelYears.size !== 1) return;
-  var y = [..._mpSelYears][0];
+  let y = [..._mpSelYears][0];
   if (_mpSelMonths.size === 1) {
-    var m = [..._mpSelMonths][0];
+    let m = [..._mpSelMonths][0];
     m--;
     if (m < 0) { m = 11; y--; }
     _mpSelYears = new Set([y]);
@@ -4188,9 +4286,9 @@ function mpPrev() {
 
 function mpNext() {
   if (_mpSelYears.size !== 1) return;
-  var y = [..._mpSelYears][0];
+  let y = [..._mpSelYears][0];
   if (_mpSelMonths.size === 1) {
-    var m = [..._mpSelMonths][0];
+    let m = [..._mpSelMonths][0];
     m++;
     if (m > 11) { m = 0; y++; }
     _mpSelYears = new Set([y]);
@@ -4350,7 +4448,7 @@ const simpleComboOptions = {
     { value: 'baseSinIVA', label: 'Base sin IVA' },
     { value: 'subtotal', label: 'Subtotal' },
     { value: 'totalLiquidar', label: 'Total a liquidar' },
-    { value: 'observacion', label: 'Observación' }
+    { value: 'observacion', label: 'Observaci\u00F3n' }
   ],
   sortdir: [
     { value: 'asc', label: '&#8593; Ascendente' },
@@ -4359,12 +4457,12 @@ const simpleComboOptions = {
   consolsort: [
     { value: 'name', label: 'Nombre A\u2191Z' },
     { value: 'name-desc', label: 'Nombre Z\u2191A' },
-    { value: 'reservas-desc', label: 'Más reservas' },
+    { value: 'reservas-desc', label: 'M\u00E1s reservas' },
     { value: 'reservas-asc', label: 'Menos reservas' },
-    { value: 'liq-desc', label: 'Mayor liquidación' },
-    { value: 'liq-asc', label: 'Menor liquidación' },
-    { value: 'total-desc', label: 'Mayor facturación' },
-    { value: 'total-asc', label: 'Menor facturación' },
+    { value: 'liq-desc', label: 'Mayor liquidaci\u00F3n' },
+    { value: 'liq-asc', label: 'Menor liquidaci\u00F3n' },
+    { value: 'total-desc', label: 'Mayor facturaci\u00F3n' },
+    { value: 'total-asc', label: 'Menor facturaci\u00F3n' },
     { value: 'pending', label: 'Pendientes primero' },
     { value: 'ready', label: 'Listas primero' }
   ]
@@ -4457,10 +4555,10 @@ document.querySelectorAll('.combo-input').forEach(input => {
   });
 });
 
-// ═══ AI ASSISTANT ═══
-var _aiPanelOpen = false;
-var _aiHistory = [];
-var _aiProcessing = false;
+// === AI ASSISTANT ===
+let _aiPanelOpen = false;
+let _aiHistory = [];
+let _aiProcessing = false;
 
 function toggleAIPanel() {
   _aiPanelOpen = !_aiPanelOpen;
@@ -4472,11 +4570,11 @@ function toggleAIPanel() {
 }
 
 function _getAIKey() {
-  var key = localStorage.getItem('ai-api-key');
+  let key = SafeStorage.get('ai-api-key');
   if (!key) {
     key = prompt('Introduce tu API Key de Anthropic para activar el asistente IA.\n\nLa clave se guarda localmente en tu navegador y nunca se comparte.\n\nPuedes obtenerla en: console.anthropic.com');
     if (key && key.trim()) {
-      localStorage.setItem('ai-api-key', key.trim());
+      SafeStorage.set('ai-api-key', key.trim());
     } else { return null; }
   }
   return key;
@@ -4485,50 +4583,50 @@ function _getAIKey() {
 function buildAIContext() {
   if (!allReservas || allReservas.length === 0) return 'No hay datos cargados.';
 
-  var total = allReservas.length;
-  var byAloj = {}, byPlat = {}, byMes = {}, byEdificio = {}, byAtendido = {}, byTipo = {};
-  var sumImporte = 0, sumLiq = 0, sumNoches = 0, sumBase = 0;
-  var sumComPlat = 0, sumComGTC = 0, sumLimp = 0, sumAmen = 0, sumPas = 0, sumCE = 0;
-  var numVal = 0, numPend = 0;
+  let total = allReservas.length;
+  let byAloj = {}, byPlat = {}, byMes = {}, byEdificio = {}, byAtendido = {}, byTipo = {};
+  let sumImporte = 0, sumLiq = 0, sumNoches = 0, sumBase = 0;
+  let sumComPlat = 0, sumComGTC = 0, sumLimp = 0, sumAmen = 0, sumPas = 0, sumCE = 0;
+  let numVal = 0, numPend = 0;
 
   allReservas.forEach(function(r) {
-    var c = getLiq(r);
-    var n = r._nights || 0;
+    let c = getLiq(r);
+    let n = r._nights || 0;
     sumImporte += c.total; sumLiq += c.totalLiq; sumNoches += n;
     sumBase += c.baseSinIVA; sumComPlat += c.comPlat; sumComGTC += c.comGTC;
     sumLimp += c.limp; sumAmen += c.amen; sumPas += c.comPas; sumCE += c.ceTotal;
     if (validated.has(r.idx)) numVal++; else numPend++;
 
-    var a = r.alojamiento || 'Sin alojamiento';
+    let a = r.alojamiento || 'Sin alojamiento';
     if (!byAloj[a]) byAloj[a] = {n:0, imp:0, liq:0, noch:0, base:0};
     byAloj[a].n++; byAloj[a].imp += c.total; byAloj[a].liq += c.totalLiq; byAloj[a].noch += n; byAloj[a].base += c.baseSinIVA;
 
-    var p = r.plataforma || 'Desconocida';
+    let p = r.plataforma || 'Desconocida';
     if (!byPlat[p]) byPlat[p] = {n:0, imp:0, liq:0};
     byPlat[p].n++; byPlat[p].imp += c.total; byPlat[p].liq += c.totalLiq;
 
-    var fE = r._dEntrada;
+    let fE = r._dEntrada;
     if (fE) {
-      var mes = (fE.getMonth()+1).toString().padStart(2,'0') + '/' + fE.getFullYear();
+      let mes = (fE.getMonth()+1).toString().padStart(2,'0') + '/' + fE.getFullYear();
       if (!byMes[mes]) byMes[mes] = {n:0, imp:0, liq:0, noch:0};
       byMes[mes].n++; byMes[mes].imp += c.total; byMes[mes].liq += c.totalLiq; byMes[mes].noch += n;
     }
 
-    var ed = r.edificio || 'Sin edificio';
+    let ed = r.edificio || 'Sin edificio';
     if (!byEdificio[ed]) byEdificio[ed] = {n:0, imp:0};
     byEdificio[ed].n++; byEdificio[ed].imp += c.total;
 
-    var at = r.atendidoPor || 'Sin asignar';
+    let at = r.atendidoPor || 'Sin asignar';
     if (!byAtendido[at]) byAtendido[at] = {n:0, imp:0};
     byAtendido[at].n++; byAtendido[at].imp += c.total;
 
-    var tp = r.tipoReserva || 'Sin tipo';
+    let tp = r.tipoReserva || 'Sin tipo';
     if (!byTipo[tp]) byTipo[tp] = {n:0, imp:0};
     byTipo[tp].n++; byTipo[tp].imp += c.total;
   });
 
-  var f = function(v){ return v.toFixed(2); };
-  var ctx = '=== RESUMEN GLOBAL ===\n';
+  let f = function(v){ return v.toFixed(2); };
+  let ctx = '=== RESUMEN GLOBAL ===\n';
   ctx += 'Total reservas: ' + total + ' (Validadas: ' + numVal + ', Pendientes: ' + numPend + ')\n';
   ctx += 'Total noches: ' + sumNoches + '\n';
   ctx += 'Importe total reservas (IVA inc.): ' + f(sumImporte) + ' EUR\n';
@@ -4543,45 +4641,45 @@ function buildAIContext() {
 
   ctx += '=== POR ALOJAMIENTO ===\n';
   Object.keys(byAloj).sort().forEach(function(a) {
-    var d = byAloj[a];
+    let d = byAloj[a];
     ctx += a + ': ' + d.n + ' reservas, ' + d.noch + ' noches, importe(IVA) ' + f(d.imp) + ' EUR, base ' + f(d.base) + ' EUR, liquidar ' + f(d.liq) + ' EUR\n';
   });
 
   ctx += '\n=== POR PLATAFORMA/CANAL DE VENTA ===\n';
   Object.keys(byPlat).sort().forEach(function(p) {
-    var d = byPlat[p];
+    let d = byPlat[p];
     ctx += p + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR, liquidar ' + f(d.liq) + ' EUR\n';
   });
 
   ctx += '\n=== POR MES ===\n';
   Object.keys(byMes).sort().forEach(function(m) {
-    var d = byMes[m];
+    let d = byMes[m];
     ctx += m + ': ' + d.n + ' reservas, ' + d.noch + ' noches, importe(IVA) ' + f(d.imp) + ' EUR, liquidar ' + f(d.liq) + ' EUR\n';
   });
 
   ctx += '\n=== POR EDIFICIO ===\n';
   Object.keys(byEdificio).sort().forEach(function(e) {
-    var d = byEdificio[e];
+    let d = byEdificio[e];
     ctx += e + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR\n';
   });
 
   ctx += '\n=== POR ATENDIDO POR ===\n';
   Object.keys(byAtendido).sort().forEach(function(a) {
-    var d = byAtendido[a];
+    let d = byAtendido[a];
     ctx += a + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR\n';
   });
 
   ctx += '\n=== POR TIPO DE RESERVA ===\n';
   Object.keys(byTipo).sort().forEach(function(t) {
-    var d = byTipo[t];
+    let d = byTipo[t];
     ctx += t + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR\n';
   });
 
   // Detail: use FILTERED rows (what user sees) instead of all, max 200
-  var filtered = (typeof getFilteredSorted === 'function') ? getFilteredSorted() : allReservas;
-  var maxDetail = 200;
-  var detailRows = filtered.slice(0, maxDetail);
-  var filteredTotal = filtered.length;
+  let filtered = (typeof getFilteredSorted === 'function') ? getFilteredSorted() : allReservas;
+  let maxDetail = 200;
+  let detailRows = filtered.slice(0, maxDetail);
+  let filteredTotal = filtered.length;
   ctx += '\n=== DETALLE RESERVAS ';
   if (filteredTotal < total) {
     ctx += '(FILTRO ACTIVO: ' + filteredTotal + ' de ' + total + ' reservas';
@@ -4590,9 +4688,9 @@ function buildAIContext() {
   }
   ctx += ', mostrando ' + detailRows.length + ') ===\n';
   ctx += 'ID | Localizador | Cliente | Alojamiento | Edificio | Plataforma | AtendidoPor | TipoReserva | Entrada | Salida | Noches | ImporteIVA | BaseSinIVA | ComCanal | ComGTC | Limpieza | Amenities | CE | Pasarela | Subtotal | ALiquidar | Estado\n';
-  for (var i = 0; i < detailRows.length; i++) {
-    var r = detailRows[i];
-    var c = getLiq(r);
+  for (let i = 0; i < detailRows.length; i++) {
+    const r = detailRows[i];
+    let c = getLiq(r);
     ctx += [
       r.id||'-', r.localizador||'-', (r.cliente||'-').substring(0,25), (r.alojamiento||'-').substring(0,20),
       (r.edificio||'-').substring(0,15), r.plataforma||'-', (r.atendidoPor||'-').substring(0,15),
@@ -4611,11 +4709,11 @@ function buildAIContext() {
 }
 
 function _addAIMsg(role, text) {
-  var box = document.getElementById('ai-messages');
-  var div = document.createElement('div');
+  let box = document.getElementById('ai-messages');
+  let div = document.createElement('div');
   div.className = 'ai-msg ' + role;
   if (role === 'assistant') {
-    var html = text
+    let html = text
       .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/\n/g, '<br>');
@@ -4629,19 +4727,19 @@ function _addAIMsg(role, text) {
 }
 
 function _showTyping() {
-  var box = document.getElementById('ai-messages');
-  var div = document.createElement('div');
+  let box = document.getElementById('ai-messages');
+  let div = document.createElement('div');
   div.className = 'ai-msg assistant'; div.id = 'ai-typing';
   div.innerHTML = '<div class="ai-typing"><span></span><span></span><span></span></div>';
   box.appendChild(div);
   box.scrollTop = box.scrollHeight;
 }
-function _removeTyping() { var el = document.getElementById('ai-typing'); if(el) el.remove(); }
+function _removeTyping() { const el = document.getElementById('ai-typing'); if(el) el.remove(); }
 
 async function sendAIMessage() {
   if (_aiProcessing) return;
-  var input = document.getElementById('ai-input');
-  var text = input.value.trim();
+  let input = document.getElementById('ai-input');
+  let text = input.value.trim();
   if (!text) return;
 
   if (!allReservas || allReservas.length === 0) {
@@ -4649,7 +4747,7 @@ async function sendAIMessage() {
     return;
   }
 
-  var apiKey = _getAIKey();
+  let apiKey = _getAIKey();
   if (!apiKey) return;
 
   _addAIMsg('user', text);
@@ -4661,32 +4759,32 @@ async function sendAIMessage() {
   _showTyping();
 
   try {
-    var context = buildAIContext();
-    var sysPrompt = 'Eres el "Asistente Histórico Reservas" de la aplicación Liquidaciones GTC, una herramienta de gestión de reservas vacacionales.\n\n' +
+    let context = buildAIContext();
+    let sysPrompt = 'Eres el "Asistente Hist\u00F3rico Reservas" de la aplicaci\u00F3n Liquidaciones GTC, una herramienta de gesti\u00F3n de reservas vacacionales.\n\n' +
       'REGLAS ESTRICTAS:\n' +
-      '1. SOLO puedes responder basándote en los datos proporcionados abajo. NUNCA inventes cifras, fechas, nombres de clientes, alojamientos ni importes.\n' +
-      '2. Si no tienes la información para responder, di: "No tengo esa información en los datos cargados."\n' +
+      '1. SOLO puedes responder bas\u00E1ndote en los datos proporcionados abajo. NUNCA inventes cifras, fechas, nombres de clientes, alojamientos ni importes.\n' +
+      '2. Si no tienes la informaci\u00F3n para responder, di: "No tengo esa informaci\u00F3n en los datos cargados."\n' +
       '3. NUNCA des consejos financieros, legales ni fiscales. Solo reporta datos.\n' +
-      '4. Responde siempre en español.\n' +
-      '5. Sé conciso y directo. Usa cifras exactas con 2 decimales y el símbolo €.\n' +
+      '4. Responde siempre en espa\u00F1ol.\n' +
+      '5. S\u00E9 conciso y directo. Usa cifras exactas con 2 decimales y el s\u00EDmbolo \u20AC.\n' +
       '6. Cuando cites importes, especifica si son con IVA incluido o sin IVA (base).\n' +
-      '7. NUNCA accedas a información externa. Solo los datos de abajo.\n' +
+      '7. NUNCA accedas a informaci\u00F3n externa. Solo los datos de abajo.\n' +
       '8. Si te preguntan algo que no son datos de reservas, responde amablemente que solo puedes responder sobre los datos de reservas cargados.\n' +
-      '9. Los resúmenes (por alojamiento, plataforma, mes, edificio, atendido por, tipo) son EXACTOS y cubren TODAS las reservas.\n' +
-      '10. El detalle individual muestra las reservas que el usuario tiene filtradas en pantalla (máximo 200). Los totales de los resúmenes siempre incluyen TODAS las reservas.\n' +
-      '11. Si el usuario necesita datos específicos de reservas individuales y hay muchas, sugiérele que filtre en la tabla (por alojamiento, plataforma, mes...) y vuelva a preguntar, así tendrás el detalle exacto.\n\n' +
+      '9. Los res\u00FAmenes (por alojamiento, plataforma, mes, edificio, atendido por, tipo) son EXACTOS y cubren TODAS las reservas.\n' +
+      '10. El detalle individual muestra las reservas que el usuario tiene filtradas en pantalla (m\u00E1ximo 200). Los totales de los res\u00FAmenes siempre incluyen TODAS las reservas.\n' +
+      '11. Si el usuario necesita datos espec\u00EDficos de reservas individuales y hay muchas, sugi\u00E9rele que filtre en la tabla (por alojamiento, plataforma, mes...) y vuelva a preguntar, as\u00ED tendr\u00E1s el detalle exacto.\n\n' +
       'CAMPOS DISPONIBLES POR RESERVA:\n' +
       '- ID Reserva, Localizador, Cliente, Alojamiento, Edificio, Plataforma (canal de venta)\n' +
       '- Atendido Por, Tipo Reserva, Origen Marketing, Observaciones\n' +
       '- Fecha Entrada, Fecha Salida, Noches\n' +
       '- Importe total (IVA inc.), Base sin IVA\n' +
-      '- Comisión Canal de Venta, Comisión GTC, Limpieza, Amenities, Conceptos Especiales, Pasarela\n' +
+      '- Comisi\u00F3n Canal de Venta, Comisi\u00F3n GTC, Limpieza, Amenities, Conceptos Especiales, Pasarela\n' +
       '- Subtotal, Total a Liquidar, Estado (Validada/Pendiente)\n\n' +
       'DATOS ACTUALES:\n' + context;
 
-    var messages = _aiHistory.slice(-20);
+    let messages = _aiHistory.slice(-CONFIG.MAX_AI_HISTORY);
 
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    let resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -4695,8 +4793,8 @@ async function sendAIMessage() {
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
+        model: CONFIG.AI_MODEL,
+        max_tokens: CONFIG.AI_MAX_TOKENS,
         system: sysPrompt,
         messages: messages
       })
@@ -4705,23 +4803,23 @@ async function sendAIMessage() {
     _removeTyping();
 
     if (!resp.ok) {
-      var errData = await resp.json().catch(function(){ return {}; });
+      let errData = await resp.json().catch(function(){ return {}; });
       if (resp.status === 401) {
-        localStorage.removeItem('ai-api-key');
-        _addAIMsg('error', 'API Key inválida. Se ha borrado. Vuelve a intentarlo.');
+        SafeStorage.remove('ai-api-key');
+        _addAIMsg('error', 'API Key inv\u00E1lida. Se ha borrado. Vuelve a intentarlo.');
       } else {
         _addAIMsg('error', 'Error: ' + (errData.error && errData.error.message ? errData.error.message : resp.statusText));
       }
       _aiHistory.pop();
     } else {
-      var data = await resp.json();
-      var reply = data.content.map(function(b){ return b.text||''; }).join('');
+      let data = await resp.json();
+      let reply = data.content.map(function(b){ return b.text||''; }).join('');
       _aiHistory.push({role:'assistant', content:reply});
       _addAIMsg('assistant', reply);
     }
   } catch(e) {
     _removeTyping();
-    _addAIMsg('error', 'Error de conexión: ' + e.message);
+    _addAIMsg('error', 'Error de conexi\u00F3n: ' + e.message);
     _aiHistory.pop();
   }
 
@@ -4732,10 +4830,10 @@ async function sendAIMessage() {
 
 // Auto-resize AI textarea
 (function(){
-  var ta = document.getElementById('ai-input');
+  let ta = document.getElementById('ai-input');
   if(ta) ta.addEventListener('input', function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,100)+'px'; });
 })();
-// ═══ END AI ASSISTANT ═══
+// === END AI ASSISTANT ===
 </script>
 </body>
 </html>

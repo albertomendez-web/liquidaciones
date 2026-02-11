@@ -390,6 +390,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .ce-item-row { display:flex;align-items:center;gap:8px;margin-bottom:5px; }
 .ce-item-row.ce-new { animation:ceRowIn .25s ease; }
 @keyframes ceRowIn { from { opacity:0;max-height:0;margin-bottom:0;overflow:hidden; } to { opacity:1;max-height:40px;margin-bottom:5px; } }
+@keyframes ceRowOut { from { opacity:1;max-height:40px;margin-bottom:5px; } to { opacity:0;max-height:0;margin-bottom:0;overflow:hidden; } }
 .ce-item-row input { border:1px solid #e5e7eb;border-radius:5px;padding:4px 8px;font-size:12px;font-family:inherit;background:white; }
 .ce-item-row .ce-inp-label { width:180px; }
 .ce-item-row .ce-inp-amt { width:90px;text-align:right;font-weight:600; }
@@ -750,16 +751,17 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.0';
-const APP_BUILD   = '2026-02-11T00:57:00+01:00';
-const APP_CHANGES = 'Texto: "Totales" → "Reservas Totales" en barra de totales';
+const APP_BUILD   = '2026-02-11T01:02:00+01:00';
+const APP_CHANGES = 'CE: eliminar concepto con animación slide-out suave';
 
 const CHANGELOG = [
-  { version: '1.9.0', date: '2026-02-11T00:54:00+01:00', changes: [
+  { version: '1.9.0', date: '2026-02-11T01:01:00+01:00', changes: [
     'Filtro de fecha multi-selección: selecciona varios años y meses simultáneamente',
     'Combinatoria libre: Ene+Feb de 2025+2026, o un mes en 3 años, etc.',
+    'Flechas ‹ › para navegar cuando hay selección simple (1 año o 1 año+mes)',
     'Contador de reservas por mes agregado según años seleccionados',
-    'Botón muestra resumen de selección (ej: "Ene, Feb 2025, 2026")',
-    'Fix: añadir concepto CE suave — inserta DOM sin re-render + animación slide-down'
+    'Fix: añadir concepto CE suave — inserta DOM sin re-render + animación slide-down',
+    'Texto: "Totales" → "Reservas Totales" en barra de totales'
   ]},
   { version: '1.8.0', date: '2026-02-11T00:33:00+01:00', changes: [
     'Asistente Histórico Reservas: chat IA integrado con botón flotante y panel lateral',
@@ -2599,8 +2601,20 @@ function addCEItem(idx, view) {
 
 function removeCEItem(idx, itemIdx, view) {
   var s = settings[idx]; if (!s || !s.conceptosEspeciales) return;
-  s.conceptosEspeciales.splice(itemIdx, 1);
-  _applyCEChange(idx, view || 'p');
+  var v = view || 'p';
+  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  var rows = panel ? panel.querySelectorAll('.ce-item-row') : [];
+  if (rows[itemIdx]) {
+    var row = rows[itemIdx];
+    row.style.animation = 'ceRowOut .2s ease forwards';
+    row.addEventListener('animationend', function() {
+      s.conceptosEspeciales.splice(itemIdx, 1);
+      _applyCEChange(idx, v);
+    }, {once:true});
+  } else {
+    s.conceptosEspeciales.splice(itemIdx, 1);
+    _applyCEChange(idx, v);
+  }
 }
 
 function updateCEItem(idx, itemIdx, field, rawVal, view) {
@@ -4069,14 +4083,63 @@ function _mpBtnHtml() {
   if (_mpSelYears.size === 0) return { active: false, html: null };
   var yArr = [..._mpSelYears].sort();
   var label = '';
-  if (_mpSelMonths.size > 0) {
+  var arrows = false;
+  if (_mpSelYears.size === 1 && _mpSelMonths.size <= 1) {
+    // Single selection: show arrows
+    arrows = true;
+    if (_mpSelMonths.size === 1) {
+      var m = [..._mpSelMonths][0];
+      label = MONTH_FULL[m] + ' ' + yArr[0];
+    } else {
+      label = 'Año ' + yArr[0];
+    }
+  } else if (_mpSelMonths.size > 0) {
     var mArr = [..._mpSelMonths].sort((a,b) => a-b);
     var mNames = mArr.map(m => MONTH_NAMES[m]).join(', ');
     label = mNames + ' ' + yArr.join(', ');
   } else {
-    label = yArr.length === 1 ? 'A\u00f1o ' + yArr[0] : yArr.join(', ');
+    label = yArr.join(', ');
   }
-  return { active: true, html: label + '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">\u2715</span>' };
+  var html = '';
+  if (arrows) {
+    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpPrev()">&#8249;</button></span>';
+  }
+  html += label;
+  if (arrows) {
+    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpNext()">&#8250;</button></span>';
+  }
+  html += '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">\u2715</span>';
+  return { active: true, html: html };
+}
+
+function mpPrev() {
+  if (_mpSelYears.size !== 1) return;
+  var y = [..._mpSelYears][0];
+  if (_mpSelMonths.size === 1) {
+    var m = [..._mpSelMonths][0];
+    m--;
+    if (m < 0) { m = 11; y--; }
+    _mpSelYears = new Set([y]);
+    _mpSelMonths = new Set([m]);
+  } else {
+    _mpSelYears = new Set([y - 1]);
+  }
+  _mpRefreshAll();
+}
+
+function mpNext() {
+  if (_mpSelYears.size !== 1) return;
+  var y = [..._mpSelYears][0];
+  if (_mpSelMonths.size === 1) {
+    var m = [..._mpSelMonths][0];
+    m++;
+    if (m > 11) { m = 0; y++; }
+    _mpSelYears = new Set([y]);
+    _mpSelMonths = new Set([m]);
+  } else {
+    _mpSelYears = new Set([y + 1]);
+  }
+  _mpRefreshAll();
 }
 
 function updateMonthPickerBtn() {

@@ -756,17 +756,26 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.7';
-const APP_BUILD   = '2026-02-11T18:41:00+01:00';
-const APP_CHANGES = 'MG mockup aplicado: Contrato Compraventa GTC, Subtotal liquidación, estilos visuales';
+const APP_VERSION = '1.9.8';
+const APP_BUILD   = '2026-02-11T18:51:00+01:00';
+const APP_CHANGES = 'v198: MG mockup completo + sin Homity + dropdown elegante';
 
 const CHANGELOG = [
-  { version: '1.9.7', date: '2026-02-11T18:41:00+01:00', changes: [
-    'MG: Subtotal → 20% Contrato Compraventa GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal liquidación',
-    'Estilo visual MG: fondo amarillo Contrato, borde ámbar Subtotal ajustado, borde verde Subtotal liquidación',
-    'Extras compactos estilo CE con + Añadir concepto',
-    'Consolidado y print con mismo flujo visual MG',
-    'Dropdown alojamientos: nombres en una línea, dropdown más ancho'
+  { version: '1.9.8', date: '2026-02-11T18:51:00+01:00', changes: [
+    'MG completo: Subtotal → 20% Contrato Compraventa GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal liquidación → IRPF/IVA → Total',
+    'Estilos visuales MG: fondo amarillo Contrato, borde ámbar Subtotal ajustado, borde verde Subtotal liquidación',
+    'Extras compactos estilo CE con + Añadir concepto para alojamientos MG',
+    'Mantenimiento con checkbox+selector dentro del flujo MG (después de Subtotal ajustado)',
+    'Consolidado y print con mismo flujo y estilos MG',
+    'Quitar prefijo "Homity" de nombres en dropdown, tabla, detalle, consolidado y print',
+    'Dropdown alojamientos: una línea por nombre, ancho auto-expandible'
+  ]},
+  { version: '1.9.7', date: '2026-02-11T18:48:00+01:00', changes: [
+    'MG: flujo Subtotal → 20% Contrato Compraventa GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal liquidación → IRPF/IVA',
+    'Estilos visuales MG: fondo amarillo Contrato, borde ámbar ajustado, borde verde liquidación',
+    'Extras compactos estilo CE con + Añadir concepto para alojamientos MG',
+    'Quitar prefijo "Homity" de nombres de alojamientos en toda la app',
+    'Dropdown alojamientos: una línea por nombre, ancho auto-expandible'
   ]},
   { version: '1.9.6', date: '2026-02-11T12:31:00+01:00', changes: [
     'Mínimo garantizado: estructura de datos y persistencia',
@@ -2136,6 +2145,7 @@ function selectCleanWithValue(html, val) {
 }
 
 // Fast number formatter (avoid toLocaleString which is ~50x slower)
+function stripAloj(name) { return name ? name.replace(/^Homity\s+/i, '') : name; }
 function fmt(n) {
   const fixed = Math.abs(n).toFixed(2);
   const [int, dec] = fixed.split('.');
@@ -2613,7 +2623,7 @@ function _buildRowHtml(r) {
     <td class="col-localizador muted" style="font-size:11px;white-space:nowrap;">${r.localizador}</td>
     <td class="col-fechaAlta muted" style="font-size:12px;">${r._fmtAlta}</td>
     <td class="col-cliente bold ellip">${r.cliente}</td>
-    <td class="col-alojamiento muted" style="max-width:180px;word-break:break-word;white-space:normal;font-size:12px;line-height:1.3;">${r.alojamiento}</td>
+    <td class="col-alojamiento muted" style="max-width:180px;word-break:break-word;white-space:normal;font-size:12px;line-height:1.3;">${stripAloj(r.alojamiento)}</td>
     <td class="col-edificio ellip muted" style="font-size:12px;">${r.edificio}</td>
     <td class="col-plataforma"><span class="badge ${isB ? 'badge-purple' : 'badge-blue'}">${r.plataforma}</span></td>
     <td class="col-atendidoPor ellip muted" style="font-size:12px;">${r.atendidoPor}</td>
@@ -3446,7 +3456,7 @@ function viewDetail(idx) {
     document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
     <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidaci\u00f3n':'Preliquidaci\u00f3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)">${_prop}</div></div>
     <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; VALIDADA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div></div>
-    <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
+    <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${stripAloj(r.alojamiento)}</div></div>
     <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
     <div><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
     <div><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
@@ -3555,7 +3565,7 @@ function renderConsolGrid() {
       <div class="aloj-card ${a.allVal ? 'ready' : 'pending'}" onclick="viewConsolDetail('${a.name.replace(/'/g, "\\'")}')">
         ${rankBadge}
         <div class="aloj-semaforo">${a.allVal ? '&#128994;' : '&#128992;'}</div>
-        <div class="aloj-name" ${showRank?'style="padding-left:28px;"':''}>${a.name}</div>
+        <div class="aloj-name" ${showRank?'style="padding-left:28px;"':''}>${stripAloj(a.name)}</div>
         <div class="aloj-edificio">${a.edificio}</div>
         <div class="aloj-stats">
           <div><div class="aloj-stat-label">Reservas</div><div class="aloj-stat-value">${a.total}</div></div>
@@ -3977,7 +3987,7 @@ function viewConsolDetail(alojName) {
         <div class="header-top">
           <div>
             <div class="type">Liquidación Mensual Consolidada</div>
-            <div class="name">${a.name}</div>
+            <div class="name">${stripAloj(a.name)}</div>
           </div>
           <div>${allVal?'<span class="badge-liq badge-liq-green">&#10003; LISTA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div>
         </div>
@@ -4170,7 +4180,7 @@ function buildPrintCards() {
       <div class="liq-header">
         <div class="header-top"><div><div class="type">Liquidación ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div></div>
         <div class="liq-meta">
-          <div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
+          <div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${stripAloj(r.alojamiento)}</div></div>
           <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
           <div><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
           <div><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
@@ -4202,7 +4212,7 @@ function buildPrintCards() {
   const _pAdjLiq = _pAdjSub - _pAdjRet + _pAdjIva;
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-header">
-      <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
+      <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${stripAloj(a.name)}</div></div></div>
       <div class="liq-meta">
         <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${a.edificio}</div></div>
         <div><div class="liq-meta-label">Nº Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
@@ -4650,7 +4660,7 @@ function renderComboList(id, query) {
   } else {
     filtered.forEach(item => {
       const isChecked = sel.has(item);
-      let label = item;
+      let label = id === 'aloj' ? stripAloj(item) : item;
       if (q) {
         const idx = item.toLowerCase().indexOf(q);
         if (idx >= 0) label = item.slice(0, idx) + '<span class="match">' + item.slice(idx, idx + q.length) + '</span>' + item.slice(idx + q.length);
@@ -4693,7 +4703,7 @@ function updateComboDisplay(id) {
     input.placeholder = comboLabels[id];
     wrap.classList.remove('has-value');
   } else if (sel.size === 1) {
-    input.value = [...sel][0];
+    input.value = id === 'aloj' ? stripAloj([...sel][0]) : [...sel][0];
     wrap.classList.add('has-value');
   } else {
     const noun = id === 'platform' ? 'plataformas' : 'alojamientos';

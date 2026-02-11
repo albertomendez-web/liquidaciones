@@ -463,14 +463,14 @@ tr.ce-highlighted { background:#fffdf5; }
     <span class="sync-text">Sincronizado</span>
   </div>
   <div class="sidebar-footer" id="version-indicator" style="cursor:pointer;" onclick="showVersionInfo()" title="Info de versión">v<span id="version-label"></span></div>
-  <div style="padding:0 24px 12px; font-size:11px;"><a href="#" onclick="event.preventDefault();showChangelog()" style="color:rgba(255,255,255,0.4);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">ðŸ“‹ Historial de cambios</a></div>
+  <div style="padding:0 24px 12px; font-size:11px;"><a href="#" onclick="event.preventDefault();showChangelog()" style="color:rgba(255,255,255,0.4);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">📋 Historial de cambios</a></div>
 </div>
 
 <!-- Changelog Modal -->
 <div class="changelog-overlay" id="changelog-overlay" onclick="if(event.target===this)closeChangelog()">
   <div class="changelog-modal">
     <div class="changelog-header">
-      <h3>ðŸ“‹ Historial de versiones</h3>
+      <h3>📋 Historial de versiones</h3>
       <button onclick="closeChangelog()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;padding:4px;">&times;</button>
     </div>
     <div class="changelog-body" id="changelog-body"></div>
@@ -478,10 +478,10 @@ tr.ce-highlighted { background:#fffdf5; }
 </div>
 
 <!-- AI Assistant -->
-<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" title="Asistente Histórico Reservas">ðŸ¤–<span class="fab-badge" id="ai-badge"></span></button>
+<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" title="Asistente Histórico Reservas">🤖<span class="fab-badge" id="ai-badge"></span></button>
 <div class="ai-panel" id="ai-panel">
   <div class="ai-header">
-    <span style="font-size:20px;">ðŸ¤–</span>
+    <span style="font-size:20px;">🤖</span>
     <h3>Asistente Histórico Reservas</h3>
     <button class="ai-close" onclick="toggleAIPanel()">&times;</button>
   </div>
@@ -756,11 +756,25 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.9';
-const APP_BUILD   = '2026-02-11T20:50:00+01:00';
-const APP_CHANGES = 'v199: Fix UTF-8 + MG name matching + extras restan + dropdown MG';
+const APP_VERSION = '2.0.1';
+const APP_BUILD   = '2026-02-11T21:45:00+01:00';
+const APP_CHANGES = 'v201: Conceptos Adicionales por reserva (CA) en preliquidaciones';
 
 const CHANGELOG = [
+  { version: '2.0.1', date: '2026-02-11T21:45:00+01:00', changes: [
+    'Nuevo: Conceptos Adicionales (CA) por reserva en preliquidaciones',
+    'CA: panel inline con + Añadir concepto después de Pasarela de pago',
+    'CA: se restan del Subtotal junto con limpieza/amenities/pasarela',
+    'CA: persistencia en pestaña Configuración de Google Sheets',
+    'CA: visible en vista detalle, impresión y consolidado'
+  ]},
+  { version: '2.0.0', date: '2026-02-11T21:20:00+01:00', changes: [
+    'Fix: extras MG se restan al mismo nivel que limpieza/amenities/pasarela para formar el Subtotal',
+    'Fix: extras MG muestran importe en rojo a la derecha como las demás deducciones',
+    'Fix: emojis corruptos restaurados (🤖 asistente, 📋 historial, 🚀 badge)',
+    'Mantenimiento siempre último antes de Subtotal liquidación',
+    'El 80/20 se aplica sobre el Subtotal ya reducido por extras'
+  ]},
   { version: '1.9.9', date: '2026-02-11T20:50:00+01:00', changes: [
     'Fix codificación UTF-8: corregidos 223 caracteres con doble codificación',
     'Fix: MG no se detectaba por desajuste de nombres (prefijo Homity)',
@@ -973,7 +987,7 @@ function showVersionToast(prevVersion) {
   toast.id = 'version-toast';
   toast.innerHTML = `
     <div style="display:flex;align-items:flex-start;gap:12px;">
-      <span style="font-size:22px;line-height:1;">ðŸš€</span>
+      <span style="font-size:22px;line-height:1;">🚀</span>
       <div style="flex:1;min-width:0;">
         <div style="font-weight:700;font-size:14px;margin-bottom:6px;">Actualización v${APP_VERSION}</div>
         ${changesList}${moreCount}
@@ -1696,7 +1710,8 @@ function buildReservaConfigRows(indices) {
       s.irpf !== undefined ? s.irpf : '',
       s.pasarela ? 'true' : 'false',
       s.pasarelaRate !== undefined ? s.pasarelaRate : '',
-      (s.conceptosEspeciales && s.conceptosEspeciales.length > 0) ? JSON.stringify(s.conceptosEspeciales) : ''
+      (s.conceptosEspeciales && s.conceptosEspeciales.length > 0) ? JSON.stringify(s.conceptosEspeciales) : '',
+      (s.conceptosAdicionales && s.conceptosAdicionales.length > 0) ? JSON.stringify(s.conceptosAdicionales) : ''
     ]);
   });
   return rows;
@@ -1713,7 +1728,7 @@ function buildFullConfigTabData() {
   globalRows.forEach(function(row) { data.push(row); });
   data.push([]);
   data.push(['AJUSTES POR RESERVA']);
-  data.push(['ID Reserva', 'comPlataforma', 'comGTC', 'limpieza', 'amenities', 'irpf', 'pasarela', 'pasarelaRate', 'conceptosEspeciales']);
+  data.push(['ID Reserva', 'comPlataforma', 'comGTC', 'limpieza', 'amenities', 'irpf', 'pasarela', 'pasarelaRate', 'conceptosEspeciales', 'conceptosAdicionales']);
   var reservaRows = buildReservaConfigRows();
   reservaRows.forEach(function(row) { data.push(row); });
   return data;
@@ -1853,6 +1868,7 @@ function applyConfigFromRows(rows) {
     var paCol = colMap['pasarela'];
     var prCol = colMap['pasarelaRate'];
     var ceCol = colMap['conceptosEspeciales'];
+    var caCol = colMap['conceptosAdicionales'];
 
     var reservaMap = {};
     allReservas.forEach(function(r) { reservaMap[r.id] = r.idx; });
@@ -1875,6 +1891,7 @@ function applyConfigFromRows(rows) {
       if (paCol !== undefined) { var v = rows[i][paCol]; if (v !== undefined && v !== '') s.pasarela = String(v).trim() === 'true'; }
       if (prCol !== undefined) { var v = rows[i][prCol]; if (v !== undefined && v !== '') s.pasarelaRate = parseFloat(v); }
       if (ceCol !== undefined) { var v = String(rows[i][ceCol] || '').trim(); if (v) { try { var parsed = JSON.parse(v); if (Array.isArray(parsed)) s.conceptosEspeciales = parsed.filter(function(item){return item && typeof item.amount === 'number';}); } catch(e) {} } }
+      if (caCol !== undefined) { var v = String(rows[i][caCol] || '').trim(); if (v) { try { var parsed = JSON.parse(v); if (Array.isArray(parsed)) s.conceptosAdicionales = parsed.filter(function(item){return item && typeof item.amount === 'number';}); } catch(e) {} } }
 
       applied++;
     }
@@ -2236,24 +2253,31 @@ function calcLiquidacion(r, s) {
   const limp = s.limpieza !== undefined ? s.limpieza : cleaningOptions[0];
   const rawAmen = s.amenities;
   const amen = (rawAmen !== undefined && !isNaN(rawAmen)) ? rawAmen : amenitiesOptions[0];
-  const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
-  // Mínimo garantizado: Subtotal â†’ 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación
+  // Conceptos Adicionales por reserva (restan del Subtotal)
+  const ca = (s.conceptosAdicionales && s.conceptosAdicionales.length > 0) ? s.conceptosAdicionales : [];
+  const caTotal = ca.reduce(function(sum, item) { return sum + (item.amount || 0); }, 0);
+  // MG extras se restan al mismo nivel que limp/amen/pasarela para formar el Subtotal
   const mg = getMinimoGarantizado(r.alojamiento);
-  let subFinal = sub, mgPct = 0, mgContrato = 0, mgSubAdj = 0, mgMaint = 0, mgExtras = 0;
   const isMG = !!(mg && mg.enabled);
+  let mgExtras = 0;
+  if (isMG) {
+    var extras = getConsolExtras(r.alojamiento);
+    mgExtras = extras.reduce(function(s,e){ return s + (e.amount || 0); }, 0);
+  }
+  const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen - caTotal - mgExtras;
+  let subFinal = sub, mgPct = 0, mgContrato = 0, mgSubAdj = 0, mgMaint = 0;
   if (isMG) {
     mgPct = mg.pct / 100;
     mgContrato = sub * (1 - mgPct); // 20% contrato GTC
     mgSubAdj = sub * mgPct;         // 80% subtotal ajustado
     var maint = getConsolMaint(r.alojamiento);
     mgMaint = (maint.enabled && maint.amount > 0) ? maint.amount : 0;
-    var extras = getConsolExtras(r.alojamiento);
-    mgExtras = extras.reduce(function(s,e){ return s + (e.amount || 0); }, 0);
-    subFinal = mgSubAdj - mgMaint - mgExtras;
+    subFinal = mgSubAdj - mgMaint;
   }
+
   const irpfRate = s.irpf !== undefined ? s.irpf : irpfOptions[0]/100;
   const iva = subFinal * IVA_SUBTOTAL, ret = subFinal * irpfRate;
-  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, subFinal, mgPct, mgContrato, mgSubAdj, mgMaint, mgExtras, isMG, iva, irpfRate, ret, totalLiq: subFinal + iva - ret };
+  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, caTotal, sub, subFinal, mgPct, mgContrato, mgSubAdj, mgMaint, mgExtras, isMG, iva, irpfRate, ret, totalLiq: subFinal + iva - ret };
 }
 
 // \u2500\u2500\u2500 FILE \u2500\u2500\u2500
@@ -2334,6 +2358,7 @@ function processRows(json) {
       limpieza: cleaningOptions[0], amenities: amenitiesOptions[0], irpf: irpfOptions[0]/100, pasarela: false,
       pasarelaRate: isB ? pasarelaBookingOptions[0]/100 : pasarelaStripeOptions[0]/100,
       conceptosEspeciales: [],
+      conceptosAdicionales: [],
     };
   });
 
@@ -2905,6 +2930,60 @@ function _refreshCEPanel(idx, view) {
   if (labels.length > 0) labels[labels.length - 1].focus();
 }
 
+// === Conceptos Adicionales (CA) por reserva ===
+function _refreshDetailAfterCA(idx) {
+  var oldC = getLiq(allReservas[idx]);
+  invalidateCache(idx);
+  var newC = getLiq(allReservas[idx]);
+  if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
+  // Patch main table row cells
+  var mainRow = document.getElementById('row-' + idx);
+  if (mainRow) {
+    var liqCel = mainRow.querySelector('.col-totalLiquidar');
+    if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' &#8364;';
+    var subCel = mainRow.querySelector('.col-subtotal');
+    if (subCel) subCel.innerHTML = fmt(newC.sub) + ' &#8364;';
+  }
+  // Update footer stats
+  var st = _cachedFilteredStats;
+  if (st && oldC && newC) {
+    st.fL += (newC.totalLiq - oldC.totalLiq);
+    st.tLiq += (newC.totalLiq - oldC.totalLiq);
+    st.tSub += (newC.sub - oldC.sub);
+    _renderStatsFromCache(_lastFiltered, st);
+  }
+  scheduleReservaConfigSave(idx);
+  // Re-render the detail panel
+  var detRow = document.getElementById('detail-row-' + idx);
+  if (detRow && detRow.style.display !== 'none') {
+    toggleDetail(idx, true);
+  }
+}
+
+function addCAItem(idx) {
+  var s = settings[idx]; if (!s) return;
+  if (!s.conceptosAdicionales) s.conceptosAdicionales = [];
+  s.conceptosAdicionales.push({label:'', amount:0});
+  _refreshDetailAfterCA(idx);
+}
+
+function removeCAItem(idx, itemIdx) {
+  var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
+  s.conceptosAdicionales.splice(itemIdx, 1);
+  _refreshDetailAfterCA(idx);
+}
+
+function updateCAItem(idx, itemIdx, field, rawVal) {
+  var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
+  var item = s.conceptosAdicionales[itemIdx]; if (!item) return;
+  if (field === 'amount') {
+    item.amount = parseFmt(rawVal);
+  } else {
+    item[field] = rawVal;
+  }
+  _refreshDetailAfterCA(idx);
+}
+
 function _renderFull() {
   const fil = getFilteredSorted();
   _lastFiltered = fil;
@@ -3415,6 +3494,18 @@ function viewDetail(idx) {
   } else if(c.comPas > 0) {
     rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
   }
+  // Conceptos Adicionales por reserva (después de Pasarela, restan del Subtotal)
+  const caItems = s.conceptosAdicionales || [];
+  if(caItems.length > 0 || !isV) {
+    if(!isV) {
+      caItems.forEach((ca, ci) => {
+        rows.push({custom:true, neg:true, v:-(ca.amount||0), l:`<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(ca.label||'').replace(/"/g,'&quot;')}" onchange="updateCAItem(${r.idx},${ci},'label',this.value)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(ca.amount||0)}" onchange="updateCAItem(${r.idx},${ci},'amount',this.value)" /><span class="ce-del" onclick="removeCAItem(${r.idx},${ci})">&#215;</span></div>`});
+      });
+      rows.push({custom:true, l:`<div class="ce-add-link no-print" onclick="addCAItem(${r.idx})">+ A\u00f1adir concepto</div>`});
+    } else {
+      caItems.forEach((ca) => { if(ca.amount > 0) rows.push({l:ca.label||'Concepto',v:-ca.amount,neg:true}); });
+    }
+  }
   // Maintenance row (per-alojamiento) â€” only for NON mínimo garantizado
   const maint = getConsolMaint(r.alojamiento);
   const escAloj = r.alojamiento.replace(/'/g, "\\'");
@@ -3436,7 +3527,7 @@ function viewDetail(idx) {
     if(extras.length > 0 || !isV) {
       if(!isV) {
         extras.forEach((ex, ei) => {
-          rows.push({custom:true, l:`<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(ex.label||'').replace(/"/g,'&quot;')}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'label',this.value,${idx})" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(ex.amount||0)}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'amount',this.value,${idx})" /><span class="ce-del" onclick="removeConsolExtraDetail('${escAloj}',${ei},${idx})">&#215;</span></div>`});
+          rows.push({custom:true, neg:true, v:-(ex.amount||0), l:`<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(ex.label||'').replace(/"/g,'&quot;')}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'label',this.value,${idx})" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(ex.amount||0)}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'amount',this.value,${idx})" /><span class="ce-del" onclick="removeConsolExtraDetail('${escAloj}',${ei},${idx})">&#215;</span></div>`});
         });
         rows.push({custom:true, l:`<div class="ce-add-link no-print" onclick="addConsolExtraDetailInline('${escAloj}',${idx})">+ A\u00f1adir concepto</div>`});
       } else {
@@ -3467,7 +3558,10 @@ function viewDetail(idx) {
   const irpfSelHtml = isV ? `Retenci&#243;n IRPF (${(c.irpfRate*100).toFixed(0)}%)`
     : `Retenci&#243;n IRPF ` + _sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true);
   let rH=rows.map(row=>{if(row.div)return'<div class="liq-divider"></div>';
-    if(row.custom||row.leftcustom)return`<div class="liq-row"><span>${row.l}</span></div>`;
+    if(row.custom||row.leftcustom){
+      if(row.v !== undefined && row.v !== 0) { const vc=row.neg?'neg':''; const d=row.v<0?`- ${fmt(Math.abs(row.v))}`:fmt(row.v); return`<div class="liq-row"><span>${row.l}</span><span class="${vc}">${d} &#8364;</span></div>`; }
+      return`<div class="liq-row"><span>${row.l}</span></div>`;
+    }
     const cl=row.bold?' bold':'';const vc=row.neg?'neg':row.pos?'pos':'';
     const d=row.v<0?`- ${fmt(Math.abs(row.v))}`:fmt(row.v);
     const label=row.irpf?irpfSelHtml:row.l;
@@ -3889,6 +3983,7 @@ function viewConsolDetail(alojName) {
   const sumComPas = calcs.reduce((s, x) => s + x.c.comPas, 0);
   const sumLimp = calcs.reduce((s, x) => s + x.c.limp, 0);
   const sumAmen = calcs.reduce((s, x) => s + x.c.amen, 0);
+  const sumCA = calcs.reduce((s, x) => s + (x.c.caTotal || 0), 0);
   const sumSub = calcs.reduce((s, x) => s + x.c.sub, 0);
   const sumSubFinal = calcs.reduce((s, x) => s + x.c.subFinal, 0);
   const _isMG = calcs.length > 0 && calcs[0].c.isMG;
@@ -4070,6 +4165,8 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
         <div class="consol-row"><span>Amenities</span><span class="neg">- ${fmt(sumAmen)} &#8364;</span></div>
         <div class="consol-divider"></div>
         ${buildPasarelaRows(calcs)}
+        ${sumCA > 0 ? `<div class="consol-row"><span>Conceptos adicionales</span><span class="neg">- ${fmt(sumCA)} &#8364;</span></div>` : ''}
+        ${_isMG && sumMgExtras > 0 ? `<div class="consol-row"><span>Conceptos adicionales (MG)</span><span class="neg">- ${fmt(sumMgExtras)} &#8364;</span></div>` : ''}
         <div class="consol-divider"></div>
         <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(sumSub)} &#8364;</span></div>
         ${_isMG ? `
@@ -4077,7 +4174,6 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
             <span style="color:#f57f17;font-weight:600;">${((1-calcs[0].c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span>
             <span class="neg" style="font-weight:600;">- ${fmt(sumMgContrato)} &#8364;</span></div>
           <div class="consol-subtotal" style="background:#fffdf5;border-left:3px solid #f59e0b;"><span>Subtotal ajustado (${(calcs[0].c.mgPct*100).toFixed(0)}%)</span><span>${fmt(sumMgSubAdj)} &#8364;</span></div>
-          ${sumMgExtras > 0 ? `<div class="consol-row"><span>Conceptos adicionales</span><span class="neg">- ${fmt(sumMgExtras)} &#8364;</span></div>` : ''}
           ${sumMgMaint > 0 ? `<div class="consol-row"><span>Mantenimiento</span><span class="neg">- ${fmt(sumMgMaint)} &#8364;</span></div>` : ''}
           <div class="consol-divider"></div>
           <div class="consol-subtotal" style="background:#f0fdf4;border-left:3px solid #16a34a;"><span>Subtotal liquidación</span><span>${fmt(sumSubFinal)} &#8364;</span></div>
@@ -4183,12 +4279,16 @@ function buildPrintCards() {
       {l:`Limpieza (${fmt(c.limp)} \u20AC)`,v:-c.limp,neg:true},
       {l:`Amenities (${fmt(c.amen)} \u20AC)`,v:-c.amen,neg:true},{div:true},
     ];
-    if(s.pasarela) rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true},{div:true});
+    if(s.pasarela) rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
+    // Conceptos Adicionales por reserva (print)
+    const caP = s.conceptosAdicionales || [];
+    caP.forEach(function(ca) { if(ca.amount > 0) rows.push({l:ca.label||'Concepto',v:-ca.amount,neg:true}); });
+    if(c.isMG && c.mgExtras > 0) rows.push({l:'Conceptos adicionales',v:-c.mgExtras,neg:true});
+    rows.push({div:true});
     rows.push({l:"Subtotal",v:c.sub,bold:true});
     if(c.isMG) {
       rows.push({l:`${((1-c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC`,v:-c.mgContrato,neg:true});
       rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true});
-      if(c.mgExtras > 0) rows.push({l:'Conceptos adicionales',v:-c.mgExtras,neg:true});
       if(c.mgMaint > 0) rows.push({l:'Mantenimiento',v:-c.mgMaint,neg:true});
       rows.push({div:true},{l:"Subtotal liquidación",v:c.subFinal,bold:true});
     }
@@ -4253,7 +4353,6 @@ function buildPrintCards() {
       ${_isMGP ? `
         <div class="liq-row" style="color:#f57f17;font-weight:600;"><span>${((1-calcs[0].c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span><span class="neg">- ${fmt(sumMgContratoP)} &#8364;</span></div>
         <div class="liq-row bold"><span>Subtotal ajustado (${(calcs[0].c.mgPct*100).toFixed(0)}%)</span><span>${fmt(sumMgSubAdjP)} &#8364;</span></div>
-        ${sumMgExtrasP > 0 ? `<div class="liq-row"><span>Conceptos adicionales</span><span class="neg">- ${fmt(sumMgExtrasP)} &#8364;</span></div>` : ''}
         ${sumMgMaintP > 0 ? `<div class="liq-row"><span>Mantenimiento</span><span class="neg">- ${fmt(sumMgMaintP)} &#8364;</span></div>` : ''}
         <div class="liq-divider"></div>
         <div class="liq-row bold"><span>Subtotal liquidación</span><span>${fmt(sumSubFinalP)} &#8364;</span></div>
@@ -4929,7 +5028,7 @@ function buildAIContext() {
   var total = allReservas.length;
   var byAloj = {}, byPlat = {}, byMes = {}, byEdificio = {}, byAtendido = {}, byTipo = {};
   var sumImporte = 0, sumLiq = 0, sumNoches = 0, sumBase = 0;
-  var sumComPlat = 0, sumComGTC = 0, sumLimp = 0, sumAmen = 0, sumPas = 0, sumCE = 0;
+  var sumComPlat = 0, sumComGTC = 0, sumLimp = 0, sumAmen = 0, sumPas = 0, sumCE = 0, sumCACtx = 0;
   var numVal = 0, numPend = 0;
 
   allReservas.forEach(function(r) {
@@ -4937,7 +5036,7 @@ function buildAIContext() {
     var n = r._nights || 0;
     sumImporte += c.total; sumLiq += c.totalLiq; sumNoches += n;
     sumBase += c.baseSinIVA; sumComPlat += c.comPlat; sumComGTC += c.comGTC;
-    sumLimp += c.limp; sumAmen += c.amen; sumPas += c.comPas; sumCE += c.ceTotal;
+    sumLimp += c.limp; sumAmen += c.amen; sumPas += c.comPas; sumCE += c.ceTotal; sumCACtx += (c.caTotal || 0);
     if (validated.has(r.idx)) numVal++; else numPend++;
 
     var a = r.alojamiento || 'Sin alojamiento';
@@ -4979,6 +5078,7 @@ function buildAIContext() {
   ctx += 'Limpieza total: ' + f(sumLimp) + ' EUR\n';
   ctx += 'Amenities total: ' + f(sumAmen) + ' EUR\n';
   ctx += 'Pasarela total: ' + f(sumPas) + ' EUR\n';
+  ctx += 'Conceptos Adicionales total: ' + f(sumCACtx) + ' EUR\n';
   ctx += 'Conceptos Especiales total: ' + f(sumCE) + ' EUR\n';
   ctx += 'Total a liquidar: ' + f(sumLiq) + ' EUR\n\n';
 

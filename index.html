@@ -768,19 +768,19 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '2.0.4';
-const APP_BUILD   = '2026-02-12T13:15:00+01:00';
-const APP_CHANGES = 'v204: Fix sync CA entre vista detalle y tabla + Fix MG duplicados + Encoding';
+const APP_VERSION = '2.0.5';
+const APP_BUILD   = '2026-02-12T13:45:00+01:00';
+const APP_CHANGES = 'v205: Fix CA pierde precio al añadir/borrar concepto en vista detalle';
 
 const CHANGELOG = [
-  { version: '2.0.4', date: '2026-02-12T13:15:00+01:00', changes: [
-    'Fix: CA sincronizado entre vista detalle ↔ tabla (cambios se reflejan en ambas)',
-    'Fix: editar CA en tabla ahora refresca vista detalle si está abierta',
-    'Fix: editar CA en detalle ahora refresca panel CA de tabla si está abierto',
-    'Fix: añadir CA en tabla ahora persiste y sincroniza con detalle',
-    'Fix: botón ⚙ configuración - renderMingarTab duplicada + toggleMGEnabled',
-    'Fix: MG duplicados - getMinimoGarantizado compara nombres stripped',
-    'Fix: encoding UTF-8 completo - 199+ líneas corregidas'
+  { version: '2.0.5', date: '2026-02-12T13:45:00+01:00', changes: [
+    'Fix: CA perdía precio al añadir/borrar concepto — flush de valores DOM antes de re-render',
+    'Fix: addCAItem y removeCAItem leen inputs pendientes del DOM antes de modificar array',
+    'Fix: MG duplicados — deduplicación por stripAloj al cargar config desde Sheets',
+    'Fix: CA sincronizado bidireccional entre vista detalle ↔ tabla ↔ consolidado',
+    'Fix: botón ⚙ no abría modal — renderMingarTab duplicada + toggleMGEnabled huérfano',
+    'Fix: encoding UTF-8 completo — 199+ líneas con doble codificación cp1252 corregidas',
+    'Fix: gear-btn tamaño fijo 34px, inline-flex, sin estiramiento en flex'
   ]},
   { version: '2.0.3', date: '2026-02-12T01:15:00+01:00', changes: [
     'CA: celda footer con total Conceptos Adicionales en tabla principal',
@@ -1935,6 +1935,25 @@ function applyConfigFromRows(rows) {
     }
     console.log('[Config] Applied per-reservation settings: ' + applied + ' reservas');
   }
+
+  // Deduplicate mínimo garantizado entries by stripped name (fix legacy duplicates)
+  var _mgSeen = {};
+  Object.keys(_minimoGarantizado).forEach(function(k) {
+    var stripped = stripAloj(k);
+    if (_mgSeen[stripped]) {
+      // Keep the one with the longer key (full name) or the first one seen
+      var existing = _mgSeen[stripped];
+      if (k.length > existing.length) {
+        delete _minimoGarantizado[existing];
+        _mgSeen[stripped] = k;
+      } else {
+        delete _minimoGarantizado[k];
+      }
+    } else {
+      _mgSeen[stripped] = k;
+    }
+  });
+  console.log('[Config] MG after dedup: ' + Object.keys(_minimoGarantizado).length + ' alojamientos');
 
   // Initialize known mínimo garantizado alojamientos if not yet in config
   var _defaultMG = ['MA-2-P2-1A','MA-2-P3-1C','MA-2-P3-1D','MA-2-P3-1E','MA-2-P4-1C','MG-2-0D'];
@@ -3202,12 +3221,42 @@ function _refreshDetailAfterCA(idx) {
 function addCAItem(idx) {
   var s = settings[idx]; if (!s) return;
   if (!s.conceptosAdicionales) s.conceptosAdicionales = [];
+  // Flush any pending input values from DOM before re-render
+  var detailEl = document.getElementById('screen-detail');
+  if (detailEl) {
+    var caInputs = detailEl.querySelectorAll('.ce-item-row');
+    caInputs.forEach(function(row, i) {
+      if (i >= (s.conceptosAdicionales || []).length) return;
+      var lbl = row.querySelector('.ce-inp-label');
+      var amt = row.querySelector('.ce-inp-amt');
+      if (lbl) s.conceptosAdicionales[i].label = lbl.value;
+      if (amt) {
+        var v = parseFloat(String(amt.value).replace(/\./g,'').replace(',','.'));
+        if (!isNaN(v)) s.conceptosAdicionales[i].amount = v;
+      }
+    });
+  }
   s.conceptosAdicionales.push({label:'', amount:0});
   _refreshDetailAfterCA(idx);
 }
 
 function removeCAItem(idx, itemIdx) {
   var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
+  // Flush pending input values from DOM before re-render
+  var detailEl = document.getElementById('screen-detail');
+  if (detailEl) {
+    var caInputs = detailEl.querySelectorAll('.ce-item-row');
+    caInputs.forEach(function(row, i) {
+      if (i >= s.conceptosAdicionales.length) return;
+      var lbl = row.querySelector('.ce-inp-label');
+      var amt = row.querySelector('.ce-inp-amt');
+      if (lbl) s.conceptosAdicionales[i].label = lbl.value;
+      if (amt) {
+        var v = parseFloat(String(amt.value).replace(/\./g,'').replace(',','.'));
+        if (!isNaN(v)) s.conceptosAdicionales[i].amount = v;
+      }
+    });
+  }
   s.conceptosAdicionales.splice(itemIdx, 1);
   _refreshDetailAfterCA(idx);
 }

@@ -3430,15 +3430,9 @@ function viewDetail(idx) {
     } else if(maint.enabled && maint.amount > 0) {
       rows.push({l:'Mantenimiento',v:-maint.amount,neg:true});
     }
-  }
-  // Subtotal
-  rows.push({div:true},{l:"Subtotal",v:c.sub,bold:true});
-  if(c.isMG) {
+  } else {
+    // MG: extras entre Pasarela y Subtotal
     const extras = getConsolExtras(r.alojamiento);
-    // 20% Contrato Compraventa GTC -> Subtotal ajustado (80%) -> Mantenimiento -> Extras -> Subtotal liquidación
-    rows.push({l:`<span style="color:#f57f17;font-weight:600;">${((1-c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span>`,v:-c.mgContrato,neg:true,mgHighlight:true});
-    rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true,mgAdj:true});
-    // Extras (conceptos adicionales MG) - antes de mantenimiento
     if(extras.length > 0 || !isV) {
       if(!isV) {
         extras.forEach((ex, ei) => {
@@ -3449,7 +3443,13 @@ function viewDetail(idx) {
         extras.forEach((ex) => { rows.push({l:ex.label,v:-ex.amount,neg:true}); });
       }
     }
-    // Mantenimiento siempre último
+  }
+  // Subtotal
+  rows.push({div:true},{l:"Subtotal",v:c.sub,bold:true});
+  if(c.isMG) {
+    rows.push({l:`<span style="color:#f57f17;font-weight:600;">${((1-c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span>`,v:-c.mgContrato,neg:true,mgHighlight:true});
+    rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true,mgAdj:true});
+    // Mantenimiento siempre último antes de Subtotal liquidación
     if(!isV) {
       const chkM = `<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid ${maint.enabled?'#16a34a':'#d1d5db'};background:${maint.enabled?'#16a34a':'#fff'};color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaintDetail('${escAloj}',${idx})">${maint.enabled?'&#10003;':''}</span>`;
       const selMM = maint.enabled ? ` <select class="sel no-print" onchange="changeConsolMaintAmountDetail('${escAloj}',this.value,${idx})" style="font-size:12px;padding:3px 6px;">${maintSelOpts}</select>` : '';

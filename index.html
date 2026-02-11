@@ -34,7 +34,7 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .cl-date { font-size:12px; color:#9ca3af; }
 .cl-changes { list-style:none; padding:0; margin:0; }
 .cl-changes li { font-size:13px; color:#4b5563; padding:3px 0 3px 18px; position:relative; line-height:1.5; }
-.cl-changes li::before { content:'•'; position:absolute; left:4px; color:#4f8cff; font-weight:700; }
+.cl-changes li::before { content:'â€¢'; position:absolute; left:4px; color:#4f8cff; font-weight:700; }
 .main { margin-left: 250px; padding: 32px 40px; min-height: 100vh; }
 .card { background: #fff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); padding: 28px 32px; margin-bottom: 24px; }
 .upload-wrap { display: flex; align-items: center; justify-content: center; min-height: 70vh; }
@@ -188,7 +188,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-mini-table tbody tr:hover td { background: #eef3ff; }
 .consol-mini-table .ellip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
 
-/* LIQUIDACIÓN INDIVIDUAL */
+/* LIQUIDACIÃ“N INDIVIDUAL */
 .liq-container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
 .liq-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color: #fff; padding: 36px 40px; }
 .liq-header .type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 4px; }
@@ -463,14 +463,14 @@ tr.ce-highlighted { background:#fffdf5; }
     <span class="sync-text">Sincronizado</span>
   </div>
   <div class="sidebar-footer" id="version-indicator" style="cursor:pointer;" onclick="showVersionInfo()" title="Info de versión">v<span id="version-label"></span></div>
-  <div style="padding:0 24px 12px; font-size:11px;"><a href="#" onclick="event.preventDefault();showChangelog()" style="color:rgba(255,255,255,0.4);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">📋 Historial de cambios</a></div>
+  <div style="padding:0 24px 12px; font-size:11px;"><a href="#" onclick="event.preventDefault();showChangelog()" style="color:rgba(255,255,255,0.4);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">ðŸ“‹ Historial de cambios</a></div>
 </div>
 
 <!-- Changelog Modal -->
 <div class="changelog-overlay" id="changelog-overlay" onclick="if(event.target===this)closeChangelog()">
   <div class="changelog-modal">
     <div class="changelog-header">
-      <h3>📋 Historial de versiones</h3>
+      <h3>ðŸ“‹ Historial de versiones</h3>
       <button onclick="closeChangelog()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;padding:4px;">&times;</button>
     </div>
     <div class="changelog-body" id="changelog-body"></div>
@@ -478,10 +478,10 @@ tr.ce-highlighted { background:#fffdf5; }
 </div>
 
 <!-- AI Assistant -->
-<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" title="Asistente Histórico Reservas">🤖<span class="fab-badge" id="ai-badge"></span></button>
+<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" title="Asistente Histórico Reservas">ðŸ¤–<span class="fab-badge" id="ai-badge"></span></button>
 <div class="ai-panel" id="ai-panel">
   <div class="ai-header">
-    <span style="font-size:20px;">🤖</span>
+    <span style="font-size:20px;">ðŸ¤–</span>
     <h3>Asistente Histórico Reservas</h3>
     <button class="ai-close" onclick="toggleAIPanel()">&times;</button>
   </div>
@@ -691,7 +691,7 @@ tr.ce-highlighted { background:#fffdf5; }
       <div class="filter-sep"></div>
       <label>Ordenar por</label>
       <div class="combo" id="combo-consolsort" style="min-width:190px;">
-        <input class="combo-input" type="text" placeholder="Nombre A↑Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
+        <input class="combo-input" type="text" placeholder="Nombre Aâ†‘Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
         <div class="combo-clear" onclick="clearSimpleCombo('consolsort')" title="Limpiar">&#10005;</div>
         <div class="combo-list" id="combo-list-consolsort"></div>
       </div>
@@ -731,9 +731,9 @@ tr.ce-highlighted { background:#fffdf5; }
 </div>
 
 <script>
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â
 // CONTROL DE VERSIONES
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â
 // \u2500\u2500\u2500 SEARCH \u2500\u2500\u2500
 function onSearchPreliq(val) {
   _searchText = val.trim().toLowerCase();
@@ -756,13 +756,20 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.8';
-const APP_BUILD   = '2026-02-11T18:51:00+01:00';
-const APP_CHANGES = 'v198: MG mockup completo + sin Homity + dropdown elegante';
+const APP_VERSION = '1.9.9';
+const APP_BUILD   = '2026-02-11T20:35:00+01:00';
+const APP_CHANGES = 'v199: Fix UTF-8 + Fix MG name matching (Homity prefix) + dropdown MG';
 
 const CHANGELOG = [
+  { version: '1.9.9', date: '2026-02-11T20:35:00+01:00', changes: [
+    'Fix codificación UTF-8: corregidos 223 caracteres con doble codificación',
+    'Fix: MG no se detectaba por desajuste de nombres (prefijo Homity)',
+    'Lookup de MG, Mantenimiento y Extras prueba nombre completo y sin prefijo',
+    'Parametrización MG: dropdown de alojamientos disponibles en vez de texto libre',
+    'Parametrización MG: muestra nombres sin prefijo Homity'
+  ]},
   { version: '1.9.8', date: '2026-02-11T18:51:00+01:00', changes: [
-    'MG completo: Subtotal → 20% Contrato Compraventa GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal liquidación → IRPF/IVA → Total',
+    'MG completo: Subtotal â†’ 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación â†’ IRPF/IVA â†’ Total',
     'Estilos visuales MG: fondo amarillo Contrato, borde ámbar Subtotal ajustado, borde verde Subtotal liquidación',
     'Extras compactos estilo CE con + Añadir concepto para alojamientos MG',
     'Mantenimiento con checkbox+selector dentro del flujo MG (después de Subtotal ajustado)',
@@ -771,7 +778,7 @@ const CHANGELOG = [
     'Dropdown alojamientos: una línea por nombre, ancho auto-expandible'
   ]},
   { version: '1.9.7', date: '2026-02-11T18:48:00+01:00', changes: [
-    'MG: flujo Subtotal → 20% Contrato Compraventa GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal liquidación → IRPF/IVA',
+    'MG: flujo Subtotal â†’ 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación â†’ IRPF/IVA',
     'Estilos visuales MG: fondo amarillo Contrato, borde ámbar ajustado, borde verde liquidación',
     'Extras compactos estilo CE con + Añadir concepto para alojamientos MG',
     'Quitar prefijo "Homity" de nombres de alojamientos en toda la app',
@@ -784,11 +791,11 @@ const CHANGELOG = [
     'Fix persistencia: save lock, beforeunload, amenities'
   ]},
   { version: '1.9.5', date: '2026-02-11T11:24:00+01:00', changes: [
-    'Detalle: mantenimiento sin checkbox ni selector — muestra solo el valor configurado',
+    'Detalle: mantenimiento sin checkbox ni selector â€” muestra solo el valor configurado',
     'Si el importe es 0 o desactivado en parametrización, no aparece la fila'
   ]},
   { version: '1.9.4', date: '2026-02-11T11:14:00+01:00', changes: [
-    'Detalle: pasarela en una sola fila — toggle inline junto al label y selector, sin salto',
+    'Detalle: pasarela en una sola fila â€” toggle inline junto al label y selector, sin salto',
     'Detalle: mantenimiento reubicado debajo de pasarela'
   ]},
   { version: '1.9.3', date: '2026-02-11T11:06:00+01:00', changes: [
@@ -801,25 +808,25 @@ const CHANGELOG = [
     'Sub-items se ocultan al volver a la vista principal',
     'Filtros de fecha independientes: Pre-liquidaciones y Por Alojamiento tienen fechas separadas',
     'Fix: editar importe en CE ya no pega salto (actualización directa de celdas)',
-    'Flechas ‹ › funcionan por vista independiente',
-    'Fix: Ordenar Por mostraba código unicode literal en vez de flecha ↑'
+    'Flechas â€¹ â€º funcionan por vista independiente',
+    'Fix: Ordenar Por mostraba código unicode literal en vez de flecha â†‘'
   ]},
   { version: '1.9.1', date: '2026-02-11T01:12:00+01:00', changes: [
     'CE: eliminar concepto con animación slide-out sin flash ni re-render',
     'CE: añadir concepto con animación slide-in + auto-focus',
-    'Texto: "Totales" → "Reservas Totales" en barra de totales'
+    'Texto: "Totales" â†’ "Reservas Totales" en barra de totales'
   ]},
   { version: '1.9.0', date: '2026-02-11T01:01:00+01:00', changes: [
     'Filtro de fecha multi-selección: selecciona varios años y meses simultáneamente',
     'Combinatoria libre: Ene+Feb de 2025+2026, o un mes en 3 años, etc.',
-    'Flechas ‹ › para navegar cuando hay selección simple (1 año o 1 año+mes)',
+    'Flechas â€¹ â€º para navegar cuando hay selección simple (1 año o 1 año+mes)',
     'Contador de reservas por mes agregado según años seleccionados',
-    'Fix: añadir concepto CE suave — inserta DOM sin re-render + animación slide-down',
-    'Texto: "Totales" → "Reservas Totales" en barra de totales'
+    'Fix: añadir concepto CE suave â€” inserta DOM sin re-render + animación slide-down',
+    'Texto: "Totales" â†’ "Reservas Totales" en barra de totales'
   ]},
   { version: '1.8.0', date: '2026-02-11T00:33:00+01:00', changes: [
     'Asistente Histórico Reservas: chat IA integrado con botón flotante y panel lateral',
-    'Responde solo con datos reales cargados — nunca inventa cifras ni nombres',
+    'Responde solo con datos reales cargados â€” nunca inventa cifras ni nombres',
     'Contexto completo: resúmenes por alojamiento, plataforma, mes, edificio, atendido por, tipo reserva',
     'Detalle por reserva: todos los campos del Sheet (ID, localizador, cliente, edificio, etc.)',
     'Desglose de liquidación: base, comisiones, limpieza, amenities, CE, pasarela, subtotal',
@@ -831,7 +838,7 @@ const CHANGELOG = [
     'Changelog muestra día, hora y segundos en horario Madrid (+01:00)',
     'Sidebar muestra hora real del deploy (primer acceso a la versión), no hora de build',
     'Meta tags anti-caché: navegador siempre pide versión fresca al servidor',
-    'Scrollbar permanente, fino (6px) y transparente — elimina sombra al abrir/cerrar CE',
+    'Scrollbar permanente, fino (6px) y transparente â€” elimina sombra al abrir/cerrar CE',
     'Fix: modal config no salta al cambiar de tab (posición fija arriba + min-height)'
   ]},
   { version: '1.7.4', date: '2026-02-10T08:30:00+01:00', changes: [
@@ -845,8 +852,8 @@ const CHANGELOG = [
     'Fix: micro-vibración DOM con overflow-anchor y DocumentFragment'
   ]},
   { version: '1.7.3', date: '2026-02-10T08:00:00+01:00', changes: [
-    'Renombrar "Plataforma" → "Canal de Venta" en cabeceras y detalle',
-    'Reordenar secciones: Canal de Venta → GTC/Limpieza → Pasarela → Impuestos',
+    'Renombrar "Plataforma" â†’ "Canal de Venta" en cabeceras y detalle',
+    'Reordenar secciones: Canal de Venta â†’ GTC/Limpieza â†’ Pasarela â†’ Impuestos',
     'Fix: salto de scroll al hacer click con pocos resultados filtrados',
     'Fix: IDs de panel CE corregidos en _patchSingleRow (ce-ppanel-)'
   ]},
@@ -856,7 +863,7 @@ const CHANGELOG = [
     'Toast de notificación de nueva versión al arrancar',
     'Filtro mes/año por defecto al mes y año actual',
     'Deducciones mensuales (mantenimiento + extras) antes del subtotal',
-    'Fix: limpieza e IRPF con valor 0€ no se aplicaban (bug falsy)',
+    'Fix: limpieza e IRPF con valor 0â‚¬ no se aplicaban (bug falsy)',
     'Fix: estilos consol-row mejorados'
   ]},
   { version: '1.7.1', date: '2026-02-09T19:30:00+01:00', changes: [
@@ -959,19 +966,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function showVersionToast(prevVersion) {
   const entry = CHANGELOG.find(c => c.version === APP_VERSION);
-  const changesList = entry ? entry.changes.slice(0, 4).map(c => `<div style="font-size:11px;color:#cbd5e1;padding:2px 0 2px 12px;position:relative;line-height:1.4;"><span style="position:absolute;left:2px;color:#4f8cff;">•</span>${c}</div>`).join('') : `<div style="font-size:12px;color:#cbd5e1;">${APP_CHANGES}</div>`;
+  const changesList = entry ? entry.changes.slice(0, 4).map(c => `<div style="font-size:11px;color:#cbd5e1;padding:2px 0 2px 12px;position:relative;line-height:1.4;"><span style="position:absolute;left:2px;color:#4f8cff;">â€¢</span>${c}</div>`).join('') : `<div style="font-size:12px;color:#cbd5e1;">${APP_CHANGES}</div>`;
   const moreCount = entry && entry.changes.length > 4 ? `<div style="font-size:11px;color:#64748b;margin-top:2px;">...y ${entry.changes.length - 4} más</div>` : '';
   const toast = document.createElement('div');
   toast.id = 'version-toast';
   toast.innerHTML = `
     <div style="display:flex;align-items:flex-start;gap:12px;">
-      <span style="font-size:22px;line-height:1;">🚀</span>
+      <span style="font-size:22px;line-height:1;">ðŸš€</span>
       <div style="flex:1;min-width:0;">
         <div style="font-weight:700;font-size:14px;margin-bottom:6px;">Actualización v${APP_VERSION}</div>
         ${changesList}${moreCount}
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
           <span style="font-size:11px;color:#64748b;">Anterior: v${prevVersion}</span>
-          <a href="#" onclick="event.preventDefault();closeVersionToast();showChangelog();" style="font-size:11px;color:#4f8cff;text-decoration:none;font-weight:600;">Ver historial completo →</a>
+          <a href="#" onclick="event.preventDefault();closeVersionToast();showChangelog();" style="font-size:11px;color:#4f8cff;text-decoration:none;font-weight:600;">Ver historial completo â†’</a>
         </div>
       </div>
       <button onclick="closeVersionToast()" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;padding:0;line-height:1;">&times;</button>
@@ -1006,7 +1013,7 @@ function showChangelog() {
       <div class="cl-version-header">
         <span class="cl-badge${isCurrent ? ' current' : ''}">v${v.version}</span>
         <span class="cl-date">${new Date(v.date).toLocaleDateString('es-ES', {day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Europe/Madrid'})}</span>
-        ${isCurrent ? '<span style="font-size:11px;color:#43a047;font-weight:600;">← actual</span>' : ''}
+        ${isCurrent ? '<span style="font-size:11px;color:#43a047;font-weight:600;">â† actual</span>' : ''}
       </div>
       <ul class="cl-changes">${items}</ul>
     </div>`;
@@ -1018,12 +1025,12 @@ function closeChangelog() {
   document.getElementById('changelog-overlay').style.display = 'none';
 }
 
-// \u2550\u2550\u2550 CONFIGURACIÓN GOOGLE \u2014 Sustituye con tus credenciales reales \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â CONFIGURACIÃ“N GOOGLE \u2014 Sustituye con tus credenciales reales \u2550Â\u2550Â\u2550Â
 const GOOGLE_CLIENT_ID = '658971789892-cnsnbr36hus5jablgkuj2qk8ipic5ptf.apps.googleusercontent.com';
 const GOOGLE_API_KEY   = 'AIzaSyAqn7NyL_QRC97KW-huBjzZjTLPGpEoT-k';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.readonly';
 
-// \u2550\u2550\u2550 GOOGLE STATE \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â GOOGLE STATE \u2550Â\u2550Â\u2550Â
 let _gapiInited = false, _gisInited = false, _googleToken = null, _tokenClient = null;
 let _pickerInited = false;
 let _sheetHistory = [];
@@ -1075,7 +1082,7 @@ window.addEventListener('load', () => {
   else { const s = document.querySelector('script[src*="accounts.google.com"]'); if (s) s.addEventListener('load', () => setTimeout(gisLoaded, 100)); }
 });
 
-// \u2550\u2550\u2550 GOOGLE AUTH \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â GOOGLE AUTH \u2550Â\u2550Â\u2550Â
 function googleSignIn() {
   if (!_tokenClient) { alert('Google API no inicializada. Recarga la página.'); return; }
   if (_googleToken) { updateGoogleStatus(true); return; }
@@ -1132,7 +1139,7 @@ function updateGoogleStatus(connected) {
   renderSheetHistory();
 }
 
-// \u2550\u2550\u2550 DEFAULT SHEET URL MANAGEMENT \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â DEFAULT SHEET URL MANAGEMENT \u2550Â\u2550Â\u2550Â
 function renderDefaultUrlDisplay() {
   var el = document.getElementById('default-url-display');
   if (!el || !_defaultSheetUrl) return;
@@ -1202,7 +1209,7 @@ function saveNewDefaultUrl() {
   renderDefaultUrlDisplay();
 }
 
-// \u2550\u2550\u2550 GOOGLE PICKER \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â GOOGLE PICKER \u2550Â\u2550Â\u2550Â
 function getAppId() {
   const m = GOOGLE_CLIENT_ID.match(/^(\d+)/);
   return m ? m[1] : '';
@@ -1228,7 +1235,7 @@ function onPickerCallback(data) {
   }
 }
 
-// \u2550\u2550\u2550 LOAD FROM URL \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â LOAD FROM URL \u2550Â\u2550Â\u2550Â
 function loadFromUrl() {
   const url = document.getElementById('gsheet-url-input').value.trim();
   if (!url) { alert('Pega la URL de la hoja de Google Sheets'); return; }
@@ -1243,7 +1250,7 @@ function extractSheetId(url) {
   return null;
 }
 
-// \u2550\u2550\u2550 LOAD SHEET DATA \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â LOAD SHEET DATA \u2550Â\u2550Â\u2550Â
 async function loadSheetById(sheetId, sheetName) {
   if (!_googleToken) { alert('Inicia sesión con Google primero.'); return; }
   showGSheetLoading('Obteniendo información de la hoja...');
@@ -1314,11 +1321,11 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
   }
 }
 
-// \u2550\u2550\u2550 LOADING UI \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â LOADING UI \u2550Â\u2550Â\u2550Â
 function showGSheetLoading(text) { document.getElementById('gsheet-loading').style.display = 'flex'; document.getElementById('gsheet-loading-text').textContent = text || 'Cargando...'; }
 function hideGSheetLoading() { document.getElementById('gsheet-loading').style.display = 'none'; document.getElementById('gsheet-autoload-status').style.display = 'none'; }
 
-// \u2550\u2550\u2550 SHEET WRITE-BACK: Validation column \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â SHEET WRITE-BACK: Validation column \u2550Â\u2550Â\u2550Â
 function colIndexToLetter(idx) {
   let s = '';
   idx = Math.max(0, idx);
@@ -1948,7 +1955,7 @@ async function flushReservaConfigSaves() {
   }
 }
 
-// \u2550\u2550\u2550 SHEET HISTORY \u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â SHEET HISTORY \u2550Â\u2550Â\u2550Â
 function addToSheetHistory(sheetId, name, sheetTab) {
   _sheetHistory = _sheetHistory.filter(h => h.id !== sheetId || h.tab !== sheetTab);
   _sheetHistory.unshift({ id: sheetId, name, tab: sheetTab, date: new Date().toISOString() });
@@ -1989,9 +1996,9 @@ function renderSheetHistory() {
   });
 }
 
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â
 // APP ORIGINAL
-// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+// \u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â\u2550Â
 
 const IVA_RESERVA = 0.10, IVA_SUBTOTAL = 0.21;
 let amenitiesOptions = [7];
@@ -2011,21 +2018,36 @@ let maintenanceOptions = [80];
 // Per-consolidation monthly deductions (keyed by alojamiento name)
 let _consolMaint = {}; // { alojName: { enabled:true, amount:80 } }
 let _consolExtras = {}; // { alojName: [ { label:'...', amount:123.45 } ] }
-let _minimoGarantizado = {}; // { alojName: { enabled:true, pct:80 } } — special 80% propietario condition
+let _minimoGarantizado = {}; // { alojName: { enabled:true, pct:80 } } â€” special 80% propietario condition
 
 function getConsolMaint(alojName) {
-  if (!_consolMaint[alojName]) _consolMaint[alojName] = { enabled: true, amount: maintenanceOptions[0] };
+  if (!_consolMaint[alojName]) {
+    var alt = stripAloj(alojName);
+    if (alt !== alojName && _consolMaint[alt]) { _consolMaint[alojName] = _consolMaint[alt]; delete _consolMaint[alt]; }
+    else _consolMaint[alojName] = { enabled: true, amount: maintenanceOptions[0] };
+  }
   return _consolMaint[alojName];
 }
 function getConsolExtras(alojName) {
-  if (!_consolExtras[alojName]) _consolExtras[alojName] = [];
+  if (!_consolExtras[alojName]) {
+    var alt = stripAloj(alojName);
+    if (alt !== alojName && _consolExtras[alt]) { _consolExtras[alojName] = _consolExtras[alt]; delete _consolExtras[alt]; }
+    else _consolExtras[alojName] = [];
+  }
   return _consolExtras[alojName];
 }
 function getMinimoGarantizado(alojName) {
-  return _minimoGarantizado[alojName] || null;
+  if (_minimoGarantizado[alojName]) return _minimoGarantizado[alojName];
+  var alt = stripAloj(alojName);
+  if (alt !== alojName && _minimoGarantizado[alt]) {
+    _minimoGarantizado[alojName] = _minimoGarantizado[alt];
+    delete _minimoGarantizado[alt];
+    return _minimoGarantizado[alojName];
+  }
+  return null;
 }
 function isMinGarantizado(alojName) {
-  var mg = _minimoGarantizado[alojName];
+  var mg = getMinimoGarantizado(alojName);
   return mg && mg.enabled;
 }
 function getConsolDeductions(alojName) {
@@ -2214,7 +2236,7 @@ function calcLiquidacion(r, s) {
   const rawAmen = s.amenities;
   const amen = (rawAmen !== undefined && !isNaN(rawAmen)) ? rawAmen : amenitiesOptions[0];
   const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
-  // Mínimo garantizado: Subtotal → 20% Contrato Compraventa GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal liquidación
+  // Mínimo garantizado: Subtotal â†’ 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación
   const mg = getMinimoGarantizado(r.alojamiento);
   let subFinal = sub, mgPct = 0, mgContrato = 0, mgSubAdj = 0, mgMaint = 0;
   const isMG = !!(mg && mg.enabled);
@@ -2801,7 +2823,7 @@ function _applyCEChange(idx, view) {
     viewConsolDetail(currentConsolAloj);
     return;
   }
-  // Direct cell update — no full row rebuild
+  // Direct cell update â€” no full row rebuild
   var mainRow = document.getElementById('row-' + idx);
   if (mainRow) {
     var ceCel = mainRow.querySelector('.col-ce');
@@ -3078,7 +3100,7 @@ function changeSetting(i,k,v){
   settings[i][k]=v; invalidateCache(i);
   const newC = getLiq(allReservas[i]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  // Direct cell update — no full row rebuild
+  // Direct cell update â€” no full row rebuild
   var mainRow = document.getElementById('row-' + i);
   if (mainRow) {
     var cells = {
@@ -3150,7 +3172,7 @@ function togglePasarela(i){
   settings[i].pasarela=!settings[i].pasarela; invalidateCache(i);
   const newC = getLiq(allReservas[i]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  // Direct cell update — no full row rebuild
+  // Direct cell update â€” no full row rebuild
   var mainRow = document.getElementById('row-' + i);
   if (mainRow) {
     var r = allReservas[i], s = settings[i], c = newC;
@@ -3383,14 +3405,14 @@ function viewDetail(idx) {
     {l:limpLabel,v:-c.limp,neg:true},
     {l:amenLabel,v:-c.amen,neg:true},{div:true}
   );
-  // Pasarela row — always shown, 0% = disabled
+  // Pasarela row â€” always shown, 0% = disabled
   if(!isV){
     const pasLabel = `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true);
     rows.push({l:pasLabel,v:-c.comPas,neg:true});
   } else if(c.comPas > 0) {
     rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
   }
-  // Maintenance row (per-alojamiento) — only for NON mínimo garantizado
+  // Maintenance row (per-alojamiento) â€” only for NON mínimo garantizado
   const maint = getConsolMaint(r.alojamiento);
   const escAloj = r.alojamiento.replace(/'/g, "\\'");
   const maintSelOpts = maintenanceOptions.map(o => `<option value="${o}"${o===maint.amount?' selected':''}>${o} \u20AC</option>`).join('');
@@ -3422,7 +3444,7 @@ function viewDetail(idx) {
   // Subtotal
   rows.push({div:true},{l:"Subtotal",v:c.sub,bold:true});
   if(c.isMG) {
-    // 20% Contrato Compraventa GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal liquidación
+    // 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación
     rows.push({l:`<span style="color:#f57f17;font-weight:600;">${((1-c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span>`,v:-c.mgContrato,neg:true,mgHighlight:true});
     rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true,mgAdj:true});
     // Mantenimiento con checkbox+selector
@@ -3726,7 +3748,7 @@ function buildConsolDeductionsHtml(alojName) {
 
   var html = '';
 
-  // Maintenance row — same consol-row style
+  // Maintenance row â€” same consol-row style
   html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
   html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaint(\''+esc+'\')">'+(maint.enabled?'&#10003;':'')+'</span>';
   html += '<span style="'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
@@ -3735,7 +3757,7 @@ function buildConsolDeductionsHtml(alojName) {
   if (maint.enabled) html += '<span class="neg">- '+fmt(maint.amount)+' \u20AC</span>';
   html += '</div>';
 
-  // Extra concepts — same consol-row style
+  // Extra concepts â€” same consol-row style
   extras.forEach(function(ex, ei) {
     html += '<div class="consol-row no-print" style="padding:4px 28px;"><div style="display:flex;align-items:center;gap:8px;width:100%;">';
     html += '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeConsolExtra(\''+esc+'\','+ei+')">&#215;</span>';
@@ -3769,7 +3791,7 @@ function changeConsolMaintAmount(alojName, val) {
 function addConsolExtra(alojName) {
   var label = prompt('Nombre del concepto:');
   if (!label || !label.trim()) return;
-  var amountStr = prompt('Importe base (sin IVA) en €:');
+  var amountStr = prompt('Importe base (sin IVA) en â‚¬:');
   var amount = parseFloat((amountStr||'').replace(',','.'));
   if (isNaN(amount) || amount <= 0) { alert('Importe no válido'); return; }
   var extras = getConsolExtras(alojName);
@@ -3798,7 +3820,7 @@ function removeConsolExtra(alojName, idx) {
   scheduleGlobalConfigSave();
   viewConsolDetail(alojName);
 }
-// Detail view variants — same data, refresh detail instead of consol
+// Detail view variants â€” same data, refresh detail instead of consol
 function toggleConsolMaintDetail(alojName, reservaIdx) {
   var m = getConsolMaint(alojName); m.enabled = !m.enabled;
   scheduleGlobalConfigSave(); viewDetail(reservaIdx);
@@ -4369,22 +4391,31 @@ function renderConfigModal() {
 function renderMingarTab() {
   var keys = Object.keys(_minimoGarantizado).sort();
   var h = '<div class="os"><div class="os-title">MÍNIMO GARANTIZADO</div>';
-  h += '<div class="os-sub">Alojamientos con condición especial: Subtotal × % Propietario − Mantenimiento</div>';
+  h += '<div class="os-sub">Alojamientos con condición especial: Subtotal Ã— % Propietario âˆ’ Mantenimiento</div>';
   keys.forEach(function(k, i) {
     var mg = _minimoGarantizado[k];
+    var displayName = stripAloj(k);
     var chkStyle = 'display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(mg.enabled?'#16a34a':'#d1d5db')+';background:'+(mg.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;';
     h += '<div class="os-item" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;">';
     h += '<span style="display:flex;align-items:center;gap:10px;">';
     h += '<span style="'+chkStyle+'" onclick="toggleMGEnabled(\''+k.replace(/'/g,"\\'")+'\')">'+(mg.enabled?'&#10003;':'')+'</span>';
-    h += '<span style="'+(mg.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">'+k+'</span>';
+    h += '<span style="'+(mg.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">'+displayName+'</span>';
     if(mg.enabled) h += ' <select class="sel" style="font-size:12px;padding:2px 6px;margin-left:4px;" onchange="changeMGPct(\''+k.replace(/'/g,"\\'")+'\'  ,this.value)">' +
       [50,60,70,75,80,85,90].map(function(p){return '<option value="'+p+'"'+(p===mg.pct?' selected':'')+'>'+p+'%</option>';}).join('') + '</select>';
     h += '</span>';
     h += '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeMG(\''+k.replace(/'/g,"\\'")+'\')">&times;</span>';
     h += '</div>';
   });
+  // Dropdown with available alojamientos not yet in MG
+  var availAlojs = allReservas ? [...new Set(allReservas.map(function(r){return r.alojamiento;}))].sort().filter(function(a){ return !getMinimoGarantizado(a); }) : [];
   h += '<div style="display:flex;gap:8px;padding:10px 16px;align-items:center;">';
-  h += '<input class="os-input" id="add-mg-name" placeholder="Código alojamiento" style="flex:1;" />';
+  if(availAlojs.length > 0) {
+    h += '<select class="os-input" id="add-mg-name" style="flex:1;"><option value="">-- Seleccionar alojamiento --</option>';
+    availAlojs.forEach(function(a){ h += '<option value="'+a.replace(/"/g,'&quot;')+'">'+stripAloj(a)+'</option>'; });
+    h += '</select>';
+  } else {
+    h += '<input class="os-input" id="add-mg-name" placeholder="Código alojamiento" style="flex:1;" />';
+  }
   h += '<input class="os-input" id="add-mg-pct" placeholder="%" style="width:60px;" value="80" />';
   h += '<button class="os-add-btn" onclick="addMG()">+ Añadir</button>';
   h += '</div></div>';
@@ -4406,9 +4437,9 @@ function removeMG(k) {
 function addMG() {
   var name = (document.getElementById('add-mg-name').value||'').trim();
   var pct = parseFloat(document.getElementById('add-mg-pct').value);
-  if(!name) { alert('Introduce un código de alojamiento'); return; }
+  if(!name) { alert('Selecciona un alojamiento'); return; }
   if(isNaN(pct)||pct<1||pct>100) { alert('Porcentaje válido: 1-100'); return; }
-  if(_minimoGarantizado[name]) { alert('Ya existe'); return; }
+  if(getMinimoGarantizado(name)) { alert('Ya existe'); return; }
   _minimoGarantizado[name] = { enabled: true, pct: pct };
   document.getElementById('add-mg-name').value = '';
   invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
@@ -4429,7 +4460,7 @@ function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal(
 const comboState = { platform: { selected: new Set(), options: [] }, aloj: { selected: new Set(), options: [] } };
 const comboLabels = { platform: 'Todas las plataformas', aloj: 'Todos los alojamientos' };
 
-// ——— MONTH PICKER STATE (multi-select, independent per view) ———
+// â€”â€”â€” MONTH PICKER STATE (multi-select, independent per view) â€”â€”â€”
 const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const MONTH_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 let _mpState = {
@@ -4724,7 +4755,7 @@ const simpleComboState = {
   status: { value: 'all', label: 'Todos los estados' },
   sort: { value: 'idx', label: 'Orden original' },
   sortdir: { value: 'asc', label: '&#8593;' },
-  consolsort: { value: 'name', label: 'Nombre A↑Z' }
+  consolsort: { value: 'name', label: 'Nombre Aâ†‘Z' }
 };
 const simpleComboOptions = {
   status: [
@@ -4759,8 +4790,8 @@ const simpleComboOptions = {
     { value: 'desc', label: '&#8595; Descendente' }
   ],
   consolsort: [
-    { value: 'name', label: 'Nombre A↑Z' },
-    { value: 'name-desc', label: 'Nombre Z↓A' },
+    { value: 'name', label: 'Nombre Aâ†‘Z' },
+    { value: 'name-desc', label: 'Nombre Zâ†“A' },
     { value: 'reservas-desc', label: 'Más reservas' },
     { value: 'reservas-asc', label: 'Menos reservas' },
     { value: 'liq-desc', label: 'Mayor liquidación' },
@@ -4809,7 +4840,7 @@ function selectSimpleCombo(id, value) {
     }
   } else if (id === 'consolsort') {
     if (value === 'name') {
-      input.value = ''; input.placeholder = 'Nombre A↑Z'; wrap.classList.remove('has-value');
+      input.value = ''; input.placeholder = 'Nombre Aâ†‘Z'; wrap.classList.remove('has-value');
     } else {
       input.value = opt.label; wrap.classList.add('has-value');
     }
@@ -4859,7 +4890,7 @@ document.querySelectorAll('.combo-input').forEach(input => {
   });
 });
 
-// ═══ AI ASSISTANT ═══
+// â•â•â• AI ASSISTANT â•â•â•
 var _aiPanelOpen = false;
 var _aiHistory = [];
 var _aiProcessing = false;
@@ -5070,7 +5101,7 @@ async function sendAIMessage() {
       '2. Si no tienes la información para responder, di: "No tengo esa información en los datos cargados."\n' +
       '3. NUNCA des consejos financieros, legales ni fiscales. Solo reporta datos.\n' +
       '4. Responde siempre en español.\n' +
-      '5. Sé conciso y directo. Usa cifras exactas con 2 decimales y el símbolo €.\n' +
+      '5. Sé conciso y directo. Usa cifras exactas con 2 decimales y el símbolo â‚¬.\n' +
       '6. Cuando cites importes, especifica si son con IVA incluido o sin IVA (base).\n' +
       '7. NUNCA accedas a información externa. Solo los datos de abajo.\n' +
       '8. Si te preguntan algo que no son datos de reservas, responde amablemente que solo puedes responder sobre los datos de reservas cargados.\n' +
@@ -5137,7 +5168,7 @@ async function sendAIMessage() {
   var ta = document.getElementById('ai-input');
   if(ta) ta.addEventListener('input', function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,100)+'px'; });
 })();
-// ═══ END AI ASSISTANT ═══
+// â•â•â• END AI ASSISTANT â•â•â•
 </script>
 </body>
 </html>

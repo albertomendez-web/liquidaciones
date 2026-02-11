@@ -85,6 +85,7 @@ tr:hover td { background: #f8f9ff; }
 tfoot td { position: sticky; bottom: 0; z-index: 2; background: #0f1628 !important; }
 tfoot tr:hover td { background: #0f1628 !important; }
 th.col-comPlataforma, th.col-comGTC, th.col-limpieza, th.col-amenities, th.col-pasarela, th.col-noches { text-align: center; }
+td.col-pasarela { min-width: 120px; }
 tr.validated td { background: rgba(232,245,233,0.3); }
 tr.highlight td { animation: pulse-highlight 0.6s ease-in-out 3; }
 @keyframes pulse-highlight {
@@ -751,11 +752,21 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.4';
-const APP_BUILD   = '2026-02-11T11:14:00+01:00';
-const APP_CHANGES = 'Detalle: pasarela en una fila con toggle inline, mantenimiento debajo';
+const APP_VERSION = '1.9.6';
+const APP_BUILD   = '2026-02-11T11:27:00+01:00';
+const APP_CHANGES = 'Tabla: pasarela toggle y selectores sin salto — actualización directa de celdas';
 
 const CHANGELOG = [
+  { version: '1.9.6', date: '2026-02-11T11:27:00+01:00', changes: [
+    'Tabla: toggle pasarela sin salto — actualiza solo celdas afectadas sin reconstruir fila',
+    'Tabla: cambiar cualquier selector (comisión, limpieza, etc.) sin salto',
+    'Columna pasarela con ancho mínimo estable para evitar redimensionado',
+    'Footer totales actualizados incrementalmente al cambiar settings'
+  ]},
+  { version: '1.9.5', date: '2026-02-11T11:24:00+01:00', changes: [
+    'Detalle: mantenimiento sin checkbox ni selector — muestra solo el valor configurado',
+    'Si el importe es 0 o desactivado en parametrización, no aparece la fila'
+  ]},
   { version: '1.9.4', date: '2026-02-11T11:14:00+01:00', changes: [
     'Detalle: pasarela en una sola fila — toggle inline junto al label y selector, sin salto',
     'Detalle: mantenimiento reubicado debajo de pasarela'
@@ -2975,12 +2986,50 @@ function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, 
 }
 
 function changeSetting(i,k,v){
-  const oldC = getLiq(allReservas[i]); // capture BEFORE invalidating
+  const oldC = getLiq(allReservas[i]);
   settings[i][k]=v; invalidateCache(i);
   const newC = getLiq(allReservas[i]);
-  // Delta update global stats O(1) instead of recomputing O(n)
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  _patchSingleRow(i, oldC, newC);
+  // Direct cell update — no full row rebuild
+  var mainRow = document.getElementById('row-' + i);
+  if (mainRow) {
+    var cells = {
+      'col-subtotal': fmt(newC.sub) + ' &#8364;',
+      'col-totalLiquidar': fmt(newC.totalLiq) + ' &#8364;',
+      'col-baseSinIVA': fmt(newC.baseSinIVA) + ' &#8364;'
+    };
+    Object.keys(cells).forEach(cls => { var el = mainRow.querySelector('.' + cls); if(el) el.innerHTML = cells[cls]; });
+    // Update deduction amounts shown below each select
+    var amountMap = {
+      'col-comPlataforma': newC.comPlat, 'col-comGTC': newC.comGTC,
+      'col-limpieza': newC.limp, 'col-amenities': newC.amen
+    };
+    Object.keys(amountMap).forEach(cls => {
+      var td = mainRow.querySelector('.' + cls);
+      if(td) { var sp = td.querySelector('span[style*="e53935"]'); if(sp) sp.innerHTML = '&#8211; ' + fmt(amountMap[cls]) + ' &#8364;'; }
+    });
+    // Update pasarela amount if active
+    if(k === 'pasarelaRate') {
+      var pasTd = mainRow.querySelector('.col-pasarela');
+      if(pasTd) { var sp = pasTd.querySelector('span[style*="e53935"]'); if(sp) sp.innerHTML = '&#8211; ' + fmt(newC.comPas) + ' &#8364;'; }
+    }
+  }
+  // Update footer stats
+  var st = _cachedFilteredStats;
+  if (st && oldC && newC) {
+    st.fL += (newC.totalLiq - oldC.totalLiq);
+    st.tLiq += (newC.totalLiq - oldC.totalLiq);
+    st.tSub += (newC.sub - oldC.sub);
+    st.tBase += (newC.baseSinIVA - oldC.baseSinIVA);
+    st.tComPlat += (newC.comPlat - oldC.comPlat);
+    st.tComGTC += (newC.comGTC - oldC.comGTC);
+    st.tLimp += (newC.limp - oldC.limp);
+    st.tAmen += (newC.amen - oldC.amen);
+    st.tComPas += (newC.comPas - oldC.comPas);
+    st.tRet += (newC.ret - oldC.ret);
+    st.tIva21 += (newC.iva - oldC.iva);
+    _renderStatsFromCache(_lastFiltered, st);
+  }
   scheduleReservaConfigSave(i);
 }
 function validarTodas() { const pending=_lastFiltered.filter(r=>!validated.has(r.idx)); const n=pending.length; if(!n||!confirm(`¿Validar ${n} reserva${n>1?'s':''}?`))return; pending.forEach(r => validated.add(r.idx)); _validatedVersion++; invalidateFilterCache(); renderTable(); batchWriteValidation(pending.map(r=>r.idx), true); }
@@ -3013,7 +3062,35 @@ function togglePasarela(i){
   settings[i].pasarela=!settings[i].pasarela; invalidateCache(i);
   const newC = getLiq(allReservas[i]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  _patchSingleRow(i, oldC, newC);
+  // Direct cell update — no full row rebuild
+  var mainRow = document.getElementById('row-' + i);
+  if (mainRow) {
+    var r = allReservas[i], s = settings[i], c = newC;
+    var isV = validated.has(i), isB = r.plataforma==='Booking.com';
+    var dis = isV ? 'disabled' : '';
+    var pasOpts = isB ? pasarelaBookingOptions : pasarelaStripeOptions;
+    var pasR = s.pasarelaRate !== undefined ? s.pasarelaRate : (isB ? pasOpts[0]/100 : pasOpts[0]/100);
+    var psO = pasOpts.map(o => `<option value="${o/100}" ${Math.abs(pasR-o/100)<0.0001?'selected':''}>${o}%</option>`).join('');
+    var pasCel = mainRow.querySelector('.col-pasarela');
+    if (pasCel) pasCel.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;">` +
+      `<div class="toggle" onclick="if(!${isV}){togglePasarela(${i})}"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>` +
+      (s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${i},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label">${isB?'Booking':'Stripe'}</span>`) +
+      `</div>${s.pasarela && c.comPas > 0 ? `<span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.comPas)} &#8364;</span>` : ''}</div>`;
+    var subCel = mainRow.querySelector('.col-subtotal');
+    if (subCel) subCel.innerHTML = fmt(c.sub) + ' &#8364;';
+    var liqCel = mainRow.querySelector('.col-totalLiquidar');
+    if (liqCel) liqCel.innerHTML = fmt(c.totalLiq) + ' &#8364;';
+    var baseCel = mainRow.querySelector('.col-baseSinIVA');
+    if (baseCel) baseCel.innerHTML = fmt(c.baseSinIVA) + ' &#8364;';
+  }
+  // Update footer stats
+  var st = _cachedFilteredStats;
+  if (st && oldC && newC) {
+    st.fL += (newC.totalLiq - oldC.totalLiq);
+    st.tLiq += (newC.totalLiq - oldC.totalLiq);
+    st.tSub += (newC.sub - oldC.sub);
+    _renderStatsFromCache(_lastFiltered, st);
+  }
   scheduleReservaConfigSave(i);
 }
 function toggleValidate(i){
@@ -3218,34 +3295,16 @@ function viewDetail(idx) {
     {l:limpLabel,v:-c.limp,neg:true},
     {l:amenLabel,v:-c.amen,neg:true},{div:true}
   );
-  // Pasarela row — single line with toggle inline
+  // Pasarela row — always shown, 0% = disabled
   if(!isV){
-    const toggleHtml = `<div style="display:inline-flex;align-items:center;gap:8px;margin-left:8px;">` +
-      `<div class="toggle" onclick="togglePasarela(${r.idx});viewDetail(${r.idx})"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>` +
-      `<span style="font-size:12px;color:#6b7280;">${s.pasarela?'Activada':'Desactivada'}</span></div>`;
-    if(s.pasarela){
-      const pasLabel = `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true) + toggleHtml;
-      rows.push({l:pasLabel,v:-c.comPas,neg:true});
-    } else {
-      rows.push({l:`Pasarela ${pasL} ${toggleHtml}`,v:0,leftcustom:true});
-    }
-  } else if(s.pasarela) {
+    const pasLabel = `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true);
+    rows.push({l:pasLabel,v:-c.comPas,neg:true});
+  } else if(c.comPas > 0) {
     rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
   }
   // Maintenance row (per-alojamiento) — below pasarela
   const maint = getConsolMaint(r.alojamiento);
-  if(!isV) {
-    const maintSelOpts = maintenanceOptions.map(o => `<option value="${o}" ${o===maint.amount?'selected':''}>${o} &#8364;</option>`).join('');
-    const chkStyle = `display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid ${maint.enabled?'#16a34a':'#d1d5db'};background:${maint.enabled?'#16a34a':'#fff'};color:#fff;font-size:11px;cursor:pointer;`;
-    const escAloj = r.alojamiento.replace(/'/g,"\\'");
-    const maintLabel = `<span style="display:flex;align-items:center;gap:8px;">` +
-      `<span style="${chkStyle}" onclick="toggleConsolMaint('${escAloj}');viewDetail(${r.idx})">${maint.enabled?'&#10003;':''}</span>` +
-      `<span style="${maint.enabled?'':'color:#9ca3af;text-decoration:line-through;'}">Mantenimiento</span>` +
-      (maint.enabled ? ` <select class="sel no-print" onchange="changeConsolMaintAmount('${escAloj}',this.value);viewDetail(${r.idx})" style="font-size:12px;padding:3px 6px;margin-left:2px;">${maintSelOpts}</select>` : '') +
-      `</span>`;
-    if(maint.enabled) rows.push({l:maintLabel,v:-maint.amount,neg:true});
-    else rows.push({l:maintLabel,v:0,leftcustom:true});
-  } else if(maint.enabled) {
+  if(maint.enabled && maint.amount > 0) {
     rows.push({l:'Mantenimiento',v:-maint.amount,neg:true});
   }
   rows.push({div:true},

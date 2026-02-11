@@ -750,11 +750,16 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.0';
+const APP_VERSION = '1.9.1';
 const APP_BUILD   = '2026-02-11T01:02:00+01:00';
 const APP_CHANGES = 'CE: eliminar concepto con animación slide-out suave';
 
 const CHANGELOG = [
+  { version: '1.9.1', date: '2026-02-11T01:02:00+01:00', changes: [
+    'CE: eliminar concepto con animación slide-out suave (sin salto)',
+    'CE: añadir concepto con animación slide-in + auto-focus',
+    'Texto: "Totales" → "Reservas Totales" en barra de totales'
+  ]},
   { version: '1.9.0', date: '2026-02-11T01:01:00+01:00', changes: [
     'Filtro de fecha multi-selección: selecciona varios años y meses simultáneamente',
     'Combinatoria libre: Ene+Feb de 2025+2026, o un mes en 3 años, etc.',

@@ -751,17 +751,23 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.2';
-const APP_BUILD   = '2026-02-11T10:59:00+01:00';
-const APP_CHANGES = 'Sidebar reorganizado: Detalle y Liquidación como sub-items indentados';
+const APP_VERSION = '1.9.3';
+const APP_BUILD   = '2026-02-11T11:06:00+01:00';
+const APP_CHANGES = 'Detalle: mantenimiento con selector, pasarela a la izquierda, imprimir solo si validada';
 
 const CHANGELOG = [
+  { version: '1.9.3', date: '2026-02-11T11:06:00+01:00', changes: [
+    'Detalle reserva: añadida opción de Mantenimiento con checkbox y selector de importe',
+    'Detalle reserva: Pasarela Stripe/Booking posicionada a la izquierda',
+    'Detalle reserva: botón Imprimir solo visible cuando la reserva está validada'
+  ]},
   { version: '1.9.2', date: '2026-02-11T10:59:00+01:00', changes: [
     'Sidebar reorganizado: Detalle y Liquidación como sub-items indentados bajo su vista padre',
     'Sub-items se ocultan al volver a la vista principal',
     'Filtros de fecha independientes: Pre-liquidaciones y Por Alojamiento tienen fechas separadas',
     'Fix: editar importe en CE ya no pega salto (actualización directa de celdas)',
-    'Flechas ‹ › funcionan por vista independiente'
+    'Flechas ‹ › funcionan por vista independiente',
+    'Fix: Ordenar Por mostraba código unicode literal en vez de flecha ↑'
   ]},
   { version: '1.9.1', date: '2026-02-11T01:12:00+01:00', changes: [
     'CE: eliminar concepto con animación slide-out sin flash ni re-render',
@@ -3208,18 +3214,35 @@ function viewDetail(idx) {
     {l:limpLabel,v:-c.limp,neg:true},
     {l:amenLabel,v:-c.amen,neg:true},{div:true}
   );
+  // Maintenance row (per-alojamiento)
+  const maint = getConsolMaint(r.alojamiento);
+  if(!isV) {
+    const maintSelOpts = maintenanceOptions.map(o => `<option value="${o}" ${o===maint.amount?'selected':''}>${o} &#8364;</option>`).join('');
+    const chkStyle = `display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid ${maint.enabled?'#16a34a':'#d1d5db'};background:${maint.enabled?'#16a34a':'#fff'};color:#fff;font-size:11px;cursor:pointer;`;
+    const escAloj = r.alojamiento.replace(/'/g,"\\'");
+    const maintLabel = `<span style="display:flex;align-items:center;gap:8px;">` +
+      `<span style="${chkStyle}" onclick="toggleConsolMaint('${escAloj}');viewDetail(${r.idx})">${maint.enabled?'&#10003;':''}</span>` +
+      `<span style="${maint.enabled?'':'color:#9ca3af;text-decoration:line-through;'}">Mantenimiento</span>` +
+      (maint.enabled ? ` <select class="sel no-print" onchange="changeConsolMaintAmount('${escAloj}',this.value);viewDetail(${r.idx})" style="font-size:12px;padding:3px 6px;margin-left:2px;">${maintSelOpts}</select>` : '') +
+      `</span>`;
+    if(maint.enabled) rows.push({l:maintLabel,v:-maint.amount,neg:true});
+    else rows.push({l:maintLabel,v:0,leftcustom:true});
+  } else if(maint.enabled) {
+    rows.push({l:'Mantenimiento',v:-maint.amount,neg:true});
+  }
+  rows.push({div:true});
   if(s.pasarela){
     const pasLabel = isV ? `Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`
       : `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true);
     rows.push({l:pasLabel,v:-c.comPas,neg:true});
   }
-  // Pasarela toggle row (only if not validated)
+  // Pasarela toggle row — left aligned
   if(!isV){
     const toggleHtml = `<div style="display:inline-flex;align-items:center;gap:8px;margin-left:6px;">` +
       `<div class="toggle" onclick="togglePasarela(${r.idx});viewDetail(${r.idx})"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>` +
       `<span style="font-size:12px;color:#6b7280;">${s.pasarela?'Activada':'Desactivada'}</span></div>`;
-    if(!s.pasarela) rows.push({l:`Pasarela ${pasL} ${toggleHtml}`,v:0,custom:true});
-    else rows.push({l:`${toggleHtml}`,v:0,custom:true});
+    if(!s.pasarela) rows.push({l:`Pasarela ${pasL} ${toggleHtml}`,v:0,leftcustom:true});
+    else rows.push({l:`${toggleHtml}`,v:0,leftcustom:true});
   }
   rows.push({div:true},
     {l:"Subtotal",v:c.sub,bold:true},
@@ -3228,7 +3251,7 @@ function viewDetail(idx) {
   const irpfSelHtml = isV ? `Retenci&#243;n IRPF (${(c.irpfRate*100).toFixed(0)}%)`
     : `Retenci&#243;n IRPF ` + _sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true);
   let rH=rows.map(row=>{if(row.div)return'<div class="liq-divider"></div>';
-    if(row.custom)return`<div class="liq-row" style="justify-content:flex-end;"><span>${row.l}</span></div>`;
+    if(row.custom||row.leftcustom)return`<div class="liq-row"><span>${row.l}</span></div>`;
     const cl=row.bold?' bold':'';const vc=row.neg?'neg':row.pos?'pos':'';
     const d=row.v<0?`- ${fmt(Math.abs(row.v))}`:fmt(row.v);
     const label=row.irpf?irpfSelHtml:row.l;
@@ -3236,7 +3259,7 @@ function viewDetail(idx) {
     const _prop = getPropietario(r.alojamiento);
     const _propStyle = _prop === 'Falta propietario' ? ' style="color:#e53935;cursor:pointer" ' : ' style="cursor:pointer" ';
     document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
-    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidación':'Preliquidación'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)">${_prop}</div></div>
+    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidaci\u00f3n':'Preliquidaci\u00f3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)">${_prop}</div></div>
     <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; VALIDADA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div></div>
     <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
     <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
@@ -3248,7 +3271,7 @@ function viewDetail(idx) {
     <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(c.totalLiq)} \u20AC</span></div></div>
     <div class="liq-actions no-print">
       ${!isV?`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
-      <button class="btn btn-outline" onclick="window.print()">&#128424; Imprimir</button></div>`;
+      ${isV?`<button class="btn btn-outline" onclick="window.print()">&#128424; Imprimir</button>`:``}</div>`;
   document.getElementById("nav-detail").style.display="block"; showScreen("detail");
 }
 

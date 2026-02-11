@@ -19,6 +19,7 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .nav-item { display: flex; align-items: center; gap: 10px; padding: 13px 24px; font-size: 14px; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; }
 .nav-item:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
 .nav-item.active { color: #fff; font-weight: 600; background: rgba(255,255,255,0.08); border-left-color: #4f8cff; }
+.nav-item.nav-sub { padding-left: 44px; font-size: 13px; }
 .sidebar-footer { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: rgba(255,255,255,0.35); margin-top: auto; }
 .changelog-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center; }
 .changelog-modal { background:#fff; border-radius:16px; max-width:640px; width:90vw; max-height:80vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
@@ -445,9 +446,9 @@ tr.ce-highlighted { background:#fffdf5; }
   <nav style="margin-top:16px; flex:1;">
     <div class="nav-item active" id="nav-upload" onclick="showScreen('upload')">&#128228; Cargar Fichero</div>
     <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; Preliquidaciones</div>
+    <div class="nav-item nav-sub" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#8627; Detalle Reserva</div>
     <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; Por Alojamiento</div>
-    <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; Detalle</div>
-    <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; Liquidación</div>
+    <div class="nav-item nav-sub" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#8627; Liquidación</div>
   </nav>
   <div class="sidebar-google" id="sidebar-google" style="display:none;">
     <span class="status-dot" id="google-dot"></span>
@@ -751,16 +752,16 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.2';
-const APP_BUILD   = '2026-02-11T10:40:00+01:00';
-const APP_CHANGES = 'Fix: Ordenar Por mostraba código unicode literal en vez de flecha ↑';
+const APP_BUILD   = '2026-02-11T10:59:00+01:00';
+const APP_CHANGES = 'Sidebar reorganizado: Detalle y Liquidación como sub-items indentados';
 
 const CHANGELOG = [
-  { version: '1.9.2', date: '2026-02-11T10:40:00+01:00', changes: [
+  { version: '1.9.2', date: '2026-02-11T10:59:00+01:00', changes: [
+    'Sidebar reorganizado: Detalle y Liquidación como sub-items indentados bajo su vista padre',
+    'Sub-items se ocultan al volver a la vista principal',
     'Filtros de fecha independientes: Pre-liquidaciones y Por Alojamiento tienen fechas separadas',
-    'Cada vista arranca en mes y año actual al cargar datos',
     'Fix: editar importe en CE ya no pega salto (actualización directa de celdas)',
-    'Flechas ‹ › funcionan por vista independiente',
-    'Fix: Ordenar Por mostraba código unicode literal al cargar'
+    'Flechas ‹ › funcionan por vista independiente'
   ]},
   { version: '1.9.1', date: '2026-02-11T01:12:00+01:00', changes: [
     'CE: eliminar concepto con animación slide-out sin flash ni re-render',
@@ -2260,6 +2261,13 @@ function showScreen(name) {
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   document.getElementById("screen-" + name).classList.add("active");
   document.getElementById("nav-" + name).classList.add("active");
+  // Hide sub-items when navigating to parent or other main views
+  if (name === 'list' || name === 'upload' || name === 'consol') {
+    document.getElementById('nav-detail').style.display = 'none';
+  }
+  if (name === 'list' || name === 'upload' || name === 'consol') {
+    document.getElementById('nav-consoldetail').style.display = 'none';
+  }
   if (_previewActive) exitPreview();
   if (_navigating) return;
   _navigating = true;

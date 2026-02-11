@@ -769,19 +769,20 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '2.0.5';
-const APP_BUILD   = '2026-02-12T13:55:00+01:00';
-const APP_CHANGES = 'v205: Eliminar mantenimiento de reservas + Fix CA oninput tiempo real';
+const APP_BUILD   = '2026-02-12T14:05:00+01:00';
+const APP_CHANGES = 'v205: Fix panel CA se cierra al añadir concepto + mantenimiento eliminado de reservas';
 
 const CHANGELOG = [
-  { version: '2.0.5', date: '2026-02-12T13:55:00+01:00', changes: [
+  { version: '2.0.5', date: '2026-02-12T14:05:00+01:00', changes: [
+    'Fix: panel CA ya no se cierra al añadir concepto — addCATableItem refactorizado con ciclo completo',
+    'Fix: flush de inputs CA antes de añadir/borrar en tabla (evita perder valores no guardados)',
     'Eliminar mantenimiento de preliquidaciones individuales (solo aplica en consolidaciones por alojamiento)',
     'Fix: CA importe se guarda en tiempo real con oninput (sin esperar blur/onchange)',
-    'Fix: CA perdía precio al añadir/borrar concepto — flush de valores DOM antes de re-render',
+    'Fix: CA perdía precio al añadir/borrar concepto en detalle — flush DOM antes de re-render',
     'Fix: MG duplicados — deduplicación por stripAloj al cargar config desde Sheets',
     'Fix: CA sincronizado bidireccional entre vista detalle ↔ tabla ↔ consolidado',
     'Fix: botón ⚙ no abría modal — renderMingarTab duplicada + toggleMGEnabled huérfano',
-    'Fix: encoding UTF-8 completo — 199+ líneas con doble codificación cp1252 corregidas',
-    'Fix: gear-btn tamaño fijo 34px, inline-flex, sin estiramiento en flex'
+    'Fix: encoding UTF-8 completo — 199+ líneas con doble codificación cp1252 corregidas'
   ]},
   { version: '2.0.3', date: '2026-02-12T01:15:00+01:00', changes: [
     'CA: celda footer con total Conceptos Adicionales en tabla principal',
@@ -3049,21 +3050,53 @@ function toggleCAPanel(idx, view) {
 function addCATableItem(idx, view) {
   var s = settings[idx]; if (!s) return;
   if (!s.conceptosAdicionales) s.conceptosAdicionales = [];
-  var i = s.conceptosAdicionales.length;
-  s.conceptosAdicionales.push({label:'', amount:0});
   var v = view || 'p';
+  // Flush pending input values from panel DOM before modifying array
   var panel = document.getElementById('ca-' + v + 'panel-' + idx);
-  if (!panel) return;
-  var addLink = panel.querySelector('.ce-add-link');
-  if (!addLink) { _refreshCAPanel(idx, v); return; }
-  var row = document.createElement('div');
-  row.className = 'ce-item-row ce-new';
-  row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" oninput="_saveCAAmountSilent('+idx+','+i+',this.value)" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button>';
-  addLink.parentNode.insertBefore(row, addLink);
-  row.querySelector('.ce-inp-label').focus();
+  if (panel) {
+    var caInputs = panel.querySelectorAll('.ce-item-row');
+    caInputs.forEach(function(row, i) {
+      if (i >= s.conceptosAdicionales.length) return;
+      var lbl = row.querySelector('.ce-inp-label');
+      var amt = row.querySelector('.ce-inp-amt');
+      if (lbl) s.conceptosAdicionales[i].label = lbl.value;
+      if (amt) {
+        var pv = parseFmt(amt.value);
+        if (!isNaN(pv)) s.conceptosAdicionales[i].amount = pv;
+      }
+    });
+  }
+  s.conceptosAdicionales.push({label:'', amount:0});
+  // Full refresh: cache, panel, row cells, stats
+  var oldC = getLiq(allReservas[idx]);
+  invalidateCache(idx);
+  var newC = getLiq(allReservas[idx]);
+  _refreshCAPanel(idx, v);
+  // Ensure panel stays visible
+  panel = document.getElementById('ca-' + v + 'panel-' + idx);
+  if (panel) { panel.style.display = ''; _openCAPanel = idx; _openCAView = v; }
+  // Update main row cells
+  var mainRow = document.getElementById('row-' + idx);
+  if (mainRow) {
+    var caCel = mainRow.querySelector('.col-ca');
+    if (caCel) caCel.innerHTML = _buildCAButton(idx, newC, v);
+    var liqCel = mainRow.querySelector('.col-totalLiquidar');
+    if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' \u20AC';
+    var subCel = mainRow.querySelector('.col-subtotal');
+    if (subCel) subCel.innerHTML = fmt(newC.sub) + ' \u20AC';
+  }
   // Sync detail view if open
   if (typeof currentDetailIdx !== 'undefined' && currentDetailIdx === idx) {
     viewDetail(idx);
+  }
+  // Update footer stats
+  var st = _cachedFilteredStats;
+  if (st && oldC && newC) {
+    st.fL += (newC.totalLiq - oldC.totalLiq);
+    st.tLiq += (newC.totalLiq - oldC.totalLiq);
+    st.tSub += (newC.sub - oldC.sub);
+    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
+    _renderStatsFromCache(_lastFiltered, st);
   }
   scheduleReservaConfigSave(idx);
 }
@@ -3072,6 +3105,20 @@ function removeCATableItem(idx, itemIdx, view) {
   var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
   var v = view || 'p';
   var panel = document.getElementById('ca-' + v + 'panel-' + idx);
+  // Flush all input values before modifying array
+  if (panel) {
+    var allRows = panel.querySelectorAll('.ce-item-row');
+    allRows.forEach(function(row, i) {
+      if (i >= s.conceptosAdicionales.length) return;
+      var lbl = row.querySelector('.ce-inp-label');
+      var amt = row.querySelector('.ce-inp-amt');
+      if (lbl) s.conceptosAdicionales[i].label = lbl.value;
+      if (amt) {
+        var pv = parseFmt(amt.value);
+        if (!isNaN(pv)) s.conceptosAdicionales[i].amount = pv;
+      }
+    });
+  }
   var rows = panel ? panel.querySelectorAll('.ce-item-row') : [];
   if (rows[itemIdx]) {
     var row = rows[itemIdx];

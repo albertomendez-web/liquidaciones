@@ -756,11 +756,17 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '2.0.1';
-const APP_BUILD   = '2026-02-11T21:45:00+01:00';
-const APP_CHANGES = 'v201: Conceptos Adicionales por reserva (CA) en preliquidaciones';
+const APP_VERSION = '2.0.2';
+const APP_BUILD   = '2026-02-11T22:00:00+01:00';
+const APP_CHANGES = 'v202: MG config limpio, 80% constante, sin duplicados';
 
 const CHANGELOG = [
+  { version: '2.0.2', date: '2026-02-11T22:00:00+01:00', changes: [
+    'MG Config: 80% es constante fija (eliminado dropdown de porcentaje)',
+    'MG Config: corregidos caracteres corruptos en descripci\u00f3n',
+    'MG Config: prevenci\u00f3n de duplicados con fuzzy matching en defaults',
+    'MG Config: bot\u00f3n + A\u00f1adir simplificado sin campo de porcentaje'
+  ]},
   { version: '2.0.1', date: '2026-02-11T21:45:00+01:00', changes: [
     'Nuevo: Conceptos Adicionales (CA) por reserva en preliquidaciones',
     'CA: panel inline con + Añadir concepto después de Pasarela de pago',
@@ -1901,7 +1907,7 @@ function applyConfigFromRows(rows) {
   // Initialize known mínimo garantizado alojamientos if not yet in config
   var _defaultMG = ['MA-2-P2-1A','MA-2-P3-1C','MA-2-P3-1D','MA-2-P3-1E','MA-2-P4-1C','MG-2-0D'];
   _defaultMG.forEach(function(a) {
-    if (!_minimoGarantizado[a]) _minimoGarantizado[a] = { enabled: true, pct: 80 };
+    if (!getMinimoGarantizado(a)) _minimoGarantizado[a] = { enabled: true, pct: 80 };
   });
 
   // Rebuild caches after applying config
@@ -4496,24 +4502,23 @@ function renderConfigModal() {
   renderMingarTab();
 }
 function renderMingarTab() {
+function renderMingarTab() {
   var keys = Object.keys(_minimoGarantizado).sort();
   var h = '<div class="os"><div class="os-title">MÍNIMO GARANTIZADO</div>';
-  h += '<div class="os-sub">Alojamientos con condición especial: Subtotal Ã— % Propietario âˆ’ Mantenimiento</div>';
-  keys.forEach(function(k, i) {
+  h += '<div class="os-sub">Alojamientos con condición especial: Subtotal × 80% Propietario − Mantenimiento</div>';
+  keys.forEach(function(k) {
     var mg = _minimoGarantizado[k];
     var displayName = stripAloj(k);
     var chkStyle = 'display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(mg.enabled?'#16a34a':'#d1d5db')+';background:'+(mg.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;';
     h += '<div class="os-item" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;">';
     h += '<span style="display:flex;align-items:center;gap:10px;">';
-    h += '<span style="'+chkStyle+'" onclick="toggleMGEnabled(\''+k.replace(/'/g,"\\'")+'\')">'+(mg.enabled?'&#10003;':'')+'</span>';
-    h += '<span style="'+(mg.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">'+displayName+'</span>';
-    if(mg.enabled) h += ' <select class="sel" style="font-size:12px;padding:2px 6px;margin-left:4px;" onchange="changeMGPct(\''+k.replace(/'/g,"\\'")+'\'  ,this.value)">' +
-      [50,60,70,75,80,85,90].map(function(p){return '<option value="'+p+'"'+(p===mg.pct?' selected':'')+'>'+p+'%</option>';}).join('') + '</select>';
+    h += '<span style="'+chkStyle+'" onclick="toggleMGEnabled(\''+k.replace(/'/g,"\\'")+'\')">'+( mg.enabled?'&#10003;':'')+'</span>';
+    h += '<span style="font-weight:500;'+(mg.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">'+displayName+'</span>';
+    h += '<span style="font-size:12px;color:#6b7280;margin-left:4px;">80%</span>';
     h += '</span>';
-    h += '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeMG(\''+k.replace(/'/g,"\\'")+'\')">&times;</span>';
+    h += '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeMG(\''+k.replace(/'/g,"\\'")+'\')">\u00d7</span>';
     h += '</div>';
   });
-  // Dropdown with available alojamientos not yet in MG
   var availAlojs = allReservas ? [...new Set(allReservas.map(function(r){return r.alojamiento;}))].sort().filter(function(a){ return !getMinimoGarantizado(a); }) : [];
   h += '<div style="display:flex;gap:8px;padding:10px 16px;align-items:center;">';
   if(availAlojs.length > 0) {
@@ -4521,14 +4526,13 @@ function renderMingarTab() {
     availAlojs.forEach(function(a){ h += '<option value="'+a.replace(/"/g,'&quot;')+'">'+stripAloj(a)+'</option>'; });
     h += '</select>';
   } else {
-    h += '<input class="os-input" id="add-mg-name" placeholder="Código alojamiento" style="flex:1;" />';
+    h += '<input class="os-input" id="add-mg-name" placeholder="C\u00f3digo alojamiento" style="flex:1;" />';
   }
-  h += '<input class="os-input" id="add-mg-pct" placeholder="%" style="width:60px;" value="80" />';
-  h += '<button class="os-add-btn" onclick="addMG()">+ Añadir</button>';
+  h += '<button class="os-add-btn" onclick="addMG()">+ A\u00f1adir</button>';
   h += '</div></div>';
   document.getElementById("tab-mingar").innerHTML = h;
 }
-function toggleMGEnabled(k) {
+
   if(_minimoGarantizado[k]) _minimoGarantizado[k].enabled = !_minimoGarantizado[k].enabled;
   invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
 }
@@ -4543,11 +4547,9 @@ function removeMG(k) {
 }
 function addMG() {
   var name = (document.getElementById('add-mg-name').value||'').trim();
-  var pct = parseFloat(document.getElementById('add-mg-pct').value);
   if(!name) { alert('Selecciona un alojamiento'); return; }
-  if(isNaN(pct)||pct<1||pct>100) { alert('Porcentaje válido: 1-100'); return; }
   if(getMinimoGarantizado(name)) { alert('Ya existe'); return; }
-  _minimoGarantizado[name] = { enabled: true, pct: pct };
+  _minimoGarantizado[name] = { enabled: true, pct: 80 };
   document.getElementById('add-mg-name').value = '';
   invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
 }

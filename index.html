@@ -19,7 +19,6 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .nav-item { display: flex; align-items: center; gap: 10px; padding: 13px 24px; font-size: 14px; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; }
 .nav-item:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
 .nav-item.active { color: #fff; font-weight: 600; background: rgba(255,255,255,0.08); border-left-color: #4f8cff; }
-.nav-item.nav-sub { padding-left: 44px; font-size: 13px; }
 .sidebar-footer { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: rgba(255,255,255,0.35); margin-top: auto; }
 .changelog-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center; }
 .changelog-modal { background:#fff; border-radius:16px; max-width:640px; width:90vw; max-height:80vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
@@ -34,7 +33,7 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .cl-date { font-size:12px; color:#9ca3af; }
 .cl-changes { list-style:none; padding:0; margin:0; }
 .cl-changes li { font-size:13px; color:#4b5563; padding:3px 0 3px 18px; position:relative; line-height:1.5; }
-.cl-changes li::before { content:'â€¢'; position:absolute; left:4px; color:#4f8cff; font-weight:700; }
+.cl-changes li::before { content:'•'; position:absolute; left:4px; color:#4f8cff; font-weight:700; }
 .main { margin-left: 250px; padding: 32px 40px; min-height: 100vh; }
 .card { background: #fff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); padding: 28px 32px; margin-bottom: 24px; }
 .upload-wrap { display: flex; align-items: center; justify-content: center; min-height: 70vh; }
@@ -85,7 +84,6 @@ tr:hover td { background: #f8f9ff; }
 tfoot td { position: sticky; bottom: 0; z-index: 2; background: #0f1628 !important; }
 tfoot tr:hover td { background: #0f1628 !important; }
 th.col-comPlataforma, th.col-comGTC, th.col-limpieza, th.col-amenities, th.col-pasarela, th.col-noches { text-align: center; }
-td.col-pasarela { min-width: 120px; }
 tr.validated td { background: rgba(232,245,233,0.3); }
 tr.highlight td { animation: pulse-highlight 0.6s ease-in-out 3; }
 @keyframes pulse-highlight {
@@ -211,8 +209,8 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .screen { display: none; }
 .screen.active { display: block; }
-.gear-btn { width: 34px; height: 34px; min-width: 34px; min-height: 34px; max-height: 34px; border-radius: 8px; border: 1.5px solid #dde1e8; background: #fafbfc; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; align-self: center; flex-shrink: 0; transition: all 0.2s; font-size: 15px; color: #6b7280; box-sizing: border-box; padding: 0; line-height: 1; }
-.gear-btn:hover { border-color: #4f8cff; color: #4f8cff; background: #f0f5ff; }
+.gear-btn { width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid #dde1e8; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 16px; }
+.gear-btn:hover { border-color: #4f8cff; background: #f0f5ff; }
 
 /* SEARCHABLE COMBO */
 .combo { position: relative; min-width: 190px; }
@@ -238,7 +236,6 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .print-target, .print-target * { visibility: visible; }
   .print-target { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none !important; border-radius: 0 !important; }
   .sidebar, .btn, .no-print, .liq-actions, .gear-btn { display: none !important; }
-  .print-only { display: flex !important; }
 
   /* Container */
   .consol-container, .liq-container { max-width: 100% !important; box-shadow: none !important; border-radius: 0 !important; }
@@ -366,13 +363,12 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .mp-all { display: block; width: 100%; padding: 7px; margin-top: 8px; border-radius: 6px; border: 1.5px dashed #dde1e8; background: transparent; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; color: #6b7280; text-align: center; transition: all 0.15s; }
 .mp-all:hover { border-color: #4f8cff; color: #4f8cff; background: #f0f5ff; }
 /* MULTI-SELECT COMBO ADDITIONS */
-.combo-item-chk { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 13px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; white-space: nowrap; }
+.combo-item-chk { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 13px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; }
 .combo-item-chk:hover { background: #eef3ff; }
 .combo-item-chk input[type=checkbox] { accent-color: #4f8cff; width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
 .combo-item-chk .match { font-weight: 700; color: #4f8cff; }
-.combo-item-chk .combo-item-count { font-size: 11px; color: #9ca3af; margin-left: auto; flex-shrink: 0; }
-#combo-list-aloj { min-width: 280px; right: auto; width: max-content; }
-.combo-selall { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 12px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; color: #4f8cff; font-weight: 600; border-bottom: 1px solid #eef0f4; margin-bottom: 2px; white-space: nowrap; }
+.combo-item-chk .combo-item-count { font-size: 11px; color: #9ca3af; margin-left: auto; }
+.combo-selall { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 12px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; color: #4f8cff; font-weight: 600; border-bottom: 1px solid #eef0f4; margin-bottom: 2px; }
 .combo-selall:hover { background: #f0f5ff; }
 .combo-selall input[type=checkbox] { accent-color: #4f8cff; width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
 .combo-tags { display: flex; gap: 4px; flex-wrap: wrap; max-width: 240px; }
@@ -407,18 +403,6 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .ce-panel-summary .ce-sum-val { font-size:16px;font-weight:700;color:#d97706;margin-top:4px; }
 tr.ce-highlighted { background:#fffdf5; }
 @media print { .ce-panel-row,.col-ce,.cc-ce,.ce-highlighted { display:none!important;background:transparent!important; } }
-/* === CONCEPTOS ADICIONALES (CA) === */
-.ca-btn { background:#fff;border:1.5px solid #38bdf8;color:#0284c7;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.15s; }
-.ca-btn:hover { background:#e0f2fe;border-color:#0284c7; }
-.ca-btn.has { background:#e0f2fe;border-color:#0284c7;color:#0369a1; }
-.ca-btn .ca-dot { display:inline-block;width:6px;height:6px;border-radius:50%;background:#0284c7;margin-right:4px; }
-.ca-panel-row td { padding:0!important;border-bottom:1px solid #0284c7!important; }
-.ca-panel-inner { background:#f0f9ff;border-top:2px solid #0284c7;padding:12px 16px 12px 48px;display:flex;align-items:flex-start;gap:16px;animation:ceSlide .2s ease; }
-.ca-panel-left { flex:1; }
-.ca-panel-title { font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0284c7;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
-.ca-panel-title .ca-sub { font-size:9px;color:#9ca3af;font-weight:500;letter-spacing:0;text-transform:none; }
-@media print { .ca-panel-row,.col-ca,.cc-ca { display:none!important;background:transparent!important; } }
-
 /* === AI ASSISTANT === */
 .ai-fab { position:fixed; bottom:24px; right:24px; width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#4f8cff,#3b6de0); color:#fff; border:none; font-size:24px; cursor:pointer; box-shadow:0 4px 16px rgba(79,140,255,0.4); z-index:90; display:flex; align-items:center; justify-content:center; transition:transform 0.2s,box-shadow 0.2s; }
 .ai-fab:hover { transform:scale(1.08); box-shadow:0 6px 24px rgba(79,140,255,0.5); }
@@ -461,9 +445,9 @@ tr.ce-highlighted { background:#fffdf5; }
   <nav style="margin-top:16px; flex:1;">
     <div class="nav-item active" id="nav-upload" onclick="showScreen('upload')">&#128228; Cargar Fichero</div>
     <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; Preliquidaciones</div>
-    <div class="nav-item nav-sub" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#8627; Detalle Reserva</div>
     <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; Por Alojamiento</div>
-    <div class="nav-item nav-sub" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#8627; Liquidación</div>
+    <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; Detalle</div>
+    <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; Liquidación</div>
   </nav>
   <div class="sidebar-google" id="sidebar-google" style="display:none;">
     <span class="status-dot" id="google-dot"></span>
@@ -703,7 +687,7 @@ tr.ce-highlighted { background:#fffdf5; }
       <div class="filter-sep"></div>
       <label>Ordenar por</label>
       <div class="combo" id="combo-consolsort" style="min-width:190px;">
-        <input class="combo-input" type="text" placeholder="Nombre Aâ†‘Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
+        <input class="combo-input" type="text" placeholder="Nombre A\u2191Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
         <div class="combo-clear" onclick="clearSimpleCombo('consolsort')" title="Limpiar">&#10005;</div>
         <div class="combo-list" id="combo-list-consolsort"></div>
       </div>
@@ -730,22 +714,20 @@ tr.ce-highlighted { background:#fffdf5; }
       <button class="modal-tab" onclick="switchTab('tab-otros',this)">Servicio GTC / Limpieza / Amenities / Mant.</button>
       <button class="modal-tab" onclick="switchTab('tab-pasarela',this)">Pasarela</button>
       <button class="modal-tab" onclick="switchTab('tab-impuestos',this)">Impuestos</button>
-      <button class="modal-tab" onclick="switchTab('tab-mingar',this)">Mín. Garant.</button>
     </div>
     <div class="modal-body">
       <div class="tab-panel active" id="tab-plat"></div>
       <div class="tab-panel" id="tab-otros"></div>
       <div class="tab-panel" id="tab-pasarela"></div>
       <div class="tab-panel" id="tab-impuestos"></div>
-      <div class="tab-panel" id="tab-mingar"></div>
     </div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // CONTROL DE VERSIONES
-// ═══════════════════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // \u2500\u2500\u2500 SEARCH \u2500\u2500\u2500
 function onSearchPreliq(val) {
   _searchText = val.trim().toLowerCase();
@@ -768,120 +750,27 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '2.0.5';
-const APP_BUILD   = '2026-02-12T14:05:00+01:00';
-const APP_CHANGES = 'v205: Fix panel CA se cierra al añadir concepto + mantenimiento eliminado de reservas';
+const APP_VERSION = '1.9.1';
+const APP_BUILD   = '2026-02-11T01:12:00+01:00';
+const APP_CHANGES = 'Fix: CE eliminar sin flash — actualiza celdas directamente sin reconstruir panel';
 
 const CHANGELOG = [
-  { version: '2.0.5', date: '2026-02-12T14:05:00+01:00', changes: [
-    'Fix: panel CA ya no se cierra al añadir concepto — addCATableItem refactorizado con ciclo completo',
-    'Fix: flush de inputs CA antes de añadir/borrar en tabla (evita perder valores no guardados)',
-    'Eliminar mantenimiento de preliquidaciones individuales (solo aplica en consolidaciones por alojamiento)',
-    'Fix: CA importe se guarda en tiempo real con oninput (sin esperar blur/onchange)',
-    'Fix: CA perdía precio al añadir/borrar concepto en detalle — flush DOM antes de re-render',
-    'Fix: MG duplicados — deduplicación por stripAloj al cargar config desde Sheets',
-    'Fix: CA sincronizado bidireccional entre vista detalle ↔ tabla ↔ consolidado',
-    'Fix: botón ⚙ no abría modal — renderMingarTab duplicada + toggleMGEnabled huérfano',
-    'Fix: encoding UTF-8 completo — 199+ líneas con doble codificación cp1252 corregidas'
-  ]},
-  { version: '2.0.3', date: '2026-02-12T01:15:00+01:00', changes: [
-    'CA: celda footer con total Conceptos Adicionales en tabla principal',
-    'CA: columna cc-ca y panel en vista consolidada por alojamiento',
-    'CA: footer consolidado con total CA',
-    'CA: delta updates para tCA en todas las funciones de cambio',
-    'CA: actualiza celda CA en tabla al editar desde vista detalle'
-  ]},
-  { version: '2.0.2', date: '2026-02-12T01:00:00+01:00', changes: [
-    'Nuevo: Columna C.A. (sin IVA) en tabla principal con panel expandible tipo CE',
-    'CA: panel inline con + A\u00f1adir concepto, edici\u00f3n de label y cantidad',
-    'CA: restan del Subtotal junto con limpieza/amenities/pasarela',
-    'CA: persistencia en pesta\u00f1a Configuraci\u00f3n de Google Sheets',
-    'Mantenimiento siempre debajo del Subtotal (tanto MG como no-MG)',
-    'Fix: Conceptos Adicionales funcional en vista detalle',
-    'MG Config: 80% constante fija, sin dropdown, sin duplicados',
-    'Subtotal liquidaci\u00f3n visible cuando hay mantenimiento'
-  ]},
-  { version: '2.0.1', date: '2026-02-11T21:45:00+01:00', changes: [
-    'Nuevo: Conceptos Adicionales (CA) por reserva en preliquidaciones',
-    'CA: panel inline con + Añadir concepto después de Pasarela de pago',
-    'CA: se restan del Subtotal junto con limpieza/amenities/pasarela',
-    'CA: persistencia en pestaña Configuración de Google Sheets',
-    'CA: visible en vista detalle, impresión y consolidado'
-  ]},
-  { version: '2.0.0', date: '2026-02-11T21:20:00+01:00', changes: [
-    'Fix: extras MG se restan al mismo nivel que limpieza/amenities/pasarela para formar el Subtotal',
-    'Fix: extras MG muestran importe en rojo a la derecha como las demás deducciones',
-    'Fix: emojis corruptos restaurados (🤖 asistente, 📋 historial, 🚀 badge)',
-    'Mantenimiento siempre último antes de Subtotal liquidación',
-    'El 80/20 se aplica sobre el Subtotal ya reducido por extras'
-  ]},
-  { version: '1.9.9', date: '2026-02-11T20:50:00+01:00', changes: [
-    'Fix codificación UTF-8: corregidos 223 caracteres con doble codificación',
-    'Fix: MG no se detectaba por desajuste de nombres (prefijo Homity)',
-    'Fix: extras MG ahora se restan correctamente del subtotal liquidación',
-    'MG: extras movidos a después de Mantenimiento (antes de Subtotal liquidación)',
-    'Parametrización MG: dropdown de alojamientos disponibles',
-    'Consolidado MG: muestra conceptos adicionales si existen'
-  ]},
-  { version: '1.9.8', date: '2026-02-11T18:51:00+01:00', changes: [
-    'MG completo: Subtotal â†’ 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación â†’ IRPF/IVA â†’ Total',
-    'Estilos visuales MG: fondo amarillo Contrato, borde ámbar Subtotal ajustado, borde verde Subtotal liquidación',
-    'Extras compactos estilo CE con + Añadir concepto para alojamientos MG',
-    'Mantenimiento con checkbox+selector dentro del flujo MG (después de Subtotal ajustado)',
-    'Consolidado y print con mismo flujo y estilos MG',
-    'Quitar prefijo "Homity" de nombres en dropdown, tabla, detalle, consolidado y print',
-    'Dropdown alojamientos: una línea por nombre, ancho auto-expandible'
-  ]},
-  { version: '1.9.7', date: '2026-02-11T18:48:00+01:00', changes: [
-    'MG: flujo Subtotal â†’ 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación â†’ IRPF/IVA',
-    'Estilos visuales MG: fondo amarillo Contrato, borde ámbar ajustado, borde verde liquidación',
-    'Extras compactos estilo CE con + Añadir concepto para alojamientos MG',
-    'Quitar prefijo "Homity" de nombres de alojamientos en toda la app',
-    'Dropdown alojamientos: una línea por nombre, ancho auto-expandible'
-  ]},
-  { version: '1.9.6', date: '2026-02-11T12:31:00+01:00', changes: [
-    'Mínimo garantizado: estructura de datos y persistencia',
-    'Detalle reserva: mantenimiento con checkbox/selector y conceptos extra',
-    'Fix pasarela sin salto inicial',
-    'Fix persistencia: save lock, beforeunload, amenities'
-  ]},
-  { version: '1.9.5', date: '2026-02-11T11:24:00+01:00', changes: [
-    'Detalle: mantenimiento sin checkbox ni selector — muestra solo el valor configurado',
-    'Si el importe es 0 o desactivado en parametrización, no aparece la fila'
-  ]},
-  { version: '1.9.4', date: '2026-02-11T11:14:00+01:00', changes: [
-    'Detalle: pasarela en una sola fila — toggle inline junto al label y selector, sin salto',
-    'Detalle: mantenimiento reubicado debajo de pasarela'
-  ]},
-  { version: '1.9.3', date: '2026-02-11T11:06:00+01:00', changes: [
-    'Detalle reserva: añadida opción de Mantenimiento con checkbox y selector de importe',
-    'Detalle reserva: Pasarela Stripe/Booking posicionada a la izquierda',
-    'Detalle reserva: botón Imprimir solo visible cuando la reserva está validada'
-  ]},
-  { version: '1.9.2', date: '2026-02-11T10:59:00+01:00', changes: [
-    'Sidebar reorganizado: Detalle y Liquidación como sub-items indentados bajo su vista padre',
-    'Sub-items se ocultan al volver a la vista principal',
-    'Filtros de fecha independientes: Pre-liquidaciones y Por Alojamiento tienen fechas separadas',
-    'Fix: editar importe en CE ya no pega salto (actualización directa de celdas)',
-    'Flechas â€¹ â€º funcionan por vista independiente',
-    'Fix: Ordenar Por mostraba código unicode literal en vez de flecha â†‘'
-  ]},
   { version: '1.9.1', date: '2026-02-11T01:12:00+01:00', changes: [
     'CE: eliminar concepto con animación slide-out sin flash ni re-render',
     'CE: añadir concepto con animación slide-in + auto-focus',
-    'Texto: "Totales" â†’ "Reservas Totales" en barra de totales'
+    'Texto: "Totales" → "Reservas Totales" en barra de totales'
   ]},
   { version: '1.9.0', date: '2026-02-11T01:01:00+01:00', changes: [
     'Filtro de fecha multi-selección: selecciona varios años y meses simultáneamente',
     'Combinatoria libre: Ene+Feb de 2025+2026, o un mes en 3 años, etc.',
-    'Flechas â€¹ â€º para navegar cuando hay selección simple (1 año o 1 año+mes)',
+    'Flechas ‹ › para navegar cuando hay selección simple (1 año o 1 año+mes)',
     'Contador de reservas por mes agregado según años seleccionados',
     'Fix: añadir concepto CE suave — inserta DOM sin re-render + animación slide-down',
-    'Texto: "Totales" â†’ "Reservas Totales" en barra de totales'
+    'Texto: "Totales" → "Reservas Totales" en barra de totales'
   ]},
   { version: '1.8.0', date: '2026-02-11T00:33:00+01:00', changes: [
     'Asistente Histórico Reservas: chat IA integrado con botón flotante y panel lateral',
-    'Responde solo con datos reales cargados — nunca inventa cifras ni nombres',
+    'Responde solo con datos reales cargados — nunca inventa cifras ni nombres',
     'Contexto completo: resúmenes por alojamiento, plataforma, mes, edificio, atendido por, tipo reserva',
     'Detalle por reserva: todos los campos del Sheet (ID, localizador, cliente, edificio, etc.)',
     'Desglose de liquidación: base, comisiones, limpieza, amenities, CE, pasarela, subtotal',
@@ -893,7 +782,7 @@ const CHANGELOG = [
     'Changelog muestra día, hora y segundos en horario Madrid (+01:00)',
     'Sidebar muestra hora real del deploy (primer acceso a la versión), no hora de build',
     'Meta tags anti-caché: navegador siempre pide versión fresca al servidor',
-    'Scrollbar permanente, fino (6px) y transparente — elimina sombra al abrir/cerrar CE',
+    'Scrollbar permanente, fino (6px) y transparente — elimina sombra al abrir/cerrar CE',
     'Fix: modal config no salta al cambiar de tab (posición fija arriba + min-height)'
   ]},
   { version: '1.7.4', date: '2026-02-10T08:30:00+01:00', changes: [
@@ -907,8 +796,8 @@ const CHANGELOG = [
     'Fix: micro-vibración DOM con overflow-anchor y DocumentFragment'
   ]},
   { version: '1.7.3', date: '2026-02-10T08:00:00+01:00', changes: [
-    'Renombrar "Plataforma" â†’ "Canal de Venta" en cabeceras y detalle',
-    'Reordenar secciones: Canal de Venta â†’ GTC/Limpieza â†’ Pasarela â†’ Impuestos',
+    'Renombrar "Plataforma" → "Canal de Venta" en cabeceras y detalle',
+    'Reordenar secciones: Canal de Venta → GTC/Limpieza → Pasarela → Impuestos',
     'Fix: salto de scroll al hacer click con pocos resultados filtrados',
     'Fix: IDs de panel CE corregidos en _patchSingleRow (ce-ppanel-)'
   ]},
@@ -918,7 +807,7 @@ const CHANGELOG = [
     'Toast de notificación de nueva versión al arrancar',
     'Filtro mes/año por defecto al mes y año actual',
     'Deducciones mensuales (mantenimiento + extras) antes del subtotal',
-    'Fix: limpieza e IRPF con valor 0â‚¬ no se aplicaban (bug falsy)',
+    'Fix: limpieza e IRPF con valor 0€ no se aplicaban (bug falsy)',
     'Fix: estilos consol-row mejorados'
   ]},
   { version: '1.7.1', date: '2026-02-09T19:30:00+01:00', changes: [
@@ -1021,7 +910,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function showVersionToast(prevVersion) {
   const entry = CHANGELOG.find(c => c.version === APP_VERSION);
-  const changesList = entry ? entry.changes.slice(0, 4).map(c => `<div style="font-size:11px;color:#cbd5e1;padding:2px 0 2px 12px;position:relative;line-height:1.4;"><span style="position:absolute;left:2px;color:#4f8cff;">â€¢</span>${c}</div>`).join('') : `<div style="font-size:12px;color:#cbd5e1;">${APP_CHANGES}</div>`;
+  const changesList = entry ? entry.changes.slice(0, 4).map(c => `<div style="font-size:11px;color:#cbd5e1;padding:2px 0 2px 12px;position:relative;line-height:1.4;"><span style="position:absolute;left:2px;color:#4f8cff;">•</span>${c}</div>`).join('') : `<div style="font-size:12px;color:#cbd5e1;">${APP_CHANGES}</div>`;
   const moreCount = entry && entry.changes.length > 4 ? `<div style="font-size:11px;color:#64748b;margin-top:2px;">...y ${entry.changes.length - 4} más</div>` : '';
   const toast = document.createElement('div');
   toast.id = 'version-toast';
@@ -1033,7 +922,7 @@ function showVersionToast(prevVersion) {
         ${changesList}${moreCount}
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
           <span style="font-size:11px;color:#64748b;">Anterior: v${prevVersion}</span>
-          <a href="#" onclick="event.preventDefault();closeVersionToast();showChangelog();" style="font-size:11px;color:#4f8cff;text-decoration:none;font-weight:600;">Ver historial completo â†’</a>
+          <a href="#" onclick="event.preventDefault();closeVersionToast();showChangelog();" style="font-size:11px;color:#4f8cff;text-decoration:none;font-weight:600;">Ver historial completo →</a>
         </div>
       </div>
       <button onclick="closeVersionToast()" style="background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;padding:0;line-height:1;">&times;</button>
@@ -1068,7 +957,7 @@ function showChangelog() {
       <div class="cl-version-header">
         <span class="cl-badge${isCurrent ? ' current' : ''}">v${v.version}</span>
         <span class="cl-date">${new Date(v.date).toLocaleDateString('es-ES', {day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'Europe/Madrid'})}</span>
-        ${isCurrent ? '<span style="font-size:11px;color:#43a047;font-weight:600;">→ actual</span>' : ''}
+        ${isCurrent ? '<span style="font-size:11px;color:#43a047;font-weight:600;">← actual</span>' : ''}
       </div>
       <ul class="cl-changes">${items}</ul>
     </div>`;
@@ -1080,12 +969,12 @@ function closeChangelog() {
   document.getElementById('changelog-overlay').style.display = 'none';
 }
 
-// ═══ CONFIGURACIÓN GOOGLE \u2014 Sustituye con tus credenciales reales ═══
+// \u2550\u2550\u2550 CONFIGURACIÓN GOOGLE \u2014 Sustituye con tus credenciales reales \u2550\u2550\u2550
 const GOOGLE_CLIENT_ID = '658971789892-cnsnbr36hus5jablgkuj2qk8ipic5ptf.apps.googleusercontent.com';
 const GOOGLE_API_KEY   = 'AIzaSyAqn7NyL_QRC97KW-huBjzZjTLPGpEoT-k';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.readonly';
 
-// ═══ GOOGLE STATE ═══
+// \u2550\u2550\u2550 GOOGLE STATE \u2550\u2550\u2550
 let _gapiInited = false, _gisInited = false, _googleToken = null, _tokenClient = null;
 let _pickerInited = false;
 let _sheetHistory = [];
@@ -1137,7 +1026,7 @@ window.addEventListener('load', () => {
   else { const s = document.querySelector('script[src*="accounts.google.com"]'); if (s) s.addEventListener('load', () => setTimeout(gisLoaded, 100)); }
 });
 
-// ═══ GOOGLE AUTH ═══
+// \u2550\u2550\u2550 GOOGLE AUTH \u2550\u2550\u2550
 function googleSignIn() {
   if (!_tokenClient) { alert('Google API no inicializada. Recarga la página.'); return; }
   if (_googleToken) { updateGoogleStatus(true); return; }
@@ -1194,7 +1083,7 @@ function updateGoogleStatus(connected) {
   renderSheetHistory();
 }
 
-// ═══ DEFAULT SHEET URL MANAGEMENT ═══
+// \u2550\u2550\u2550 DEFAULT SHEET URL MANAGEMENT \u2550\u2550\u2550
 function renderDefaultUrlDisplay() {
   var el = document.getElementById('default-url-display');
   if (!el || !_defaultSheetUrl) return;
@@ -1264,7 +1153,7 @@ function saveNewDefaultUrl() {
   renderDefaultUrlDisplay();
 }
 
-// ═══ GOOGLE PICKER ═══
+// \u2550\u2550\u2550 GOOGLE PICKER \u2550\u2550\u2550
 function getAppId() {
   const m = GOOGLE_CLIENT_ID.match(/^(\d+)/);
   return m ? m[1] : '';
@@ -1290,7 +1179,7 @@ function onPickerCallback(data) {
   }
 }
 
-// ═══ LOAD FROM URL ═══
+// \u2550\u2550\u2550 LOAD FROM URL \u2550\u2550\u2550
 function loadFromUrl() {
   const url = document.getElementById('gsheet-url-input').value.trim();
   if (!url) { alert('Pega la URL de la hoja de Google Sheets'); return; }
@@ -1305,7 +1194,7 @@ function extractSheetId(url) {
   return null;
 }
 
-// ═══ LOAD SHEET DATA ═══
+// \u2550\u2550\u2550 LOAD SHEET DATA \u2550\u2550\u2550
 async function loadSheetById(sheetId, sheetName) {
   if (!_googleToken) { alert('Inicia sesión con Google primero.'); return; }
   showGSheetLoading('Obteniendo información de la hoja...');
@@ -1376,11 +1265,11 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
   }
 }
 
-// ═══ LOADING UI ═══
+// \u2550\u2550\u2550 LOADING UI \u2550\u2550\u2550
 function showGSheetLoading(text) { document.getElementById('gsheet-loading').style.display = 'flex'; document.getElementById('gsheet-loading-text').textContent = text || 'Cargando...'; }
 function hideGSheetLoading() { document.getElementById('gsheet-loading').style.display = 'none'; document.getElementById('gsheet-autoload-status').style.display = 'none'; }
 
-// ═══ SHEET WRITE-BACK: Validation column ═══
+// \u2550\u2550\u2550 SHEET WRITE-BACK: Validation column \u2550\u2550\u2550
 function colIndexToLetter(idx) {
   let s = '';
   idx = Math.max(0, idx);
@@ -1650,7 +1539,6 @@ async function loadPropietariosTab(sheetId) {
   } catch(e) { console.warn('Error loading Propietarios tab:', e); }
 }
 let _configLoaded = false; // true after config has been loaded/created for current sheet
-let _configSaving = false; // lock to prevent concurrent saves
 
 // Debounce timers for saving
 let _globalConfigSaveTimer = null;
@@ -1669,37 +1557,6 @@ function scheduleReservaConfigSave(idx) {
   if (_reservaConfigSaveTimer) clearTimeout(_reservaConfigSaveTimer);
   _reservaConfigSaveTimer = setTimeout(flushReservaConfigSaves, 1000);
 }
-
-// Flush all pending saves immediately (for beforeunload)
-function flushAllPendingSaves() {
-  if (_globalConfigSaveTimer) { clearTimeout(_globalConfigSaveTimer); _globalConfigSaveTimer = null; }
-  if (_reservaConfigSaveTimer) { clearTimeout(_reservaConfigSaveTimer); _reservaConfigSaveTimer = null; }
-  if (!_sheetSource || !_googleToken || !_configLoaded) return;
-  // Use synchronous XHR as last resort on page unload
-  try {
-    var data = buildFullConfigTabData();
-    var url = 'https://sheets.googleapis.com/v4/spreadsheets/' + _sheetSource.id + '/values/' + CONFIG_TAB_NAME + '!A1:I10000?valueInputOption=RAW';
-    var clearUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + _sheetSource.id + '/values/' + CONFIG_TAB_NAME + '!A1:I10000:clear';
-    // Clear
-    var xhr1 = new XMLHttpRequest();
-    xhr1.open('POST', clearUrl, false);
-    xhr1.setRequestHeader('Authorization', 'Bearer ' + _googleToken);
-    xhr1.setRequestHeader('Content-Type', 'application/json');
-    xhr1.send('{}');
-    // Write
-    var xhr2 = new XMLHttpRequest();
-    xhr2.open('PUT', url, false);
-    xhr2.setRequestHeader('Authorization', 'Bearer ' + _googleToken);
-    xhr2.setRequestHeader('Content-Type', 'application/json');
-    xhr2.send(JSON.stringify({ values: data }));
-    console.log('[Config] Emergency save on unload: ' + data.length + ' rows');
-  } catch(e) { console.warn('[Config] Emergency save failed:', e); }
-}
-window.addEventListener('beforeunload', function(e) {
-  if (_globalConfigSaveTimer || _reservaConfigSaveTimer || _pendingReservaConfigSaves.size > 0) {
-    flushAllPendingSaves();
-  }
-});
 
 // Build global config data as key-value rows
 function buildGlobalConfigRows() {
@@ -1725,11 +1582,6 @@ function buildGlobalConfigRows() {
       rows.push(['extras:' + k, JSON.stringify(exs)]);
     }
   });
-  // Mínimo garantizado per-alojamiento
-  Object.keys(_minimoGarantizado).forEach(function(k) {
-    var mg = _minimoGarantizado[k];
-    rows.push(['mingar:' + k, (mg.enabled?'1':'0') + ',' + mg.pct]);
-  });
   return rows;
 }
 
@@ -1750,8 +1602,7 @@ function buildReservaConfigRows(indices) {
       s.irpf !== undefined ? s.irpf : '',
       s.pasarela ? 'true' : 'false',
       s.pasarelaRate !== undefined ? s.pasarelaRate : '',
-      (s.conceptosEspeciales && s.conceptosEspeciales.length > 0) ? JSON.stringify(s.conceptosEspeciales) : '',
-      (s.conceptosAdicionales && s.conceptosAdicionales.length > 0) ? JSON.stringify(s.conceptosAdicionales) : ''
+      (s.conceptosEspeciales && s.conceptosEspeciales.length > 0) ? JSON.stringify(s.conceptosEspeciales) : ''
     ]);
   });
   return rows;
@@ -1768,7 +1619,7 @@ function buildFullConfigTabData() {
   globalRows.forEach(function(row) { data.push(row); });
   data.push([]);
   data.push(['AJUSTES POR RESERVA']);
-  data.push(['ID Reserva', 'comPlataforma', 'comGTC', 'limpieza', 'amenities', 'irpf', 'pasarela', 'pasarelaRate', 'conceptosEspeciales', 'conceptosAdicionales']);
+  data.push(['ID Reserva', 'comPlataforma', 'comGTC', 'limpieza', 'amenities', 'irpf', 'pasarela', 'pasarelaRate', 'conceptosEspeciales']);
   var reservaRows = buildReservaConfigRows();
   reservaRows.forEach(function(row) { data.push(row); });
   return data;
@@ -1869,10 +1720,6 @@ function applyConfigFromRows(rows) {
       } else if (key.startsWith('extras:')) {
         var extAloj = key.substring(7);
         try { _consolExtras[extAloj] = JSON.parse(val); } catch(e) { _consolExtras[extAloj] = []; }
-      } else if (key.startsWith('mingar:')) {
-        var mgAloj = key.substring(7);
-        var mgParts = val.split(',');
-        _minimoGarantizado[mgAloj] = { enabled: mgParts[0] === '1', pct: parseFloat(mgParts[1]) || 80 };
       }
     }
 
@@ -1908,7 +1755,6 @@ function applyConfigFromRows(rows) {
     var paCol = colMap['pasarela'];
     var prCol = colMap['pasarelaRate'];
     var ceCol = colMap['conceptosEspeciales'];
-    var caCol = colMap['conceptosAdicionales'];
 
     var reservaMap = {};
     allReservas.forEach(function(r) { reservaMap[r.id] = r.idx; });
@@ -1926,42 +1772,27 @@ function applyConfigFromRows(rows) {
       if (cpCol !== undefined) { var v = rows[i][cpCol]; if (v !== undefined && v !== '') s.comPlataforma = parseFloat(v); }
       if (cgCol !== undefined) { var v = rows[i][cgCol]; if (v !== undefined && v !== '') s.comGTC = parseFloat(v); }
       if (lmCol !== undefined) { var v = rows[i][lmCol]; if (v !== undefined && v !== '') s.limpieza = parseFloat(v); }
-      if (amCol !== undefined) { var v = rows[i][amCol]; if (v !== undefined && v !== '') { var av = parseFloat(v); if (!isNaN(av)) s.amenities = av; } }
+      if (amCol !== undefined) { var v = rows[i][amCol]; if (v !== undefined && v !== '') { var av = parseFloat(v); if (!isNaN(av) && amenitiesOptions.some(function(o){return Math.abs(o-av)<0.001;})) s.amenities = av; } }
       if (irCol !== undefined) { var v = rows[i][irCol]; if (v !== undefined && v !== '') s.irpf = parseFloat(v); }
       if (paCol !== undefined) { var v = rows[i][paCol]; if (v !== undefined && v !== '') s.pasarela = String(v).trim() === 'true'; }
       if (prCol !== undefined) { var v = rows[i][prCol]; if (v !== undefined && v !== '') s.pasarelaRate = parseFloat(v); }
       if (ceCol !== undefined) { var v = String(rows[i][ceCol] || '').trim(); if (v) { try { var parsed = JSON.parse(v); if (Array.isArray(parsed)) s.conceptosEspeciales = parsed.filter(function(item){return item && typeof item.amount === 'number';}); } catch(e) {} } }
-      if (caCol !== undefined) { var v = String(rows[i][caCol] || '').trim(); if (v) { try { var parsed = JSON.parse(v); if (Array.isArray(parsed)) s.conceptosAdicionales = parsed.filter(function(item){return item && typeof item.amount === 'number';}); } catch(e) {} } }
 
       applied++;
     }
     console.log('[Config] Applied per-reservation settings: ' + applied + ' reservas');
-  }
 
-  // Deduplicate mínimo garantizado entries by stripped name (fix legacy duplicates)
-  var _mgSeen = {};
-  Object.keys(_minimoGarantizado).forEach(function(k) {
-    var stripped = stripAloj(k);
-    if (_mgSeen[stripped]) {
-      // Keep the one with the longer key (full name) or the first one seen
-      var existing = _mgSeen[stripped];
-      if (k.length > existing.length) {
-        delete _minimoGarantizado[existing];
-        _mgSeen[stripped] = k;
-      } else {
-        delete _minimoGarantizado[k];
+    // Sanitize: reset any amenities value that isn't in amenitiesOptions
+    var sanitized = 0;
+    allReservas.forEach(function(r) {
+      var s = settings[r.idx];
+      if (s && s.amenities !== undefined && !amenitiesOptions.some(function(o){return Math.abs(o-s.amenities)<0.001;})) {
+        s.amenities = amenitiesOptions[0];
+        sanitized++;
       }
-    } else {
-      _mgSeen[stripped] = k;
-    }
-  });
-  console.log('[Config] MG after dedup: ' + Object.keys(_minimoGarantizado).length + ' alojamientos');
-
-  // Initialize known mínimo garantizado alojamientos if not yet in config
-  var _defaultMG = ['MA-2-P2-1A','MA-2-P3-1C','MA-2-P3-1D','MA-2-P3-1E','MA-2-P4-1C','MG-2-0D'];
-  _defaultMG.forEach(function(a) {
-    if (!getMinimoGarantizado(a)) _minimoGarantizado[a] = { enabled: true, pct: 80 };
-  });
+    });
+    if (sanitized > 0) console.log('[Config] Sanitized ' + sanitized + ' reservas with invalid amenities value');
+  }
 
   // Rebuild caches after applying config
   rebuildSelectCache();
@@ -1971,13 +1802,8 @@ function applyConfigFromRows(rows) {
 // Save full global config to sheet
 async function saveGlobalConfigToSheet() {
   if (!_sheetSource || !_googleToken || !_configLoaded) return;
-  if (_configSaving) { scheduleGlobalConfigSave(); return; } // retry if busy
-  _configSaving = true;
   updateSyncIndicator('syncing');
   try {
-    // Also flush any pending reserva saves in same write
-    _pendingReservaConfigSaves.clear();
-    if (_reservaConfigSaveTimer) { clearTimeout(_reservaConfigSaveTimer); _reservaConfigSaveTimer = null; }
     var data = buildFullConfigTabData();
     await gapi.client.sheets.spreadsheets.values.clear({
       spreadsheetId: _sheetSource.id,
@@ -1994,8 +1820,6 @@ async function saveGlobalConfigToSheet() {
   } catch(e) {
     console.error('[Config] Error saving config:', e);
     updateSyncIndicator('error');
-  } finally {
-    _configSaving = false;
   }
 }
 
@@ -2003,8 +1827,6 @@ async function saveGlobalConfigToSheet() {
 async function flushReservaConfigSaves() {
   if (!_sheetSource || !_googleToken || !_configLoaded) return;
   if (_pendingReservaConfigSaves.size === 0) return;
-  if (_configSaving) { scheduleReservaConfigSave([..._pendingReservaConfigSaves][0]); return; } // retry if busy
-  _configSaving = true;
 
   var indices = [..._pendingReservaConfigSaves];
   _pendingReservaConfigSaves.clear();
@@ -2027,12 +1849,10 @@ async function flushReservaConfigSaves() {
   } catch(e) {
     console.error('[Config] Error saving reserva config:', e);
     updateSyncIndicator('error');
-  } finally {
-    _configSaving = false;
   }
 }
 
-// ═══ SHEET HISTORY ═══
+// \u2550\u2550\u2550 SHEET HISTORY \u2550\u2550\u2550
 function addToSheetHistory(sheetId, name, sheetTab) {
   _sheetHistory = _sheetHistory.filter(h => h.id !== sheetId || h.tab !== sheetTab);
   _sheetHistory.unshift({ id: sheetId, name, tab: sheetTab, date: new Date().toISOString() });
@@ -2073,9 +1893,9 @@ function renderSheetHistory() {
   });
 }
 
-// ══════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 // APP ORIGINAL
-// ══════════════════════════════════════════════════
+// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
 
 const IVA_RESERVA = 0.10, IVA_SUBTOTAL = 0.21;
 let amenitiesOptions = [7];
@@ -2095,44 +1915,14 @@ let maintenanceOptions = [80];
 // Per-consolidation monthly deductions (keyed by alojamiento name)
 let _consolMaint = {}; // { alojName: { enabled:true, amount:80 } }
 let _consolExtras = {}; // { alojName: [ { label:'...', amount:123.45 } ] }
-let _minimoGarantizado = {}; // { alojName: { enabled:true, pct:80 } } — special 80% propietario condition
 
 function getConsolMaint(alojName) {
-  if (!_consolMaint[alojName]) {
-    var alt = stripAloj(alojName);
-    if (alt !== alojName && _consolMaint[alt]) { _consolMaint[alojName] = _consolMaint[alt]; delete _consolMaint[alt]; }
-    else _consolMaint[alojName] = { enabled: true, amount: maintenanceOptions[0] };
-  }
+  if (!_consolMaint[alojName]) _consolMaint[alojName] = { enabled: true, amount: maintenanceOptions[0] };
   return _consolMaint[alojName];
 }
 function getConsolExtras(alojName) {
-  if (!_consolExtras[alojName]) {
-    var alt = stripAloj(alojName);
-    if (alt !== alojName && _consolExtras[alt]) { _consolExtras[alojName] = _consolExtras[alt]; delete _consolExtras[alt]; }
-    else _consolExtras[alojName] = [];
-  }
+  if (!_consolExtras[alojName]) _consolExtras[alojName] = [];
   return _consolExtras[alojName];
-}
-function getMinimoGarantizado(alojName) {
-  if (_minimoGarantizado[alojName]) return _minimoGarantizado[alojName];
-  var alt = stripAloj(alojName);
-  if (alt !== alojName && _minimoGarantizado[alt]) {
-    _minimoGarantizado[alojName] = _minimoGarantizado[alt];
-    delete _minimoGarantizado[alt];
-    return _minimoGarantizado[alojName];
-  }
-  // Also check if any existing key strips to the same name
-  var keys = Object.keys(_minimoGarantizado);
-  for (var i = 0; i < keys.length; i++) {
-    if (stripAloj(keys[i]) === alt) {
-      return _minimoGarantizado[keys[i]];
-    }
-  }
-  return null;
-}
-function isMinGarantizado(alojName) {
-  var mg = getMinimoGarantizado(alojName);
-  return mg && mg.enabled;
 }
 function getConsolDeductions(alojName) {
   var m = getConsolMaint(alojName);
@@ -2178,7 +1968,7 @@ let _searchText = '', _searchTextConsol = '';
 function getFilterSortKey() {
   const pKey = [...comboState.platform.selected].sort().join(',') || 'all';
   const aKey = [...comboState.aloj.selected].sort().join(',') || 'all';
-  return pKey + '|' + aKey + '|' + [..._mpState.p.years].sort().join(',') + '|' + [..._mpState.p.months].sort().join(',') + '|' +
+  return pKey + '|' + aKey + '|' + [..._mpSelYears].sort().join(',') + '|' + [..._mpSelMonths].sort().join(',') + '|' +
     simpleComboState.status.value + '|' + simpleComboState.sort.value + '|' +
     simpleComboState.sortdir.value + '|' + _validatedVersion + '|' + allReservas.length + '|' + _searchText;
 }
@@ -2192,7 +1982,7 @@ function getFilteredSorted() {
   let fil = allReservas.filter(r => {
     if (pSel.size > 0 && !pSel.has(r.plataforma)) return false;
     if (aSel.size > 0 && !aSel.has(r.alojamiento)) return false;
-    if (_mpState.p.years.size > 0 && !_mpMatchDate(r._dEntrada, 'p')) return false;
+    if (_mpSelYears.size > 0 && !_mpMatchDate(r._dEntrada)) return false;
     if (sf2 === "validated" && !validated.has(r.idx)) return false;
     if (sf2 === "pending" && validated.has(r.idx)) return false;
     if (_searchText) {
@@ -2251,7 +2041,6 @@ function selectCleanWithValue(html, val) {
 }
 
 // Fast number formatter (avoid toLocaleString which is ~50x slower)
-function stripAloj(name) { return name ? name.replace(/^Homity\s+/i, '') : name; }
 function fmt(n) {
   const fixed = Math.abs(n).toFixed(2);
   const [int, dec] = fixed.split('.');
@@ -2318,31 +2107,11 @@ function calcLiquidacion(r, s) {
   }
   const limp = s.limpieza !== undefined ? s.limpieza : cleaningOptions[0];
   const rawAmen = s.amenities;
-  const amen = (rawAmen !== undefined && !isNaN(rawAmen)) ? rawAmen : amenitiesOptions[0];
-  // Conceptos Adicionales por reserva (restan del Subtotal)
-  const ca = (s.conceptosAdicionales && s.conceptosAdicionales.length > 0) ? s.conceptosAdicionales : [];
-  const caTotal = ca.reduce(function(sum, item) { return sum + (item.amount || 0); }, 0);
-  // MG extras se restan al mismo nivel que limp/amen/pasarela para formar el Subtotal
-  const mg = getMinimoGarantizado(r.alojamiento);
-  const isMG = !!(mg && mg.enabled);
-  let mgExtras = 0;
-  if (isMG) {
-    var extras = getConsolExtras(r.alojamiento);
-    mgExtras = extras.reduce(function(s,e){ return s + (e.amount || 0); }, 0);
-  }
-  const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen - caTotal - mgExtras;
-  // Mantenimiento solo se aplica en consolidaciones, NO en preliquidaciones individuales
-  let subFinal = sub, mgPct = 0, mgContrato = 0, mgSubAdj = 0;
-  if (isMG) {
-    mgPct = mg.pct / 100;
-    mgContrato = sub * (1 - mgPct); // 20% contrato GTC
-    mgSubAdj = sub * mgPct;         // 80% subtotal ajustado
-    subFinal = mgSubAdj;
-  }
-
+  const amen = (rawAmen !== undefined && amenitiesOptions.some(function(o){return Math.abs(o-rawAmen)<0.001;})) ? rawAmen : amenitiesOptions[0];
+  const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
   const irpfRate = s.irpf !== undefined ? s.irpf : irpfOptions[0]/100;
-  const iva = subFinal * IVA_SUBTOTAL, ret = subFinal * irpfRate;
-  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, caTotal, sub, subFinal, mgPct, mgContrato, mgSubAdj, mgExtras, isMG, iva, irpfRate, ret, totalLiq: subFinal + iva - ret };
+  const iva = sub * IVA_SUBTOTAL, ret = sub * irpfRate;
+  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, iva, irpfRate, ret, totalLiq: sub + iva - ret };
 }
 
 // \u2500\u2500\u2500 FILE \u2500\u2500\u2500
@@ -2423,7 +2192,6 @@ function processRows(json) {
       limpieza: cleaningOptions[0], amenities: amenitiesOptions[0], irpf: irpfOptions[0]/100, pasarela: false,
       pasarelaRate: isB ? pasarelaBookingOptions[0]/100 : pasarelaStripeOptions[0]/100,
       conceptosEspeciales: [],
-      conceptosAdicionales: [],
     };
   });
 
@@ -2485,13 +2253,6 @@ function showScreen(name) {
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   document.getElementById("screen-" + name).classList.add("active");
   document.getElementById("nav-" + name).classList.add("active");
-  // Hide sub-items when navigating to parent or other main views
-  if (name === 'list' || name === 'upload' || name === 'consol') {
-    document.getElementById('nav-detail').style.display = 'none';
-  }
-  if (name === 'list' || name === 'upload' || name === 'consol') {
-    document.getElementById('nav-consoldetail').style.display = 'none';
-  }
   if (_previewActive) exitPreview();
   if (_navigating) return;
   _navigating = true;
@@ -2526,7 +2287,6 @@ const COLUMNS = [
   { key:"limpieza",label:"Limpieza",sortable:false },
   { key:"amenities",label:"Amenities",sortable:false },
   { key:"pasarela",label:"Pasarela",sortable:false },
-  { key:"ca",label:"C.A.<br>(sin IVA)",sortable:false },
   { key:"subtotal",label:"Subtotal",sortable:true,right:true },
   { key:"irpf",label:"IRPF",sortable:false },
   { key:"iva21",label:"IVA 21%",sortable:false },
@@ -2739,7 +2499,7 @@ function _buildRowHtml(r) {
     <td class="col-localizador muted" style="font-size:11px;white-space:nowrap;">${r.localizador}</td>
     <td class="col-fechaAlta muted" style="font-size:12px;">${r._fmtAlta}</td>
     <td class="col-cliente bold ellip">${r.cliente}</td>
-    <td class="col-alojamiento muted" style="max-width:180px;word-break:break-word;white-space:normal;font-size:12px;line-height:1.3;">${stripAloj(r.alojamiento)}</td>
+    <td class="col-alojamiento ellip muted">${r.alojamiento}</td>
     <td class="col-edificio ellip muted" style="font-size:12px;">${r.edificio}</td>
     <td class="col-plataforma"><span class="badge ${isB ? 'badge-purple' : 'badge-blue'}">${r.plataforma}</span></td>
     <td class="col-atendidoPor ellip muted" style="font-size:12px;">${r.atendidoPor}</td>
@@ -2759,11 +2519,10 @@ function _buildRowHtml(r) {
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.limp)} &#8364;</span></div></td>
     <td class="col-amenities" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="changeSetting(${r.idx},'amenities',parseFloat(this.value))" ${dis}>${aO}</select>
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.amen)} &#8364;</span></div></td>
-    <td class="col-pasarela" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:110px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;min-height:28px;">
+    <td class="col-pasarela" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;">
       <div class="toggle" onclick="if(!${isV}){togglePasarela(${r.idx})}"><div class="toggle-track ${s.pasarela ? 'on' : ''}"><div class="toggle-thumb"></div></div></div>
-      ${s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${r.idx},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label" style="display:inline-block;min-width:52px;text-align:left;">${isB ? 'Booking' : 'Stripe'}</span>`}
-    </div><span style="font-size:11px;font-variant-numeric:tabular-nums;min-height:16px;${s.pasarela && c.comPas > 0 ? 'color:#e53935;' : 'visibility:hidden;'}">${s.pasarela && c.comPas > 0 ? `&#8211; ${fmt(c.comPas)} &#8364;` : '&#8211; 0,00 &#8364;'}</span></div></td>
-    <td class="col-ca" style="text-align:center;vertical-align:middle;">${_buildCAButton(r.idx, c)}</td>
+      ${s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${r.idx},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label">${isB ? 'Booking' : 'Stripe'}</span>`}
+    </div>${s.pasarela && c.comPas > 0 ? `<span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.comPas)} &#8364;</span>` : ''}</div></td>
     <td class="col-subtotal right bold" style="font-size:12px;">${fmt(c.sub)} &#8364;</td>
     <td class="col-irpf" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="changeSetting(${r.idx},'irpf',parseFloat(this.value))" ${dis}>${iO}</select>
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.ret)} &#8364;</span></div></td>
@@ -2774,7 +2533,7 @@ function _buildRowHtml(r) {
       <button class="btn btn-sm btn-primary" onclick="viewDetail(${r.idx})">&#128065;</button>
       ${!isV ? `<button class="btn btn-sm btn-success" onclick="toggleValidate(${r.idx})">&#10004;</button>` : `<button class="btn btn-sm btn-orange" onclick="toggleValidate(${r.idx})">&#8617;</button>`}
     </div></td>
-  </tr>` + _buildCEPanelRow(r.idx, s, c) + _buildCAPanelRow(r.idx, s, c);
+  </tr>` + _buildCEPanelRow(r.idx, s, c);
 }
 
 function _buildCEButton(idx, c, view) {
@@ -2912,40 +2671,15 @@ function _applyCEChange(idx, view) {
   invalidateCache(idx);
   var newC = getLiq(allReservas[idx]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
+  _patchSingleRow(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
   // If changed from consol view, re-render consol detail
   if (v === 'c' && currentConsolAloj) {
     viewConsolDetail(currentConsolAloj);
-    return;
-  }
-  // Direct cell update — no full row rebuild
-  var mainRow = document.getElementById('row-' + idx);
-  if (mainRow) {
-    var ceCel = mainRow.querySelector('.col-ce');
-    if (ceCel) ceCel.innerHTML = _buildCEButton(idx, newC, v);
-    var liqCel = mainRow.querySelector('.col-totalLiquidar');
-    if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' &#8364;';
-    var subCel = mainRow.querySelector('.col-subtotal');
-    if (subCel) subCel.innerHTML = fmt(newC.sub) + ' &#8364;';
-    var baseCel = mainRow.querySelector('.col-baseSinIVA');
-    if (baseCel) baseCel.innerHTML = fmt(newC.baseSinIVA) + ' &#8364;';
-    var totalCel = mainRow.querySelector('.col-totalReserva');
-    if (totalCel) totalCel.innerHTML = fmt(newC.total) + ' &#8364;';
-  }
-  // Update CE panel summary numbers
-  _refreshCESummary(idx, v);
-  // Keep panel open
-  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
-  if (panel) { panel.style.display = ''; _openCEPanel = idx; _openCEView = v; }
-  // Update footer stats
-  var st = _cachedFilteredStats;
-  if (st && oldC && newC) {
-    st.fL += (newC.totalLiq - oldC.totalLiq);
-    st.tLiq += (newC.totalLiq - oldC.totalLiq);
-    st.tCE += (newC.ceTotal - oldC.ceTotal);
-    st.tSub += (newC.sub - oldC.sub);
-    st.tBase += (newC.baseSinIVA - oldC.baseSinIVA);
-    _renderStatsFromCache(_lastFiltered, st);
+  } else {
+    // Re-open panel if it was open in preliq
+    var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+    if (panel) { panel.style.display = ''; _openCEPanel = idx; _openCEView = v; }
   }
 }
 
@@ -2997,338 +2731,12 @@ function _refreshCEPanel(idx, view) {
   if (labels.length > 0) labels[labels.length - 1].focus();
 }
 
-// === CA TABLE COLUMN (panel expandible en tabla, como CE) ===
-function _buildCAButton(idx, c, view) {
-  var v = view || 'p';
-  if (c.caTotal > 0) {
-    return '<button class="ca-btn has" onclick="event.stopPropagation();toggleCAPanel('+idx+',\''+v+'\')">' +
-      '<span class="ca-dot"></span>\u2013' + fmt(c.caTotal) + ' \u20AC</button>';
-  }
-  return '<button class="ca-btn" onclick="event.stopPropagation();toggleCAPanel('+idx+',\''+v+'\')">+</button>';
-}
-
-function _buildCAPanelRow(idx, s, c, view) {
-  var v = view || 'p';
-  var ca = s.conceptosAdicionales || [];
-  var colCount = v === 'c'
-    ? CONSOL_COLUMNS.filter(function(col){return consolColVis[col.key]!==false;}).length
-    : COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
-  var itemsHtml = ca.map(function(item, i) {
-    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" oninput="_saveCAAmountSilent('+idx+','+i+',this.value)" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button></div>';
-  }).join('');
-  return '<tr class="ca-panel-row" id="ca-'+v+'panel-'+idx+'" style="display:none"><td colspan="'+colCount+'" style="padding:0"><div class="ca-panel-inner"><div class="ca-panel-left"><div class="ca-panel-title">Conceptos Adicionales <span class="ca-sub">Sin IVA \u2013 restan del Subtotal</span></div>'+itemsHtml+'<div class="ce-add-link" onclick="addCATableItem('+idx+',\''+v+'\')">+ A\u00f1adir concepto</div></div></div></td></tr>';
-}
-
-var _openCAPanel = null;
-var _openCAView = 'p';
-function toggleCAPanel(idx, view) {
-  var v = view || 'p';
-  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
-  if (!panel) return;
-  if (_openCAPanel !== null && (_openCAPanel !== idx || _openCAView !== v)) {
-    var prev = document.getElementById('ca-' + _openCAView + 'panel-' + _openCAPanel);
-    if (prev) prev.style.display = 'none';
-  }
-  if (panel.style.display === 'none') {
-    var wrap = panel.closest('.table-wrap');
-    var st = wrap ? wrap.scrollTop : window.scrollY;
-    panel.style.display = '';
-    if (wrap) wrap.scrollTop = st; else window.scrollTo(0, st);
-    _openCAPanel = idx;
-    _openCAView = v;
-    var s = settings[idx];
-    if (!s.conceptosAdicionales || s.conceptosAdicionales.length === 0) {
-      s.conceptosAdicionales = [{label:'', amount:0}];
-      _refreshCAPanel(idx, v);
-    }
-  } else {
-    panel.style.display = 'none';
-    _openCAPanel = null;
-  }
-}
-
-function addCATableItem(idx, view) {
-  var s = settings[idx]; if (!s) return;
-  if (!s.conceptosAdicionales) s.conceptosAdicionales = [];
-  var v = view || 'p';
-  // Flush pending input values from panel DOM before modifying array
-  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
-  if (panel) {
-    var caInputs = panel.querySelectorAll('.ce-item-row');
-    caInputs.forEach(function(row, i) {
-      if (i >= s.conceptosAdicionales.length) return;
-      var lbl = row.querySelector('.ce-inp-label');
-      var amt = row.querySelector('.ce-inp-amt');
-      if (lbl) s.conceptosAdicionales[i].label = lbl.value;
-      if (amt) {
-        var pv = parseFmt(amt.value);
-        if (!isNaN(pv)) s.conceptosAdicionales[i].amount = pv;
-      }
-    });
-  }
-  s.conceptosAdicionales.push({label:'', amount:0});
-  // Full refresh: cache, panel, row cells, stats
-  var oldC = getLiq(allReservas[idx]);
-  invalidateCache(idx);
-  var newC = getLiq(allReservas[idx]);
-  _refreshCAPanel(idx, v);
-  // Ensure panel stays visible
-  panel = document.getElementById('ca-' + v + 'panel-' + idx);
-  if (panel) { panel.style.display = ''; _openCAPanel = idx; _openCAView = v; }
-  // Update main row cells
-  var mainRow = document.getElementById('row-' + idx);
-  if (mainRow) {
-    var caCel = mainRow.querySelector('.col-ca');
-    if (caCel) caCel.innerHTML = _buildCAButton(idx, newC, v);
-    var liqCel = mainRow.querySelector('.col-totalLiquidar');
-    if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' \u20AC';
-    var subCel = mainRow.querySelector('.col-subtotal');
-    if (subCel) subCel.innerHTML = fmt(newC.sub) + ' \u20AC';
-  }
-  // Sync detail view if open
-  if (typeof currentDetailIdx !== 'undefined' && currentDetailIdx === idx) {
-    viewDetail(idx);
-  }
-  // Update footer stats
-  var st = _cachedFilteredStats;
-  if (st && oldC && newC) {
-    st.fL += (newC.totalLiq - oldC.totalLiq);
-    st.tLiq += (newC.totalLiq - oldC.totalLiq);
-    st.tSub += (newC.sub - oldC.sub);
-    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
-    _renderStatsFromCache(_lastFiltered, st);
-  }
-  scheduleReservaConfigSave(idx);
-}
-
-function removeCATableItem(idx, itemIdx, view) {
-  var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
-  var v = view || 'p';
-  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
-  // Flush all input values before modifying array
-  if (panel) {
-    var allRows = panel.querySelectorAll('.ce-item-row');
-    allRows.forEach(function(row, i) {
-      if (i >= s.conceptosAdicionales.length) return;
-      var lbl = row.querySelector('.ce-inp-label');
-      var amt = row.querySelector('.ce-inp-amt');
-      if (lbl) s.conceptosAdicionales[i].label = lbl.value;
-      if (amt) {
-        var pv = parseFmt(amt.value);
-        if (!isNaN(pv)) s.conceptosAdicionales[i].amount = pv;
-      }
-    });
-  }
-  var rows = panel ? panel.querySelectorAll('.ce-item-row') : [];
-  if (rows[itemIdx]) {
-    var row = rows[itemIdx];
-    row.style.animation = 'ceRowOut .2s ease forwards';
-    row.addEventListener('animationend', function() {
-      row.remove();
-      s.conceptosAdicionales.splice(itemIdx, 1);
-      _applyCAChange(idx, v);
-    }, {once:true});
-  } else {
-    s.conceptosAdicionales.splice(itemIdx, 1);
-    _applyCAChange(idx, v);
-  }
-}
-
-function updateCATableItem(idx, itemIdx, field, rawVal, view) {
-  var s = settings[idx]; if (!s || !s.conceptosAdicionales || !s.conceptosAdicionales[itemIdx]) return;
-  if (field === 'label') {
-    s.conceptosAdicionales[itemIdx].label = rawVal;
-    scheduleReservaConfigSave(idx);
-  } else {
-    var v = parseFloat(String(rawVal).replace(/\./g,'').replace(',','.'));
-    if (isNaN(v)) v = 0;
-    s.conceptosAdicionales[itemIdx].amount = v;
-    _applyCAChange(idx, view || 'p');
-  }
-}
-
-function _applyCAChange(idx, view) {
-  var v = view || 'p';
-  var oldC = getLiq(allReservas[idx]);
-  invalidateCache(idx);
-  var newC = getLiq(allReservas[idx]);
-  if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  scheduleReservaConfigSave(idx);
-  if (v === 'c' && currentConsolAloj) { viewConsolDetail(currentConsolAloj); return; }
-  var mainRow = document.getElementById('row-' + idx);
-  if (mainRow) {
-    var caCel = mainRow.querySelector('.col-ca');
-    if (caCel) caCel.innerHTML = _buildCAButton(idx, newC, v);
-    var liqCel = mainRow.querySelector('.col-totalLiquidar');
-    if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' \u20AC';
-    var subCel = mainRow.querySelector('.col-subtotal');
-    if (subCel) subCel.innerHTML = fmt(newC.sub) + ' \u20AC';
-  }
-  _refreshCASummary(idx, v);
-  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
-  if (panel) { panel.style.display = ''; _openCAPanel = idx; _openCAView = v; }
-  // Sync detail view if open for this reservation
-  if (typeof currentDetailIdx !== 'undefined' && currentDetailIdx === idx) {
-    viewDetail(idx);
-  }
-  var st = _cachedFilteredStats;
-  if (st && oldC && newC) {
-    st.fL += (newC.totalLiq - oldC.totalLiq);
-    st.tLiq += (newC.totalLiq - oldC.totalLiq);
-    st.tSub += (newC.sub - oldC.sub);
-    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
-    _renderStatsFromCache(_lastFiltered, st);
-  }
-}
-
-function _refreshCASummary(idx, view) {
-  var v = view || 'p';
-  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
-  if (!panel) return;
-  var rows = panel.querySelectorAll('.ce-item-row');
-  rows.forEach(function(row, i) {
-    var del = row.querySelector('.ce-del');
-    if (del) del.setAttribute('onclick', "removeCATableItem("+idx+","+i+",'"+v+"')");
-    var lbl = row.querySelector('.ce-inp-label');
-    if (lbl) lbl.setAttribute('onchange', "updateCATableItem("+idx+","+i+",'label',this.value,'"+v+"')");
-    var amt = row.querySelector('.ce-inp-amt');
-    if (amt) amt.setAttribute('onchange', "updateCATableItem("+idx+","+i+",'amount',this.value,'"+v+"')");
-  });
-}
-
-function _refreshCAPanel(idx, view) {
-  var v = view || 'p';
-  var s = settings[idx] || {}, c = getLiq(allReservas[idx]);
-  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
-  if (!panel) return;
-  var wrap = panel.closest('.table-wrap') || panel.closest('.main');
-  var scrollY = wrap ? wrap.scrollTop : window.scrollY;
-  var colCount = v === 'c'
-    ? CONSOL_COLUMNS.filter(function(col){return consolColVis[col.key]!==false;}).length
-    : COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
-  var ca = s.conceptosAdicionales || [];
-  var itemsHtml = ca.map(function(item, i) {
-    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" oninput="_saveCAAmountSilent('+idx+','+i+',this.value)" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button></div>';
-  }).join('');
-  panel.innerHTML = '<td colspan="'+colCount+'" style="padding:0"><div class="ca-panel-inner"><div class="ca-panel-left"><div class="ca-panel-title">Conceptos Adicionales <span class="ca-sub">Sin IVA \u2013 restan del Subtotal</span></div>'+itemsHtml+'<div class="ce-add-link" onclick="addCATableItem('+idx+',\''+v+'\')">+ A\u00f1adir concepto</div></div></div></td>';
-  if (wrap) wrap.scrollTop = scrollY;
-  var labels = panel.querySelectorAll('.ce-inp-label');
-  if (labels.length > 0) labels[labels.length - 1].focus();
-}
-
-
-// === Conceptos Adicionales (CA) por reserva ===
-function _refreshDetailAfterCA(idx) {
-  var oldC = getLiq(allReservas[idx]);
-  invalidateCache(idx);
-  var newC = getLiq(allReservas[idx]);
-  if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  // Patch main table row cells
-  var mainRow = document.getElementById('row-' + idx);
-  if (mainRow) {
-    var liqCel = mainRow.querySelector('.col-totalLiquidar');
-    if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' &#8364;';
-    var subCel = mainRow.querySelector('.col-subtotal');
-    if (subCel) subCel.innerHTML = fmt(newC.sub) + ' &#8364;';
-    var caCel = mainRow.querySelector('.col-ca');
-    if (caCel) caCel.innerHTML = _buildCAButton(idx, newC);
-  }
-  // Sync table CA panel if open
-  var tableCAPanel = document.getElementById('ca-ppanel-' + idx);
-  if (tableCAPanel && tableCAPanel.style.display !== 'none') {
-    _refreshCAPanel(idx, 'p');
-  }
-  // Sync consol CA panel if open
-  var consolCAPanel = document.getElementById('ca-cpanel-' + idx);
-  if (consolCAPanel && consolCAPanel.style.display !== 'none') {
-    _refreshCAPanel(idx, 'c');
-  }
-  // Update footer stats
-  var st = _cachedFilteredStats;
-  if (st && oldC && newC) {
-    st.fL += (newC.totalLiq - oldC.totalLiq);
-    st.tLiq += (newC.totalLiq - oldC.totalLiq);
-    st.tSub += (newC.sub - oldC.sub);
-    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
-    _renderStatsFromCache(_lastFiltered, st);
-  }
-  scheduleReservaConfigSave(idx);
-  // Re-render: detect if in viewDetail mode or table detail
-  if (typeof currentDetailIdx !== 'undefined' && currentDetailIdx === idx) {
-    viewDetail(idx);
-  } else {
-    var detRow = document.getElementById('detail-row-' + idx);
-    if (detRow && detRow.style.display !== 'none') {
-      toggleDetail(idx, true);
-    }
-  }
-}
-
-function addCAItem(idx) {
-  var s = settings[idx]; if (!s) return;
-  if (!s.conceptosAdicionales) s.conceptosAdicionales = [];
-  // Flush any pending input values from DOM before re-render
-  var detailEl = document.getElementById('screen-detail');
-  if (detailEl) {
-    var caInputs = detailEl.querySelectorAll('.ce-item-row');
-    caInputs.forEach(function(row, i) {
-      if (i >= (s.conceptosAdicionales || []).length) return;
-      var lbl = row.querySelector('.ce-inp-label');
-      var amt = row.querySelector('.ce-inp-amt');
-      if (lbl) s.conceptosAdicionales[i].label = lbl.value;
-      if (amt) {
-        var v = parseFloat(String(amt.value).replace(/\./g,'').replace(',','.'));
-        if (!isNaN(v)) s.conceptosAdicionales[i].amount = v;
-      }
-    });
-  }
-  s.conceptosAdicionales.push({label:'', amount:0});
-  _refreshDetailAfterCA(idx);
-}
-
-function removeCAItem(idx, itemIdx) {
-  var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
-  // Flush pending input values from DOM before re-render
-  var detailEl = document.getElementById('screen-detail');
-  if (detailEl) {
-    var caInputs = detailEl.querySelectorAll('.ce-item-row');
-    caInputs.forEach(function(row, i) {
-      if (i >= s.conceptosAdicionales.length) return;
-      var lbl = row.querySelector('.ce-inp-label');
-      var amt = row.querySelector('.ce-inp-amt');
-      if (lbl) s.conceptosAdicionales[i].label = lbl.value;
-      if (amt) {
-        var v = parseFloat(String(amt.value).replace(/\./g,'').replace(',','.'));
-        if (!isNaN(v)) s.conceptosAdicionales[i].amount = v;
-      }
-    });
-  }
-  s.conceptosAdicionales.splice(itemIdx, 1);
-  _refreshDetailAfterCA(idx);
-}
-
-function _saveCAAmountSilent(idx, itemIdx, rawVal) {
-  var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
-  var item = s.conceptosAdicionales[itemIdx]; if (!item) return;
-  item.amount = parseFmt(rawVal);
-}
-function updateCAItem(idx, itemIdx, field, rawVal) {
-  var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
-  var item = s.conceptosAdicionales[itemIdx]; if (!item) return;
-  if (field === 'amount') {
-    item.amount = parseFmt(rawVal);
-  } else {
-    item[field] = rawVal;
-  }
-  _refreshDetailAfterCA(idx);
-}
-
 function _renderFull() {
   const fil = getFilteredSorted();
   _lastFiltered = fil;
   const sf2 = simpleComboState.status.value;
   const sortF = simpleComboState.sort.value, sortD = simpleComboState.sortdir.value;
-  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpHasFilter('p');
+  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpHasFilter();
 
   document.getElementById("filter-count").textContent = fil.length + " reservas";
 
@@ -3338,7 +2746,7 @@ function _renderFull() {
   const fR = st.fR, fL = st.fL, fV = st.fV;
   const tNoches = st.tNoches, tTotal = st.tTotal, tBase = st.tBase;
   const tComPlat = st.tComPlat, tComGTC = st.tComGTC, tLimp = st.tLimp, tAmen = st.tAmen;
-  const tComPas = st.tComPas, tCA = st.tCA, tSub = st.tSub, tRet = st.tRet, tIva21 = st.tIva21, tLiq = st.tLiq;
+  const tComPas = st.tComPas, tSub = st.tSub, tRet = st.tRet, tIva21 = st.tIva21, tLiq = st.tLiq;
   const tCE = st.tCE;
 
   // Global stats (cached)
@@ -3389,7 +2797,7 @@ function _renderFull() {
   _updatePaginationBar(fil.length, totalPages);
 
   // Totals footer (always over ALL filtered, not just visible)
-  _updateFooter(fil.length, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tCA, tSub, tRet, tIva21, tLiq, tCE);
+  _updateFooter(fil.length, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tSub, tRet, tIva21, tLiq, tCE);
 }
 
 // Fast re-render for page changes only \u2014 no stats recalc
@@ -3480,7 +2888,7 @@ function changePageSize(size) {
   _renderPageOnly();
 }
 
-function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tCA, tSub, tRet, tIva21, tLiq, tCE) {
+function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tSub, tRet, tIva21, tLiq, tCE) {
   const tfoot = document.getElementById("table-foot");
   const _fs = 'border:none;padding:10px 8px;';
   const _fr = 'border:none;padding:10px 8px;color:#ff8a80;text-align:center;font-variant-numeric:tabular-nums;';
@@ -3507,7 +2915,6 @@ function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, 
     <td class="col-limpieza" style="${_fr}">${fmt(tLimp)} &#8364;</td>
     <td class="col-amenities" style="${_fr}">${fmt(tAmen)} &#8364;</td>
     <td class="col-pasarela" style="${_fr}">${tComPas > 0 ? fmt(tComPas) + ' &#8364;' : '&#8211;'}</td>
-    <td class="col-ca" style="${_fs}text-align:center;color:#0284c7;font-size:11px;">${tCA > 0 ? '&#8211; ' + fmt(tCA) + ' &#8364;' : ''}</td>
     <td class="col-subtotal" style="${_fs}text-align:right;">${fmt(tSub)} &#8364;</td>
     <td class="col-irpf" style="${_fr}">&#8211; ${fmt(tRet)} &#8364;</td>
     <td class="col-iva21" style="${_fs}text-align:center;color:#81c784;font-variant-numeric:tabular-nums;">+ ${fmt(tIva21)} &#8364;</td>
@@ -3518,51 +2925,12 @@ function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, 
 }
 
 function changeSetting(i,k,v){
-  const oldC = getLiq(allReservas[i]);
+  const oldC = getLiq(allReservas[i]); // capture BEFORE invalidating
   settings[i][k]=v; invalidateCache(i);
   const newC = getLiq(allReservas[i]);
+  // Delta update global stats O(1) instead of recomputing O(n)
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  // Direct cell update — no full row rebuild
-  var mainRow = document.getElementById('row-' + i);
-  if (mainRow) {
-    var cells = {
-      'col-subtotal': fmt(newC.sub) + ' &#8364;',
-      'col-totalLiquidar': fmt(newC.totalLiq) + ' &#8364;',
-      'col-baseSinIVA': fmt(newC.baseSinIVA) + ' &#8364;'
-    };
-    Object.keys(cells).forEach(cls => { var el = mainRow.querySelector('.' + cls); if(el) el.innerHTML = cells[cls]; });
-    // Update deduction amounts shown below each select
-    var amountMap = {
-      'col-comPlataforma': newC.comPlat, 'col-comGTC': newC.comGTC,
-      'col-limpieza': newC.limp, 'col-amenities': newC.amen
-    };
-    Object.keys(amountMap).forEach(cls => {
-      var td = mainRow.querySelector('.' + cls);
-      if(td) { var sp = td.querySelector('span[style*="e53935"]'); if(sp) sp.innerHTML = '&#8211; ' + fmt(amountMap[cls]) + ' &#8364;'; }
-    });
-    // Update pasarela amount if active
-    if(k === 'pasarelaRate') {
-      var pasTd = mainRow.querySelector('.col-pasarela');
-      if(pasTd) { var sp = pasTd.querySelector('span[style*="e53935"]'); if(sp) sp.innerHTML = '&#8211; ' + fmt(newC.comPas) + ' &#8364;'; }
-    }
-  }
-  // Update footer stats
-  var st = _cachedFilteredStats;
-  if (st && oldC && newC) {
-    st.fL += (newC.totalLiq - oldC.totalLiq);
-    st.tLiq += (newC.totalLiq - oldC.totalLiq);
-    st.tSub += (newC.sub - oldC.sub);
-    st.tBase += (newC.baseSinIVA - oldC.baseSinIVA);
-    st.tComPlat += (newC.comPlat - oldC.comPlat);
-    st.tComGTC += (newC.comGTC - oldC.comGTC);
-    st.tLimp += (newC.limp - oldC.limp);
-    st.tAmen += (newC.amen - oldC.amen);
-    st.tComPas += (newC.comPas - oldC.comPas);
-    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
-    st.tRet += (newC.ret - oldC.ret);
-    st.tIva21 += (newC.iva - oldC.iva);
-    _renderStatsFromCache(_lastFiltered, st);
-  }
+  _patchSingleRow(i, oldC, newC);
   scheduleReservaConfigSave(i);
 }
 function validarTodas() { const pending=_lastFiltered.filter(r=>!validated.has(r.idx)); const n=pending.length; if(!n||!confirm(`¿Validar ${n} reserva${n>1?'s':''}?`))return; pending.forEach(r => validated.add(r.idx)); _validatedVersion++; invalidateFilterCache(); renderTable(); batchWriteValidation(pending.map(r=>r.idx), true); }
@@ -3572,7 +2940,7 @@ function togglePasarelaConsol(i){const oldC=getLiq(allReservas[i]);settings[i].p
 function toggleValidateConsol(i){const wasV=validated.has(i);if(wasV)validated.delete(i);else validated.add(i);_validatedVersion++;invalidateFilterCache();if(currentConsolAloj)viewConsolDetail(currentConsolAloj);writeValidationToSheet(i,!wasV);}
 function validarTodasConsol(alojName) {
   let src=allReservas.filter(r => r.alojamiento === alojName);
-  if (_mpHasFilter('c')) src = src.filter(r => _mpMatchDate(r._dEntrada, 'c'));
+  if (_mpHasFilter()) src = src.filter(r => _mpMatchDate(r._dEntrada));
   const pending=src.filter(r => !validated.has(r.idx));
   if(!pending.length||!confirm(`¿Validar ${pending.length} reserva${pending.length>1?'s':''} de ${alojName}?`))return;
   pending.forEach(r => validated.add(r.idx));
@@ -3582,7 +2950,7 @@ function validarTodasConsol(alojName) {
 }
 function desvalidarTodasConsol(alojName) {
   let src=allReservas.filter(r => r.alojamiento === alojName);
-  if (_mpHasFilter('c')) src = src.filter(r => _mpMatchDate(r._dEntrada, 'c'));
+  if (_mpHasFilter()) src = src.filter(r => _mpMatchDate(r._dEntrada));
   const vals=src.filter(r => validated.has(r.idx));
   if(!vals.length||!confirm(`¿Desvalidar ${vals.length} reserva${vals.length>1?'s':''} de ${alojName}?`))return;
   vals.forEach(r => validated.delete(r.idx));
@@ -3595,35 +2963,7 @@ function togglePasarela(i){
   settings[i].pasarela=!settings[i].pasarela; invalidateCache(i);
   const newC = getLiq(allReservas[i]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  // Direct cell update — no full row rebuild
-  var mainRow = document.getElementById('row-' + i);
-  if (mainRow) {
-    var r = allReservas[i], s = settings[i], c = newC;
-    var isV = validated.has(i), isB = r.plataforma==='Booking.com';
-    var dis = isV ? 'disabled' : '';
-    var pasOpts = isB ? pasarelaBookingOptions : pasarelaStripeOptions;
-    var pasR = s.pasarelaRate !== undefined ? s.pasarelaRate : (isB ? pasOpts[0]/100 : pasOpts[0]/100);
-    var psO = pasOpts.map(o => `<option value="${o/100}" ${Math.abs(pasR-o/100)<0.0001?'selected':''}>${o}%</option>`).join('');
-    var pasCel = mainRow.querySelector('.col-pasarela');
-    if (pasCel) pasCel.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:110px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;min-height:28px;">` +
-      `<div class="toggle" onclick="if(!${isV}){togglePasarela(${i})}"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>` +
-      (s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${i},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label" style="display:inline-block;min-width:52px;text-align:left;">${isB?'Booking':'Stripe'}</span>`) +
-      `</div><span style="font-size:11px;font-variant-numeric:tabular-nums;min-height:16px;${s.pasarela && c.comPas > 0 ? 'color:#e53935;' : 'visibility:hidden;'}">${s.pasarela && c.comPas > 0 ? `&#8211; ${fmt(c.comPas)} &#8364;` : '&#8211; 0,00 &#8364;'}</span></div>`;
-    var subCel = mainRow.querySelector('.col-subtotal');
-    if (subCel) subCel.innerHTML = fmt(c.sub) + ' &#8364;';
-    var liqCel = mainRow.querySelector('.col-totalLiquidar');
-    if (liqCel) liqCel.innerHTML = fmt(c.totalLiq) + ' &#8364;';
-    var baseCel = mainRow.querySelector('.col-baseSinIVA');
-    if (baseCel) baseCel.innerHTML = fmt(c.baseSinIVA) + ' &#8364;';
-  }
-  // Update footer stats
-  var st = _cachedFilteredStats;
-  if (st && oldC && newC) {
-    st.fL += (newC.totalLiq - oldC.totalLiq);
-    st.tLiq += (newC.totalLiq - oldC.totalLiq);
-    st.tSub += (newC.sub - oldC.sub);
-    _renderStatsFromCache(_lastFiltered, st);
-  }
+  _patchSingleRow(i, oldC, newC);
   scheduleReservaConfigSave(i);
 }
 function toggleValidate(i){
@@ -3649,13 +2989,13 @@ let _cachedFilteredStats = null; // { filPendingCount, filValidatedCount, fR, fL
 
 function _computeStatsFromScratch(fil) {
   const s = { filPendingCount:0, filValidatedCount:0, fR:0, fL:0, fV:0,
-    tNoches:0, tTotal:0, tBase:0, tComPlat:0, tComGTC:0, tLimp:0, tAmen:0, tComPas:0, tCA:0, tSub:0, tRet:0, tIva21:0, tLiq:0, tCE:0 };
+    tNoches:0, tTotal:0, tBase:0, tComPlat:0, tComGTC:0, tLimp:0, tAmen:0, tComPas:0, tSub:0, tRet:0, tIva21:0, tLiq:0, tCE:0 };
   for (let i = 0; i < fil.length; i++) {
     const r = fil[i], c = getLiq(r), isV = validated.has(r.idx);
     s.fR += r.totalReserva; s.fL += c.totalLiq;
     if (isV) { s.fV++; s.filValidatedCount++; } else s.filPendingCount++;
     s.tNoches += r._nights; s.tTotal += r.totalReserva; s.tBase += c.baseSinIVA;
-    s.tComPlat += c.comPlat; s.tComGTC += c.comGTC; s.tLimp += c.limp; s.tAmen += c.amen; s.tComPas += c.comPas; s.tCA += (c.caTotal||0);
+    s.tComPlat += c.comPlat; s.tComGTC += c.comGTC; s.tLimp += c.limp; s.tAmen += c.amen; s.tComPas += c.comPas;
     s.tSub += c.sub; s.tRet += c.ret; s.tIva21 += c.iva; s.tLiq += c.totalLiq; s.tCE += c.ceTotal;
   }
   _cachedFilteredStats = s;
@@ -3716,7 +3056,6 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
     st.tLimp += (newC.limp - oldC.limp);
     st.tAmen += (newC.amen - oldC.amen);
     st.tComPas += (newC.comPas - oldC.comPas);
-    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
     st.tSub += (newC.sub - oldC.sub);
     st.tRet += (newC.ret - oldC.ret);
     st.tIva21 += (newC.iva - oldC.iva);
@@ -3736,7 +3075,7 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
 
 function _renderStatsFromCache(fil, st) {
   const sf2 = simpleComboState.status.value;
-  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpHasFilter('p');
+  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpHasFilter();
 
   const gs = getGlobalStats();
   const tR = gs.tR, tL = gs.tL, vC = validated.size;
@@ -3763,7 +3102,7 @@ function _renderStatsFromCache(fil, st) {
     <div class="stat-card"><div class="stat-label">Validadas</div><div class="stat-value" style="color:#43a047">${vC} / ${allReservas.length}</div>
       ${hasFilter ? `<div class="stat-filtered">${st.fV} / ${fil.length} filtradas <span class="stat-pct">(${pctV}%)</span></div>` : ''}</div>`;
 
-  _updateFooter(fil.length, st.tNoches, st.tTotal, st.tBase, st.tComPlat, st.tComGTC, st.tLimp, st.tAmen, st.tComPas, st.tCA, st.tSub, st.tRet, st.tIva21, st.tLiq, st.tCE);
+  _updateFooter(fil.length, st.tNoches, st.tTotal, st.tBase, st.tComPlat, st.tComGTC, st.tLimp, st.tAmen, st.tComPas, st.tSub, st.tRet, st.tIva21, st.tLiq, st.tCE);
 }
 
 let highlightIdx = null;
@@ -3829,76 +3168,37 @@ function viewDetail(idx) {
     {l:limpLabel,v:-c.limp,neg:true},
     {l:amenLabel,v:-c.amen,neg:true},{div:true}
   );
-  // Pasarela row — always shown, 0% = disabled
-  if(!isV){
-    const pasLabel = `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true);
+  if(s.pasarela){
+    const pasLabel = isV ? `Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`
+      : `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true);
     rows.push({l:pasLabel,v:-c.comPas,neg:true});
-  } else if(c.comPas > 0) {
-    rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
   }
-  // Conceptos Adicionales por reserva (después de Pasarela, restan del Subtotal)
-  const caItems = s.conceptosAdicionales || [];
-  if(caItems.length > 0 || !isV) {
-    if(!isV) {
-      caItems.forEach((ca, ci) => {
-        rows.push({custom:true, neg:true, v:-(ca.amount||0), l:`<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(ca.label||'').replace(/"/g,'&quot;')}" onchange="updateCAItem(${r.idx},${ci},'label',this.value)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(ca.amount||0)}" oninput="_saveCAAmountSilent(${r.idx},${ci},this.value)" onchange="updateCAItem(${r.idx},${ci},'amount',this.value)" /><span class="ce-del" onclick="removeCAItem(${r.idx},${ci})">&#215;</span></div>`});
-      });
-      rows.push({custom:true, l:`<div class="ce-add-link no-print" onclick="addCAItem(${r.idx})">+ A\u00f1adir concepto</div>`});
-    } else {
-      caItems.forEach((ca) => { if(ca.amount > 0) rows.push({l:ca.label||'Concepto',v:-ca.amount,neg:true}); });
-    }
+  // Pasarela toggle row (only if not validated)
+  if(!isV){
+    const toggleHtml = `<div style="display:inline-flex;align-items:center;gap:8px;margin-left:6px;">` +
+      `<div class="toggle" onclick="togglePasarela(${r.idx});viewDetail(${r.idx})"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>` +
+      `<span style="font-size:12px;color:#6b7280;">${s.pasarela?'Activada':'Desactivada'}</span></div>`;
+    if(!s.pasarela) rows.push({l:`Pasarela ${pasL} ${toggleHtml}`,v:0,custom:true});
+    else rows.push({l:`${toggleHtml}`,v:0,custom:true});
   }
-  // MG extras (consolidado por alojamiento)
-  const escAloj = r.alojamiento.replace(/'/g, "\\'");
-  if(c.isMG) {
-    const extras = getConsolExtras(r.alojamiento);
-    if(extras.length > 0 || !isV) {
-      if(!isV) {
-        extras.forEach((ex, ei) => {
-          rows.push({custom:true, neg:true, v:-(ex.amount||0), l:`<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(ex.label||'').replace(/"/g,'&quot;')}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'label',this.value,${idx})" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(ex.amount||0)}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'amount',this.value,${idx})" /><span class="ce-del" onclick="removeConsolExtraDetail('${escAloj}',${ei},${idx})">&#215;</span></div>`});
-        });
-        rows.push({custom:true, l:`<div class="ce-add-link no-print" onclick="addConsolExtraDetailInline('${escAloj}',${idx})">+ A\u00f1adir concepto</div>`});
-      } else {
-        extras.forEach((ex) => { rows.push({l:ex.label,v:-ex.amount,neg:true}); });
-      }
-    }
-  }
-  // Subtotal
-  rows.push({div:true},{l:"Subtotal",v:c.sub,bold:true});
-  if(c.isMG) {
-    rows.push({l:`<span style="color:#f57f17;font-weight:600;">${((1-c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span>`,v:-c.mgContrato,neg:true,mgHighlight:true});
-    rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true,mgAdj:true});
-  }
-  // Subtotal liquidación only for MG
-  if(c.isMG) {
-    rows.push({div:true},{l:"Subtotal liquidaci\u00f3n",v:c.subFinal,bold:true,mgSubLiq:c.isMG});
-  }
-
-
-  rows.push(
+  rows.push({div:true},
+    {l:"Subtotal",v:c.sub,bold:true},
     {l:"__IRPF__",v:-c.ret,neg:true,irpf:true},
     {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
   const irpfSelHtml = isV ? `Retenci&#243;n IRPF (${(c.irpfRate*100).toFixed(0)}%)`
     : `Retenci&#243;n IRPF ` + _sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true);
   let rH=rows.map(row=>{if(row.div)return'<div class="liq-divider"></div>';
-    if(row.custom||row.leftcustom){
-      if(row.v !== undefined && row.v !== 0) { const vc=row.neg?'neg':''; const d=row.v<0?`- ${fmt(Math.abs(row.v))}`:fmt(row.v); return`<div class="liq-row"><span>${row.l}</span><span class="${vc}">${d} &#8364;</span></div>`; }
-      return`<div class="liq-row"><span>${row.l}</span></div>`;
-    }
+    if(row.custom)return`<div class="liq-row" style="justify-content:flex-end;"><span>${row.l}</span></div>`;
     const cl=row.bold?' bold':'';const vc=row.neg?'neg':row.pos?'pos':'';
     const d=row.v<0?`- ${fmt(Math.abs(row.v))}`:fmt(row.v);
     const label=row.irpf?irpfSelHtml:row.l;
-    const sty=row.mgHighlight?'background:#fff8e1;padding:10px 28px;':'';
-    const styAdj=row.mgAdj?' style="background:#fffdf5;border-left:3px solid #f59e0b;padding:12px 28px;"':'';
-    if(row.mgAdj)return`<div class="liq-row bold"${styAdj}><span>${label}</span><span>${d} &#8364;</span></div>`;
-    if(row.mgSubLiq)return`<div class="liq-row bold" style="background:#f0fdf4;border-left:3px solid #16a34a;padding:12px 28px;"><span>${label}</span><span>${d} &#8364;</span></div>`;
-    return`<div class="liq-row${cl}" ${sty?'style="'+sty+'"':''}><span>${label}</span><span class="${vc}">${d} &#8364;</span></div>`;}).join("");
+    return`<div class="liq-row${cl}"><span>${label}</span><span class="${vc}">${d} &#8364;</span></div>`;}).join("");
     const _prop = getPropietario(r.alojamiento);
     const _propStyle = _prop === 'Falta propietario' ? ' style="color:#e53935;cursor:pointer" ' : ' style="cursor:pointer" ';
     document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
-    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidaci\u00f3n':'Preliquidaci\u00f3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)">${_prop}</div></div>
+    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidación':'Preliquidación'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)">${_prop}</div></div>
     <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; VALIDADA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div></div>
-    <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${stripAloj(r.alojamiento)}</div></div>
+    <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
     <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
     <div><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
     <div><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
@@ -3908,7 +3208,7 @@ function viewDetail(idx) {
     <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(c.totalLiq)} \u20AC</span></div></div>
     <div class="liq-actions no-print">
       ${!isV?`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
-      ${isV?`<button class="btn btn-outline" onclick="window.print()">&#128424; Imprimir</button>`:``}</div>`;
+      <button class="btn btn-outline" onclick="window.print()">&#128424; Imprimir</button></div>`;
   document.getElementById("nav-detail").style.display="block"; showScreen("detail");
 }
 
@@ -3931,8 +3231,8 @@ function renderConsolGrid() {
 
   // Apply date filter helper
   function filterByDate(reservas) {
-    if (!_mpHasFilter('c')) return reservas;
-    return reservas.filter(r => _mpMatchDate(r._dEntrada, 'c'));
+    if (!_mpHasFilter()) return reservas;
+    return reservas.filter(r => _mpMatchDate(r._dEntrada));
   }
 
   let totalAloj = 0, readyCount = 0, totalLiq = 0;
@@ -4007,7 +3307,7 @@ function renderConsolGrid() {
       <div class="aloj-card ${a.allVal ? 'ready' : 'pending'}" onclick="viewConsolDetail('${a.name.replace(/'/g, "\\'")}')">
         ${rankBadge}
         <div class="aloj-semaforo">${a.allVal ? '&#128994;' : '&#128992;'}</div>
-        <div class="aloj-name" ${showRank?'style="padding-left:28px;"':''}>${stripAloj(a.name)}</div>
+        <div class="aloj-name" ${showRank?'style="padding-left:28px;"':''}>${a.name}</div>
         <div class="aloj-edificio">${a.edificio}</div>
         <div class="aloj-stats">
           <div><div class="aloj-stat-label">Reservas</div><div class="aloj-stat-value">${a.total}</div></div>
@@ -4168,7 +3468,7 @@ function buildConsolDeductionsHtml(alojName) {
 
   var html = '';
 
-  // Maintenance row — same consol-row style
+  // Maintenance row — same consol-row style
   html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
   html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaint(\''+esc+'\')">'+(maint.enabled?'&#10003;':'')+'</span>';
   html += '<span style="'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
@@ -4177,20 +3477,17 @@ function buildConsolDeductionsHtml(alojName) {
   if (maint.enabled) html += '<span class="neg">- '+fmt(maint.amount)+' \u20AC</span>';
   html += '</div>';
 
-  // Extra concepts — same consol-row style
+  // Extra concepts — same consol-row style
   extras.forEach(function(ex, ei) {
-    html += '<div class="consol-row no-print" style="padding:4px 28px;"><div style="display:flex;align-items:center;gap:8px;width:100%;">';
-    html += '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeConsolExtra(\''+esc+'\','+ei+')">&#215;</span>';
-    html += '<input type="text" value="'+(ex.label||'').replace(/"/g,'&quot;')+'" onchange="updateConsolExtra(\''+esc+'\','+ei+',\'label\',this.value)" style="flex:1;padding:5px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:12px;background:#fffbeb;" placeholder="Ej: Golf..." />';
-    html += '<input type="text" value="'+fmt(ex.amount||0)+'" onchange="updateConsolExtra(\''+esc+'\','+ei+',\'amount\',this.value)" style="width:80px;padding:5px 10px;border:1px solid #e5e7eb;border-radius:6px;font-size:12px;text-align:right;background:#fffbeb;" />';
-    html += '</div></div>';
-    // Print-only row
-    html += '<div class="consol-row print-only" style="display:none;"><span>'+ex.label+'</span><span class="neg">- '+fmt(ex.amount)+' \u20AC</span></div>';
+    html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
+    html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeConsolExtra(\''+esc+'\','+ei+')">&#10005;</span>';
+    html += ex.label;
+    html += '</span><span class="neg">- '+fmt(ex.amount)+' \u20AC</span></div>';
   });
 
-  // Add concept link
-  html += '<div class="consol-row no-print" style="padding:2px 28px;">';
-  html += '<span onclick="addConsolExtraInline(\''+esc+'\')" style="font-size:12px;color:#3b82f6;cursor:pointer;">+ A\u00f1adir concepto</span>';
+  // Add concept button
+  html += '<div class="consol-row no-print" style="padding-top:4px;padding-bottom:4px;">';
+  html += '<button onclick="addConsolExtra(\''+esc+'\')" style="font-size:11px;color:#3b82f6;background:none;border:1px dashed #93c5fd;border-radius:5px;padding:3px 10px;cursor:pointer;">+ A\u00f1adir concepto</button>';
   html += '</div>';
 
   return html;
@@ -4211,66 +3508,19 @@ function changeConsolMaintAmount(alojName, val) {
 function addConsolExtra(alojName) {
   var label = prompt('Nombre del concepto:');
   if (!label || !label.trim()) return;
-  var amountStr = prompt('Importe base (sin IVA) en â‚¬:');
+  var amountStr = prompt('Importe base (sin IVA) en €:');
   var amount = parseFloat((amountStr||'').replace(',','.'));
   if (isNaN(amount) || amount <= 0) { alert('Importe no válido'); return; }
   var extras = getConsolExtras(alojName);
   extras.push({ label: label.trim(), amount: amount });
   scheduleGlobalConfigSave();
-}
-function addConsolExtraInline(alojName) {
-  var extras = getConsolExtras(alojName);
-  extras.push({ label: '', amount: 0 });
   viewConsolDetail(alojName);
-}
-function updateConsolExtra(alojName, ei, field, val) {
-  var extras = getConsolExtras(alojName);
-  if (ei < 0 || ei >= extras.length) return;
-  if (field === 'label') {
-    extras[ei].label = val.trim();
-  } else if (field === 'amount') {
-    var n = parseFloat(val.replace(/\./g,'').replace(',','.'));
-    extras[ei].amount = isNaN(n) ? 0 : Math.abs(n);
-  }
-  scheduleGlobalConfigSave(); viewConsolDetail(alojName);
 }
 function removeConsolExtra(alojName, idx) {
   var extras = getConsolExtras(alojName);
   if (idx >= 0 && idx < extras.length) { extras.splice(idx, 1); }
   scheduleGlobalConfigSave();
   viewConsolDetail(alojName);
-}
-// Detail view variants — same data, refresh detail instead of consol
-function addConsolExtraDetail(alojName, reservaIdx) {
-  var label = prompt('Nombre del concepto:');
-  if (!label || !label.trim()) return;
-  var amountStr = prompt('Importe base (sin IVA) en \u20AC:');
-  var amount = parseFloat((amountStr||'').replace(',','.'));
-  if (isNaN(amount) || amount <= 0) { alert('Importe no válido'); return; }
-  var extras = getConsolExtras(alojName);
-  extras.push({ label: label.trim(), amount: amount });
-  scheduleGlobalConfigSave(); viewDetail(reservaIdx);
-}
-function addConsolExtraDetailInline(alojName, reservaIdx) {
-  var extras = getConsolExtras(alojName);
-  extras.push({ label: '', amount: 0 });
-  viewDetail(reservaIdx);
-}
-function updateConsolExtraDetail(alojName, ei, field, val, reservaIdx) {
-  var extras = getConsolExtras(alojName);
-  if (ei < 0 || ei >= extras.length) return;
-  if (field === 'label') {
-    extras[ei].label = val.trim();
-  } else if (field === 'amount') {
-    var n = parseFloat(val.replace(/\./g,'').replace(',','.'));
-    extras[ei].amount = isNaN(n) ? 0 : Math.abs(n);
-  }
-  scheduleGlobalConfigSave(); viewDetail(reservaIdx);
-}
-function removeConsolExtraDetail(alojName, ei, reservaIdx) {
-  var extras = getConsolExtras(alojName);
-  if (ei >= 0 && ei < extras.length) { extras.splice(ei, 1); }
-  scheduleGlobalConfigSave(); viewDetail(reservaIdx);
 }
 
 function viewConsolDetail(alojName) {
@@ -4281,8 +3531,8 @@ function viewConsolDetail(alojName) {
 
   // Apply date filter
   let filteredReservas = a.reservas;
-  if (_mpHasFilter('c')) {
-    filteredReservas = a.reservas.filter(r => _mpMatchDate(r._dEntrada, 'c'));
+  if (_mpHasFilter()) {
+    filteredReservas = a.reservas.filter(r => _mpMatchDate(r._dEntrada));
   }
 
   const allVal = filteredReservas.every(r => validated.has(r.idx));
@@ -4298,13 +3548,7 @@ function viewConsolDetail(alojName) {
   const sumComPas = calcs.reduce((s, x) => s + x.c.comPas, 0);
   const sumLimp = calcs.reduce((s, x) => s + x.c.limp, 0);
   const sumAmen = calcs.reduce((s, x) => s + x.c.amen, 0);
-  const sumCA = calcs.reduce((s, x) => s + (x.c.caTotal || 0), 0);
   const sumSub = calcs.reduce((s, x) => s + x.c.sub, 0);
-  const sumSubFinal = calcs.reduce((s, x) => s + x.c.subFinal, 0);
-  const _isMG = calcs.length > 0 && calcs[0].c.isMG;
-  const sumMgContrato = _isMG ? calcs.reduce((s, x) => s + x.c.mgContrato, 0) : 0;
-  const sumMgSubAdj = _isMG ? calcs.reduce((s, x) => s + x.c.mgSubAdj, 0) : 0;
-  const sumMgExtras = _isMG ? calcs.reduce((s, x) => s + (x.c.mgExtras || 0), 0) : 0;
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumRet = calcs.reduce((s, x) => s + x.c.ret, 0);
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
@@ -4317,7 +3561,7 @@ function viewConsolDetail(alojName) {
   });
 
   // Consolidated table - identical look to main preliquidaciones (without alojamiento)
-  let cNoches=0, cTotal=0, cBase=0, cComPlat=0, cComGTC=0, cLimp=0, cAmen=0, cComPas=0, cCA=0, cSub=0, cRet=0, cIva21=0, cLiq=0, cCE=0;
+  let cNoches=0, cTotal=0, cBase=0, cComPlat=0, cComGTC=0, cLimp=0, cAmen=0, cComPas=0, cSub=0, cRet=0, cIva21=0, cLiq=0, cCE=0;
 
   let miniRows = calcs.map(x => {
     const r = x.r, c = x.c, s = x.s, isV = validated.has(r.idx), isB = r._isBooking;
@@ -4331,7 +3575,7 @@ function viewConsolDetail(alojName) {
     const iO = selectWithValue(_selectCache.irpf, s.irpf);
     const psO = selectWithValue(isB?_selectCache.pasBooking:_selectCache.pasStripe, s.pasarelaRate);
 
-    cNoches+=nights; cTotal+=r.totalReserva; cBase+=c.baseSinIVA; cComPlat+=c.comPlat; cComGTC+=c.comGTC; cLimp+=c.limp; cAmen+=c.amen; cComPas+=c.comPas; cCA+=(c.caTotal||0); cSub+=c.sub; cRet+=c.ret; cIva21+=c.iva; cLiq+=c.totalLiq; cCE+=c.ceTotal;
+    cNoches+=nights; cTotal+=r.totalReserva; cBase+=c.baseSinIVA; cComPlat+=c.comPlat; cComGTC+=c.comGTC; cLimp+=c.limp; cAmen+=c.amen; cComPas+=c.comPas; cSub+=c.sub; cRet+=c.ret; cIva21+=c.iva; cLiq+=c.totalLiq; cCE+=c.ceTotal;
 
     return `<tr ${isV?'class="validated"':''} id="crow-${r.idx}">
       <td class="cc-estado">${isV?'<span class="badge badge-green">&#10003; Validada</span>':'<span class="badge badge-amber">Pendiente</span>'}</td>
@@ -4362,7 +3606,6 @@ function viewConsolDetail(alojName) {
         <div class="toggle" onclick="event.stopPropagation();if(!${isV}){togglePasarelaConsol(${r.idx})}"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>
         ${s.pasarela?`<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="event.stopPropagation();changeSettingConsol(${r.idx},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>`:`<span class="toggle-label">${isB?'Booking':'Stripe'}</span>`}
       </div>${s.pasarela&&c.comPas>0?`<span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.comPas)} &#8364;</span>`:''}</div></td>
-      <td class="cc-ca" style="text-align:center;vertical-align:middle;">${_buildCAButton(r.idx, c, 'c')}</td>
       <td class="cc-subtotal right bold" style="font-size:12px;">${fmt(c.sub)} &#8364;</td>
       <td class="cc-irpf" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="event.stopPropagation();changeSettingConsol(${r.idx},'irpf',parseFloat(this.value))" ${dis}>${iO}</select>
         <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.ret)} &#8364;</span></div></td>
@@ -4373,7 +3616,7 @@ function viewConsolDetail(alojName) {
         <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();goToReserva(${r.idx})">&#128065;</button>
         ${!isV?`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#10004;</button>`:`<button class="btn btn-sm btn-orange" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#8617;</button>`}
       </div></td>
-    </tr>${_buildCEPanelRow(r.idx, settings[r.idx], c, 'c')}${_buildCAPanelRow(r.idx, settings[r.idx], c, 'c')}`;
+    </tr>${_buildCEPanelRow(r.idx, settings[r.idx], c, 'c')}`;
   }).join("");
 
   // Footer totals - identical dark bar like main table
@@ -4401,7 +3644,6 @@ function viewConsolDetail(alojName) {
     <td class="cc-limpieza" style="${_cfr}">${fmt(cLimp)} &#8364;</td>
     <td class="cc-amenities" style="${_cfr}">${fmt(cAmen)} &#8364;</td>
     <td class="cc-pasarela" style="${_cfr}">${cComPas>0?fmt(cComPas)+' &#8364;':'&#8211;'}</td>
-    <td class="cc-ca" style="${_cfs}text-align:center;color:#0284c7;font-size:11px;">${cCA > 0 ? '&#8211; ' + fmt(cCA) + ' &#8364;' : ''}</td>
     <td class="cc-subtotal" style="${_cfs}text-align:right;">${fmt(cSub)} &#8364;</td>
     <td class="cc-irpf" style="${_cfr}">&#8211; ${fmt(cRet)} &#8364;</td>
     <td class="cc-iva21" style="${_cfs}text-align:center;color:#81c784;font-variant-numeric:tabular-nums;">+ ${fmt(cIva21)} &#8364;</td>
@@ -4412,9 +3654,8 @@ function viewConsolDetail(alojName) {
 
   const _dedHtml = buildConsolDeductionsHtml(alojName);
   const _ded = getConsolDeductions(alojName);
-  // For MG: sumSubFinal already includes all deductions (contrato, maintenance, extras)
-  const adjSub = _isMG ? sumSubFinal : sumSub - _ded.totalBase;
-  const avgIrpfRate = sumSubFinal > 0 ? sumRet / sumSubFinal : 0;
+  const adjSub = sumSub - _ded.totalBase;
+  const avgIrpfRate = sumSub > 0 ? sumRet / sumSub : 0;
   const adjRet = adjSub * avgIrpfRate;
   const adjIva = adjSub * IVA_SUBTOTAL;
   const adjLiq = adjSub - adjRet + adjIva;
@@ -4424,7 +3665,7 @@ function viewConsolDetail(alojName) {
         <div class="header-top">
           <div>
             <div class="type">Liquidación Mensual Consolidada</div>
-            <div class="name">${stripAloj(a.name)}</div>
+            <div class="name">${a.name}</div>
           </div>
           <div>${allVal?'<span class="badge-liq badge-liq-green">&#10003; LISTA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div>
         </div>
@@ -4479,24 +3720,11 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
         ${buildGTCRows(calcs)}
         ${buildLimpRows(calcs)}
         <div class="consol-row"><span>Amenities</span><span class="neg">- ${fmt(sumAmen)} &#8364;</span></div>
+        ${_dedHtml}
         <div class="consol-divider"></div>
         ${buildPasarelaRows(calcs)}
-        ${sumCA > 0 ? `<div class="consol-row"><span>Conceptos adicionales</span><span class="neg">- ${fmt(sumCA)} &#8364;</span></div>` : ''}
-        ${_isMG && sumMgExtras > 0 ? `<div class="consol-row"><span>Conceptos adicionales (MG)</span><span class="neg">- ${fmt(sumMgExtras)} &#8364;</span></div>` : ''}
         <div class="consol-divider"></div>
-        <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(sumSub)} &#8364;</span></div>
-        ${_isMG ? `
-          <div class="consol-row" style="background:#fff8e1;padding:6px 28px;border-radius:4px;margin:2px 0;">
-            <span style="color:#f57f17;font-weight:600;">${((1-calcs[0].c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span>
-            <span class="neg" style="font-weight:600;">- ${fmt(sumMgContrato)} &#8364;</span></div>
-          <div class="consol-subtotal" style="background:#fffdf5;border-left:3px solid #f59e0b;"><span>Subtotal ajustado (${(calcs[0].c.mgPct*100).toFixed(0)}%)</span><span>${fmt(sumMgSubAdj)} &#8364;</span></div>
-        ` : ''}
-        ${_isMG ? `
-          <div class="consol-divider"></div>
-          <div class="consol-subtotal" style="background:#f0fdf4;border-left:3px solid #16a34a;"><span>Subtotal liquidación</span><span>${fmt(sumSubFinal)} &#8364;</span></div>
-        ` : ''}
-        ${!_isMG ? _dedHtml : ''}
-        ${!_isMG && _ded.totalBase > 0 ? `<div class="consol-divider"></div><div class="consol-subtotal"><span>Subtotal ajustado</span><span>${fmt(adjSub)} &#8364;</span></div>` : ''}
+        <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(adjSub)} &#8364;</span></div>
         <div class="consol-row"><span>Retención IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
         <div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
         <div class="consol-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(adjLiq)} &#8364;</span></div>
@@ -4578,7 +3806,7 @@ function buildPrintCards() {
   const a = alojamientos.find(x => x.name === alojName);
   if (!a) return null;
 
-  const calcs_src = _mpHasFilter('c') ? a.reservas.filter(r => _mpMatchDate(r._dEntrada, 'c')) : a.reservas;
+  const calcs_src = _mpHasFilter() ? a.reservas.filter(r => _mpMatchDate(r._dEntrada)) : a.reservas;
   const calcs = calcs_src.map(r => ({ r, s: settings[r.idx] || {}, c: getLiq(r) }));
 
   let cardsHtml = calcs.map((x, i) => {
@@ -4596,21 +3824,9 @@ function buildPrintCards() {
       {l:`Limpieza (${fmt(c.limp)} \u20AC)`,v:-c.limp,neg:true},
       {l:`Amenities (${fmt(c.amen)} \u20AC)`,v:-c.amen,neg:true},{div:true},
     ];
-    if(s.pasarela) rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true});
-    // Conceptos Adicionales por reserva (print)
-    const caP = s.conceptosAdicionales || [];
-    caP.forEach(function(ca) { if(ca.amount > 0) rows.push({l:ca.label||'Concepto',v:-ca.amount,neg:true}); });
-    if(c.isMG && c.mgExtras > 0) rows.push({l:'Conceptos adicionales',v:-c.mgExtras,neg:true});
-    rows.push({div:true});
-    rows.push({l:"Subtotal",v:c.sub,bold:true});
-    if(c.isMG) {
-      rows.push({l:`${((1-c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC`,v:-c.mgContrato,neg:true});
-      rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true});
-    }
-    if(c.isMG) {
-      rows.push({div:true},{l:"Subtotal liquidación",v:c.subFinal,bold:true});
-    }
+    if(s.pasarela) rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true},{div:true});
     rows.push(
+      {l:"Subtotal",v:c.sub,bold:true},
       {l:`Retención IRPF (${(c.irpfRate*100).toFixed(0)}%)`,v:-c.ret,neg:true},
       {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
 
@@ -4626,7 +3842,7 @@ function buildPrintCards() {
       <div class="liq-header">
         <div class="header-top"><div><div class="type">Liquidación ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div></div>
         <div class="liq-meta">
-          <div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${stripAloj(r.alojamiento)}</div></div>
+          <div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${r.alojamiento}</div></div>
           <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
           <div><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
           <div><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
@@ -4640,25 +3856,20 @@ function buildPrintCards() {
   }).join('');
 
   const sumSub = calcs.reduce((s, x) => s + x.c.sub, 0);
-  const sumSubFinalP = calcs.reduce((s, x) => s + x.c.subFinal, 0);
-  const _isMGP = calcs.length > 0 && calcs[0].c.isMG;
-  const sumMgContratoP = _isMGP ? calcs.reduce((s, x) => s + x.c.mgContrato, 0) : 0;
-  const sumMgSubAdjP = _isMGP ? calcs.reduce((s, x) => s + x.c.mgSubAdj, 0) : 0;
-  const sumMgExtrasP = _isMGP ? calcs.reduce((s, x) => s + (x.c.mgExtras || 0), 0) : 0;
   const sumRet = calcs.reduce((s, x) => s + x.c.ret, 0);
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
 
   const _printDed = getConsolDeductions(a.name);
   const _printDedHtml = buildPrintDeductionsHtml(a.name);
-  const _pAdjSub = _isMGP ? sumSubFinalP : sumSub - _printDed.totalBase;
-  const _pAvgIrpf = sumSubFinalP > 0 ? sumRet / sumSubFinalP : 0;
+  const _pAdjSub = sumSub - _printDed.totalBase;
+  const _pAvgIrpf = sumSub > 0 ? sumRet / sumSub : 0;
   const _pAdjRet = _pAdjSub * _pAvgIrpf;
   const _pAdjIva = _pAdjSub * IVA_SUBTOTAL;
   const _pAdjLiq = _pAdjSub - _pAdjRet + _pAdjIva;
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-header">
-      <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${stripAloj(a.name)}</div></div></div>
+      <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
       <div class="liq-meta">
         <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${a.edificio}</div></div>
         <div><div class="liq-meta-label">Nº Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
@@ -4667,14 +3878,9 @@ function buildPrintCards() {
     </div>
     <div style="padding:8px 0;">
       <div class="liq-row bold"><span>Subtotal reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
-      ${_isMGP ? `
-        <div class="liq-row" style="color:#f57f17;font-weight:600;"><span>${((1-calcs[0].c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span><span class="neg">- ${fmt(sumMgContratoP)} &#8364;</span></div>
-        <div class="liq-row bold"><span>Subtotal ajustado (${(calcs[0].c.mgPct*100).toFixed(0)}%)</span><span>${fmt(sumMgSubAdjP)} &#8364;</span></div>
-      ` : `
-        ${_printDedHtml}
-        ${_printDed.totalBase > 0 ? '<div class="liq-divider"></div><div class="liq-row bold"><span>Subtotal ajustado</span><span>' + fmt(_pAdjSub) + ' &#8364;</span></div>' : ''}
-      `}
-      ${_isMGP ? `<div class="liq-divider"></div><div class="liq-row bold"><span>Subtotal liquidación</span><span>${fmt(sumSubFinalP)} &#8364;</span></div>` : ''}
+      ${_printDedHtml}
+      <div class="liq-divider"></div>
+      <div class="liq-row bold"><span>Subtotal ajustado</span><span>${fmt(_pAdjSub)} &#8364;</span></div>
       <div class="liq-row"><span>Retención IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
       <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>
@@ -4802,65 +4008,11 @@ function renderConfigModal() {
     '<hr class="section-divider">' +
     buildOS("Limpieza","\u20AC sin IVA",cleaningOptions," \u20AC","add-cl","addCL","delCL") +
     '<hr class="section-divider">' +
-    buildOS("Amenities","Coste fijo por reserva en \u20AC sin IVA",amenitiesOptions," \u20AC","add-am","addAM","delAM") +
+    buildOS("Amenities","Coste fijo por reserva en \u20AC",amenitiesOptions," \u20AC","add-am","addAM","delAM") +
     '<hr class="section-divider">' +
-    buildOS("Mantenimiento mensual","Sin IVA (Mensual/apartamento)",maintenanceOptions," \u20AC","add-mt","addMT","delMT");
+    buildOS("Mantenimiento mensual","Importe base (+ 21% IVA) por liquidación",maintenanceOptions," \u20AC","add-mt","addMT","delMT");
   document.getElementById("tab-impuestos").innerHTML =
     buildOS("Retención IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR");
-  // Mínimo garantizado tab
-  renderMingarTab();
-}
-function renderMingarTab() {
-  var keys = Object.keys(_minimoGarantizado).sort();
-  var h = '<div class="os"><div class="os-title">MÍNIMO GARANTIZADO</div>';
-  h += '<div class="os-sub">Alojamientos con condición especial: Subtotal × 80% Propietario − Mantenimiento</div>';
-  keys.forEach(function(k) {
-    var mg = _minimoGarantizado[k];
-    var displayName = stripAloj(k);
-    var chkStyle = 'display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(mg.enabled?'#16a34a':'#d1d5db')+';background:'+(mg.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;';
-    h += '<div class="os-item" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;">';
-    h += '<span style="display:flex;align-items:center;gap:10px;">';
-    h += '<span style="'+chkStyle+'" onclick="toggleMGEnabled(\''+k.replace(/'/g,"\\'")+'\')">'+( mg.enabled?'&#10003;':'')+'</span>';
-    h += '<span style="font-weight:500;'+(mg.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">'+displayName+'</span>';
-    h += '<span style="font-size:12px;color:#6b7280;margin-left:4px;">80%</span>';
-    h += '</span>';
-    h += '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeMG(\''+k.replace(/'/g,"\\'")+'\')">\u00d7</span>';
-    h += '</div>';
-  });
-  var availAlojs = allReservas ? [...new Set(allReservas.map(function(r){return r.alojamiento;}))].sort().filter(function(a){ return !getMinimoGarantizado(a); }) : [];
-  h += '<div style="display:flex;gap:8px;padding:10px 16px;align-items:center;">';
-  if(availAlojs.length > 0) {
-    h += '<select class="os-input" id="add-mg-name" style="flex:1;"><option value="">-- Seleccionar alojamiento --</option>';
-    availAlojs.forEach(function(a){ h += '<option value="'+a.replace(/"/g,'&quot;')+'">'+stripAloj(a)+'</option>'; });
-    h += '</select>';
-  } else {
-    h += '<input class="os-input" id="add-mg-name" placeholder="C\u00f3digo alojamiento" style="flex:1;" />';
-  }
-  h += '<button class="os-add-btn" onclick="addMG()">+ A\u00f1adir</button>';
-  h += '</div></div>';
-  document.getElementById("tab-mingar").innerHTML = h;
-}
-
-function toggleMGEnabled(k) {
-  if(_minimoGarantizado[k]) _minimoGarantizado[k].enabled = !_minimoGarantizado[k].enabled;
-  invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
-}
-function changeMGPct(k, val) {
-  if(_minimoGarantizado[k]) _minimoGarantizado[k].pct = parseFloat(val) || 80;
-  invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
-}
-function removeMG(k) {
-  if(!confirm('¿Eliminar '+k+' del mínimo garantizado?')) return;
-  delete _minimoGarantizado[k];
-  invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
-}
-function addMG() {
-  var name = (document.getElementById('add-mg-name').value||'').trim();
-  if(!name) { alert('Selecciona un alojamiento'); return; }
-  if(getMinimoGarantizado(name)) { alert('Ya existe'); return; }
-  _minimoGarantizado[name] = { enabled: true, pct: 80 };
-  document.getElementById('add-mg-name').value = '';
-  invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
 }
 function addPS(){aL(pasarelaStripeOptions,"add-ps",100);} function delPS(i){dL(pasarelaStripeOptions,i);}
 function addPB(){aL(pasarelaBookingOptions,"add-pb",100);} function delPB(i){dL(pasarelaBookingOptions,i);}
@@ -4878,26 +4030,23 @@ function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal(
 const comboState = { platform: { selected: new Set(), options: [] }, aloj: { selected: new Set(), options: [] } };
 const comboLabels = { platform: 'Todas las plataformas', aloj: 'Todos los alojamientos' };
 
-// ——— MONTH PICKER STATE (multi-select, independent per view) ———
+// ——— MONTH PICKER STATE (multi-select) ———
 const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const MONTH_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-let _mpState = {
-  p: { years: new Set(), months: new Set() },
-  c: { years: new Set(), months: new Set() }
-};
+let _mpSelYears = new Set();
+let _mpSelMonths = new Set();
 let _mpAvailable = {};
 let _mpAllYears = [];
 let _mpActiveSrc = 'p';
 
-function _mpMatchDate(d, view) {
-  var st = _mpState[view || 'p'];
-  if (st.years.size === 0) return true;
+function _mpMatchDate(d) {
+  if (_mpSelYears.size === 0) return true;
   if (!d) return false;
-  if (!st.years.has(d.getFullYear())) return false;
-  if (st.months.size > 0 && !st.months.has(d.getMonth())) return false;
+  if (!_mpSelYears.has(d.getFullYear())) return false;
+  if (_mpSelMonths.size > 0 && !_mpSelMonths.has(d.getMonth())) return false;
   return true;
 }
-function _mpHasFilter(view) { return _mpState[view || 'p'].years.size > 0; }
+function _mpHasFilter() { return _mpSelYears.size > 0; }
 
 function buildAvailableMonths() {
   _mpAvailable = {};
@@ -4910,18 +4059,15 @@ function buildAvailableMonths() {
   _mpAllYears = Object.keys(_mpAvailable).map(Number).sort((a,b) => b-a);
   const curY = new Date().getFullYear();
   const curM = new Date().getMonth();
-  ['p','c'].forEach(v => {
-    _mpState[v].years = new Set();
-    _mpState[v].months = new Set();
-    if (_mpAvailable[curY]) {
-      _mpState[v].years.add(curY);
-      if (_mpAvailable[curY][curM] !== undefined) _mpState[v].months.add(curM);
-    } else if (_mpAllYears.length > 0) {
-      _mpState[v].years.add(_mpAllYears[0]);
-    }
-  });
-  updateMonthPickerBtn('p');
-  updateMonthPickerBtn('c');
+  _mpSelYears = new Set();
+  _mpSelMonths = new Set();
+  if (_mpAvailable[curY]) {
+    _mpSelYears.add(curY);
+    if (_mpAvailable[curY][curM] !== undefined) _mpSelMonths.add(curM);
+  } else if (_mpAllYears.length > 0) {
+    _mpSelYears.add(_mpAllYears[0]);
+  }
+  updateMonthPickerBtn();
 }
 
 function toggleMonthPicker(src) {
@@ -4938,9 +4084,8 @@ function toggleMonthPicker(src) {
 function renderMonthPickerDD() {
   const dd = document.getElementById('mp-dd-' + _mpActiveSrc);
   if (!dd) return;
-  var st = _mpState[_mpActiveSrc];
   var monthCounts = {};
-  var yearsForMonths = st.years.size > 0 ? st.years : new Set(_mpAllYears);
+  var yearsForMonths = _mpSelYears.size > 0 ? _mpSelYears : new Set(_mpAllYears);
   yearsForMonths.forEach(function(y) {
     var ym = _mpAvailable[y] || {};
     for (var m = 0; m < 12; m++) {
@@ -4948,124 +4093,128 @@ function renderMonthPickerDD() {
     }
   });
   let yearsHtml = _mpAllYears.map(y =>
-    '<button class="mp-year ' + (st.years.has(y)?'sel':'') + '" onclick="event.stopPropagation();toggleMPYear(' + y + ')">' + y + '</button>'
+    `<button class="mp-year ${_mpSelYears.has(y)?'sel':''}" onclick="event.stopPropagation();toggleMPYear(${y})">${y}</button>`
   ).join('');
   let monthsHtml = '';
   for (let m = 0; m < 12; m++) {
     const cnt = monthCounts[m] || 0;
-    const isSel = st.months.has(m);
+    const isSel = _mpSelMonths.has(m);
     const dim = cnt === 0 ? 'dim' : '';
-    monthsHtml += '<button class="mp-month ' + (isSel?'sel':'') + ' ' + dim + '" onclick="event.stopPropagation();toggleMPMonth(' + m + ')">' + MONTH_NAMES[m] + '<span class="mp-cnt">' + (cnt>0?cnt:'') + '</span></button>';
+    monthsHtml += `<button class="mp-month ${isSel?'sel':''} ${dim}" onclick="event.stopPropagation();toggleMPMonth(${m})">${MONTH_NAMES[m]}<span class="mp-cnt">${cnt>0?cnt:''}</span></button>`;
   }
-  dd.innerHTML = '<div class="mp-years">' + yearsHtml + '</div>'
-    + '<div class="mp-grid">' + monthsHtml + '</div>'
-    + (st.years.size > 0 || st.months.size > 0 ? '<button class="mp-all" onclick="event.stopPropagation();clearMonthFilter()">\u2715 Quitar filtro de fecha</button>' : '');
+  dd.innerHTML = `
+    <div class="mp-years">${yearsHtml}</div>
+    <div class="mp-grid">${monthsHtml}</div>
+    ${_mpSelYears.size > 0 || _mpSelMonths.size > 0 ? '<button class="mp-all" onclick="event.stopPropagation();clearMonthFilter()">\u2715 Quitar filtro de fecha</button>' : ''}
+  `;
 }
 
 function toggleMPYear(year) {
-  var st = _mpState[_mpActiveSrc];
-  if (st.years.has(year)) st.years.delete(year);
-  else st.years.add(year);
-  if (st.years.size === 0) st.months.clear();
-  _mpRefreshView(_mpActiveSrc);
+  if (_mpSelYears.has(year)) _mpSelYears.delete(year);
+  else _mpSelYears.add(year);
+  if (_mpSelYears.size === 0) _mpSelMonths.clear();
+  _mpRefreshAll();
   renderMonthPickerDD();
 }
 
 function toggleMPMonth(month) {
-  var st = _mpState[_mpActiveSrc];
-  if (st.months.has(month)) st.months.delete(month);
-  else st.months.add(month);
-  _mpRefreshView(_mpActiveSrc);
+  if (_mpSelMonths.has(month)) _mpSelMonths.delete(month);
+  else _mpSelMonths.add(month);
+  _mpRefreshAll();
   renderMonthPickerDD();
 }
 
 function clearMonthFilter() {
-  var st = _mpState[_mpActiveSrc];
-  st.years.clear(); st.months.clear();
-  _mpRefreshView(_mpActiveSrc);
-  document.getElementById('mp-dd-' + _mpActiveSrc).classList.remove('open');
+  _mpSelYears.clear(); _mpSelMonths.clear();
+  _mpRefreshAll();
+  document.getElementById('mp-dd-p').classList.remove('open');
+  document.getElementById('mp-dd-c').classList.remove('open');
 }
 
-function _mpRefreshView(src) {
-  updateMonthPickerBtn(src);
-  if (src === 'p') {
-    invalidateFilterCache(); _currentPage = 1; renderTable();
-  } else {
-    renderConsolGrid();
-    if (document.getElementById("screen-consoldetail").classList.contains("active") && currentConsolAloj) viewConsolDetail(currentConsolAloj);
-  }
+function _mpRefreshAll() {
+  updateMonthPickerBtn();
+  invalidateFilterCache(); _currentPage = 1; renderTable();
+  renderConsolGrid();
+  if (document.getElementById("screen-consoldetail").classList.contains("active") && currentConsolAloj) viewConsolDetail(currentConsolAloj);
 }
 
-function _mpBtnHtml(src) {
-  var st = _mpState[src || 'p'];
-  if (st.years.size === 0) return { active: false, html: null };
-  var yArr = [...st.years].sort();
+function _mpBtnHtml() {
+  if (_mpSelYears.size === 0) return { active: false, html: null };
+  var yArr = [..._mpSelYears].sort();
   var label = '';
-  var arrows = (st.years.size === 1 && st.months.size <= 1);
+  var arrows = false;
+  if (_mpSelYears.size === 1 && _mpSelMonths.size <= 1) {
+    // Single selection: show arrows
+    arrows = true;
+    if (_mpSelMonths.size === 1) {
+      var m = [..._mpSelMonths][0];
+      label = MONTH_FULL[m] + ' ' + yArr[0];
+    } else {
+      label = 'Año ' + yArr[0];
+    }
+  } else if (_mpSelMonths.size > 0) {
+    var mArr = [..._mpSelMonths].sort((a,b) => a-b);
+    var mNames = mArr.map(m => MONTH_NAMES[m]).join(', ');
+    label = mNames + ' ' + yArr.join(', ');
+  } else {
+    label = yArr.join(', ');
+  }
   var html = '';
   if (arrows) {
-    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpPrev(\'' + (src||'p') + '\')">&#8249;</button></span>';
-  }
-  if (st.months.size > 0) {
-    var mArr = [...st.months].sort((a,b) => a-b);
-    if (st.years.size === 1 && st.months.size === 1) {
-      label = MONTH_FULL[mArr[0]] + ' ' + yArr[0];
-    } else {
-      var mNames = mArr.map(m => MONTH_NAMES[m]).join(', ');
-      label = mNames + ' ' + yArr.join(', ');
-    }
-  } else {
-    label = yArr.length === 1 ? 'A\u00f1o ' + yArr[0] : yArr.join(', ');
+    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpPrev()">&#8249;</button></span>';
   }
   html += label;
   if (arrows) {
-    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpNext(\'' + (src||'p') + '\')">&#8250;</button></span>';
+    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpNext()">&#8250;</button></span>';
   }
-  html += '<span class="mp-clear" onclick="event.stopPropagation();_mpActiveSrc=\'' + (src||'p') + '\';clearMonthFilter();">\u2715</span>';
+  html += '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">\u2715</span>';
   return { active: true, html: html };
 }
 
-function mpPrev(src) {
-  var st = _mpState[src || 'p'];
-  if (st.years.size !== 1) return;
-  var y = [...st.years][0];
-  if (st.months.size === 1) {
-    var m = [...st.months][0];
-    m--; if (m < 0) { m = 11; y--; }
-    st.years = new Set([y]); st.months = new Set([m]);
+function mpPrev() {
+  if (_mpSelYears.size !== 1) return;
+  var y = [..._mpSelYears][0];
+  if (_mpSelMonths.size === 1) {
+    var m = [..._mpSelMonths][0];
+    m--;
+    if (m < 0) { m = 11; y--; }
+    _mpSelYears = new Set([y]);
+    _mpSelMonths = new Set([m]);
   } else {
-    st.years = new Set([y - 1]);
+    _mpSelYears = new Set([y - 1]);
   }
-  _mpRefreshView(src || 'p');
+  _mpRefreshAll();
 }
 
-function mpNext(src) {
-  var st = _mpState[src || 'p'];
-  if (st.years.size !== 1) return;
-  var y = [...st.years][0];
-  if (st.months.size === 1) {
-    var m = [...st.months][0];
-    m++; if (m > 11) { m = 0; y++; }
-    st.years = new Set([y]); st.months = new Set([m]);
+function mpNext() {
+  if (_mpSelYears.size !== 1) return;
+  var y = [..._mpSelYears][0];
+  if (_mpSelMonths.size === 1) {
+    var m = [..._mpSelMonths][0];
+    m++;
+    if (m > 11) { m = 0; y++; }
+    _mpSelYears = new Set([y]);
+    _mpSelMonths = new Set([m]);
   } else {
-    st.years = new Set([y + 1]);
+    _mpSelYears = new Set([y + 1]);
   }
-  _mpRefreshView(src || 'p');
+  _mpRefreshAll();
 }
 
-function updateMonthPickerBtn(src) {
-  var v = src || 'p';
-  var info = _mpBtnHtml(v);
-  var btn = document.getElementById('mp-btn-' + v);
-  var label = document.getElementById('mp-label-' + v);
-  if (!btn || !label) return;
-  if (info.active) {
-    label.innerHTML = info.html;
-    btn.classList.add('active');
-  } else {
-    label.textContent = 'Todos los meses';
-    btn.classList.remove('active');
-  }
+function updateMonthPickerBtn() {
+  const info = _mpBtnHtml();
+  ['p','c'].forEach(src => {
+    const btn = document.getElementById('mp-btn-' + src);
+    const label = document.getElementById('mp-label-' + src);
+    if (!btn || !label) return;
+    if (info.active) {
+      label.innerHTML = info.html;
+      btn.classList.add('active');
+    } else {
+      label.textContent = 'Todos los meses';
+      btn.classList.remove('active');
+    }
+  });
 }
 
 function populateCombo(id, items) {
@@ -5109,7 +4258,7 @@ function renderComboList(id, query) {
   } else {
     filtered.forEach(item => {
       const isChecked = sel.has(item);
-      let label = id === 'aloj' ? stripAloj(item) : item;
+      let label = item;
       if (q) {
         const idx = item.toLowerCase().indexOf(q);
         if (idx >= 0) label = item.slice(0, idx) + '<span class="match">' + item.slice(idx, idx + q.length) + '</span>' + item.slice(idx + q.length);
@@ -5152,7 +4301,7 @@ function updateComboDisplay(id) {
     input.placeholder = comboLabels[id];
     wrap.classList.remove('has-value');
   } else if (sel.size === 1) {
-    input.value = id === 'aloj' ? stripAloj([...sel][0]) : [...sel][0];
+    input.value = [...sel][0];
     wrap.classList.add('has-value');
   } else {
     const noun = id === 'platform' ? 'plataformas' : 'alojamientos';
@@ -5173,7 +4322,7 @@ const simpleComboState = {
   status: { value: 'all', label: 'Todos los estados' },
   sort: { value: 'idx', label: 'Orden original' },
   sortdir: { value: 'asc', label: '&#8593;' },
-  consolsort: { value: 'name', label: 'Nombre Aâ†‘Z' }
+  consolsort: { value: 'name', label: 'Nombre A\u2191Z' }
 };
 const simpleComboOptions = {
   status: [
@@ -5208,8 +4357,8 @@ const simpleComboOptions = {
     { value: 'desc', label: '&#8595; Descendente' }
   ],
   consolsort: [
-    { value: 'name', label: 'Nombre Aâ†‘Z' },
-    { value: 'name-desc', label: 'Nombre Zâ†“A' },
+    { value: 'name', label: 'Nombre A\u2191Z' },
+    { value: 'name-desc', label: 'Nombre Z\u2191A' },
     { value: 'reservas-desc', label: 'Más reservas' },
     { value: 'reservas-asc', label: 'Menos reservas' },
     { value: 'liq-desc', label: 'Mayor liquidación' },
@@ -5258,7 +4407,7 @@ function selectSimpleCombo(id, value) {
     }
   } else if (id === 'consolsort') {
     if (value === 'name') {
-      input.value = ''; input.placeholder = 'Nombre Aâ†‘Z'; wrap.classList.remove('has-value');
+      input.value = ''; input.placeholder = 'Nombre A\u2191Z'; wrap.classList.remove('has-value');
     } else {
       input.value = opt.label; wrap.classList.add('has-value');
     }
@@ -5308,7 +4457,7 @@ document.querySelectorAll('.combo-input').forEach(input => {
   });
 });
 
-// ★★★ AI ASSISTANT ★★★
+// ═══ AI ASSISTANT ═══
 var _aiPanelOpen = false;
 var _aiHistory = [];
 var _aiProcessing = false;
@@ -5339,7 +4488,7 @@ function buildAIContext() {
   var total = allReservas.length;
   var byAloj = {}, byPlat = {}, byMes = {}, byEdificio = {}, byAtendido = {}, byTipo = {};
   var sumImporte = 0, sumLiq = 0, sumNoches = 0, sumBase = 0;
-  var sumComPlat = 0, sumComGTC = 0, sumLimp = 0, sumAmen = 0, sumPas = 0, sumCE = 0, sumCACtx = 0;
+  var sumComPlat = 0, sumComGTC = 0, sumLimp = 0, sumAmen = 0, sumPas = 0, sumCE = 0;
   var numVal = 0, numPend = 0;
 
   allReservas.forEach(function(r) {
@@ -5347,7 +4496,7 @@ function buildAIContext() {
     var n = r._nights || 0;
     sumImporte += c.total; sumLiq += c.totalLiq; sumNoches += n;
     sumBase += c.baseSinIVA; sumComPlat += c.comPlat; sumComGTC += c.comGTC;
-    sumLimp += c.limp; sumAmen += c.amen; sumPas += c.comPas; sumCE += c.ceTotal; sumCACtx += (c.caTotal || 0);
+    sumLimp += c.limp; sumAmen += c.amen; sumPas += c.comPas; sumCE += c.ceTotal;
     if (validated.has(r.idx)) numVal++; else numPend++;
 
     var a = r.alojamiento || 'Sin alojamiento';
@@ -5389,7 +4538,6 @@ function buildAIContext() {
   ctx += 'Limpieza total: ' + f(sumLimp) + ' EUR\n';
   ctx += 'Amenities total: ' + f(sumAmen) + ' EUR\n';
   ctx += 'Pasarela total: ' + f(sumPas) + ' EUR\n';
-  ctx += 'Conceptos Adicionales total: ' + f(sumCACtx) + ' EUR\n';
   ctx += 'Conceptos Especiales total: ' + f(sumCE) + ' EUR\n';
   ctx += 'Total a liquidar: ' + f(sumLiq) + ' EUR\n\n';
 
@@ -5520,7 +4668,7 @@ async function sendAIMessage() {
       '2. Si no tienes la información para responder, di: "No tengo esa información en los datos cargados."\n' +
       '3. NUNCA des consejos financieros, legales ni fiscales. Solo reporta datos.\n' +
       '4. Responde siempre en español.\n' +
-      '5. Sé conciso y directo. Usa cifras exactas con 2 decimales y el símbolo â‚¬.\n' +
+      '5. Sé conciso y directo. Usa cifras exactas con 2 decimales y el símbolo €.\n' +
       '6. Cuando cites importes, especifica si son con IVA incluido o sin IVA (base).\n' +
       '7. NUNCA accedas a información externa. Solo los datos de abajo.\n' +
       '8. Si te preguntan algo que no son datos de reservas, responde amablemente que solo puedes responder sobre los datos de reservas cargados.\n' +
@@ -5587,7 +4735,7 @@ async function sendAIMessage() {
   var ta = document.getElementById('ai-input');
   if(ta) ta.addEventListener('input', function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,100)+'px'; });
 })();
-// ★★★ END AI ASSISTANT ★★★
+// ═══ END AI ASSISTANT ═══
 </script>
 </body>
 </html>

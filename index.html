@@ -407,6 +407,18 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .ce-panel-summary .ce-sum-val { font-size:16px;font-weight:700;color:#d97706;margin-top:4px; }
 tr.ce-highlighted { background:#fffdf5; }
 @media print { .ce-panel-row,.col-ce,.cc-ce,.ce-highlighted { display:none!important;background:transparent!important; } }
+/* === CONCEPTOS ADICIONALES (CA) === */
+.ca-btn { background:#fff;border:1.5px solid #38bdf8;color:#0284c7;border-radius:6px;padding:3px 10px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:.15s; }
+.ca-btn:hover { background:#e0f2fe;border-color:#0284c7; }
+.ca-btn.has { background:#e0f2fe;border-color:#0284c7;color:#0369a1; }
+.ca-btn .ca-dot { display:inline-block;width:6px;height:6px;border-radius:50%;background:#0284c7;margin-right:4px; }
+.ca-panel-row td { padding:0!important;border-bottom:1px solid #0284c7!important; }
+.ca-panel-inner { background:#f0f9ff;border-top:2px solid #0284c7;padding:12px 16px 12px 48px;display:flex;align-items:flex-start;gap:16px;animation:ceSlide .2s ease; }
+.ca-panel-left { flex:1; }
+.ca-panel-title { font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0284c7;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
+.ca-panel-title .ca-sub { font-size:9px;color:#9ca3af;font-weight:500;letter-spacing:0;text-transform:none; }
+@media print { .ca-panel-row,.col-ca,.cc-ca { display:none!important;background:transparent!important; } }
+
 /* === AI ASSISTANT === */
 .ai-fab { position:fixed; bottom:24px; right:24px; width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#4f8cff,#3b6de0); color:#fff; border:none; font-size:24px; cursor:pointer; box-shadow:0 4px 16px rgba(79,140,255,0.4); z-index:90; display:flex; align-items:center; justify-content:center; transition:transform 0.2s,box-shadow 0.2s; }
 .ai-fab:hover { transform:scale(1.08); box-shadow:0 6px 24px rgba(79,140,255,0.5); }
@@ -756,19 +768,27 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '2.0.2';
-const APP_BUILD   = '2026-02-12T00:30:00+01:00';
-const APP_CHANGES = 'v202: Mant. siempre tras Subtotal, CA funcional, MG config limpio';
+const APP_VERSION = '2.0.3';
+const APP_BUILD   = '2026-02-12T01:15:00+01:00';
+const APP_CHANGES = 'v203: CA columna tabla con panel expandible completo, footer, consol';
 
 const CHANGELOG = [
-  { version: '2.0.2', date: '2026-02-12T00:30:00+01:00', changes: [
+  { version: '2.0.3', date: '2026-02-12T01:15:00+01:00', changes: [
+    'CA: celda footer con total Conceptos Adicionales en tabla principal',
+    'CA: columna cc-ca y panel en vista consolidada por alojamiento',
+    'CA: footer consolidado con total CA',
+    'CA: delta updates para tCA en todas las funciones de cambio',
+    'CA: actualiza celda CA en tabla al editar desde vista detalle'
+  ]},
+  { version: '2.0.2', date: '2026-02-12T01:00:00+01:00', changes: [
+    'Nuevo: Columna C.A. (sin IVA) en tabla principal con panel expandible tipo CE',
+    'CA: panel inline con + A\u00f1adir concepto, edici\u00f3n de label y cantidad',
+    'CA: restan del Subtotal junto con limpieza/amenities/pasarela',
+    'CA: persistencia en pesta\u00f1a Configuraci\u00f3n de Google Sheets',
     'Mantenimiento siempre debajo del Subtotal (tanto MG como no-MG)',
-    'Fix: Conceptos Adicionales (+A\u00f1adir concepto) funcional en vista detalle',
-    'Fix: re-render usa viewDetail en vez de toggleDetail para CA',
-    'Consolidado: mantenimiento visible para todos los alojamientos',
+    'Fix: Conceptos Adicionales funcional en vista detalle',
     'MG Config: 80% constante fija, sin dropdown, sin duplicados',
-    'MG Config: caracteres corruptos corregidos en descripci\u00f3n',
-    'Subtotal liquidaci\u00f3n visible cuando hay mantenimiento (no solo MG)'
+    'Subtotal liquidaci\u00f3n visible cuando hay mantenimiento'
   ]},
   { version: '2.0.1', date: '2026-02-11T21:45:00+01:00', changes: [
     'Nuevo: Conceptos Adicionales (CA) por reserva en preliquidaciones',
@@ -2471,6 +2491,7 @@ const COLUMNS = [
   { key:"limpieza",label:"Limpieza",sortable:false },
   { key:"amenities",label:"Amenities",sortable:false },
   { key:"pasarela",label:"Pasarela",sortable:false },
+  { key:"ca",label:"C.A.<br>(sin IVA)",sortable:false },
   { key:"subtotal",label:"Subtotal",sortable:true,right:true },
   { key:"irpf",label:"IRPF",sortable:false },
   { key:"iva21",label:"IVA 21%",sortable:false },
@@ -2707,6 +2728,7 @@ function _buildRowHtml(r) {
       <div class="toggle" onclick="if(!${isV}){togglePasarela(${r.idx})}"><div class="toggle-track ${s.pasarela ? 'on' : ''}"><div class="toggle-thumb"></div></div></div>
       ${s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${r.idx},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label" style="display:inline-block;min-width:52px;text-align:left;">${isB ? 'Booking' : 'Stripe'}</span>`}
     </div><span style="font-size:11px;font-variant-numeric:tabular-nums;min-height:16px;${s.pasarela && c.comPas > 0 ? 'color:#e53935;' : 'visibility:hidden;'}">${s.pasarela && c.comPas > 0 ? `&#8211; ${fmt(c.comPas)} &#8364;` : '&#8211; 0,00 &#8364;'}</span></div></td>
+    <td class="col-ca" style="text-align:center;vertical-align:middle;">${_buildCAButton(r.idx, c)}</td>
     <td class="col-subtotal right bold" style="font-size:12px;">${fmt(c.sub)} &#8364;</td>
     <td class="col-irpf" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="changeSetting(${r.idx},'irpf',parseFloat(this.value))" ${dis}>${iO}</select>
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.ret)} &#8364;</span></div></td>
@@ -2717,7 +2739,7 @@ function _buildRowHtml(r) {
       <button class="btn btn-sm btn-primary" onclick="viewDetail(${r.idx})">&#128065;</button>
       ${!isV ? `<button class="btn btn-sm btn-success" onclick="toggleValidate(${r.idx})">&#10004;</button>` : `<button class="btn btn-sm btn-orange" onclick="toggleValidate(${r.idx})">&#8617;</button>`}
     </div></td>
-  </tr>` + _buildCEPanelRow(r.idx, s, c);
+  </tr>` + _buildCEPanelRow(r.idx, s, c) + _buildCAPanelRow(r.idx, s, c);
 }
 
 function _buildCEButton(idx, c, view) {
@@ -2940,6 +2962,171 @@ function _refreshCEPanel(idx, view) {
   if (labels.length > 0) labels[labels.length - 1].focus();
 }
 
+// === CA TABLE COLUMN (panel expandible en tabla, como CE) ===
+function _buildCAButton(idx, c, view) {
+  var v = view || 'p';
+  if (c.caTotal > 0) {
+    return '<button class="ca-btn has" onclick="event.stopPropagation();toggleCAPanel('+idx+',\''+v+'\')">' +
+      '<span class="ca-dot"></span>\u2013' + fmt(c.caTotal) + ' \u20AC</button>';
+  }
+  return '<button class="ca-btn" onclick="event.stopPropagation();toggleCAPanel('+idx+',\''+v+'\')">+</button>';
+}
+
+function _buildCAPanelRow(idx, s, c, view) {
+  var v = view || 'p';
+  var ca = s.conceptosAdicionales || [];
+  var colCount = v === 'c'
+    ? CONSOL_COLUMNS.filter(function(col){return consolColVis[col.key]!==false;}).length
+    : COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
+  var itemsHtml = ca.map(function(item, i) {
+    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button></div>';
+  }).join('');
+  return '<tr class="ca-panel-row" id="ca-'+v+'panel-'+idx+'" style="display:none"><td colspan="'+colCount+'" style="padding:0"><div class="ca-panel-inner"><div class="ca-panel-left"><div class="ca-panel-title">Conceptos Adicionales <span class="ca-sub">Sin IVA \u2013 restan del Subtotal</span></div>'+itemsHtml+'<div class="ce-add-link" onclick="addCATableItem('+idx+',\''+v+'\')">+ A\u00f1adir concepto</div></div></div></td></tr>';
+}
+
+var _openCAPanel = null;
+var _openCAView = 'p';
+function toggleCAPanel(idx, view) {
+  var v = view || 'p';
+  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
+  if (!panel) return;
+  if (_openCAPanel !== null && (_openCAPanel !== idx || _openCAView !== v)) {
+    var prev = document.getElementById('ca-' + _openCAView + 'panel-' + _openCAPanel);
+    if (prev) prev.style.display = 'none';
+  }
+  if (panel.style.display === 'none') {
+    var wrap = panel.closest('.table-wrap');
+    var st = wrap ? wrap.scrollTop : window.scrollY;
+    panel.style.display = '';
+    if (wrap) wrap.scrollTop = st; else window.scrollTo(0, st);
+    _openCAPanel = idx;
+    _openCAView = v;
+    var s = settings[idx];
+    if (!s.conceptosAdicionales || s.conceptosAdicionales.length === 0) {
+      s.conceptosAdicionales = [{label:'', amount:0}];
+      _refreshCAPanel(idx, v);
+    }
+  } else {
+    panel.style.display = 'none';
+    _openCAPanel = null;
+  }
+}
+
+function addCATableItem(idx, view) {
+  var s = settings[idx]; if (!s) return;
+  if (!s.conceptosAdicionales) s.conceptosAdicionales = [];
+  var i = s.conceptosAdicionales.length;
+  s.conceptosAdicionales.push({label:'', amount:0});
+  var v = view || 'p';
+  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
+  if (!panel) return;
+  var addLink = panel.querySelector('.ce-add-link');
+  if (!addLink) { _refreshCAPanel(idx, v); return; }
+  var row = document.createElement('div');
+  row.className = 'ce-item-row ce-new';
+  row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button>';
+  addLink.parentNode.insertBefore(row, addLink);
+  row.querySelector('.ce-inp-label').focus();
+}
+
+function removeCATableItem(idx, itemIdx, view) {
+  var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
+  var v = view || 'p';
+  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
+  var rows = panel ? panel.querySelectorAll('.ce-item-row') : [];
+  if (rows[itemIdx]) {
+    var row = rows[itemIdx];
+    row.style.animation = 'ceRowOut .2s ease forwards';
+    row.addEventListener('animationend', function() {
+      row.remove();
+      s.conceptosAdicionales.splice(itemIdx, 1);
+      _applyCAChange(idx, v);
+    }, {once:true});
+  } else {
+    s.conceptosAdicionales.splice(itemIdx, 1);
+    _applyCAChange(idx, v);
+  }
+}
+
+function updateCATableItem(idx, itemIdx, field, rawVal, view) {
+  var s = settings[idx]; if (!s || !s.conceptosAdicionales || !s.conceptosAdicionales[itemIdx]) return;
+  if (field === 'label') {
+    s.conceptosAdicionales[itemIdx].label = rawVal;
+    scheduleReservaConfigSave(idx);
+  } else {
+    var v = parseFloat(String(rawVal).replace(/\./g,'').replace(',','.'));
+    if (isNaN(v)) v = 0;
+    s.conceptosAdicionales[itemIdx].amount = v;
+    _applyCAChange(idx, view || 'p');
+  }
+}
+
+function _applyCAChange(idx, view) {
+  var v = view || 'p';
+  var oldC = getLiq(allReservas[idx]);
+  invalidateCache(idx);
+  var newC = getLiq(allReservas[idx]);
+  if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
+  scheduleReservaConfigSave(idx);
+  if (v === 'c' && currentConsolAloj) { viewConsolDetail(currentConsolAloj); return; }
+  var mainRow = document.getElementById('row-' + idx);
+  if (mainRow) {
+    var caCel = mainRow.querySelector('.col-ca');
+    if (caCel) caCel.innerHTML = _buildCAButton(idx, newC, v);
+    var liqCel = mainRow.querySelector('.col-totalLiquidar');
+    if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' \u20AC';
+    var subCel = mainRow.querySelector('.col-subtotal');
+    if (subCel) subCel.innerHTML = fmt(newC.sub) + ' \u20AC';
+  }
+  _refreshCASummary(idx, v);
+  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
+  if (panel) { panel.style.display = ''; _openCAPanel = idx; _openCAView = v; }
+  var st = _cachedFilteredStats;
+  if (st && oldC && newC) {
+    st.fL += (newC.totalLiq - oldC.totalLiq);
+    st.tLiq += (newC.totalLiq - oldC.totalLiq);
+    st.tSub += (newC.sub - oldC.sub);
+    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
+    _renderStatsFromCache(_lastFiltered, st);
+  }
+}
+
+function _refreshCASummary(idx, view) {
+  var v = view || 'p';
+  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
+  if (!panel) return;
+  var rows = panel.querySelectorAll('.ce-item-row');
+  rows.forEach(function(row, i) {
+    var del = row.querySelector('.ce-del');
+    if (del) del.setAttribute('onclick', "removeCATableItem("+idx+","+i+",'"+v+"')");
+    var lbl = row.querySelector('.ce-inp-label');
+    if (lbl) lbl.setAttribute('onchange', "updateCATableItem("+idx+","+i+",'label',this.value,'"+v+"')");
+    var amt = row.querySelector('.ce-inp-amt');
+    if (amt) amt.setAttribute('onchange', "updateCATableItem("+idx+","+i+",'amount',this.value,'"+v+"')");
+  });
+}
+
+function _refreshCAPanel(idx, view) {
+  var v = view || 'p';
+  var s = settings[idx] || {}, c = getLiq(allReservas[idx]);
+  var panel = document.getElementById('ca-' + v + 'panel-' + idx);
+  if (!panel) return;
+  var wrap = panel.closest('.table-wrap') || panel.closest('.main');
+  var scrollY = wrap ? wrap.scrollTop : window.scrollY;
+  var colCount = v === 'c'
+    ? CONSOL_COLUMNS.filter(function(col){return consolColVis[col.key]!==false;}).length
+    : COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
+  var ca = s.conceptosAdicionales || [];
+  var itemsHtml = ca.map(function(item, i) {
+    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button></div>';
+  }).join('');
+  panel.innerHTML = '<td colspan="'+colCount+'" style="padding:0"><div class="ca-panel-inner"><div class="ca-panel-left"><div class="ca-panel-title">Conceptos Adicionales <span class="ca-sub">Sin IVA \u2013 restan del Subtotal</span></div>'+itemsHtml+'<div class="ce-add-link" onclick="addCATableItem('+idx+',\''+v+'\')">+ A\u00f1adir concepto</div></div></div></td>';
+  if (wrap) wrap.scrollTop = scrollY;
+  var labels = panel.querySelectorAll('.ce-inp-label');
+  if (labels.length > 0) labels[labels.length - 1].focus();
+}
+
+
 // === Conceptos Adicionales (CA) por reserva ===
 function _refreshDetailAfterCA(idx) {
   var oldC = getLiq(allReservas[idx]);
@@ -2953,6 +3140,8 @@ function _refreshDetailAfterCA(idx) {
     if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' &#8364;';
     var subCel = mainRow.querySelector('.col-subtotal');
     if (subCel) subCel.innerHTML = fmt(newC.sub) + ' &#8364;';
+    var caCel = mainRow.querySelector('.col-ca');
+    if (caCel) caCel.innerHTML = _buildCAButton(idx, newC);
   }
   // Update footer stats
   var st = _cachedFilteredStats;
@@ -2960,6 +3149,7 @@ function _refreshDetailAfterCA(idx) {
     st.fL += (newC.totalLiq - oldC.totalLiq);
     st.tLiq += (newC.totalLiq - oldC.totalLiq);
     st.tSub += (newC.sub - oldC.sub);
+    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
     _renderStatsFromCache(_lastFiltered, st);
   }
   scheduleReservaConfigSave(idx);
@@ -3013,7 +3203,7 @@ function _renderFull() {
   const fR = st.fR, fL = st.fL, fV = st.fV;
   const tNoches = st.tNoches, tTotal = st.tTotal, tBase = st.tBase;
   const tComPlat = st.tComPlat, tComGTC = st.tComGTC, tLimp = st.tLimp, tAmen = st.tAmen;
-  const tComPas = st.tComPas, tSub = st.tSub, tRet = st.tRet, tIva21 = st.tIva21, tLiq = st.tLiq;
+  const tComPas = st.tComPas, tCA = st.tCA, tSub = st.tSub, tRet = st.tRet, tIva21 = st.tIva21, tLiq = st.tLiq;
   const tCE = st.tCE;
 
   // Global stats (cached)
@@ -3064,7 +3254,7 @@ function _renderFull() {
   _updatePaginationBar(fil.length, totalPages);
 
   // Totals footer (always over ALL filtered, not just visible)
-  _updateFooter(fil.length, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tSub, tRet, tIva21, tLiq, tCE);
+  _updateFooter(fil.length, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tCA, tSub, tRet, tIva21, tLiq, tCE);
 }
 
 // Fast re-render for page changes only \u2014 no stats recalc
@@ -3155,7 +3345,7 @@ function changePageSize(size) {
   _renderPageOnly();
 }
 
-function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tSub, tRet, tIva21, tLiq, tCE) {
+function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, tAmen, tComPas, tCA, tSub, tRet, tIva21, tLiq, tCE) {
   const tfoot = document.getElementById("table-foot");
   const _fs = 'border:none;padding:10px 8px;';
   const _fr = 'border:none;padding:10px 8px;color:#ff8a80;text-align:center;font-variant-numeric:tabular-nums;';
@@ -3182,6 +3372,7 @@ function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, 
     <td class="col-limpieza" style="${_fr}">${fmt(tLimp)} &#8364;</td>
     <td class="col-amenities" style="${_fr}">${fmt(tAmen)} &#8364;</td>
     <td class="col-pasarela" style="${_fr}">${tComPas > 0 ? fmt(tComPas) + ' &#8364;' : '&#8211;'}</td>
+    <td class="col-ca" style="${_fs}text-align:center;color:#0284c7;font-size:11px;">${tCA > 0 ? '&#8211; ' + fmt(tCA) + ' &#8364;' : ''}</td>
     <td class="col-subtotal" style="${_fs}text-align:right;">${fmt(tSub)} &#8364;</td>
     <td class="col-irpf" style="${_fr}">&#8211; ${fmt(tRet)} &#8364;</td>
     <td class="col-iva21" style="${_fs}text-align:center;color:#81c784;font-variant-numeric:tabular-nums;">+ ${fmt(tIva21)} &#8364;</td>
@@ -3232,6 +3423,7 @@ function changeSetting(i,k,v){
     st.tLimp += (newC.limp - oldC.limp);
     st.tAmen += (newC.amen - oldC.amen);
     st.tComPas += (newC.comPas - oldC.comPas);
+    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
     st.tRet += (newC.ret - oldC.ret);
     st.tIva21 += (newC.iva - oldC.iva);
     _renderStatsFromCache(_lastFiltered, st);
@@ -3322,13 +3514,13 @@ let _cachedFilteredStats = null; // { filPendingCount, filValidatedCount, fR, fL
 
 function _computeStatsFromScratch(fil) {
   const s = { filPendingCount:0, filValidatedCount:0, fR:0, fL:0, fV:0,
-    tNoches:0, tTotal:0, tBase:0, tComPlat:0, tComGTC:0, tLimp:0, tAmen:0, tComPas:0, tSub:0, tRet:0, tIva21:0, tLiq:0, tCE:0 };
+    tNoches:0, tTotal:0, tBase:0, tComPlat:0, tComGTC:0, tLimp:0, tAmen:0, tComPas:0, tCA:0, tSub:0, tRet:0, tIva21:0, tLiq:0, tCE:0 };
   for (let i = 0; i < fil.length; i++) {
     const r = fil[i], c = getLiq(r), isV = validated.has(r.idx);
     s.fR += r.totalReserva; s.fL += c.totalLiq;
     if (isV) { s.fV++; s.filValidatedCount++; } else s.filPendingCount++;
     s.tNoches += r._nights; s.tTotal += r.totalReserva; s.tBase += c.baseSinIVA;
-    s.tComPlat += c.comPlat; s.tComGTC += c.comGTC; s.tLimp += c.limp; s.tAmen += c.amen; s.tComPas += c.comPas;
+    s.tComPlat += c.comPlat; s.tComGTC += c.comGTC; s.tLimp += c.limp; s.tAmen += c.amen; s.tComPas += c.comPas; s.tCA += (c.caTotal||0);
     s.tSub += c.sub; s.tRet += c.ret; s.tIva21 += c.iva; s.tLiq += c.totalLiq; s.tCE += c.ceTotal;
   }
   _cachedFilteredStats = s;
@@ -3389,6 +3581,7 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
     st.tLimp += (newC.limp - oldC.limp);
     st.tAmen += (newC.amen - oldC.amen);
     st.tComPas += (newC.comPas - oldC.comPas);
+    st.tCA += ((newC.caTotal||0) - (oldC.caTotal||0));
     st.tSub += (newC.sub - oldC.sub);
     st.tRet += (newC.ret - oldC.ret);
     st.tIva21 += (newC.iva - oldC.iva);
@@ -3435,7 +3628,7 @@ function _renderStatsFromCache(fil, st) {
     <div class="stat-card"><div class="stat-label">Validadas</div><div class="stat-value" style="color:#43a047">${vC} / ${allReservas.length}</div>
       ${hasFilter ? `<div class="stat-filtered">${st.fV} / ${fil.length} filtradas <span class="stat-pct">(${pctV}%)</span></div>` : ''}</div>`;
 
-  _updateFooter(fil.length, st.tNoches, st.tTotal, st.tBase, st.tComPlat, st.tComGTC, st.tLimp, st.tAmen, st.tComPas, st.tSub, st.tRet, st.tIva21, st.tLiq, st.tCE);
+  _updateFooter(fil.length, st.tNoches, st.tTotal, st.tBase, st.tComPlat, st.tComGTC, st.tLimp, st.tAmen, st.tComPas, st.tCA, st.tSub, st.tRet, st.tIva21, st.tLiq, st.tCE);
 }
 
 let highlightIdx = null;
@@ -4009,7 +4202,7 @@ function viewConsolDetail(alojName) {
   });
 
   // Consolidated table - identical look to main preliquidaciones (without alojamiento)
-  let cNoches=0, cTotal=0, cBase=0, cComPlat=0, cComGTC=0, cLimp=0, cAmen=0, cComPas=0, cSub=0, cRet=0, cIva21=0, cLiq=0, cCE=0;
+  let cNoches=0, cTotal=0, cBase=0, cComPlat=0, cComGTC=0, cLimp=0, cAmen=0, cComPas=0, cCA=0, cSub=0, cRet=0, cIva21=0, cLiq=0, cCE=0;
 
   let miniRows = calcs.map(x => {
     const r = x.r, c = x.c, s = x.s, isV = validated.has(r.idx), isB = r._isBooking;
@@ -4023,7 +4216,7 @@ function viewConsolDetail(alojName) {
     const iO = selectWithValue(_selectCache.irpf, s.irpf);
     const psO = selectWithValue(isB?_selectCache.pasBooking:_selectCache.pasStripe, s.pasarelaRate);
 
-    cNoches+=nights; cTotal+=r.totalReserva; cBase+=c.baseSinIVA; cComPlat+=c.comPlat; cComGTC+=c.comGTC; cLimp+=c.limp; cAmen+=c.amen; cComPas+=c.comPas; cSub+=c.sub; cRet+=c.ret; cIva21+=c.iva; cLiq+=c.totalLiq; cCE+=c.ceTotal;
+    cNoches+=nights; cTotal+=r.totalReserva; cBase+=c.baseSinIVA; cComPlat+=c.comPlat; cComGTC+=c.comGTC; cLimp+=c.limp; cAmen+=c.amen; cComPas+=c.comPas; cCA+=(c.caTotal||0); cSub+=c.sub; cRet+=c.ret; cIva21+=c.iva; cLiq+=c.totalLiq; cCE+=c.ceTotal;
 
     return `<tr ${isV?'class="validated"':''} id="crow-${r.idx}">
       <td class="cc-estado">${isV?'<span class="badge badge-green">&#10003; Validada</span>':'<span class="badge badge-amber">Pendiente</span>'}</td>
@@ -4054,6 +4247,7 @@ function viewConsolDetail(alojName) {
         <div class="toggle" onclick="event.stopPropagation();if(!${isV}){togglePasarelaConsol(${r.idx})}"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>
         ${s.pasarela?`<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="event.stopPropagation();changeSettingConsol(${r.idx},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>`:`<span class="toggle-label">${isB?'Booking':'Stripe'}</span>`}
       </div>${s.pasarela&&c.comPas>0?`<span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.comPas)} &#8364;</span>`:''}</div></td>
+      <td class="cc-ca" style="text-align:center;vertical-align:middle;">${_buildCAButton(r.idx, c, 'c')}</td>
       <td class="cc-subtotal right bold" style="font-size:12px;">${fmt(c.sub)} &#8364;</td>
       <td class="cc-irpf" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="event.stopPropagation();changeSettingConsol(${r.idx},'irpf',parseFloat(this.value))" ${dis}>${iO}</select>
         <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.ret)} &#8364;</span></div></td>
@@ -4064,7 +4258,7 @@ function viewConsolDetail(alojName) {
         <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();goToReserva(${r.idx})">&#128065;</button>
         ${!isV?`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#10004;</button>`:`<button class="btn btn-sm btn-orange" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#8617;</button>`}
       </div></td>
-    </tr>${_buildCEPanelRow(r.idx, settings[r.idx], c, 'c')}`;
+    </tr>${_buildCEPanelRow(r.idx, settings[r.idx], c, 'c')}${_buildCAPanelRow(r.idx, settings[r.idx], c, 'c')}`;
   }).join("");
 
   // Footer totals - identical dark bar like main table
@@ -4092,6 +4286,7 @@ function viewConsolDetail(alojName) {
     <td class="cc-limpieza" style="${_cfr}">${fmt(cLimp)} &#8364;</td>
     <td class="cc-amenities" style="${_cfr}">${fmt(cAmen)} &#8364;</td>
     <td class="cc-pasarela" style="${_cfr}">${cComPas>0?fmt(cComPas)+' &#8364;':'&#8211;'}</td>
+    <td class="cc-ca" style="${_cfs}text-align:center;color:#0284c7;font-size:11px;">${cCA > 0 ? '&#8211; ' + fmt(cCA) + ' &#8364;' : ''}</td>
     <td class="cc-subtotal" style="${_cfs}text-align:right;">${fmt(cSub)} &#8364;</td>
     <td class="cc-irpf" style="${_cfr}">&#8211; ${fmt(cRet)} &#8364;</td>
     <td class="cc-iva21" style="${_cfs}text-align:center;color:#81c784;font-variant-numeric:tabular-nums;">+ ${fmt(cIva21)} &#8364;</td>

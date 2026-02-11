@@ -687,7 +687,7 @@ tr.ce-highlighted { background:#fffdf5; }
       <div class="filter-sep"></div>
       <label>Ordenar por</label>
       <div class="combo" id="combo-consolsort" style="min-width:190px;">
-        <input class="combo-input" type="text" placeholder="Nombre A\u2191Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
+        <input class="combo-input" type="text" placeholder="Nombre A↑Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
         <div class="combo-clear" onclick="clearSimpleCombo('consolsort')" title="Limpiar">&#10005;</div>
         <div class="combo-list" id="combo-list-consolsort"></div>
       </div>
@@ -751,15 +751,16 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.2';
-const APP_BUILD   = '2026-02-11T10:35:00+01:00';
-const APP_CHANGES = 'Filtros de fecha independientes + CE sin saltos al editar importes';
+const APP_BUILD   = '2026-02-11T10:40:00+01:00';
+const APP_CHANGES = 'Fix: Ordenar Por mostraba código unicode literal en vez de flecha ↑';
 
 const CHANGELOG = [
-  { version: '1.9.2', date: '2026-02-11T10:35:00+01:00', changes: [
+  { version: '1.9.2', date: '2026-02-11T10:40:00+01:00', changes: [
     'Filtros de fecha independientes: Pre-liquidaciones y Por Alojamiento tienen fechas separadas',
     'Cada vista arranca en mes y año actual al cargar datos',
     'Fix: editar importe en CE ya no pega salto (actualización directa de celdas)',
-    'Flechas ‹ › funcionan por vista independiente'
+    'Flechas ‹ › funcionan por vista independiente',
+    'Fix: Ordenar Por mostraba código unicode literal al cargar'
   ]},
   { version: '1.9.1', date: '2026-02-11T01:12:00+01:00', changes: [
     'CE: eliminar concepto con animación slide-out sin flash ni re-render',
@@ -4356,7 +4357,7 @@ const simpleComboState = {
   status: { value: 'all', label: 'Todos los estados' },
   sort: { value: 'idx', label: 'Orden original' },
   sortdir: { value: 'asc', label: '&#8593;' },
-  consolsort: { value: 'name', label: 'Nombre A\u2191Z' }
+  consolsort: { value: 'name', label: 'Nombre A↑Z' }
 };
 const simpleComboOptions = {
   status: [
@@ -4391,8 +4392,8 @@ const simpleComboOptions = {
     { value: 'desc', label: '&#8595; Descendente' }
   ],
   consolsort: [
-    { value: 'name', label: 'Nombre A\u2191Z' },
-    { value: 'name-desc', label: 'Nombre Z\u2191A' },
+    { value: 'name', label: 'Nombre A↑Z' },
+    { value: 'name-desc', label: 'Nombre Z↓A' },
     { value: 'reservas-desc', label: 'Más reservas' },
     { value: 'reservas-asc', label: 'Menos reservas' },
     { value: 'liq-desc', label: 'Mayor liquidación' },
@@ -4441,7 +4442,7 @@ function selectSimpleCombo(id, value) {
     }
   } else if (id === 'consolsort') {
     if (value === 'name') {
-      input.value = ''; input.placeholder = 'Nombre A\u2191Z'; wrap.classList.remove('has-value');
+      input.value = ''; input.placeholder = 'Nombre A↑Z'; wrap.classList.remove('has-value');
     } else {
       input.value = opt.label; wrap.classList.add('has-value');
     }

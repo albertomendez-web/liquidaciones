@@ -716,12 +716,14 @@ tr.ce-highlighted { background:#fffdf5; }
       <button class="modal-tab" onclick="switchTab('tab-otros',this)">Servicio GTC / Limpieza / Amenities / Mant.</button>
       <button class="modal-tab" onclick="switchTab('tab-pasarela',this)">Pasarela</button>
       <button class="modal-tab" onclick="switchTab('tab-impuestos',this)">Impuestos</button>
+      <button class="modal-tab" onclick="switchTab('tab-mingar',this)">Mín. Garant.</button>
     </div>
     <div class="modal-body">
       <div class="tab-panel active" id="tab-plat"></div>
       <div class="tab-panel" id="tab-otros"></div>
       <div class="tab-panel" id="tab-pasarela"></div>
       <div class="tab-panel" id="tab-impuestos"></div>
+      <div class="tab-panel" id="tab-mingar"></div>
     </div>
   </div>
 </div>
@@ -753,17 +755,20 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.6';
-const APP_BUILD   = '2026-02-11T11:45:00+01:00';
-const APP_CHANGES = 'Detalle: mantenimiento + extras completo; fix persistencia; pasarela sin salto';
+const APP_BUILD   = '2026-02-11T12:07:00+01:00';
+const APP_CHANGES = 'Mínimo garantizado: 80% propietario para alojamientos especiales; fix pasarela sin salto; fix persistencia';
 
 const CHANGELOG = [
-  { version: '1.9.6', date: '2026-02-11T11:45:00+01:00', changes: [
-    'Detalle reserva: mantenimiento completo con checkbox y selector (igual que liquidación)',
-    'Detalle reserva: conceptos extra con añadir/eliminar (igual que liquidación)',
-    'Fix persistencia: save lock impide race condition entre guardados simultáneos',
-    'Fix persistencia: beforeunload guarda cambios pendientes al cerrar/recargar página',
-    'Fix persistencia: valores de amenities ya no se pierden al cambiar opciones',
-    'Tabla: toggle pasarela y selectores sin salto — actualización directa de celdas',
+  { version: '1.9.6', date: '2026-02-11T12:07:00+01:00', changes: [
+    'Mínimo garantizado: condición especial para alojamientos con % propietario (ej. 80%)',
+    'Pestaña "Mín. Garant." en parametrización para gestionar alojamientos especiales',
+    'Preliquidación individual: muestra línea "80% Propietario" con IRPF/IVA recalculados',
+    'Liquidación consolidada: Subtotal → 80% Propietario → Mantenimiento → IRPF/IVA → Total',
+    'Impresión: ambas vistas (individual y consolidada) reflejan el mínimo garantizado',
+    'Persistencia en Google Sheets (mingar:alojamiento en Configuracion tab)',
+    'Detalle reserva: mantenimiento completo con checkbox/selector y conceptos extra',
+    'Fix pasarela sin salto: espacio reservado para importe, ancho estable',
+    'Fix persistencia: save lock, beforeunload, amenities no se pierden',
     'Textos: Amenities → "sin IVA", Mantenimiento → "Sin IVA (Mensual/apartamento)"'
   ]},
   { version: '1.9.5', date: '2026-02-11T11:24:00+01:00', changes: [
@@ -1646,6 +1651,11 @@ function buildGlobalConfigRows() {
       rows.push(['extras:' + k, JSON.stringify(exs)]);
     }
   });
+  // Mínimo garantizado per-alojamiento
+  Object.keys(_minimoGarantizado).forEach(function(k) {
+    var mg = _minimoGarantizado[k];
+    rows.push(['mingar:' + k, (mg.enabled?'1':'0') + ',' + mg.pct]);
+  });
   return rows;
 }
 
@@ -1784,6 +1794,10 @@ function applyConfigFromRows(rows) {
       } else if (key.startsWith('extras:')) {
         var extAloj = key.substring(7);
         try { _consolExtras[extAloj] = JSON.parse(val); } catch(e) { _consolExtras[extAloj] = []; }
+      } else if (key.startsWith('mingar:')) {
+        var mgAloj = key.substring(7);
+        var mgParts = val.split(',');
+        _minimoGarantizado[mgAloj] = { enabled: mgParts[0] === '1', pct: parseFloat(mgParts[1]) || 80 };
       }
     }
 
@@ -1846,6 +1860,12 @@ function applyConfigFromRows(rows) {
     }
     console.log('[Config] Applied per-reservation settings: ' + applied + ' reservas');
   }
+
+  // Initialize known mínimo garantizado alojamientos if not yet in config
+  var _defaultMG = ['MA-2-P2-1A','MA-2-P3-1C','MA-2-P3-1D','MA-2-P3-1E','MA-2-P4-1C','MG-2-0D'];
+  _defaultMG.forEach(function(a) {
+    if (!_minimoGarantizado[a]) _minimoGarantizado[a] = { enabled: true, pct: 80 };
+  });
 
   // Rebuild caches after applying config
   rebuildSelectCache();
@@ -1979,6 +1999,7 @@ let maintenanceOptions = [80];
 // Per-consolidation monthly deductions (keyed by alojamiento name)
 let _consolMaint = {}; // { alojName: { enabled:true, amount:80 } }
 let _consolExtras = {}; // { alojName: [ { label:'...', amount:123.45 } ] }
+let _minimoGarantizado = {}; // { alojName: { enabled:true, pct:80 } } — special 80% propietario condition
 
 function getConsolMaint(alojName) {
   if (!_consolMaint[alojName]) _consolMaint[alojName] = { enabled: true, amount: maintenanceOptions[0] };
@@ -1987,6 +2008,13 @@ function getConsolMaint(alojName) {
 function getConsolExtras(alojName) {
   if (!_consolExtras[alojName]) _consolExtras[alojName] = [];
   return _consolExtras[alojName];
+}
+function getMinimoGarantizado(alojName) {
+  return _minimoGarantizado[alojName] || null;
+}
+function isMinGarantizado(alojName) {
+  var mg = _minimoGarantizado[alojName];
+  return mg && mg.enabled;
 }
 function getConsolDeductions(alojName) {
   var m = getConsolMaint(alojName);
@@ -2173,9 +2201,17 @@ function calcLiquidacion(r, s) {
   const rawAmen = s.amenities;
   const amen = (rawAmen !== undefined && !isNaN(rawAmen)) ? rawAmen : amenitiesOptions[0];
   const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
+  // Mínimo garantizado: sub × pct% for propietario (maintenance applied at consol level)
+  const mg = getMinimoGarantizado(r.alojamiento);
+  let subFinal = sub, mgPct = 0;
+  const isMG = !!(mg && mg.enabled);
+  if (isMG) {
+    mgPct = mg.pct / 100;
+    subFinal = sub * mgPct;
+  }
   const irpfRate = s.irpf !== undefined ? s.irpf : irpfOptions[0]/100;
-  const iva = sub * IVA_SUBTOTAL, ret = sub * irpfRate;
-  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, iva, irpfRate, ret, totalLiq: sub + iva - ret };
+  const iva = subFinal * IVA_SUBTOTAL, ret = subFinal * irpfRate;
+  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, subFinal, mgPct, isMG, iva, irpfRate, ret, totalLiq: subFinal + iva - ret };
 }
 
 // \u2500\u2500\u2500 FILE \u2500\u2500\u2500
@@ -2590,10 +2626,10 @@ function _buildRowHtml(r) {
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.limp)} &#8364;</span></div></td>
     <td class="col-amenities" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="changeSetting(${r.idx},'amenities',parseFloat(this.value))" ${dis}>${aO}</select>
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.amen)} &#8364;</span></div></td>
-    <td class="col-pasarela" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;">
+    <td class="col-pasarela" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:110px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;min-height:28px;">
       <div class="toggle" onclick="if(!${isV}){togglePasarela(${r.idx})}"><div class="toggle-track ${s.pasarela ? 'on' : ''}"><div class="toggle-thumb"></div></div></div>
-      ${s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${r.idx},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label">${isB ? 'Booking' : 'Stripe'}</span>`}
-    </div>${s.pasarela && c.comPas > 0 ? `<span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.comPas)} &#8364;</span>` : ''}</div></td>
+      ${s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${r.idx},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label" style="display:inline-block;min-width:52px;text-align:left;">${isB ? 'Booking' : 'Stripe'}</span>`}
+    </div><span style="font-size:11px;font-variant-numeric:tabular-nums;min-height:16px;${s.pasarela && c.comPas > 0 ? 'color:#e53935;' : 'visibility:hidden;'}">${s.pasarela && c.comPas > 0 ? `&#8211; ${fmt(c.comPas)} &#8364;` : '&#8211; 0,00 &#8364;'}</span></div></td>
     <td class="col-subtotal right bold" style="font-size:12px;">${fmt(c.sub)} &#8364;</td>
     <td class="col-irpf" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="changeSetting(${r.idx},'irpf',parseFloat(this.value))" ${dis}>${iO}</select>
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.ret)} &#8364;</span></div></td>
@@ -3107,10 +3143,10 @@ function togglePasarela(i){
     var pasR = s.pasarelaRate !== undefined ? s.pasarelaRate : (isB ? pasOpts[0]/100 : pasOpts[0]/100);
     var psO = pasOpts.map(o => `<option value="${o/100}" ${Math.abs(pasR-o/100)<0.0001?'selected':''}>${o}%</option>`).join('');
     var pasCel = mainRow.querySelector('.col-pasarela');
-    if (pasCel) pasCel.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;">` +
+    if (pasCel) pasCel.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:110px;"><div style="display:flex;align-items:center;justify-content:center;gap:6px;min-height:28px;">` +
       `<div class="toggle" onclick="if(!${isV}){togglePasarela(${i})}"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>` +
-      (s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${i},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label">${isB?'Booking':'Stripe'}</span>`) +
-      `</div>${s.pasarela && c.comPas > 0 ? `<span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.comPas)} &#8364;</span>` : ''}</div>`;
+      (s.pasarela ? `<select class="sel" style="width:70px;font-size:11px;padding:4px 6px;" onchange="changeSetting(${i},'pasarelaRate',parseFloat(this.value))" ${dis}>${psO}</select>` : `<span class="toggle-label" style="display:inline-block;min-width:52px;text-align:left;">${isB?'Booking':'Stripe'}</span>`) +
+      `</div><span style="font-size:11px;font-variant-numeric:tabular-nums;min-height:16px;${s.pasarela && c.comPas > 0 ? 'color:#e53935;' : 'visibility:hidden;'}">${s.pasarela && c.comPas > 0 ? `&#8211; ${fmt(c.comPas)} &#8364;` : '&#8211; 0,00 &#8364;'}</span></div>`;
     var subCel = mainRow.querySelector('.col-subtotal');
     if (subCel) subCel.innerHTML = fmt(c.sub) + ' &#8364;';
     var liqCel = mainRow.querySelector('.col-totalLiquidar');
@@ -3366,7 +3402,13 @@ function viewDetail(idx) {
     rows.push({custom:true,l:`<button class="no-print" onclick="addConsolExtraDetail('${escAloj}',${idx})" style="font-size:11px;color:#3b82f6;background:none;border:1px dashed #93c5fd;border-radius:5px;padding:3px 10px;cursor:pointer;">+ A\u00f1adir concepto</button>`});
   }
   rows.push({div:true},
-    {l:"Subtotal",v:c.sub,bold:true},
+    {l:"Subtotal",v:c.sub,bold:true});
+  // Mínimo garantizado: show propietario %
+  if(c.isMG) {
+    const mgPctLabel = `${(c.mgPct*100).toFixed(0)}% Propietario`;
+    rows.push({l:mgPctLabel,v:c.subFinal,bold:true});
+  }
+  rows.push(
     {l:"__IRPF__",v:-c.ret,neg:true,irpf:true},
     {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
   const irpfSelHtml = isV ? `Retenci&#243;n IRPF (${(c.irpfRate*100).toFixed(0)}%)`
@@ -3757,6 +3799,8 @@ function viewConsolDetail(alojName) {
   const sumLimp = calcs.reduce((s, x) => s + x.c.limp, 0);
   const sumAmen = calcs.reduce((s, x) => s + x.c.amen, 0);
   const sumSub = calcs.reduce((s, x) => s + x.c.sub, 0);
+  const sumSubFinal = calcs.reduce((s, x) => s + x.c.subFinal, 0);
+  const _isMG = calcs.length > 0 && calcs[0].c.isMG;
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumRet = calcs.reduce((s, x) => s + x.c.ret, 0);
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
@@ -3862,8 +3906,9 @@ function viewConsolDetail(alojName) {
 
   const _dedHtml = buildConsolDeductionsHtml(alojName);
   const _ded = getConsolDeductions(alojName);
-  const adjSub = sumSub - _ded.totalBase;
-  const avgIrpfRate = sumSub > 0 ? sumRet / sumSub : 0;
+  // For MG: subtotal already at propietario %, deductions apply on top
+  const adjSub = (_isMG ? sumSubFinal : sumSub) - _ded.totalBase;
+  const avgIrpfRate = sumSubFinal > 0 ? sumRet / sumSubFinal : 0;
   const adjRet = adjSub * avgIrpfRate;
   const adjIva = adjSub * IVA_SUBTOTAL;
   const adjLiq = adjSub - adjRet + adjIva;
@@ -3932,7 +3977,13 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
         <div class="consol-divider"></div>
         ${buildPasarelaRows(calcs)}
         <div class="consol-divider"></div>
-        <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(adjSub)} &#8364;</span></div>
+        <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(sumSub)} &#8364;</span></div>
+        ${_isMG ? `<div class="consol-row" style="background:#fff8e1;padding:6px 28px;border-radius:4px;margin:2px 0;">
+          <span style="color:#f57f17;font-weight:600;">${(calcs[0].c.mgPct*100).toFixed(0)}% Propietario</span>
+          <span style="color:#f57f17;font-weight:600;">${fmt(sumSubFinal)} &#8364;</span></div>` : ''}
+        ${_dedHtml}
+        <div class="consol-divider"></div>
+        <div class="consol-subtotal"><span>${_isMG ? 'Subtotal Propietario' : 'Subtotal ajustado'}</span><span>${fmt(adjSub)} &#8364;</span></div>
         <div class="consol-row"><span>Retención IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
         <div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
         <div class="consol-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(adjLiq)} &#8364;</span></div>
@@ -4033,8 +4084,11 @@ function buildPrintCards() {
       {l:`Amenities (${fmt(c.amen)} \u20AC)`,v:-c.amen,neg:true},{div:true},
     ];
     if(s.pasarela) rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true},{div:true});
+    rows.push({l:"Subtotal",v:c.sub,bold:true});
+    if(c.isMG) {
+      rows.push({l:`${(c.mgPct*100).toFixed(0)}% Propietario`,v:c.subFinal,bold:true});
+    }
     rows.push(
-      {l:"Subtotal",v:c.sub,bold:true},
       {l:`Retención IRPF (${(c.irpfRate*100).toFixed(0)}%)`,v:-c.ret,neg:true},
       {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
 
@@ -4064,17 +4118,20 @@ function buildPrintCards() {
   }).join('');
 
   const sumSub = calcs.reduce((s, x) => s + x.c.sub, 0);
+  const sumSubFinalP = calcs.reduce((s, x) => s + x.c.subFinal, 0);
+  const _isMGP = calcs.length > 0 && calcs[0].c.isMG;
   const sumRet = calcs.reduce((s, x) => s + x.c.ret, 0);
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
 
   const _printDed = getConsolDeductions(a.name);
   const _printDedHtml = buildPrintDeductionsHtml(a.name);
-  const _pAdjSub = sumSub - _printDed.totalBase;
-  const _pAvgIrpf = sumSub > 0 ? sumRet / sumSub : 0;
+  const _pAdjSub = (_isMGP ? sumSubFinalP : sumSub) - _printDed.totalBase;
+  const _pAvgIrpf = sumSubFinalP > 0 ? sumRet / sumSubFinalP : 0;
   const _pAdjRet = _pAdjSub * _pAvgIrpf;
   const _pAdjIva = _pAdjSub * IVA_SUBTOTAL;
   const _pAdjLiq = _pAdjSub - _pAdjRet + _pAdjIva;
+  const _mgPrintHtml = _isMGP ? `<div class="liq-row" style="color:#f57f17;font-weight:600;"><span>${(calcs[0].c.mgPct*100).toFixed(0)}% Propietario</span><span>${fmt(sumSubFinalP)} &#8364;</span></div>` : '';
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-header">
       <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
@@ -4086,9 +4143,10 @@ function buildPrintCards() {
     </div>
     <div style="padding:8px 0;">
       <div class="liq-row bold"><span>Subtotal reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
+      ${_mgPrintHtml}
       ${_printDedHtml}
       <div class="liq-divider"></div>
-      <div class="liq-row bold"><span>Subtotal ajustado</span><span>${fmt(_pAdjSub)} &#8364;</span></div>
+      <div class="liq-row bold"><span>${_isMGP ? 'Subtotal Propietario' : 'Subtotal ajustado'}</span><span>${fmt(_pAdjSub)} &#8364;</span></div>
       <div class="liq-row"><span>Retención IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
       <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>
@@ -4221,6 +4279,55 @@ function renderConfigModal() {
     buildOS("Mantenimiento mensual","Sin IVA (Mensual/apartamento)",maintenanceOptions," \u20AC","add-mt","addMT","delMT");
   document.getElementById("tab-impuestos").innerHTML =
     buildOS("Retención IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR");
+  // Mínimo garantizado tab
+  renderMingarTab();
+}
+function renderMingarTab() {
+  var keys = Object.keys(_minimoGarantizado).sort();
+  var h = '<div class="os"><div class="os-title">MÍNIMO GARANTIZADO</div>';
+  h += '<div class="os-sub">Alojamientos con condición especial: Subtotal × % Propietario − Mantenimiento</div>';
+  keys.forEach(function(k, i) {
+    var mg = _minimoGarantizado[k];
+    var chkStyle = 'display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(mg.enabled?'#16a34a':'#d1d5db')+';background:'+(mg.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;';
+    h += '<div class="os-item" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;">';
+    h += '<span style="display:flex;align-items:center;gap:10px;">';
+    h += '<span style="'+chkStyle+'" onclick="toggleMGEnabled(\''+k.replace(/'/g,"\\'")+'\')">'+(mg.enabled?'&#10003;':'')+'</span>';
+    h += '<span style="'+(mg.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">'+k+'</span>';
+    if(mg.enabled) h += ' <select class="sel" style="font-size:12px;padding:2px 6px;margin-left:4px;" onchange="changeMGPct(\''+k.replace(/'/g,"\\'")+'\'  ,this.value)">' +
+      [50,60,70,75,80,85,90].map(function(p){return '<option value="'+p+'"'+(p===mg.pct?' selected':'')+'>'+p+'%</option>';}).join('') + '</select>';
+    h += '</span>';
+    h += '<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeMG(\''+k.replace(/'/g,"\\'")+'\')">&times;</span>';
+    h += '</div>';
+  });
+  h += '<div style="display:flex;gap:8px;padding:10px 16px;align-items:center;">';
+  h += '<input class="os-input" id="add-mg-name" placeholder="Código alojamiento" style="flex:1;" />';
+  h += '<input class="os-input" id="add-mg-pct" placeholder="%" style="width:60px;" value="80" />';
+  h += '<button class="os-add-btn" onclick="addMG()">+ Añadir</button>';
+  h += '</div></div>';
+  document.getElementById("tab-mingar").innerHTML = h;
+}
+function toggleMGEnabled(k) {
+  if(_minimoGarantizado[k]) _minimoGarantizado[k].enabled = !_minimoGarantizado[k].enabled;
+  invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
+}
+function changeMGPct(k, val) {
+  if(_minimoGarantizado[k]) _minimoGarantizado[k].pct = parseFloat(val) || 80;
+  invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
+}
+function removeMG(k) {
+  if(!confirm('¿Eliminar '+k+' del mínimo garantizado?')) return;
+  delete _minimoGarantizado[k];
+  invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
+}
+function addMG() {
+  var name = (document.getElementById('add-mg-name').value||'').trim();
+  var pct = parseFloat(document.getElementById('add-mg-pct').value);
+  if(!name) { alert('Introduce un código de alojamiento'); return; }
+  if(isNaN(pct)||pct<1||pct>100) { alert('Porcentaje válido: 1-100'); return; }
+  if(_minimoGarantizado[name]) { alert('Ya existe'); return; }
+  _minimoGarantizado[name] = { enabled: true, pct: pct };
+  document.getElementById('add-mg-name').value = '';
+  invalidateCache(); renderMingarTab(); scheduleGlobalConfigSave();
 }
 function addPS(){aL(pasarelaStripeOptions,"add-ps",100);} function delPS(i){dL(pasarelaStripeOptions,i);}
 function addPB(){aL(pasarelaBookingOptions,"add-pb",100);} function delPB(i){dL(pasarelaBookingOptions,i);}

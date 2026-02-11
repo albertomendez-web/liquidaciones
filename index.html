@@ -366,12 +366,13 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .mp-all { display: block; width: 100%; padding: 7px; margin-top: 8px; border-radius: 6px; border: 1.5px dashed #dde1e8; background: transparent; font-size: 12px; font-weight: 500; cursor: pointer; font-family: inherit; color: #6b7280; text-align: center; transition: all 0.15s; }
 .mp-all:hover { border-color: #4f8cff; color: #4f8cff; background: #f0f5ff; }
 /* MULTI-SELECT COMBO ADDITIONS */
-.combo-item-chk { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 13px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; }
+.combo-item-chk { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 13px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; white-space: nowrap; }
 .combo-item-chk:hover { background: #eef3ff; }
 .combo-item-chk input[type=checkbox] { accent-color: #4f8cff; width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
 .combo-item-chk .match { font-weight: 700; color: #4f8cff; }
-.combo-item-chk .combo-item-count { font-size: 11px; color: #9ca3af; margin-left: auto; }
-.combo-selall { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 12px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; color: #4f8cff; font-weight: 600; border-bottom: 1px solid #eef0f4; margin-bottom: 2px; }
+.combo-item-chk .combo-item-count { font-size: 11px; color: #9ca3af; margin-left: auto; flex-shrink: 0; }
+#combo-list-aloj { min-width: 340px; right: auto; }
+.combo-selall { display: flex; align-items: center; gap: 8px; padding: 7px 12px; font-size: 12px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; color: #4f8cff; font-weight: 600; border-bottom: 1px solid #eef0f4; margin-bottom: 2px; white-space: nowrap; }
 .combo-selall:hover { background: #f0f5ff; }
 .combo-selall input[type=checkbox] { accent-color: #4f8cff; width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
 .combo-tags { display: flex; gap: 4px; flex-wrap: wrap; max-width: 240px; }
@@ -756,19 +757,16 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.7';
-const APP_BUILD   = '2026-02-11T18:08:00+01:00';
-const APP_CHANGES = 'MG: Subtotal→20% Contrato GTC→Subtotal ajustado 80%→Mantenimiento→Subtotal final→IRPF/IVA';
+const APP_BUILD   = '2026-02-11T18:33:00+01:00';
+const APP_CHANGES = 'Dropdown alojamientos: una sola línea, más ancho y elegante';
 
 const CHANGELOG = [
-  { version: '1.9.7', date: '2026-02-11T18:08:00+01:00', changes: [
+  { version: '1.9.7', date: '2026-02-11T18:33:00+01:00', changes: [
     'Mínimo garantizado: Subtotal → 20% Contrato GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal final',
     'MG solo para alojamientos configurados; resto mantiene flujo normal con mantenimiento',
     'Extras compactos estilo CE (inputs cortos) solo en alojamientos MG',
-    'Pestaña "Mín. Garant." en parametrización para gestionar alojamientos especiales',
     'Consolidado y print: flujo completo con 20% Contrato, 80%, mantenimiento, subtotal final',
-    'Fix pasarela sin salto: espacio reservado, ancho estable',
-    'Fix persistencia: save lock, beforeunload, amenities protegidos',
-    'Columna alojamiento: texto completo sin truncar, copiable'
+    'Dropdown alojamientos: nombres en una línea, dropdown más ancho y elegante'
   ]},
   { version: '1.9.6', date: '2026-02-11T12:31:00+01:00', changes: [
     'Mínimo garantizado: estructura de datos y persistencia',

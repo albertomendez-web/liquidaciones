@@ -750,8 +750,8 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.0';
-const APP_BUILD   = '2026-02-11T00:54:00+01:00';
-const APP_CHANGES = 'CE: añadir concepto suave con animación, sin salto ni re-render completo';
+const APP_BUILD   = '2026-02-11T00:57:00+01:00';
+const APP_CHANGES = 'Texto: "Totales" → "Reservas Totales" en barra de totales';
 
 const CHANGELOG = [
   { version: '1.9.0', date: '2026-02-11T00:54:00+01:00', changes: [
@@ -2824,7 +2824,7 @@ function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, 
     <td class="col-idReserva" style="${_fs}"></td>
     <td class="col-localizador" style="${_fs}"></td>
     <td class="col-fechaAlta" style="${_fs}"></td>
-    <td class="col-cliente" style="${_fs}text-align:right;text-transform:uppercase;letter-spacing:0.06em;font-size:11px;color:rgba(255,255,255,0.6);">Totales (${count})</td>
+    <td class="col-cliente" style="${_fs}text-align:right;text-transform:uppercase;letter-spacing:0.06em;font-size:11px;color:rgba(255,255,255,0.6);">Reservas Totales (${count})</td>
     <td class="col-alojamiento" style="${_fs}"></td>
     <td class="col-edificio" style="${_fs}"></td>
     <td class="col-plataforma" style="${_fs}"></td>
@@ -3554,7 +3554,7 @@ function viewConsolDetail(alojName) {
     <td class="cc-idReserva" style="${_cfs}"></td>
     <td class="cc-localizador" style="${_cfs}"></td>
     <td class="cc-fechaAlta" style="${_cfs}"></td>
-    <td class="cc-cliente" style="${_cfs}text-align:right;text-transform:uppercase;letter-spacing:0.06em;font-size:11px;color:rgba(255,255,255,0.6);">Totales (${calcs.length})</td>
+    <td class="cc-cliente" style="${_cfs}text-align:right;text-transform:uppercase;letter-spacing:0.06em;font-size:11px;color:rgba(255,255,255,0.6);">Reservas Totales (${calcs.length})</td>
     <td class="cc-edificio" style="${_cfs}"></td>
     <td class="cc-plataforma" style="${_cfs}"></td>
     <td class="cc-atendidoPor" style="${_cfs}"></td>

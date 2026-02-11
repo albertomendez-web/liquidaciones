@@ -388,6 +388,8 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .ce-panel-title { font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#d97706;margin-bottom:8px;display:flex;align-items:center;gap:8px; }
 .ce-panel-title .ce-eye { font-size:9px;color:#9ca3af;font-weight:500;letter-spacing:0;text-transform:none; }
 .ce-item-row { display:flex;align-items:center;gap:8px;margin-bottom:5px; }
+.ce-item-row.ce-new { animation:ceRowIn .25s ease; }
+@keyframes ceRowIn { from { opacity:0;max-height:0;margin-bottom:0;overflow:hidden; } to { opacity:1;max-height:40px;margin-bottom:5px; } }
 .ce-item-row input { border:1px solid #e5e7eb;border-radius:5px;padding:4px 8px;font-size:12px;font-family:inherit;background:white; }
 .ce-item-row .ce-inp-label { width:180px; }
 .ce-item-row .ce-inp-amt { width:90px;text-align:right;font-weight:600; }
@@ -748,16 +750,16 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.0';
-const APP_BUILD   = '2026-02-11T00:50:00+01:00';
-const APP_CHANGES = 'Fix: CE panel no salta al añadir concepto + auto-focus en nuevo campo';
+const APP_BUILD   = '2026-02-11T00:54:00+01:00';
+const APP_CHANGES = 'CE: añadir concepto suave con animación, sin salto ni re-render completo';
 
 const CHANGELOG = [
-  { version: '1.9.0', date: '2026-02-11T00:50:00+01:00', changes: [
+  { version: '1.9.0', date: '2026-02-11T00:54:00+01:00', changes: [
     'Filtro de fecha multi-selección: selecciona varios años y meses simultáneamente',
     'Combinatoria libre: Ene+Feb de 2025+2026, o un mes en 3 años, etc.',
     'Contador de reservas por mes agregado según años seleccionados',
     'Botón muestra resumen de selección (ej: "Ene, Feb 2025, 2026")',
-    'Fix: panel CE ya no salta al añadir concepto + auto-focus en campo nuevo'
+    'Fix: añadir concepto CE suave — inserta DOM sin re-render + animación slide-down'
   ]},
   { version: '1.8.0', date: '2026-02-11T00:33:00+01:00', changes: [
     'Asistente Histórico Reservas: chat IA integrado con botón flotante y panel lateral',
@@ -2580,8 +2582,19 @@ function toggleCEPanel(idx, view) {
 function addCEItem(idx, view) {
   var s = settings[idx]; if (!s) return;
   if (!s.conceptosEspeciales) s.conceptosEspeciales = [];
+  var i = s.conceptosEspeciales.length;
   s.conceptosEspeciales.push({label:'', amount:0});
-  _refreshCEPanel(idx, view || 'p');
+  var v = view || 'p';
+  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  if (!panel) return;
+  var addLink = panel.querySelector('.ce-add-link');
+  if (!addLink) { _refreshCEPanel(idx, v); return; }
+  // Create new row via DOM (no full re-render)
+  var row = document.createElement('div');
+  row.className = 'ce-item-row ce-new';
+  row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button>';
+  addLink.parentNode.insertBefore(row, addLink);
+  row.querySelector('.ce-inp-label').focus();
 }
 
 function removeCEItem(idx, itemIdx, view) {

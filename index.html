@@ -757,16 +757,17 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.9';
-const APP_BUILD   = '2026-02-11T20:35:00+01:00';
-const APP_CHANGES = 'v199: Fix UTF-8 + Fix MG name matching (Homity prefix) + dropdown MG';
+const APP_BUILD   = '2026-02-11T20:50:00+01:00';
+const APP_CHANGES = 'v199: Fix UTF-8 + MG name matching + extras restan + dropdown MG';
 
 const CHANGELOG = [
-  { version: '1.9.9', date: '2026-02-11T20:35:00+01:00', changes: [
+  { version: '1.9.9', date: '2026-02-11T20:50:00+01:00', changes: [
     'Fix codificación UTF-8: corregidos 223 caracteres con doble codificación',
     'Fix: MG no se detectaba por desajuste de nombres (prefijo Homity)',
-    'Lookup de MG, Mantenimiento y Extras prueba nombre completo y sin prefijo',
-    'Parametrización MG: dropdown de alojamientos disponibles en vez de texto libre',
-    'Parametrización MG: muestra nombres sin prefijo Homity'
+    'Fix: extras MG ahora se restan correctamente del subtotal liquidación',
+    'MG: extras movidos a después de Mantenimiento (antes de Subtotal liquidación)',
+    'Parametrización MG: dropdown de alojamientos disponibles',
+    'Consolidado MG: muestra conceptos adicionales si existen'
   ]},
   { version: '1.9.8', date: '2026-02-11T18:51:00+01:00', changes: [
     'MG completo: Subtotal â†’ 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación â†’ IRPF/IVA â†’ Total',
@@ -2238,7 +2239,7 @@ function calcLiquidacion(r, s) {
   const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
   // Mínimo garantizado: Subtotal â†’ 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación
   const mg = getMinimoGarantizado(r.alojamiento);
-  let subFinal = sub, mgPct = 0, mgContrato = 0, mgSubAdj = 0, mgMaint = 0;
+  let subFinal = sub, mgPct = 0, mgContrato = 0, mgSubAdj = 0, mgMaint = 0, mgExtras = 0;
   const isMG = !!(mg && mg.enabled);
   if (isMG) {
     mgPct = mg.pct / 100;
@@ -2246,11 +2247,13 @@ function calcLiquidacion(r, s) {
     mgSubAdj = sub * mgPct;         // 80% subtotal ajustado
     var maint = getConsolMaint(r.alojamiento);
     mgMaint = (maint.enabled && maint.amount > 0) ? maint.amount : 0;
-    subFinal = mgSubAdj - mgMaint;
+    var extras = getConsolExtras(r.alojamiento);
+    mgExtras = extras.reduce(function(s,e){ return s + (e.amount || 0); }, 0);
+    subFinal = mgSubAdj - mgMaint - mgExtras;
   }
   const irpfRate = s.irpf !== undefined ? s.irpf : irpfOptions[0]/100;
   const iva = subFinal * IVA_SUBTOTAL, ret = subFinal * irpfRate;
-  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, subFinal, mgPct, mgContrato, mgSubAdj, mgMaint, isMG, iva, irpfRate, ret, totalLiq: subFinal + iva - ret };
+  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, subFinal, mgPct, mgContrato, mgSubAdj, mgMaint, mgExtras, isMG, iva, irpfRate, ret, totalLiq: subFinal + iva - ret };
 }
 
 // \u2500\u2500\u2500 FILE \u2500\u2500\u2500
@@ -3427,9 +3430,15 @@ function viewDetail(idx) {
     } else if(maint.enabled && maint.amount > 0) {
       rows.push({l:'Mantenimiento',v:-maint.amount,neg:true});
     }
-  } else {
-    // MG: extras compactos (estilo CE) después de amenities
+  }
+  // Subtotal
+  rows.push({div:true},{l:"Subtotal",v:c.sub,bold:true});
+  if(c.isMG) {
     const extras = getConsolExtras(r.alojamiento);
+    // 20% Contrato Compraventa GTC -> Subtotal ajustado (80%) -> Mantenimiento -> Extras -> Subtotal liquidación
+    rows.push({l:`<span style="color:#f57f17;font-weight:600;">${((1-c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span>`,v:-c.mgContrato,neg:true,mgHighlight:true});
+    rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true,mgAdj:true});
+    // Extras (conceptos adicionales MG) - antes de mantenimiento
     if(extras.length > 0 || !isV) {
       if(!isV) {
         extras.forEach((ex, ei) => {
@@ -3440,14 +3449,7 @@ function viewDetail(idx) {
         extras.forEach((ex) => { rows.push({l:ex.label,v:-ex.amount,neg:true}); });
       }
     }
-  }
-  // Subtotal
-  rows.push({div:true},{l:"Subtotal",v:c.sub,bold:true});
-  if(c.isMG) {
-    // 20% Contrato Compraventa GTC â†’ Subtotal ajustado (80%) â†’ Mantenimiento â†’ Subtotal liquidación
-    rows.push({l:`<span style="color:#f57f17;font-weight:600;">${((1-c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span>`,v:-c.mgContrato,neg:true,mgHighlight:true});
-    rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true,mgAdj:true});
-    // Mantenimiento con checkbox+selector
+    // Mantenimiento siempre último
     if(!isV) {
       const chkM = `<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid ${maint.enabled?'#16a34a':'#d1d5db'};background:${maint.enabled?'#16a34a':'#fff'};color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaintDetail('${escAloj}',${idx})">${maint.enabled?'&#10003;':''}</span>`;
       const selMM = maint.enabled ? ` <select class="sel no-print" onchange="changeConsolMaintAmountDetail('${escAloj}',this.value,${idx})" style="font-size:12px;padding:3px 6px;">${maintSelOpts}</select>` : '';
@@ -3458,6 +3460,7 @@ function viewDetail(idx) {
     }
     rows.push({div:true},{l:"Subtotal liquidación",v:c.subFinal,bold:true,mgSubLiq:true});
   }
+
   rows.push(
     {l:"__IRPF__",v:-c.ret,neg:true,irpf:true},
     {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
@@ -3892,6 +3895,7 @@ function viewConsolDetail(alojName) {
   const sumMgContrato = _isMG ? calcs.reduce((s, x) => s + x.c.mgContrato, 0) : 0;
   const sumMgSubAdj = _isMG ? calcs.reduce((s, x) => s + x.c.mgSubAdj, 0) : 0;
   const sumMgMaint = _isMG ? calcs.reduce((s, x) => s + x.c.mgMaint, 0) : 0;
+  const sumMgExtras = _isMG ? calcs.reduce((s, x) => s + (x.c.mgExtras || 0), 0) : 0;
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumRet = calcs.reduce((s, x) => s + x.c.ret, 0);
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
@@ -3997,8 +4001,8 @@ function viewConsolDetail(alojName) {
 
   const _dedHtml = buildConsolDeductionsHtml(alojName);
   const _ded = getConsolDeductions(alojName);
-  // For MG: maintenance already deducted per-reservation in calcLiquidacion, only subtract extras
-  const adjSub = _isMG ? sumSubFinal - _ded.extrasTotal : sumSub - _ded.totalBase;
+  // For MG: sumSubFinal already includes all deductions (contrato, maintenance, extras)
+  const adjSub = _isMG ? sumSubFinal : sumSub - _ded.totalBase;
   const avgIrpfRate = sumSubFinal > 0 ? sumRet / sumSubFinal : 0;
   const adjRet = adjSub * avgIrpfRate;
   const adjIva = adjSub * IVA_SUBTOTAL;
@@ -4073,6 +4077,7 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
             <span style="color:#f57f17;font-weight:600;">${((1-calcs[0].c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span>
             <span class="neg" style="font-weight:600;">- ${fmt(sumMgContrato)} &#8364;</span></div>
           <div class="consol-subtotal" style="background:#fffdf5;border-left:3px solid #f59e0b;"><span>Subtotal ajustado (${(calcs[0].c.mgPct*100).toFixed(0)}%)</span><span>${fmt(sumMgSubAdj)} &#8364;</span></div>
+          ${sumMgExtras > 0 ? `<div class="consol-row"><span>Conceptos adicionales</span><span class="neg">- ${fmt(sumMgExtras)} &#8364;</span></div>` : ''}
           ${sumMgMaint > 0 ? `<div class="consol-row"><span>Mantenimiento</span><span class="neg">- ${fmt(sumMgMaint)} &#8364;</span></div>` : ''}
           <div class="consol-divider"></div>
           <div class="consol-subtotal" style="background:#f0fdf4;border-left:3px solid #16a34a;"><span>Subtotal liquidación</span><span>${fmt(sumSubFinal)} &#8364;</span></div>
@@ -4183,6 +4188,7 @@ function buildPrintCards() {
     if(c.isMG) {
       rows.push({l:`${((1-c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC`,v:-c.mgContrato,neg:true});
       rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true});
+      if(c.mgExtras > 0) rows.push({l:'Conceptos adicionales',v:-c.mgExtras,neg:true});
       if(c.mgMaint > 0) rows.push({l:'Mantenimiento',v:-c.mgMaint,neg:true});
       rows.push({div:true},{l:"Subtotal liquidación",v:c.subFinal,bold:true});
     }
@@ -4221,13 +4227,14 @@ function buildPrintCards() {
   const sumMgContratoP = _isMGP ? calcs.reduce((s, x) => s + x.c.mgContrato, 0) : 0;
   const sumMgSubAdjP = _isMGP ? calcs.reduce((s, x) => s + x.c.mgSubAdj, 0) : 0;
   const sumMgMaintP = _isMGP ? calcs.reduce((s, x) => s + x.c.mgMaint, 0) : 0;
+  const sumMgExtrasP = _isMGP ? calcs.reduce((s, x) => s + (x.c.mgExtras || 0), 0) : 0;
   const sumRet = calcs.reduce((s, x) => s + x.c.ret, 0);
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
 
   const _printDed = getConsolDeductions(a.name);
   const _printDedHtml = buildPrintDeductionsHtml(a.name);
-  const _pAdjSub = _isMGP ? sumSubFinalP - _printDed.extrasTotal : sumSub - _printDed.totalBase;
+  const _pAdjSub = _isMGP ? sumSubFinalP : sumSub - _printDed.totalBase;
   const _pAvgIrpf = sumSubFinalP > 0 ? sumRet / sumSubFinalP : 0;
   const _pAdjRet = _pAdjSub * _pAvgIrpf;
   const _pAdjIva = _pAdjSub * IVA_SUBTOTAL;
@@ -4246,6 +4253,7 @@ function buildPrintCards() {
       ${_isMGP ? `
         <div class="liq-row" style="color:#f57f17;font-weight:600;"><span>${((1-calcs[0].c.mgPct)*100).toFixed(0)}% Contrato Compraventa GTC</span><span class="neg">- ${fmt(sumMgContratoP)} &#8364;</span></div>
         <div class="liq-row bold"><span>Subtotal ajustado (${(calcs[0].c.mgPct*100).toFixed(0)}%)</span><span>${fmt(sumMgSubAdjP)} &#8364;</span></div>
+        ${sumMgExtrasP > 0 ? `<div class="liq-row"><span>Conceptos adicionales</span><span class="neg">- ${fmt(sumMgExtrasP)} &#8364;</span></div>` : ''}
         ${sumMgMaintP > 0 ? `<div class="liq-row"><span>Mantenimiento</span><span class="neg">- ${fmt(sumMgMaintP)} &#8364;</span></div>` : ''}
         <div class="liq-divider"></div>
         <div class="liq-row bold"><span>Subtotal liquidación</span><span>${fmt(sumSubFinalP)} &#8364;</span></div>

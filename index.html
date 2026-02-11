@@ -755,21 +755,26 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.6';
-const APP_BUILD   = '2026-02-11T12:35:00+01:00';
-const APP_CHANGES = 'Fix: extras CE y flujo 80% solo para alojamientos MG; resto mantiene mantenimiento normal';
+const APP_VERSION = '1.9.7';
+const APP_BUILD   = '2026-02-11T18:08:00+01:00';
+const APP_CHANGES = 'MG: Subtotal→20% Contrato GTC→Subtotal ajustado 80%→Mantenimiento→Subtotal final→IRPF/IVA';
 
 const CHANGELOG = [
-  { version: '1.9.6', date: '2026-02-11T12:31:00+01:00', changes: [
-    'Mínimo garantizado: Subtotal → 80% Propietario → Subtotal Propietario → IRPF/IVA',
-    'MG sin mantenimiento en preliquidación individual (solo a nivel consolidado)',
-    'Extras con estilo panel CE (fondo amarillo, inputs, botón añadir)',
+  { version: '1.9.7', date: '2026-02-11T18:08:00+01:00', changes: [
+    'Mínimo garantizado: Subtotal → 20% Contrato GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal final',
+    'MG solo para alojamientos configurados; resto mantiene flujo normal con mantenimiento',
+    'Extras compactos estilo CE (inputs cortos) solo en alojamientos MG',
     'Pestaña "Mín. Garant." en parametrización para gestionar alojamientos especiales',
-    'Consolidado: deducciones antes de Subtotal (no-MG) o después de 80% (MG)',
-    'Persistencia completa: mínimo garantizado en Google Sheets',
+    'Consolidado y print: flujo completo con 20% Contrato, 80%, mantenimiento, subtotal final',
     'Fix pasarela sin salto: espacio reservado, ancho estable',
     'Fix persistencia: save lock, beforeunload, amenities protegidos',
     'Columna alojamiento: texto completo sin truncar, copiable'
+  ]},
+  { version: '1.9.6', date: '2026-02-11T12:31:00+01:00', changes: [
+    'Mínimo garantizado: estructura de datos y persistencia',
+    'Detalle reserva: mantenimiento con checkbox/selector y conceptos extra',
+    'Fix pasarela sin salto inicial',
+    'Fix persistencia: save lock, beforeunload, amenities'
   ]},
   { version: '1.9.5', date: '2026-02-11T11:24:00+01:00', changes: [
     'Detalle: mantenimiento sin checkbox ni selector — muestra solo el valor configurado',
@@ -2201,17 +2206,21 @@ function calcLiquidacion(r, s) {
   const rawAmen = s.amenities;
   const amen = (rawAmen !== undefined && !isNaN(rawAmen)) ? rawAmen : amenitiesOptions[0];
   const sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen;
-  // Mínimo garantizado: sub × pct% for propietario (maintenance applied at consol level)
+  // Mínimo garantizado: Subtotal → 20% Contrato GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal final
   const mg = getMinimoGarantizado(r.alojamiento);
-  let subFinal = sub, mgPct = 0;
+  let subFinal = sub, mgPct = 0, mgContrato = 0, mgSubAdj = 0, mgMaint = 0;
   const isMG = !!(mg && mg.enabled);
   if (isMG) {
     mgPct = mg.pct / 100;
-    subFinal = sub * mgPct;
+    mgContrato = sub * (1 - mgPct); // 20% contrato GTC
+    mgSubAdj = sub * mgPct;         // 80% subtotal ajustado
+    var maint = getConsolMaint(r.alojamiento);
+    mgMaint = (maint.enabled && maint.amount > 0) ? maint.amount : 0;
+    subFinal = mgSubAdj - mgMaint;
   }
   const irpfRate = s.irpf !== undefined ? s.irpf : irpfOptions[0]/100;
   const iva = subFinal * IVA_SUBTOTAL, ret = subFinal * irpfRate;
-  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, subFinal, mgPct, isMG, iva, irpfRate, ret, totalLiq: subFinal + iva - ret };
+  return { totalOriginal, ceTotal, total, baseSinIVA, comRate, comPlat, gtcRate, comGTC, comPas, limp, amen, sub, subFinal, mgPct, mgContrato, mgSubAdj, mgMaint, isMG, iva, irpfRate, ret, totalLiq: subFinal + iva - ret };
 }
 
 // \u2500\u2500\u2500 FILE \u2500\u2500\u2500
@@ -3376,9 +3385,9 @@ function viewDetail(idx) {
   // Maintenance row (per-alojamiento) — only for NON mínimo garantizado
   const maint = getConsolMaint(r.alojamiento);
   const escAloj = r.alojamiento.replace(/'/g, "\\'");
+  const maintSelOpts = maintenanceOptions.map(o => `<option value="${o}"${o===maint.amount?' selected':''}>${o} \u20AC</option>`).join('');
   if(!c.isMG) {
-    // NON-MG: mantenimiento normal
-    const maintSelOpts = maintenanceOptions.map(o => `<option value="${o}"${o===maint.amount?' selected':''}>${o} \u20AC</option>`).join('');
+    // NON-MG: mantenimiento normal después de amenities
     if(!isV) {
       const chk = `<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid ${maint.enabled?'#16a34a':'#d1d5db'};background:${maint.enabled?'#16a34a':'#fff'};color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaintDetail('${escAloj}',${idx})">${maint.enabled?'&#10003;':''}</span>`;
       const selM = maint.enabled ? ` <select class="sel no-print" onchange="changeConsolMaintAmountDetail('${escAloj}',this.value,${idx})" style="font-size:12px;padding:3px 6px;">${maintSelOpts}</select>` : '';
@@ -3389,32 +3398,35 @@ function viewDetail(idx) {
       rows.push({l:'Mantenimiento',v:-maint.amount,neg:true});
     }
   } else {
-    // MG: extras CE panel (deducciones adicionales)
+    // MG: extras compactos (estilo CE) después de amenities
     const extras = getConsolExtras(r.alojamiento);
     if(extras.length > 0 || !isV) {
-      rows.push({div:true});
       if(!isV) {
-        let ceHtml = `<div style="background:#fffdf5;border:1px solid #f59e0b;border-radius:8px;padding:10px 14px;">`;
-        ceHtml += `<div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#d97706;margin-bottom:8px;display:flex;align-items:center;gap:8px;">Deducciones adicionales <span style="font-size:9px;color:#9ca3af;font-weight:500;letter-spacing:0;text-transform:none;">&#128065; Solo uso interno</span></div>`;
         extras.forEach((ex, ei) => {
-          ceHtml += `<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(ex.label||'').replace(/"/g,'&quot;')}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'label',this.value,${idx})" placeholder="Ej: Golf..." /><input class="ce-inp-amt" type="text" value="${fmt(ex.amount||0)}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'amount',this.value,${idx})" /><span class="ce-del" onclick="removeConsolExtraDetail('${escAloj}',${ei},${idx})">&#215;</span></div>`;
+          rows.push({custom:true, l:`<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(ex.label||'').replace(/"/g,'&quot;')}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'label',this.value,${idx})" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(ex.amount||0)}" onchange="updateConsolExtraDetail('${escAloj}',${ei},'amount',this.value,${idx})" /><span class="ce-del" onclick="removeConsolExtraDetail('${escAloj}',${ei},${idx})">&#215;</span></div>`});
         });
-        ceHtml += `<div class="ce-add-link" onclick="addConsolExtraDetailInline('${escAloj}',${idx})">+ A\u00f1adir concepto</div>`;
-        ceHtml += `</div>`;
-        rows.push({custom:true, l:ceHtml});
+        rows.push({custom:true, l:`<div class="ce-add-link no-print" onclick="addConsolExtraDetailInline('${escAloj}',${idx})">+ A\u00f1adir concepto</div>`});
       } else {
-        extras.forEach((ex) => {
-          rows.push({l:ex.label,v:-ex.amount,neg:true});
-        });
+        extras.forEach((ex) => { rows.push({l:ex.label,v:-ex.amount,neg:true}); });
       }
     }
   }
-  rows.push({div:true},
-    {l:"Subtotal",v:c.sub,bold:true});
-  // Mínimo garantizado: 80% Propietario → Subtotal Propietario
+  // Subtotal
+  rows.push({div:true},{l:"Subtotal",v:c.sub,bold:true});
   if(c.isMG) {
-    rows.push({l:`${(c.mgPct*100).toFixed(0)}% Propietario`,v:c.subFinal,bold:false,pos:false});
-    rows.push({div:true},{l:"Subtotal Propietario",v:c.subFinal,bold:true});
+    // 20% Contrato GTC → Subtotal ajustado (80%) → Mantenimiento → Subtotal final
+    rows.push({l:`${((1-c.mgPct)*100).toFixed(0)}% Contrato GTC`,v:-c.mgContrato,neg:true});
+    rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true});
+    // Mantenimiento con checkbox+selector
+    if(!isV) {
+      const chkM = `<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid ${maint.enabled?'#16a34a':'#d1d5db'};background:${maint.enabled?'#16a34a':'#fff'};color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaintDetail('${escAloj}',${idx})">${maint.enabled?'&#10003;':''}</span>`;
+      const selMM = maint.enabled ? ` <select class="sel no-print" onchange="changeConsolMaintAmountDetail('${escAloj}',this.value,${idx})" style="font-size:12px;padding:3px 6px;">${maintSelOpts}</select>` : '';
+      const lsM = maint.enabled ? '' : 'color:#9ca3af;text-decoration:line-through;';
+      rows.push({l:`<span style="display:flex;align-items:center;gap:8px;">${chkM}<span style="${lsM}">Mantenimiento</span>${selMM}</span>`, v: maint.enabled ? -maint.amount : 0, neg:maint.enabled, leftcustom:!maint.enabled && true, custom: !maint.enabled});
+    } else if(c.mgMaint > 0) {
+      rows.push({l:'Mantenimiento',v:-c.mgMaint,neg:true});
+    }
+    rows.push({div:true},{l:"Subtotal final",v:c.subFinal,bold:true});
   }
   rows.push(
     {l:"__IRPF__",v:-c.ret,neg:true,irpf:true},
@@ -3843,6 +3855,9 @@ function viewConsolDetail(alojName) {
   const sumSub = calcs.reduce((s, x) => s + x.c.sub, 0);
   const sumSubFinal = calcs.reduce((s, x) => s + x.c.subFinal, 0);
   const _isMG = calcs.length > 0 && calcs[0].c.isMG;
+  const sumMgContrato = _isMG ? calcs.reduce((s, x) => s + x.c.mgContrato, 0) : 0;
+  const sumMgSubAdj = _isMG ? calcs.reduce((s, x) => s + x.c.mgSubAdj, 0) : 0;
+  const sumMgMaint = _isMG ? calcs.reduce((s, x) => s + x.c.mgMaint, 0) : 0;
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumRet = calcs.reduce((s, x) => s + x.c.ret, 0);
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
@@ -3948,8 +3963,8 @@ function viewConsolDetail(alojName) {
 
   const _dedHtml = buildConsolDeductionsHtml(alojName);
   const _ded = getConsolDeductions(alojName);
-  // For MG: subtotal already at propietario %, deductions apply on top
-  const adjSub = (_isMG ? sumSubFinal : sumSub) - _ded.totalBase;
+  // For MG: maintenance already deducted per-reservation in calcLiquidacion, only subtract extras
+  const adjSub = _isMG ? sumSubFinal - _ded.extrasTotal : sumSub - _ded.totalBase;
   const avgIrpfRate = sumSubFinal > 0 ? sumRet / sumSubFinal : 0;
   const adjRet = adjSub * avgIrpfRate;
   const adjIva = adjSub * IVA_SUBTOTAL;
@@ -4015,17 +4030,21 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
         ${buildGTCRows(calcs)}
         ${buildLimpRows(calcs)}
         <div class="consol-row"><span>Amenities</span><span class="neg">- ${fmt(sumAmen)} &#8364;</span></div>
-        ${!_isMG ? _dedHtml : ''}
         <div class="consol-divider"></div>
         ${buildPasarelaRows(calcs)}
         <div class="consol-divider"></div>
         <div class="consol-subtotal"><span>Subtotal</span><span>${fmt(sumSub)} &#8364;</span></div>
-        ${_isMG ? `<div class="consol-row" style="background:#fff8e1;padding:6px 28px;border-radius:4px;margin:2px 0;">
-          <span style="color:#f57f17;font-weight:600;">${(calcs[0].c.mgPct*100).toFixed(0)}% Propietario</span>
-          <span style="color:#f57f17;font-weight:600;">${fmt(sumSubFinal)} &#8364;</span></div>` : ''}
-        ${_isMG ? _dedHtml : ''}
-        ${_isMG || _ded.totalBase > 0 ? '<div class="consol-divider"></div>' : ''}
-        ${_isMG || _ded.totalBase > 0 ? `<div class="consol-subtotal"><span>${_isMG ? 'Subtotal Propietario' : 'Subtotal ajustado'}</span><span>${fmt(adjSub)} &#8364;</span></div>` : ''}
+        ${_isMG ? `
+          <div class="consol-row" style="background:#fff8e1;padding:6px 28px;border-radius:4px;margin:2px 0;">
+            <span style="color:#f57f17;font-weight:600;">${((1-calcs[0].c.mgPct)*100).toFixed(0)}% Contrato GTC</span>
+            <span class="neg" style="font-weight:600;">- ${fmt(sumMgContrato)} &#8364;</span></div>
+          <div class="consol-subtotal"><span>Subtotal ajustado (${(calcs[0].c.mgPct*100).toFixed(0)}%)</span><span>${fmt(sumMgSubAdj)} &#8364;</span></div>
+          ${sumMgMaint > 0 ? `<div class="consol-row"><span>Mantenimiento</span><span class="neg">- ${fmt(sumMgMaint)} &#8364;</span></div>` : ''}
+          <div class="consol-divider"></div>
+          <div class="consol-subtotal"><span>Subtotal final</span><span>${fmt(sumSubFinal)} &#8364;</span></div>
+        ` : ''}
+        ${!_isMG ? _dedHtml : ''}
+        ${!_isMG && _ded.totalBase > 0 ? `<div class="consol-divider"></div><div class="consol-subtotal"><span>Subtotal ajustado</span><span>${fmt(adjSub)} &#8364;</span></div>` : ''}
         <div class="consol-row"><span>Retención IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
         <div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
         <div class="consol-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(adjLiq)} &#8364;</span></div>
@@ -4128,8 +4147,10 @@ function buildPrintCards() {
     if(s.pasarela) rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true},{div:true});
     rows.push({l:"Subtotal",v:c.sub,bold:true});
     if(c.isMG) {
-      rows.push({l:`${(c.mgPct*100).toFixed(0)}% Propietario`,v:c.subFinal});
-      rows.push({div:true},{l:"Subtotal Propietario",v:c.subFinal,bold:true});
+      rows.push({l:`${((1-c.mgPct)*100).toFixed(0)}% Contrato GTC`,v:-c.mgContrato,neg:true});
+      rows.push({l:`Subtotal ajustado (${(c.mgPct*100).toFixed(0)}%)`,v:c.mgSubAdj,bold:true});
+      if(c.mgMaint > 0) rows.push({l:'Mantenimiento',v:-c.mgMaint,neg:true});
+      rows.push({div:true},{l:"Subtotal final",v:c.subFinal,bold:true});
     }
     rows.push(
       {l:`Retención IRPF (${(c.irpfRate*100).toFixed(0)}%)`,v:-c.ret,neg:true},
@@ -4163,18 +4184,20 @@ function buildPrintCards() {
   const sumSub = calcs.reduce((s, x) => s + x.c.sub, 0);
   const sumSubFinalP = calcs.reduce((s, x) => s + x.c.subFinal, 0);
   const _isMGP = calcs.length > 0 && calcs[0].c.isMG;
+  const sumMgContratoP = _isMGP ? calcs.reduce((s, x) => s + x.c.mgContrato, 0) : 0;
+  const sumMgSubAdjP = _isMGP ? calcs.reduce((s, x) => s + x.c.mgSubAdj, 0) : 0;
+  const sumMgMaintP = _isMGP ? calcs.reduce((s, x) => s + x.c.mgMaint, 0) : 0;
   const sumRet = calcs.reduce((s, x) => s + x.c.ret, 0);
   const sumIva = calcs.reduce((s, x) => s + x.c.iva, 0);
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
 
   const _printDed = getConsolDeductions(a.name);
   const _printDedHtml = buildPrintDeductionsHtml(a.name);
-  const _pAdjSub = (_isMGP ? sumSubFinalP : sumSub) - _printDed.totalBase;
+  const _pAdjSub = _isMGP ? sumSubFinalP - _printDed.extrasTotal : sumSub - _printDed.totalBase;
   const _pAvgIrpf = sumSubFinalP > 0 ? sumRet / sumSubFinalP : 0;
   const _pAdjRet = _pAdjSub * _pAvgIrpf;
   const _pAdjIva = _pAdjSub * IVA_SUBTOTAL;
   const _pAdjLiq = _pAdjSub - _pAdjRet + _pAdjIva;
-  const _mgPrintHtml = _isMGP ? `<div class="liq-row" style="color:#f57f17;font-weight:600;"><span>${(calcs[0].c.mgPct*100).toFixed(0)}% Propietario</span><span>${fmt(sumSubFinalP)} &#8364;</span></div>` : '';
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-header">
       <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
@@ -4186,11 +4209,16 @@ function buildPrintCards() {
     </div>
     <div style="padding:8px 0;">
       <div class="liq-row bold"><span>Subtotal reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
-      ${!_isMGP ? _printDedHtml : ''}
-      ${!_isMGP && _printDed.totalBase > 0 ? '<div class="liq-divider"></div><div class="liq-row bold"><span>Subtotal ajustado</span><span>' + fmt(_pAdjSub) + ' &#8364;</span></div>' : ''}
-      ${_mgPrintHtml}
-      ${_isMGP ? _printDedHtml : ''}
-      ${_isMGP ? '<div class="liq-divider"></div><div class="liq-row bold"><span>Subtotal Propietario</span><span>' + fmt(_pAdjSub) + ' &#8364;</span></div>' : ''}
+      ${_isMGP ? `
+        <div class="liq-row" style="color:#f57f17;font-weight:600;"><span>${((1-calcs[0].c.mgPct)*100).toFixed(0)}% Contrato GTC</span><span class="neg">- ${fmt(sumMgContratoP)} &#8364;</span></div>
+        <div class="liq-row bold"><span>Subtotal ajustado (${(calcs[0].c.mgPct*100).toFixed(0)}%)</span><span>${fmt(sumMgSubAdjP)} &#8364;</span></div>
+        ${sumMgMaintP > 0 ? `<div class="liq-row"><span>Mantenimiento</span><span class="neg">- ${fmt(sumMgMaintP)} &#8364;</span></div>` : ''}
+        <div class="liq-divider"></div>
+        <div class="liq-row bold"><span>Subtotal final</span><span>${fmt(sumSubFinalP)} &#8364;</span></div>
+      ` : `
+        ${_printDedHtml}
+        ${_printDed.totalBase > 0 ? '<div class="liq-divider"></div><div class="liq-row bold"><span>Subtotal ajustado</span><span>' + fmt(_pAdjSub) + ' &#8364;</span></div>' : ''}
+      `}
       <div class="liq-row"><span>Retención IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
       <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>

@@ -769,15 +769,13 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '2.0.5';
-const APP_BUILD   = '2026-02-12T13:50:00+01:00';
-const APP_CHANGES = 'v205: Eliminar mantenimiento de preliquidaciones individuales (solo en consolidaciones)';
+const APP_BUILD   = '2026-02-12T13:55:00+01:00';
+const APP_CHANGES = 'v205: Eliminar mantenimiento de reservas + Fix CA oninput tiempo real';
 
 const CHANGELOG = [
-  { version: '2.0.5', date: '2026-02-12T13:50:00+01:00', changes: [
+  { version: '2.0.5', date: '2026-02-12T13:55:00+01:00', changes: [
     'Eliminar mantenimiento de preliquidaciones individuales (solo aplica en consolidaciones por alojamiento)',
-    'Fix: calcLiquidacion ya no resta mantenimiento por reserva',
-    'Fix: vista detalle sin checkbox/selector de mantenimiento',
-    'Fix: resumen impresión sin línea de mantenimiento por reserva',
+    'Fix: CA importe se guarda en tiempo real con oninput (sin esperar blur/onchange)',
     'Fix: CA perdía precio al añadir/borrar concepto — flush de valores DOM antes de re-render',
     'Fix: MG duplicados — deduplicación por stripAloj al cargar config desde Sheets',
     'Fix: CA sincronizado bidireccional entre vista detalle ↔ tabla ↔ consolidado',
@@ -3015,7 +3013,7 @@ function _buildCAPanelRow(idx, s, c, view) {
     ? CONSOL_COLUMNS.filter(function(col){return consolColVis[col.key]!==false;}).length
     : COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
   var itemsHtml = ca.map(function(item, i) {
-    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button></div>';
+    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" oninput="_saveCAAmountSilent('+idx+','+i+',this.value)" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button></div>';
   }).join('');
   return '<tr class="ca-panel-row" id="ca-'+v+'panel-'+idx+'" style="display:none"><td colspan="'+colCount+'" style="padding:0"><div class="ca-panel-inner"><div class="ca-panel-left"><div class="ca-panel-title">Conceptos Adicionales <span class="ca-sub">Sin IVA \u2013 restan del Subtotal</span></div>'+itemsHtml+'<div class="ce-add-link" onclick="addCATableItem('+idx+',\''+v+'\')">+ A\u00f1adir concepto</div></div></div></td></tr>';
 }
@@ -3060,7 +3058,7 @@ function addCATableItem(idx, view) {
   if (!addLink) { _refreshCAPanel(idx, v); return; }
   var row = document.createElement('div');
   row.className = 'ce-item-row ce-new';
-  row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button>';
+  row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" oninput="_saveCAAmountSilent('+idx+','+i+',this.value)" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button>';
   addLink.parentNode.insertBefore(row, addLink);
   row.querySelector('.ce-inp-label').focus();
   // Sync detail view if open
@@ -3163,7 +3161,7 @@ function _refreshCAPanel(idx, view) {
     : COLUMNS.filter(function(col){return colVisibility[col.key]!==false;}).length;
   var ca = s.conceptosAdicionales || [];
   var itemsHtml = ca.map(function(item, i) {
-    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button></div>';
+    return '<div class="ce-item-row"><input class="ce-inp-label" type="text" value="'+(item.label||'').replace(/"/g,'&quot;')+'" onchange="updateCATableItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="'+fmt(item.amount||0)+'" oninput="_saveCAAmountSilent('+idx+','+i+',this.value)" onchange="updateCATableItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCATableItem('+idx+','+i+',\''+v+'\')">\u00d7</button></div>';
   }).join('');
   panel.innerHTML = '<td colspan="'+colCount+'" style="padding:0"><div class="ca-panel-inner"><div class="ca-panel-left"><div class="ca-panel-title">Conceptos Adicionales <span class="ca-sub">Sin IVA \u2013 restan del Subtotal</span></div>'+itemsHtml+'<div class="ce-add-link" onclick="addCATableItem('+idx+',\''+v+'\')">+ A\u00f1adir concepto</div></div></div></td>';
   if (wrap) wrap.scrollTop = scrollY;
@@ -3262,6 +3260,11 @@ function removeCAItem(idx, itemIdx) {
   _refreshDetailAfterCA(idx);
 }
 
+function _saveCAAmountSilent(idx, itemIdx, rawVal) {
+  var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
+  var item = s.conceptosAdicionales[itemIdx]; if (!item) return;
+  item.amount = parseFmt(rawVal);
+}
 function updateCAItem(idx, itemIdx, field, rawVal) {
   var s = settings[idx]; if (!s || !s.conceptosAdicionales) return;
   var item = s.conceptosAdicionales[itemIdx]; if (!item) return;
@@ -3791,7 +3794,7 @@ function viewDetail(idx) {
   if(caItems.length > 0 || !isV) {
     if(!isV) {
       caItems.forEach((ca, ci) => {
-        rows.push({custom:true, neg:true, v:-(ca.amount||0), l:`<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(ca.label||'').replace(/"/g,'&quot;')}" onchange="updateCAItem(${r.idx},${ci},'label',this.value)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(ca.amount||0)}" onchange="updateCAItem(${r.idx},${ci},'amount',this.value)" /><span class="ce-del" onclick="removeCAItem(${r.idx},${ci})">&#215;</span></div>`});
+        rows.push({custom:true, neg:true, v:-(ca.amount||0), l:`<div class="ce-item-row"><input class="ce-inp-label" type="text" value="${(ca.label||'').replace(/"/g,'&quot;')}" onchange="updateCAItem(${r.idx},${ci},'label',this.value)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="${fmt(ca.amount||0)}" oninput="_saveCAAmountSilent(${r.idx},${ci},this.value)" onchange="updateCAItem(${r.idx},${ci},'amount',this.value)" /><span class="ce-del" onclick="removeCAItem(${r.idx},${ci})">&#215;</span></div>`});
       });
       rows.push({custom:true, l:`<div class="ce-add-link no-print" onclick="addCAItem(${r.idx})">+ A\u00f1adir concepto</div>`});
     } else {

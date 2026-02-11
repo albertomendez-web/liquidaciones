@@ -751,12 +751,12 @@ function clearSearchConsol() {
 }
 
 const APP_VERSION = '1.9.1';
-const APP_BUILD   = '2026-02-11T01:02:00+01:00';
-const APP_CHANGES = 'CE: eliminar concepto con animación slide-out suave';
+const APP_BUILD   = '2026-02-11T01:07:00+01:00';
+const APP_CHANGES = 'Fix: CE eliminar sin flash — quita DOM + actualiza resumen sin re-render';
 
 const CHANGELOG = [
-  { version: '1.9.1', date: '2026-02-11T01:02:00+01:00', changes: [
-    'CE: eliminar concepto con animación slide-out suave (sin salto)',
+  { version: '1.9.1', date: '2026-02-11T01:07:00+01:00', changes: [
+    'CE: eliminar concepto con animación slide-out sin flash ni re-render',
     'CE: añadir concepto con animación slide-in + auto-focus',
     'Texto: "Totales" → "Reservas Totales" en barra de totales'
   ]},
@@ -2613,8 +2613,17 @@ function removeCEItem(idx, itemIdx, view) {
     var row = rows[itemIdx];
     row.style.animation = 'ceRowOut .2s ease forwards';
     row.addEventListener('animationend', function() {
+      row.remove();
       s.conceptosEspeciales.splice(itemIdx, 1);
-      _applyCEChange(idx, v);
+      // Update data + row without full panel re-render
+      var oldC = getLiq(allReservas[idx]);
+      invalidateCache(idx);
+      var newC = getLiq(allReservas[idx]);
+      if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
+      _patchSingleRow(idx, oldC, newC);
+      scheduleReservaConfigSave(idx);
+      // Update just the summary numbers in the CE panel
+      _refreshCESummary(idx, v);
     }, {once:true});
   } else {
     s.conceptosEspeciales.splice(itemIdx, 1);
@@ -2651,6 +2660,30 @@ function _applyCEChange(idx, view) {
     var panel = document.getElementById('ce-' + v + 'panel-' + idx);
     if (panel) { panel.style.display = ''; _openCEPanel = idx; _openCEView = v; }
   }
+}
+
+function _refreshCESummary(idx, view) {
+  var v = view || 'p';
+  var c = getLiq(allReservas[idx]);
+  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  if (!panel) return;
+  var vals = panel.querySelectorAll('.ce-sum-val');
+  if (vals.length >= 4) {
+    vals[0].innerHTML = fmt(c.totalOriginal) + ' &#8364;';
+    vals[1].innerHTML = '&#8211; ' + fmt(c.ceTotal) + ' &#8364;';
+    vals[2].innerHTML = fmt(c.total) + ' &#8364;';
+    vals[3].innerHTML = fmt(c.baseSinIVA) + ' &#8364;';
+  }
+  // Re-index onclick handlers for remaining rows
+  var rows = panel.querySelectorAll('.ce-item-row');
+  rows.forEach(function(row, i) {
+    var del = row.querySelector('.ce-del');
+    if (del) del.setAttribute('onclick', "removeCEItem("+idx+","+i+",'"+v+"')");
+    var lbl = row.querySelector('.ce-inp-label');
+    if (lbl) lbl.setAttribute('onchange', "updateCEItem("+idx+","+i+",'label',this.value,'"+v+"')");
+    var amt = row.querySelector('.ce-inp-amt');
+    if (amt) amt.setAttribute('onchange', "updateCEItem("+idx+","+i+",'amount',this.value,'"+v+"')");
+  });
 }
 
 function _refreshCEPanel(idx, view) {

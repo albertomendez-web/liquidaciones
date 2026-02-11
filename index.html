@@ -750,11 +750,17 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '1.9.1';
-const APP_BUILD   = '2026-02-11T01:12:00+01:00';
-const APP_CHANGES = 'Fix: CE eliminar sin flash — actualiza celdas directamente sin reconstruir panel';
+const APP_VERSION = '1.9.2';
+const APP_BUILD   = '2026-02-11T10:35:00+01:00';
+const APP_CHANGES = 'Filtros de fecha independientes + CE sin saltos al editar importes';
 
 const CHANGELOG = [
+  { version: '1.9.2', date: '2026-02-11T10:35:00+01:00', changes: [
+    'Filtros de fecha independientes: Pre-liquidaciones y Por Alojamiento tienen fechas separadas',
+    'Cada vista arranca en mes y año actual al cargar datos',
+    'Fix: editar importe en CE ya no pega salto (actualización directa de celdas)',
+    'Flechas ‹ › funcionan por vista independiente'
+  ]},
   { version: '1.9.1', date: '2026-02-11T01:12:00+01:00', changes: [
     'CE: eliminar concepto con animación slide-out sin flash ni re-render',
     'CE: añadir concepto con animación slide-in + auto-focus',
@@ -1968,7 +1974,7 @@ let _searchText = '', _searchTextConsol = '';
 function getFilterSortKey() {
   const pKey = [...comboState.platform.selected].sort().join(',') || 'all';
   const aKey = [...comboState.aloj.selected].sort().join(',') || 'all';
-  return pKey + '|' + aKey + '|' + [..._mpSelYears].sort().join(',') + '|' + [..._mpSelMonths].sort().join(',') + '|' +
+  return pKey + '|' + aKey + '|' + [..._mpState.p.years].sort().join(',') + '|' + [..._mpState.p.months].sort().join(',') + '|' +
     simpleComboState.status.value + '|' + simpleComboState.sort.value + '|' +
     simpleComboState.sortdir.value + '|' + _validatedVersion + '|' + allReservas.length + '|' + _searchText;
 }
@@ -1982,7 +1988,7 @@ function getFilteredSorted() {
   let fil = allReservas.filter(r => {
     if (pSel.size > 0 && !pSel.has(r.plataforma)) return false;
     if (aSel.size > 0 && !aSel.has(r.alojamiento)) return false;
-    if (_mpSelYears.size > 0 && !_mpMatchDate(r._dEntrada)) return false;
+    if (_mpState.p.years.size > 0 && !_mpMatchDate(r._dEntrada, 'p')) return false;
     if (sf2 === "validated" && !validated.has(r.idx)) return false;
     if (sf2 === "pending" && validated.has(r.idx)) return false;
     if (_searchText) {
@@ -2671,15 +2677,40 @@ function _applyCEChange(idx, view) {
   invalidateCache(idx);
   var newC = getLiq(allReservas[idx]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  _patchSingleRow(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
   // If changed from consol view, re-render consol detail
   if (v === 'c' && currentConsolAloj) {
     viewConsolDetail(currentConsolAloj);
-  } else {
-    // Re-open panel if it was open in preliq
-    var panel = document.getElementById('ce-' + v + 'panel-' + idx);
-    if (panel) { panel.style.display = ''; _openCEPanel = idx; _openCEView = v; }
+    return;
+  }
+  // Direct cell update — no full row rebuild
+  var mainRow = document.getElementById('row-' + idx);
+  if (mainRow) {
+    var ceCel = mainRow.querySelector('.col-ce');
+    if (ceCel) ceCel.innerHTML = _buildCEButton(idx, newC, v);
+    var liqCel = mainRow.querySelector('.col-totalLiquidar');
+    if (liqCel) liqCel.innerHTML = fmt(newC.totalLiq) + ' &#8364;';
+    var subCel = mainRow.querySelector('.col-subtotal');
+    if (subCel) subCel.innerHTML = fmt(newC.sub) + ' &#8364;';
+    var baseCel = mainRow.querySelector('.col-baseSinIVA');
+    if (baseCel) baseCel.innerHTML = fmt(newC.baseSinIVA) + ' &#8364;';
+    var totalCel = mainRow.querySelector('.col-totalReserva');
+    if (totalCel) totalCel.innerHTML = fmt(newC.total) + ' &#8364;';
+  }
+  // Update CE panel summary numbers
+  _refreshCESummary(idx, v);
+  // Keep panel open
+  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  if (panel) { panel.style.display = ''; _openCEPanel = idx; _openCEView = v; }
+  // Update footer stats
+  var st = _cachedFilteredStats;
+  if (st && oldC && newC) {
+    st.fL += (newC.totalLiq - oldC.totalLiq);
+    st.tLiq += (newC.totalLiq - oldC.totalLiq);
+    st.tCE += (newC.ceTotal - oldC.ceTotal);
+    st.tSub += (newC.sub - oldC.sub);
+    st.tBase += (newC.baseSinIVA - oldC.baseSinIVA);
+    _renderStatsFromCache(_lastFiltered, st);
   }
 }
 
@@ -2736,7 +2767,7 @@ function _renderFull() {
   _lastFiltered = fil;
   const sf2 = simpleComboState.status.value;
   const sortF = simpleComboState.sort.value, sortD = simpleComboState.sortdir.value;
-  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpHasFilter();
+  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpHasFilter('p');
 
   document.getElementById("filter-count").textContent = fil.length + " reservas";
 
@@ -2940,7 +2971,7 @@ function togglePasarelaConsol(i){const oldC=getLiq(allReservas[i]);settings[i].p
 function toggleValidateConsol(i){const wasV=validated.has(i);if(wasV)validated.delete(i);else validated.add(i);_validatedVersion++;invalidateFilterCache();if(currentConsolAloj)viewConsolDetail(currentConsolAloj);writeValidationToSheet(i,!wasV);}
 function validarTodasConsol(alojName) {
   let src=allReservas.filter(r => r.alojamiento === alojName);
-  if (_mpHasFilter()) src = src.filter(r => _mpMatchDate(r._dEntrada));
+  if (_mpHasFilter('c')) src = src.filter(r => _mpMatchDate(r._dEntrada, 'c'));
   const pending=src.filter(r => !validated.has(r.idx));
   if(!pending.length||!confirm(`¿Validar ${pending.length} reserva${pending.length>1?'s':''} de ${alojName}?`))return;
   pending.forEach(r => validated.add(r.idx));
@@ -2950,7 +2981,7 @@ function validarTodasConsol(alojName) {
 }
 function desvalidarTodasConsol(alojName) {
   let src=allReservas.filter(r => r.alojamiento === alojName);
-  if (_mpHasFilter()) src = src.filter(r => _mpMatchDate(r._dEntrada));
+  if (_mpHasFilter('c')) src = src.filter(r => _mpMatchDate(r._dEntrada, 'c'));
   const vals=src.filter(r => validated.has(r.idx));
   if(!vals.length||!confirm(`¿Desvalidar ${vals.length} reserva${vals.length>1?'s':''} de ${alojName}?`))return;
   vals.forEach(r => validated.delete(r.idx));
@@ -3075,7 +3106,7 @@ function _patchSingleRow(idx, oldC, newC, validationFlipped) {
 
 function _renderStatsFromCache(fil, st) {
   const sf2 = simpleComboState.status.value;
-  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpHasFilter();
+  const hasFilter = comboState.platform.selected.size > 0 || comboState.aloj.selected.size > 0 || sf2 !== "all" || _mpHasFilter('p');
 
   const gs = getGlobalStats();
   const tR = gs.tR, tL = gs.tL, vC = validated.size;
@@ -3231,8 +3262,8 @@ function renderConsolGrid() {
 
   // Apply date filter helper
   function filterByDate(reservas) {
-    if (!_mpHasFilter()) return reservas;
-    return reservas.filter(r => _mpMatchDate(r._dEntrada));
+    if (!_mpHasFilter('c')) return reservas;
+    return reservas.filter(r => _mpMatchDate(r._dEntrada, 'c'));
   }
 
   let totalAloj = 0, readyCount = 0, totalLiq = 0;
@@ -3531,8 +3562,8 @@ function viewConsolDetail(alojName) {
 
   // Apply date filter
   let filteredReservas = a.reservas;
-  if (_mpHasFilter()) {
-    filteredReservas = a.reservas.filter(r => _mpMatchDate(r._dEntrada));
+  if (_mpHasFilter('c')) {
+    filteredReservas = a.reservas.filter(r => _mpMatchDate(r._dEntrada, 'c'));
   }
 
   const allVal = filteredReservas.every(r => validated.has(r.idx));
@@ -3806,7 +3837,7 @@ function buildPrintCards() {
   const a = alojamientos.find(x => x.name === alojName);
   if (!a) return null;
 
-  const calcs_src = _mpHasFilter() ? a.reservas.filter(r => _mpMatchDate(r._dEntrada)) : a.reservas;
+  const calcs_src = _mpHasFilter('c') ? a.reservas.filter(r => _mpMatchDate(r._dEntrada, 'c')) : a.reservas;
   const calcs = calcs_src.map(r => ({ r, s: settings[r.idx] || {}, c: getLiq(r) }));
 
   let cardsHtml = calcs.map((x, i) => {
@@ -4030,23 +4061,26 @@ function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal(
 const comboState = { platform: { selected: new Set(), options: [] }, aloj: { selected: new Set(), options: [] } };
 const comboLabels = { platform: 'Todas las plataformas', aloj: 'Todos los alojamientos' };
 
-// ——— MONTH PICKER STATE (multi-select) ———
+// ——— MONTH PICKER STATE (multi-select, independent per view) ———
 const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 const MONTH_FULL = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-let _mpSelYears = new Set();
-let _mpSelMonths = new Set();
+let _mpState = {
+  p: { years: new Set(), months: new Set() },
+  c: { years: new Set(), months: new Set() }
+};
 let _mpAvailable = {};
 let _mpAllYears = [];
 let _mpActiveSrc = 'p';
 
-function _mpMatchDate(d) {
-  if (_mpSelYears.size === 0) return true;
+function _mpMatchDate(d, view) {
+  var st = _mpState[view || 'p'];
+  if (st.years.size === 0) return true;
   if (!d) return false;
-  if (!_mpSelYears.has(d.getFullYear())) return false;
-  if (_mpSelMonths.size > 0 && !_mpSelMonths.has(d.getMonth())) return false;
+  if (!st.years.has(d.getFullYear())) return false;
+  if (st.months.size > 0 && !st.months.has(d.getMonth())) return false;
   return true;
 }
-function _mpHasFilter() { return _mpSelYears.size > 0; }
+function _mpHasFilter(view) { return _mpState[view || 'p'].years.size > 0; }
 
 function buildAvailableMonths() {
   _mpAvailable = {};
@@ -4059,15 +4093,18 @@ function buildAvailableMonths() {
   _mpAllYears = Object.keys(_mpAvailable).map(Number).sort((a,b) => b-a);
   const curY = new Date().getFullYear();
   const curM = new Date().getMonth();
-  _mpSelYears = new Set();
-  _mpSelMonths = new Set();
-  if (_mpAvailable[curY]) {
-    _mpSelYears.add(curY);
-    if (_mpAvailable[curY][curM] !== undefined) _mpSelMonths.add(curM);
-  } else if (_mpAllYears.length > 0) {
-    _mpSelYears.add(_mpAllYears[0]);
-  }
-  updateMonthPickerBtn();
+  ['p','c'].forEach(v => {
+    _mpState[v].years = new Set();
+    _mpState[v].months = new Set();
+    if (_mpAvailable[curY]) {
+      _mpState[v].years.add(curY);
+      if (_mpAvailable[curY][curM] !== undefined) _mpState[v].months.add(curM);
+    } else if (_mpAllYears.length > 0) {
+      _mpState[v].years.add(_mpAllYears[0]);
+    }
+  });
+  updateMonthPickerBtn('p');
+  updateMonthPickerBtn('c');
 }
 
 function toggleMonthPicker(src) {
@@ -4084,8 +4121,9 @@ function toggleMonthPicker(src) {
 function renderMonthPickerDD() {
   const dd = document.getElementById('mp-dd-' + _mpActiveSrc);
   if (!dd) return;
+  var st = _mpState[_mpActiveSrc];
   var monthCounts = {};
-  var yearsForMonths = _mpSelYears.size > 0 ? _mpSelYears : new Set(_mpAllYears);
+  var yearsForMonths = st.years.size > 0 ? st.years : new Set(_mpAllYears);
   yearsForMonths.forEach(function(y) {
     var ym = _mpAvailable[y] || {};
     for (var m = 0; m < 12; m++) {
@@ -4093,128 +4131,124 @@ function renderMonthPickerDD() {
     }
   });
   let yearsHtml = _mpAllYears.map(y =>
-    `<button class="mp-year ${_mpSelYears.has(y)?'sel':''}" onclick="event.stopPropagation();toggleMPYear(${y})">${y}</button>`
+    '<button class="mp-year ' + (st.years.has(y)?'sel':'') + '" onclick="event.stopPropagation();toggleMPYear(' + y + ')">' + y + '</button>'
   ).join('');
   let monthsHtml = '';
   for (let m = 0; m < 12; m++) {
     const cnt = monthCounts[m] || 0;
-    const isSel = _mpSelMonths.has(m);
+    const isSel = st.months.has(m);
     const dim = cnt === 0 ? 'dim' : '';
-    monthsHtml += `<button class="mp-month ${isSel?'sel':''} ${dim}" onclick="event.stopPropagation();toggleMPMonth(${m})">${MONTH_NAMES[m]}<span class="mp-cnt">${cnt>0?cnt:''}</span></button>`;
+    monthsHtml += '<button class="mp-month ' + (isSel?'sel':'') + ' ' + dim + '" onclick="event.stopPropagation();toggleMPMonth(' + m + ')">' + MONTH_NAMES[m] + '<span class="mp-cnt">' + (cnt>0?cnt:'') + '</span></button>';
   }
-  dd.innerHTML = `
-    <div class="mp-years">${yearsHtml}</div>
-    <div class="mp-grid">${monthsHtml}</div>
-    ${_mpSelYears.size > 0 || _mpSelMonths.size > 0 ? '<button class="mp-all" onclick="event.stopPropagation();clearMonthFilter()">\u2715 Quitar filtro de fecha</button>' : ''}
-  `;
+  dd.innerHTML = '<div class="mp-years">' + yearsHtml + '</div>'
+    + '<div class="mp-grid">' + monthsHtml + '</div>'
+    + (st.years.size > 0 || st.months.size > 0 ? '<button class="mp-all" onclick="event.stopPropagation();clearMonthFilter()">\u2715 Quitar filtro de fecha</button>' : '');
 }
 
 function toggleMPYear(year) {
-  if (_mpSelYears.has(year)) _mpSelYears.delete(year);
-  else _mpSelYears.add(year);
-  if (_mpSelYears.size === 0) _mpSelMonths.clear();
-  _mpRefreshAll();
+  var st = _mpState[_mpActiveSrc];
+  if (st.years.has(year)) st.years.delete(year);
+  else st.years.add(year);
+  if (st.years.size === 0) st.months.clear();
+  _mpRefreshView(_mpActiveSrc);
   renderMonthPickerDD();
 }
 
 function toggleMPMonth(month) {
-  if (_mpSelMonths.has(month)) _mpSelMonths.delete(month);
-  else _mpSelMonths.add(month);
-  _mpRefreshAll();
+  var st = _mpState[_mpActiveSrc];
+  if (st.months.has(month)) st.months.delete(month);
+  else st.months.add(month);
+  _mpRefreshView(_mpActiveSrc);
   renderMonthPickerDD();
 }
 
 function clearMonthFilter() {
-  _mpSelYears.clear(); _mpSelMonths.clear();
-  _mpRefreshAll();
-  document.getElementById('mp-dd-p').classList.remove('open');
-  document.getElementById('mp-dd-c').classList.remove('open');
+  var st = _mpState[_mpActiveSrc];
+  st.years.clear(); st.months.clear();
+  _mpRefreshView(_mpActiveSrc);
+  document.getElementById('mp-dd-' + _mpActiveSrc).classList.remove('open');
 }
 
-function _mpRefreshAll() {
-  updateMonthPickerBtn();
-  invalidateFilterCache(); _currentPage = 1; renderTable();
-  renderConsolGrid();
-  if (document.getElementById("screen-consoldetail").classList.contains("active") && currentConsolAloj) viewConsolDetail(currentConsolAloj);
-}
-
-function _mpBtnHtml() {
-  if (_mpSelYears.size === 0) return { active: false, html: null };
-  var yArr = [..._mpSelYears].sort();
-  var label = '';
-  var arrows = false;
-  if (_mpSelYears.size === 1 && _mpSelMonths.size <= 1) {
-    // Single selection: show arrows
-    arrows = true;
-    if (_mpSelMonths.size === 1) {
-      var m = [..._mpSelMonths][0];
-      label = MONTH_FULL[m] + ' ' + yArr[0];
-    } else {
-      label = 'Año ' + yArr[0];
-    }
-  } else if (_mpSelMonths.size > 0) {
-    var mArr = [..._mpSelMonths].sort((a,b) => a-b);
-    var mNames = mArr.map(m => MONTH_NAMES[m]).join(', ');
-    label = mNames + ' ' + yArr.join(', ');
+function _mpRefreshView(src) {
+  updateMonthPickerBtn(src);
+  if (src === 'p') {
+    invalidateFilterCache(); _currentPage = 1; renderTable();
   } else {
-    label = yArr.join(', ');
+    renderConsolGrid();
+    if (document.getElementById("screen-consoldetail").classList.contains("active") && currentConsolAloj) viewConsolDetail(currentConsolAloj);
   }
+}
+
+function _mpBtnHtml(src) {
+  var st = _mpState[src || 'p'];
+  if (st.years.size === 0) return { active: false, html: null };
+  var yArr = [...st.years].sort();
+  var label = '';
+  var arrows = (st.years.size === 1 && st.months.size <= 1);
   var html = '';
   if (arrows) {
-    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpPrev()">&#8249;</button></span>';
+    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpPrev(\'' + (src||'p') + '\')">&#8249;</button></span>';
+  }
+  if (st.months.size > 0) {
+    var mArr = [...st.months].sort((a,b) => a-b);
+    if (st.years.size === 1 && st.months.size === 1) {
+      label = MONTH_FULL[mArr[0]] + ' ' + yArr[0];
+    } else {
+      var mNames = mArr.map(m => MONTH_NAMES[m]).join(', ');
+      label = mNames + ' ' + yArr.join(', ');
+    }
+  } else {
+    label = yArr.length === 1 ? 'A\u00f1o ' + yArr[0] : yArr.join(', ');
   }
   html += label;
   if (arrows) {
-    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpNext()">&#8250;</button></span>';
+    html += '<span class="mp-nav"><button class="mp-arrow" onclick="event.stopPropagation();mpNext(\'' + (src||'p') + '\')">&#8250;</button></span>';
   }
-  html += '<span class="mp-clear" onclick="event.stopPropagation();clearMonthFilter();">\u2715</span>';
+  html += '<span class="mp-clear" onclick="event.stopPropagation();_mpActiveSrc=\'' + (src||'p') + '\';clearMonthFilter();">\u2715</span>';
   return { active: true, html: html };
 }
 
-function mpPrev() {
-  if (_mpSelYears.size !== 1) return;
-  var y = [..._mpSelYears][0];
-  if (_mpSelMonths.size === 1) {
-    var m = [..._mpSelMonths][0];
-    m--;
-    if (m < 0) { m = 11; y--; }
-    _mpSelYears = new Set([y]);
-    _mpSelMonths = new Set([m]);
+function mpPrev(src) {
+  var st = _mpState[src || 'p'];
+  if (st.years.size !== 1) return;
+  var y = [...st.years][0];
+  if (st.months.size === 1) {
+    var m = [...st.months][0];
+    m--; if (m < 0) { m = 11; y--; }
+    st.years = new Set([y]); st.months = new Set([m]);
   } else {
-    _mpSelYears = new Set([y - 1]);
+    st.years = new Set([y - 1]);
   }
-  _mpRefreshAll();
+  _mpRefreshView(src || 'p');
 }
 
-function mpNext() {
-  if (_mpSelYears.size !== 1) return;
-  var y = [..._mpSelYears][0];
-  if (_mpSelMonths.size === 1) {
-    var m = [..._mpSelMonths][0];
-    m++;
-    if (m > 11) { m = 0; y++; }
-    _mpSelYears = new Set([y]);
-    _mpSelMonths = new Set([m]);
+function mpNext(src) {
+  var st = _mpState[src || 'p'];
+  if (st.years.size !== 1) return;
+  var y = [...st.years][0];
+  if (st.months.size === 1) {
+    var m = [...st.months][0];
+    m++; if (m > 11) { m = 0; y++; }
+    st.years = new Set([y]); st.months = new Set([m]);
   } else {
-    _mpSelYears = new Set([y + 1]);
+    st.years = new Set([y + 1]);
   }
-  _mpRefreshAll();
+  _mpRefreshView(src || 'p');
 }
 
-function updateMonthPickerBtn() {
-  const info = _mpBtnHtml();
-  ['p','c'].forEach(src => {
-    const btn = document.getElementById('mp-btn-' + src);
-    const label = document.getElementById('mp-label-' + src);
-    if (!btn || !label) return;
-    if (info.active) {
-      label.innerHTML = info.html;
-      btn.classList.add('active');
-    } else {
-      label.textContent = 'Todos los meses';
-      btn.classList.remove('active');
-    }
-  });
+function updateMonthPickerBtn(src) {
+  var v = src || 'p';
+  var info = _mpBtnHtml(v);
+  var btn = document.getElementById('mp-btn-' + v);
+  var label = document.getElementById('mp-label-' + v);
+  if (!btn || !label) return;
+  if (info.active) {
+    label.innerHTML = info.html;
+    btn.classList.add('active');
+  } else {
+    label.textContent = 'Todos los meses';
+    btn.classList.remove('active');
+  }
 }
 
 function populateCombo(id, items) {

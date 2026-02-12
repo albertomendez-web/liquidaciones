@@ -276,59 +276,58 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-mini-table tbody tr:hover td { background: #eef3ff; }
 .consol-mini-table .ellip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
 
-/* LIQUIDACIÓN INDIVIDUAL */
-.liq-container { max-width: 800px; margin: 0 auto; background: #fff; box-shadow: 0 4px 24px rgba(44,74,82,0.07), 0 1px 3px rgba(0,0,0,0.03); overflow: hidden; border: 1px solid #f0ece5; }
-.liq-gold-line { height: 3px; background: linear-gradient(90deg, var(--hm-gold-deep), var(--hm-gold), var(--hm-gold-bright), var(--hm-gold)); }
-.liq-header { background: linear-gradient(155deg, var(--hm-slate-night) 0%, var(--hm-slate-deep) 50%, var(--hm-slate-dark) 100%); color: #fff; padding: 34px 38px 28px; position: relative; }
-.liq-header .type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--hm-gold); margin-bottom: 6px; }
-.liq-header .name { font-size: 28px; font-weight: 600; font-family: var(--font-serif); line-height: 1.15; }
-.liq-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; margin-top: 0; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; }
-.liq-meta-item { padding: 0 10px; }
-.liq-meta-item:first-child { padding-left: 0; }
+/* LIQUIDACI\u00D3N INDIVIDUAL */
+.liq-container { max-width: 780px; margin: 0 auto; background: var(--c-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--c-border-light); overflow: hidden; }
+.liq-header { background: linear-gradient(195deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 100%); color: #fff; padding: 32px 36px 26px; position: relative; }
+.liq-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff, var(--c-primary)); }
+.liq-header .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--c-primary); margin-bottom: 6px; }
+.liq-header .name { font-size: 26px; font-weight: 800; font-family: var(--font-display); letter-spacing: -0.02em; line-height: 1.15; }
+.liq-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 18px; }
+.liq-meta-item { padding: 10px 0; }
 .liq-meta-item:not(:nth-child(3n)) { border-right: 1px solid rgba(255,255,255,0.06); }
-.liq-meta-item + .liq-meta-item + .liq-meta-item + .liq-meta-item { margin-top: 14px; }
-.liq-meta-label { font-size: 8.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hm-gold-muted); margin-bottom: 3px; }
-.liq-meta-value { font-weight: 500; margin-top: 2px; font-size: 12.5px; color: rgba(255,255,255,0.8); }
-.liq-sec-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: #9ca8ab; padding: 16px 38px 2px; }
-.liq-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 38px; font-size: 13.5px; transition: background 0.12s; }
-.liq-row:hover { background: rgba(107,138,143,0.06); }
-.liq-row.bold { font-weight: 700; font-size: 14px; padding: 13px 38px; background: var(--hm-cream); }
-.liq-row .neg { color: var(--hm-neg); }
-.liq-row .pos { color: var(--hm-pos); }
+.liq-meta-item:nth-child(2), .liq-meta-item:nth-child(5) { padding-left: 20px; }
+.liq-meta-item:nth-child(3), .liq-meta-item:nth-child(6) { padding-left: 20px; }
+.liq-meta-item:nth-child(n+4) { border-top: 1px solid rgba(255,255,255,0.05); }
+.liq-meta-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-primary); opacity: 0.8; margin-bottom: 3px; }
+.liq-meta-value { font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.85); }
+.liq-sec { padding: 0 36px; }
+.liq-sec + .liq-sec { border-top: 1px solid var(--c-border-light); }
+.liq-sec-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-text-secondary); padding: 18px 0 10px; }
+.liq-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; font-size: 13.5px; color: var(--c-text-secondary); }
+.liq-row + .liq-row { border-top: 1px solid var(--c-border-light); }
+.liq-row.bold { font-weight: 700; font-size: 14px; padding: 13px 0; margin: 0 -36px; padding-left: 36px; padding-right: 36px; background: #f8f9fb; color: var(--c-text); }
+.liq-row .neg { color: var(--c-error); }
+.liq-row .pos { color: var(--c-success); }
 .liq-row .liq-val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; min-width: 115px; text-align: right; white-space: nowrap; }
-.liq-divider { height: 1px; background: #f0ece5; margin: 3px 38px; }
-.liq-sec + .liq-sec { border-top: 1px solid #f0ece5; }
-.liq-sel { font-family: var(--font-body); font-size: 11.5px; font-weight: 600; color: var(--hm-slate-deep); background: var(--hm-cream-warm); border: 1px solid #e8e3db; border-radius: 3px; padding: 3px 20px 3px 7px; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%234a6b72' fill='none' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 5px center; margin-left: 4px; transition: all 0.15s; }
-.liq-sel:hover { border-color: var(--hm-gold-muted); }
-.liq-sel:focus { border-color: var(--hm-gold); box-shadow: 0 0 0 2px var(--hm-gold-bg2); }
+.liq-divider { height: 1px; background: var(--c-border); margin: 4px 0; }
+.liq-sel { font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--c-text); background: #fafbfc; border: 1.5px solid #dde1e8; border-radius: 8px; padding: 6px 10px; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; margin-left: 4px; transition: border-color 0.2s; text-align: center; text-align-last: center; }
+.liq-sel:focus { border-color: #4f8cff; box-shadow: 0 0 0 2px rgba(79,140,255,0.08); }
 /* Pasarela integrated row */
-.liq-pas-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 38px; font-size: 13.5px; transition: background 0.12s; }
-.liq-pas-row:hover { background: rgba(107,138,143,0.06); }
+.liq-pas-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; font-size: 13.5px; border-top: 1px solid var(--c-border-light); }
 .liq-pas-left { display: flex; align-items: center; gap: 10px; flex: 1; }
-.liq-sw { position: relative; width: 34px; height: 18px; cursor: pointer; flex-shrink: 0; display: inline-block; }
-.liq-sw-track { width: 100%; height: 100%; border-radius: 9px; background: #ccc8be; transition: background 0.2s; position: relative; }
-.liq-sw-track.on { background: var(--hm-gold); }
-.liq-sw-thumb { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.15); transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+.liq-sw { position: relative; width: 38px; height: 22px; cursor: pointer; flex-shrink: 0; display: inline-block; }
+.liq-sw-track { width: 100%; height: 100%; border-radius: 11px; background: #d1d5db; transition: background 0.2s; position: relative; }
+.liq-sw-track.on { background: #4f8cff; }
+.liq-sw-thumb { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 9px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: transform 0.2s var(--ease-bounce); }
 .liq-sw-track.on .liq-sw-thumb { transform: translateX(16px); }
-.liq-pas-val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--hm-neg); min-width: 115px; text-align: right; transition: all 0.2s; }
-.liq-pas-val.off { color: #9ca8ab; opacity: 0.4; text-decoration: line-through; }
+.liq-pas-val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--c-error); min-width: 115px; text-align: right; transition: all 0.2s; }
+.liq-pas-val.off { color: var(--c-text-muted); opacity: 0.4; text-decoration: line-through; }
 /* CE2 section */
-.liq-ce2 { border-top: 1px solid #f0ece5; background: var(--hm-gold-bg); position: relative; }
-.liq-ce2::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--hm-gold), var(--hm-gold-bright), transparent); }
-.liq-ce2 .liq-sec-label { color: var(--hm-gold-deep); }
-.liq-ce2 .liq-val { color: var(--hm-neg); }
-.liq-ce2-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--hm-gold); margin-right: 6px; vertical-align: middle; }
+.liq-ce2 { background: var(--c-primary-bg); border-top: 2px solid var(--c-primary); position: relative; padding: 0 36px; }
+.liq-ce2 .liq-sec-label { color: var(--c-primary-dark); padding: 18px 0 10px; }
+.liq-ce2 .liq-val { color: var(--c-error); }
+.liq-ce2-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--c-primary); margin-right: 6px; vertical-align: middle; }
 /* Total */
-.liq-total-bar { }
-.liq-total-bar::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, var(--hm-gold), var(--hm-gold-bright), var(--hm-gold-deep)); }
-.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 38px; background: linear-gradient(155deg, var(--hm-slate-night), var(--hm-slate-deep)); color: #fff; }
-.liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.45); }
-.liq-total-value { font-family: var(--font-serif); font-size: 30px; font-weight: 700; color: var(--hm-gold-bright); }
-.liq-actions { display: flex; gap: 10px; justify-content: center; padding: 24px 38px; background: var(--hm-cream); border-top: 1px solid #f0ece5; }
-.header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 26px; }
-.badge-liq { padding: 4px 14px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
-.badge-liq-green { background: rgba(39,174,96,0.12); color: #6fcf97; border: 1px solid rgba(39,174,96,0.25); }
-.badge-liq-amber { background: var(--hm-gold-bg2); color: var(--hm-gold-bright); border: 1px solid var(--hm-gold-border); }
+.liq-total-bar { position: relative; }
+.liq-total-bar::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff, var(--c-primary)); }
+.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 24px 36px; background: linear-gradient(195deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 100%); color: #fff; }
+.liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.4); }
+.liq-total-value { font-family: var(--font-display); font-size: 30px; font-weight: 800; color: var(--c-primary); letter-spacing: -0.02em; font-style: italic; }
+.liq-actions { display: flex; gap: 12px; justify-content: center; padding: 24px 36px; background: #f8f9fb; border-top: 1px solid var(--c-border-light); }
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
+.badge-liq { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; }
+.badge-liq-green { background: rgba(46,125,50,0.2); color: #81c784; border: 1px solid rgba(46,125,50,0.3); }
+.badge-liq-amber { background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
 
 .screen { display: none; }
 .screen.active { display: block; animation: screenFadeIn 0.2s ease; }
@@ -398,15 +397,17 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .consol-section-title { page-break-after: avoid; }
 
   /* Individual liquidaci&oacute;n */
-  .liq-row { padding: 6px 20px !important; font-size: 11px !important; }
-  .liq-pas-row { padding: 6px 20px !important; font-size: 11px !important; }
-  .liq-divider { margin: 2px 20px !important; }
+  .liq-row { padding: 6px 0 !important; font-size: 11px !important; }
+  .liq-pas-row { padding: 6px 0 !important; font-size: 11px !important; }
+  .liq-divider { margin: 2px 0 !important; }
   .liq-total { padding: 10px 20px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-total-value { font-size: 20px !important; }
   .liq-header { padding: 16px 20px !important; }
-  .liq-gold-line, .liq-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-header::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-ce2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .liq-sec-label { padding: 8px 20px 2px !important; font-size: 8px !important; }
+  .liq-sec { padding: 0 20px !important; }
+  .liq-sec-label { padding: 8px 0 2px !important; font-size: 8px !important; }
   .liq-actions { display: none !important; }
   .liq-sw { display: none !important; }
 
@@ -943,9 +944,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.5.1';
-const APP_BUILD   = '2026-02-12T15:10:00+01:00';
-const APP_CHANGES = 'Fix toggle pasarela: label+checkbox caus\u00F3 doble-click, reemplazado por div+clase .on';
+const APP_VERSION = '2.6.0';
+const APP_BUILD   = '2026-02-12T18:30:00+01:00';
+const APP_CHANGES = 'Detalle liquidaci\u00F3n: paleta unificada con app (azul #4f8cff, sidebar gradient, Inter/DM Sans)';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1062,6 +1063,23 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.6.0',
+    date: '2026-02-12',
+    changes: [
+      'Detalle liquidaci\u00F3n: reemplazada paleta Homity (gold/slate/serif) por paleta app (azul/sidebar/Inter)',
+      'Header: gradiente sidebar (#0f1628 \u2192 #1a2744) + l\u00EDnea azul gradient inferior',
+      'Labels meta: color var(--c-primary) #4f8cff, tipograf\u00EDa Inter 800 en nombre propietario',
+      'Secciones: padding 36px, bordes var(--c-border-light), filas bold con fondo #f8f9fb',
+      'CE2: fondo var(--c-primary-bg) #f0f5ff, borde superior azul, dots azules',
+      'Total: gradiente sidebar + importe #4f8cff italic, l\u00EDnea azul gradient',
+      'Controles: select.sel con border #dde1e8, focus #4f8cff (igual que tabla)',
+      'Toggle pasarela: #4f8cff on, #d1d5db off, tama\u00F1o 38x22px (igual que tabla)',
+      'Botones: Validar btn-success #43a047, Desvalidar btn-orange, Imprimir btn-outline',
+      'Badges: badge-liq-green rgba(46,125,50,0.2), badge-liq-amber rgba(245,158,11,0.2)',
+      'Eliminado liq-gold-line, eliminadas referencias Homity en botones detalle'
+    ]
+  },
   {
     version: '2.5.1',
     date: '2026-02-12',
@@ -4051,7 +4069,6 @@ function viewDetail(idx) {
     <div class="liq-meta-item"><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">Localizador</div><div class="liq-meta-value" style="font-size:11px">${r.localizador}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div></div></div>
-    <div class="liq-gold-line"></div>
     <div class="liq-sec">
       <div class="liq-row bold"><span>Total Reserva (IVA incluido)</span><span class="liq-val">${fv(c.total)}</span></div>
       <div class="liq-row"><span>IVA Reserva (${(IVA_RESERVA*100).toFixed(0)}%)</span><span class="liq-val neg">${fv(-(c.total-c.baseSinIVA))}</span></div>
@@ -4074,8 +4091,8 @@ function viewDetail(idx) {
     </div>
     <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} \u20AC</span></div></div></div>
     <div class="liq-actions no-print">
-      ${!isV?`<button class="btn" style="background:var(--hm-gold);color:var(--hm-slate-night);font-weight:700;font-size:11px;padding:10px 26px;text-transform:uppercase;letter-spacing:0.06em;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(212,168,67,0.3)" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
-      <button class="btn" style="background:transparent;color:var(--hm-slate-dark);border:1.5px solid #e8e3db;font-weight:700;font-size:11px;padding:10px 26px;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer" onclick="window.print()">&#128424; Imprimir</button></div>`;
+      ${!isV?`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
+      <button class="btn btn-outline" onclick="window.print()">&#128424; Imprimir</button></div>`;
   document.getElementById("nav-detail").style.display="block"; showScreen("detail");
 }
 

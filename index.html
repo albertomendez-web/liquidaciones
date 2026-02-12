@@ -885,9 +885,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.4.7';
-const APP_BUILD   = '2026-02-12T12:38:33+01:00';
-const APP_CHANGES = 'Fix: botones CE/CE2 en fila se actualizan con Enter';
+const APP_VERSION = '2.4.8';
+const APP_BUILD   = '2026-02-12T12:45:29+01:00';
+const APP_CHANGES = 'CE/CE2 onchange ligero: sin rebuild DOM al cambiar campo';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1004,6 +1004,15 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.4.8',
+    date: '2026-02-12',
+    changes: [
+      '_applyCEChange/_applyCE2Change: reemplazado _patchSingleRow por path ligero',
+      'Clic entre campos CE ya no reconstruye el panel ni provoca salto',
+      'onchange ahora usa _refreshCESummary + _patchMainRowCells (mismo path que Enter)'
+    ]
+  },
   {
     version: '2.4.7',
     date: '2026-02-12',
@@ -3221,7 +3230,8 @@ function _applyCEChange(idx, view) {
   invalidateCache(idx);
   let newC = getLiq(allReservas[idx]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  _patchSingleRow(idx, oldC, newC);
+  _refreshCESummary(idx, v);
+  _patchMainRowCells(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
   // If changed from consol view, re-render consol detail
   if (v === 'c' && currentConsolAloj) {
@@ -3411,7 +3421,8 @@ function _applyCE2Change(idx, view) {
   invalidateCache(idx);
   let newC = getLiq(allReservas[idx]);
   if (_globalStatsCache) _globalStatsCache.tL += (newC.totalLiq - oldC.totalLiq);
-  _patchSingleRow(idx, oldC, newC);
+  _refreshCE2Summary(idx, v);
+  _patchMainRowCells(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
   if (v === 'c' && currentConsolAloj) {
     viewConsolDetail(currentConsolAloj);

@@ -650,7 +650,7 @@ tr.ce2-highlighted { background:#faf8ff; }
             <div id="default-url-display" style="font-size:13px;color:#1a2744;font-weight:500;word-break:break-all;"></div>
             <div id="default-url-edit" style="display:none;">
               <div class="gsheet-url-row" style="margin-bottom:0;">
-                <input class="gsheet-url-input" type="text" id="default-url-edit-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+                <input class="gsheet-url-input" type="text" id="default-url-edit-input" placeholder="https://docs.google.com/spreadsheets/d/..." onkeydown="if(event.key==='Enter')saveDefaultUrlEdit();">
                 <button class="btn btn-sm btn-success" onclick="saveDefaultUrlEdit()">Guardar</button>
                 <button class="btn btn-sm btn-outline" onclick="cancelDefaultUrlEdit()">Cancelar</button>
               </div>
@@ -674,7 +674,7 @@ tr.ce2-highlighted { background:#faf8ff; }
             </div>
             <div id="set-default-url-form" style="display:none;margin-top:12px;">
               <div class="gsheet-url-row" style="margin-bottom:0;">
-                <input class="gsheet-url-input" type="text" id="set-default-url-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+                <input class="gsheet-url-input" type="text" id="set-default-url-input" placeholder="https://docs.google.com/spreadsheets/d/..." onkeydown="if(event.key==='Enter')saveNewDefaultUrl();">
                 <button class="btn btn-sm btn-success" onclick="saveNewDefaultUrl()">Guardar</button>
               </div>
             </div>
@@ -690,7 +690,7 @@ tr.ce2-highlighted { background:#faf8ff; }
             <div style="flex:1;height:1px;background:#e0e4ea;"></div>
           </div>
           <div class="gsheet-url-row">
-            <input class="gsheet-url-input" type="text" id="gsheet-url-input" placeholder="https://docs.google.com/spreadsheets/d/...">
+            <input class="gsheet-url-input" type="text" id="gsheet-url-input" placeholder="https://docs.google.com/spreadsheets/d/..." onkeydown="if(event.key==='Enter')loadFromUrl();">
             <button class="btn btn-primary" onclick="loadFromUrl()">Cargar</button>
           </div>
         </div>
@@ -885,9 +885,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.4.1';
-const APP_BUILD   = '2026-02-12T11:49:45+01:00';
-const APP_CHANGES = 'CE: Enter en importe abre nuevo concepto suavemente';
+const APP_VERSION = '2.4.2';
+const APP_BUILD   = '2026-02-12T11:53:13+01:00';
+const APP_CHANGES = 'Enter key en config, URLs y consol extras inline';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1004,6 +1004,17 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.4.2',
+    date: '2026-02-12',
+    changes: [
+      'Config modal: Enter en campo valor ejecuta Añadir directamente',
+      'URLs Google Sheets: Enter en los 3 inputs dispara Cargar/Guardar',
+      'Conceptos Extraordinarios: prompt() reemplazado por inputs inline',
+      'Consol extras: flujo nombre → Enter → importe → Enter → guardado suave',
+      'Consol extras: Escape cancela, blur inteligente auto-guarda si hay datos'
+    ]
+  },
   {
     version: '2.4.1',
     date: '2026-02-12',
@@ -4099,15 +4110,49 @@ function changeConsolMaintAmount(alojName, val) {
   viewConsolDetail(alojName);
 }
 function addConsolExtra(alojName) {
-  let label = prompt('Nombre del concepto:');
-  if (!label || !label.trim()) return;
-  let amountStr = prompt('Importe base (sin IVA) en \u20AC:');
-  let amount = parseFloat((amountStr||'').replace(',','.'));
-  if (isNaN(amount) || amount <= 0) { showToast('Importe no válido', 'warning'); return; }
-  let extras = getConsolExtras(alojName);
-  extras.push({ label: label.trim(), amount: amount });
-  scheduleGlobalConfigSave();
-  viewConsolDetail(alojName);
+  var esc2 = alojName.replace(/'/g,"\\'");
+  var box = document.querySelector('.consol-monthly-box');
+  if (!box) return;
+  // Check if inline form already exists
+  var existing = document.getElementById('consol-extra-inline');
+  if (existing) { existing.querySelector('.cex-inp-label').focus(); return; }
+  // Create inline input row
+  var row = document.createElement('div');
+  row.id = 'consol-extra-inline';
+  row.className = 'consol-row';
+  row.style.cssText = 'gap:8px;padding:6px 8px;animation:ceRowIn .25s ease;';
+  row.innerHTML = '<input class="cex-inp-label" type="text" placeholder="Nombre del concepto..." style="flex:1;border:1.5px solid #16a34a;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />'
+    + '<input class="cex-inp-amt" type="text" placeholder="0,00 \u20AC" style="width:90px;border:1.5px solid #16a34a;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />'
+    + '<button onclick="this.parentNode.remove();" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">\u00D7</button>';
+  var addBtn = box.querySelector('button[onclick*="addConsolExtra"]');
+  if (addBtn) addBtn.parentNode.insertBefore(row, addBtn);
+  else box.appendChild(row);
+
+  var lblInp = row.querySelector('.cex-inp-label');
+  var amtInp = row.querySelector('.cex-inp-amt');
+  lblInp.focus();
+
+  function commitExtra() {
+    var label = lblInp.value.trim();
+    var amount = parseFloat((amtInp.value||'').replace(/[^\d.,-]/g,'').replace(',','.'));
+    if (!label) { row.remove(); return; }
+    if (isNaN(amount) || amount <= 0) { showToast('Importe no válido', 'warning'); amtInp.focus(); amtInp.select(); return; }
+    var extras = getConsolExtras(alojName);
+    extras.push({ label: label, amount: amount });
+    scheduleGlobalConfigSave();
+    viewConsolDetail(alojName);
+  }
+  lblInp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); amtInp.focus(); amtInp.select(); }
+    if (e.key === 'Escape') row.remove();
+  });
+  amtInp.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); commitExtra(); }
+    if (e.key === 'Escape') row.remove();
+  });
+  amtInp.addEventListener('blur', function() {
+    setTimeout(function() { if (!row.contains(document.activeElement)) { if (lblInp.value.trim() && amtInp.value.trim()) commitExtra(); else if (!lblInp.value.trim() && !amtInp.value.trim()) row.remove(); } }, 150);
+  });
 }
 function removeConsolExtra(alojName, idx) {
   let extras = getConsolExtras(alojName);
@@ -4609,7 +4654,7 @@ function buildOS(title, desc, vals, unit, addId, addFn, delFn) {
     ${vals.length > 1 ? `<button class="option-delete" onclick="${delFn}(${i})">&#10005;</button>` : '<span style="width:28px"></span>'}</div>`).join("");
   return `<div class="modal-section"><h4>${title}</h4>${desc?`<div class="desc">${desc}</div>`:''}
     <div class="option-list">${items}</div>
-    <div class="add-row"><input class="add-input" type="number" id="${addId}" placeholder="Nuevo valor" step="any">
+    <div class="add-row"><input class="add-input" type="number" id="${addId}" placeholder="Nuevo valor" step="any" onkeydown="if(event.key==='Enter'){event.preventDefault();${addFn}();}">
     <button class="btn btn-sm btn-primary" onclick="${addFn}()">+ A\u00F1adir</button></div></div>`;
 }
 

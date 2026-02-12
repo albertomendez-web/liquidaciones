@@ -885,9 +885,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.4.5';
-const APP_BUILD   = '2026-02-12T12:15:55+01:00';
-const APP_CHANGES = 'CE Enter: no duplica filas vacías, foco inteligente';
+const APP_VERSION = '2.4.6';
+const APP_BUILD   = '2026-02-12T12:32:53+01:00';
+const APP_CHANGES = 'Fix CE2: propiedad correcta conceptosSinIVA en _ce2Key';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1004,6 +1004,14 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.4.6',
+    date: '2026-02-12',
+    changes: [
+      'Fix critico CE2: _ce2Key guardaba en propiedad incorrecta, valores no llegaban al calculo',
+      'CE2 ahora suma y persiste correctamente al pulsar Enter'
+    ]
+  },
   {
     version: '2.4.5',
     date: '2026-02-12',
@@ -3060,8 +3068,8 @@ function _ce2Key(e, idx, view, isAmt) {
   var val = parseFloat(String(inp.value).replace(/\./g,'').replace(',','.'));
   if (isNaN(val)) val = 0;
   var s = settings[idx];
-  if (s && s.conceptosEspeciales2 && s.conceptosEspeciales2[itemIdx]) {
-    s.conceptosEspeciales2[itemIdx].amount = val;
+  if (s && s.conceptosSinIVA && s.conceptosSinIVA[itemIdx]) {
+    s.conceptosSinIVA[itemIdx].amount = val;
   }
   inp.removeAttribute('onchange');
   // Check if last row is already empty

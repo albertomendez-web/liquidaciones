@@ -4736,7 +4736,7 @@ function buildConsolDeductionsHtml(alojName) {
   extras.forEach(function(ex, ei) {
     html += '<div class="cex-item-row" style="display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;">';
     html += '<input class="cex-inp-label" type="text" value="'+(ex.label||'').replace(/"/g,'&quot;')+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="Concepto..." style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />';
-    html += '<input class="cex-inp-amt" type="text" value="'+fmt(ex.amount||0)+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />';
+    html += '<input class="cex-inp-amt" type="text" value="'+fmt(ex.amount||0)+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;color:#e53935;" />';
     html += '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">\u00D7</button>';
     html += '<span class="neg" style="margin-left:auto;white-space:nowrap;">- '+fmt(ex.amount||0)+' \u20AC</span>';
     html += '</div>';
@@ -4762,6 +4762,9 @@ function changeConsolMaintAmount(alojName, val) {
   let m = getConsolMaint(alojName);
   m.amount = parseFloat(val) || maintenanceOptions[0];
   scheduleGlobalConfigSave();
+  // Patch the displayed neg span in maint row
+  var box = document.querySelector('.consol-monthly-box');
+  if (box) { var nr = box.querySelector('.consol-row .neg'); if (nr) nr.textContent = '- ' + fmt(m.amount) + ' \u20AC'; }
   _patchConsolFinalTotals();
 }
 function updateConsolExtra(alojName, idx, field, rawVal) {
@@ -4793,7 +4796,7 @@ function addConsolExtra(alojName) {
   row.className = 'cex-item-row';
   row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;';
   row.innerHTML = '<input class="cex-inp-label" type="text" value="" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="Concepto..." style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />'
-    + '<input class="cex-inp-amt" type="text" value="0,00" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />'
+    + '<input class="cex-inp-amt" type="text" value="0,00" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;color:#e53935;" />'
     + '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">\u00D7</button>'
     + '<span class="neg" style="margin-left:auto;white-space:nowrap;">- 0,00 \u20AC</span>';
   var addLinkWrap = addLink.parentNode;
@@ -4808,11 +4811,12 @@ function removeConsolExtra(alojName, idx) {
     if (rows[idx]) {
       rows[idx].style.animation = 'ceRowOut .2s ease forwards';
       rows[idx].addEventListener('animationend', function() {
+        rows[idx].remove();
         var extras = getConsolExtras(alojName);
         if (idx >= 0 && idx < extras.length) extras.splice(idx, 1);
         scheduleGlobalConfigSave();
-        // Re-render just the deductions section (to fix indices) + patch totals
-        _refreshConsolDeductionsBox(alojName);
+        // Rebuild onclick/onchange indices on remaining rows
+        _rebuildCexIndices(alojName);
         _patchConsolFinalTotals();
       }, {once:true});
       return;
@@ -4821,8 +4825,28 @@ function removeConsolExtra(alojName, idx) {
   var extras = getConsolExtras(alojName);
   if (idx >= 0 && idx < extras.length) extras.splice(idx, 1);
   scheduleGlobalConfigSave();
-  _refreshConsolDeductionsBox(alojName);
   _patchConsolFinalTotals();
+}
+
+function _rebuildCexIndices(alojName) {
+  var box = document.querySelector('.consol-monthly-box');
+  if (!box) return;
+  var esc2 = alojName.replace(/'/g, "\\'");
+  var rows = box.querySelectorAll('.cex-item-row');
+  rows.forEach(function(row, ei) {
+    var lbl = row.querySelector('.cex-inp-label');
+    var amt = row.querySelector('.cex-inp-amt');
+    var del = row.querySelector('.ce-del');
+    if (lbl) {
+      lbl.setAttribute('onchange', "updateConsolExtra('"+esc2+"',"+ei+",'label',this.value)");
+      lbl.setAttribute('onkeydown', "_cexKey(event,'"+esc2+"',false)");
+    }
+    if (amt) {
+      amt.setAttribute('onchange', "updateConsolExtra('"+esc2+"',"+ei+",'amount',this.value)");
+      amt.setAttribute('onkeydown', "_cexKey(event,'"+esc2+"',true)");
+    }
+    if (del) del.setAttribute('onclick', "removeConsolExtra('"+esc2+"',"+ei+")");
+  });
 }
 
 function _refreshConsolMaintRow(alojName) {

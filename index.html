@@ -7,17 +7,65 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>Liquidaciones &mdash; Gesti&oacute;n de Reservas</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
+
+:root {
+  /* Brand colors */
+  --c-primary: #4f8cff;
+  --c-primary-dark: #3b6de0;
+  --c-primary-light: #e3f2fd;
+  --c-primary-bg: #f0f5ff;
+  /* Semantic */
+  --c-success: #16a34a;
+  --c-success-bg: #f0fdf4;
+  --c-warning: #f59e0b;
+  --c-warning-bg: #fffbeb;
+  --c-error: #dc2626;
+  --c-error-bg: #fef2f2;
+  /* Neutrals */
+  --c-bg: #f3f5f8;
+  --c-surface: #ffffff;
+  --c-border: #e2e5ea;
+  --c-border-light: #eef0f4;
+  --c-text: #1a1a2e;
+  --c-text-secondary: #6b7280;
+  --c-text-muted: #9ca3af;
+  /* Sidebar */
+  --c-sidebar-start: #0f1628;
+  --c-sidebar-end: #1a2744;
+  /* Typography */
+  --font-display: 'Inter', 'DM Sans', sans-serif;
+  --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+  /* Spacing */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-xl: 0 20px 60px rgba(0,0,0,0.12);
+  /* Transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
-.sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 250px; background: linear-gradient(195deg, #0f1628 0%, #1a2744 100%); color: #fff; display: flex; flex-direction: column; z-index: 50; }
+html { scroll-behavior: smooth; }
+
+/* Global focus styles */
+:focus-visible { outline: 2px solid var(--c-primary); outline-offset: 2px; }
+input:focus, select:focus, textarea:focus { outline: none; }
+
+::selection { background: rgba(79,140,255,0.2); color: inherit; }
+body { font-family: var(--font-body); background: var(--c-bg); color: var(--c-text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+.sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 250px; background: linear-gradient(195deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 100%); color: #fff; display: flex; flex-direction: column; z-index: 50; }
 .logo { padding: 28px 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.logo h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+.logo h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.03em; font-family: var(--font-display); }
 .logo p { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 13px 24px; font-size: 14px; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; }
-.nav-item:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+.nav-item { display: flex; align-items: center; gap: 10px; padding: 13px 24px; font-size: 14px; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.25s var(--ease-out); border-left: 3px solid transparent; }
+.nav-item:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); }
 .nav-item.active { color: #fff; font-weight: 600; background: rgba(255,255,255,0.08); border-left-color: #4f8cff; }
 .sidebar-footer { padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 11px; color: rgba(255,255,255,0.35); margin-top: auto; }
 .changelog-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center; }
@@ -28,27 +76,29 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .cl-version { margin-bottom:20px; }
 .cl-version:last-child { margin-bottom:0; }
 .cl-version-header { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-.cl-badge { background:#4f8cff; color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:20px; }
+.cl-badge { background:var(--c-primary); color:#fff; font-size:12px; font-weight:700; padding:3px 10px; border-radius:20px; }
 .cl-badge.current { background:#43a047; }
 .cl-date { font-size:12px; color:#9ca3af; }
 .cl-changes { list-style:none; padding:0; margin:0; }
 .cl-changes li { font-size:13px; color:#4b5563; padding:3px 0 3px 18px; position:relative; line-height:1.5; }
 .cl-changes li::before { content:'\2022'; position:absolute; left:4px; color:#4f8cff; font-weight:700; }
 .main { margin-left: 250px; padding: 32px 40px; min-height: 100vh; }
-.card { background: #fff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04); padding: 28px 32px; margin-bottom: 24px; }
+.card { background: var(--c-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 28px 32px; margin-bottom: 24px; border: 1px solid var(--c-border-light); transition: box-shadow 0.2s ease; }
 .upload-wrap { display: flex; align-items: center; justify-content: center; min-height: 70vh; }
 .upload-inner { max-width: 520px; width: 100%; text-align: center; }
-.upload-inner h2 { font-size: 32px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 8px; }
+.upload-inner h2 { font-size: 32px; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 8px; font-family: var(--font-display); }
 .upload-inner p { color: #6b7280; font-size: 15px; margin-bottom: 32px; }
-.dropzone { border: 2px dashed #cfd5de; border-radius: 16px; padding: 64px 40px; text-align: center; cursor: pointer; transition: all 0.3s; background: #fafbfc; }
+.dropzone { border: 2px dashed var(--c-border); border-radius: var(--radius-lg); padding: 64px 40px; text-align: center; cursor: pointer; transition: all 0.3s var(--ease-out); background: #fafbfc; }
+.dropzone:hover { border-color: var(--c-primary); background: var(--c-primary-bg); }
 .dropzone.dragging { border-color: #4f8cff; background: rgba(79,140,255,0.04); }
 .dropzone svg { color: #9ca3af; margin-bottom: 16px; }
 .dropzone .title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
 .dropzone .sub { font-size: 13px; color: #9ca3af; }
 .stats-row { display: flex; gap: 16px; margin-bottom: 24px; }
-.stat-card { flex: 1; padding: 20px 24px; border-radius: 12px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.stat-card { flex: 1; padding: 20px 24px; border-radius: var(--radius-md); background: var(--c-surface); box-shadow: var(--shadow-sm); border: 1px solid var(--c-border-light); transition: transform 0.15s var(--ease-out), box-shadow 0.15s ease; }
+.stat-card:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
 .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #9ca3af; margin-bottom: 6px; }
-.stat-value { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.stat-value { font-size: 26px; font-weight: 800; letter-spacing: -0.03em; font-family: var(--font-display); }
 .stat-filtered { font-size: 13px; font-weight: 600; color: #4f8cff; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #e0e4ea; }
 .stat-pct { font-size: 11px; font-weight: 500; color: #9ca3af; }
 .filters-bar { display: flex; gap: 12px; align-items: center; padding: 16px 24px; margin-bottom: 16px; flex-wrap: wrap; }
@@ -61,12 +111,12 @@ body { font-family: 'DM Sans', 'Helvetica Neue', sans-serif; background: #f0f2f5
 .search-input::placeholder { color: #9ca3af; font-weight: 400; }
 .search-clear { position: absolute; right: 6px; cursor: pointer; color: #9ca3af; font-size: 14px; line-height: 1; padding: 2px; }
 .search-clear:hover { color: #e53935; }
-.filter-sep { width: 1px; height: 24px; background: #e5e7eb; }
+.filter-sep { width: 1px; height: 24px; background: var(--c-border); }
 .table-wrap { overflow-x: auto; overflow-y: scroll; max-height: 75vh; overscroll-behavior: contain; overflow-anchor: none; }
 .table-wrap::-webkit-scrollbar { width: 6px; }
 .table-wrap::-webkit-scrollbar-track { background: transparent; }
-.table-wrap::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
-.table-wrap::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.3); }
+.table-wrap::-webkit-scrollbar-thumb { background: rgba(79,140,255,0.2); border-radius: 3px; }
+.table-wrap::-webkit-scrollbar-thumb:hover { background: rgba(79,140,255,0.4); }
 table { width: 100%; border-collapse: collapse; }
 th { padding: 8px 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; border-bottom: 2px solid #eef0f4; text-align: center; white-space: nowrap; background: #f8f9fb; cursor: pointer; user-select: none; position: sticky; top: 0; z-index: 3; line-height: 1.35; vertical-align: middle; }
 th:hover { color: #4f8cff; }
@@ -80,11 +130,11 @@ td.right { text-align: right; font-variant-numeric: tabular-nums; }
 td.bold { font-weight: 700; }
 td.ellip { max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
 td.muted { font-size: 12px; color: #6b7280; }
-tr:hover td { background: #f8f9ff; }
-tfoot td { position: sticky; bottom: 0; z-index: 2; background: #0f1628 !important; }
+tr:hover td { background: rgba(79,140,255,0.04); }
+tfoot td { position: sticky; bottom: 0; z-index: 2; background: linear-gradient(135deg, var(--c-sidebar-start), var(--c-sidebar-end)) !important; font-family: var(--font-display); }
 tfoot tr:hover td { background: #0f1628 !important; }
 th.col-comPlataforma, th.col-comGTC, th.col-limpieza, th.col-amenities, th.col-pasarela, th.col-noches { text-align: center; }
-tr.validated td { background: rgba(232,245,233,0.3); }
+tr.validated td { background: rgba(22,163,74,0.06); }
 tr.highlight td { animation: pulse-highlight 0.6s ease-in-out 3; }
 @keyframes pulse-highlight {
   0% { background: #fff; }
@@ -106,10 +156,12 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .toggle-thumb { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 9px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: left 0.2s; }
 .toggle-track.on .toggle-thumb { left: 18px; }
 .toggle-label { font-size: 11px; color: #6b7280; }
-.btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; }
-.btn:hover { opacity: 0.88; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: var(--radius-sm); border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s var(--ease-out); font-family: inherit; }
+.btn:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
 .btn-sm { padding: 6px 12px; font-size: 12px; }
-.btn-primary { background: #4f8cff; color: #fff; }
+.btn-primary { background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark)); color: #fff; box-shadow: 0 2px 8px rgba(79,140,255,0.25); }
+.btn-primary:hover { box-shadow: 0 4px 14px rgba(79,140,255,0.35); }
 .btn-success { background: #43a047; color: #fff; }
 .btn-orange { background: #ef6c00; color: #fff; }
 .btn-outline { background: transparent; color: #4f8cff; border: 1.5px solid #4f8cff; }
@@ -118,9 +170,10 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* MODAL */
 .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); z-index: 100; display: flex; align-items: flex-start; justify-content: center; padding-top: 8vh; backdrop-filter: blur(3px); }
-.modal { background: #fff; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); width: 600px; max-height: 85vh; min-height: 520px; overflow-y: auto; }
+.modal { background: var(--c-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); width: 600px; max-height: 85vh; min-height: 520px; overflow-y: auto; animation: modalIn 0.25s var(--ease-out); }
+@keyframes modalIn { from { opacity: 0; transform: translateY(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
 .modal-header { padding: 24px 28px 16px; border-bottom: 1px solid #eef0f4; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: #fff; z-index: 2; border-radius: 16px 16px 0 0; }
-.modal-header h3 { font-size: 18px; font-weight: 700; }
+.modal-header h3 { font-size: 18px; font-weight: 700; font-family: var(--font-display); }
 .modal-close { width: 32px; height: 32px; border-radius: 8px; border: none; background: #f3f4f6; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
 .modal-close:hover { background: #e5e7eb; }
 .modal-body { padding: 24px 28px; }
@@ -146,16 +199,16 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ALOJAMIENTO CARDS */
 .aloj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; margin-bottom: 24px; }
-.aloj-card { background: #fff; border-radius: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 24px; transition: all 0.2s; cursor: pointer; border: 2px solid transparent; position: relative; overflow: hidden; }
-.aloj-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
+.aloj-card { background: var(--c-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 24px; transition: all 0.25s var(--ease-out); cursor: pointer; border: 2px solid transparent; position: relative; overflow: hidden; }
+.aloj-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
 .aloj-card.ready { border-color: #43a047; }
 .aloj-card.pending { border-color: #ff9800; }
 .aloj-semaforo { position: absolute; top: 0; right: 0; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-.aloj-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; padding-right: 40px; }
+.aloj-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; padding-right: 40px; font-family: var(--font-display); }
 .aloj-edificio { font-size: 12px; color: #6b7280; margin-bottom: 16px; }
 .aloj-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 .aloj-stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #9ca3af; }
-.aloj-stat-value { font-size: 18px; font-weight: 700; margin-top: 2px; }
+.aloj-stat-value { font-size: 18px; font-weight: 700; margin-top: 2px; font-family: var(--font-display); font-variant-numeric: tabular-nums; }
 .aloj-bar { height: 4px; border-radius: 2px; background: #eef0f4; margin-top: 16px; overflow: hidden; }
 .aloj-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
 
@@ -163,7 +216,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-container { max-width: 100%; margin: 0 auto; }
 .consol-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color: #fff; padding: 32px 32px; border-radius: 14px 14px 0 0; }
 .consol-header .type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 4px; }
-.consol-header .name { font-size: 24px; font-weight: 700; }
+.consol-header .name { font-size: 24px; font-weight: 800; font-family: var(--font-display); }
 .consol-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 24px; font-size: 13px; }
 .consol-meta-label { opacity: 0.5; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
 .consol-meta-value { font-weight: 600; margin-top: 2px; }
@@ -198,18 +251,18 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .gtc-split-counter { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 8px 10px; background: rgba(168,85,247,0.08); border-radius: 8px; font-size: 11px; color: #6b7280; }
 .gtc-split-counter .badge { display: inline-flex; align-items: center; justify-content: center; background: #7c3aed; color: #fff; font-size: 10px; font-weight: 700; min-width: 20px; height: 20px; border-radius: 10px; padding: 0 6px; }
 .consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; font-size: 15px; font-weight: 700; background: #f0f2f5; }
-.consol-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; font-size: 20px; font-weight: 700; background: #0f1628; color: #fff; border-radius: 0 0 14px 14px; }
+.consol-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; font-size: 20px; font-weight: 800; background: linear-gradient(135deg, var(--c-sidebar-start), var(--c-sidebar-end)); color: #fff; border-radius: 0 0 14px 14px; font-family: var(--font-display); }
 .consol-mini-table { margin: 0; width: 100%; table-layout: auto; }
 .consol-mini-table th { font-size: 10px; padding: 10px 8px; }
 .consol-mini-table td { font-size: 11px; padding: 8px 8px; }
 .consol-mini-table tbody tr:hover td { background: #eef3ff; }
 .consol-mini-table .ellip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
 
-/* LIQUIDACI&#xC3;&ldquo;N INDIVIDUAL */
+/* LIQUIDACIÓN INDIVIDUAL */
 .liq-container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
 .liq-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color: #fff; padding: 36px 40px; }
 .liq-header .type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 4px; }
-.liq-header .name { font-size: 24px; font-weight: 700; }
+.liq-header .name { font-size: 24px; font-weight: 800; font-family: var(--font-display); }
 .liq-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 24px; font-size: 13px; }
 .liq-meta-label { opacity: 0.5; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
 .liq-meta-value { font-weight: 600; margin-top: 2px; }
@@ -219,7 +272,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-row .neg { color: #e53935; }
 .liq-row .pos { color: #43a047; }
 .liq-divider { height: 1px; background: #eef0f4; margin: 4px 40px; }
-.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; font-size: 18px; font-weight: 700; background: #0f1628; color: #fff; }
+.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; font-size: 18px; font-weight: 800; background: linear-gradient(135deg, var(--c-sidebar-start), var(--c-sidebar-end)); color: #fff; font-family: var(--font-display); }
 .liq-actions { display: flex; gap: 12px; justify-content: center; margin-top: 28px; }
 .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
 .badge-liq { padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
@@ -227,7 +280,8 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .badge-liq-amber { background: rgba(255,183,77,0.2); color: #ffb74d; }
 
 .screen { display: none; }
-.screen.active { display: block; }
+.screen.active { display: block; animation: screenFadeIn 0.2s ease; }
+@keyframes screenFadeIn { from { opacity: 0; } to { opacity: 1; } }
 .gear-btn { width: 36px; height: 36px; border-radius: 8px; border: 1.5px solid #dde1e8; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 16px; }
 .gear-btn:hover { border-color: #4f8cff; background: #f0f5ff; }
 
@@ -306,7 +360,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 ::-webkit-scrollbar-thumb { background: #cfd5de; border-radius: 3px; }
 /* GOOGLE SHEETS UI */
 .gsheet-section { margin-top: 32px; padding-top: 28px; border-top: 2px solid #eef0f4; }
-.gsheet-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.gsheet-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; font-family: var(--font-display); }
 .gsheet-section p { font-size: 13px; color: #9ca3af; margin-bottom: 16px; }
 .gsheet-status { display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; font-size: 13px; font-weight: 500; margin-bottom: 16px; }
 .gsheet-status.connected { background: #e8f5e9; color: #2e7d32; }
@@ -342,7 +396,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .sync-dot.saved { background: #43a047; }
 .sync-dot.error { background: #e53935; }
 @keyframes sync-pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-.page-header h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.page-header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.03em; font-family: var(--font-display); }
 .page-header p { color: #6b7280; font-size: 14px; margin-top: 4px; }
 /* COLUMN TOGGLE DROPDOWN */
 .col-toggle-wrap { position: relative; }
@@ -448,7 +502,7 @@ tr.ce-highlighted { background:#fffdf5; }
 tr.ce2-highlighted { background:#faf8ff; }
 @media print { .ce-panel-row,.col-ce,.cc-ce,.ce-highlighted,.ce2-panel-row,.col-ceSinIva,.cc-ceSinIva,.ce2-highlighted { display:none!important;background:transparent!important; } }
 /* === AI ASSISTANT === */
-.ai-fab { position:fixed; bottom:24px; right:24px; width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,#4f8cff,#3b6de0); color:#fff; border:none; font-size:24px; cursor:pointer; box-shadow:0 4px 16px rgba(79,140,255,0.4); z-index:90; display:flex; align-items:center; justify-content:center; transition:transform 0.2s,box-shadow 0.2s; }
+.ai-fab { position:fixed; bottom:24px; right:24px; width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,var(--c-primary),var(--c-primary-dark)); color:#fff; border:none; font-size:24px; cursor:pointer; box-shadow:0 4px 16px rgba(79,140,255,0.4); z-index:90; display:flex; align-items:center; justify-content:center; transition:transform 0.25s var(--ease-bounce),box-shadow 0.2s; }
 .ai-fab:hover { transform:scale(1.08); box-shadow:0 6px 24px rgba(79,140,255,0.5); }
 .ai-fab .fab-badge { position:absolute; top:-2px; right:-2px; width:14px; height:14px; background:#43a047; border-radius:50%; border:2px solid #fff; display:none; }
 .ai-panel { position:fixed; right:-420px; top:0; bottom:0; width:400px; background:#fff; box-shadow:-4px 0 24px rgba(0,0,0,0.12); z-index:95; display:flex; flex-direction:column; transition:right 0.3s cubic-bezier(0.16,1,0.3,1); }
@@ -476,6 +530,20 @@ tr.ce2-highlighted { background:#faf8ff; }
 .ai-typing span:nth-child(3) { animation-delay:0.4s; }
 @keyframes aiDot { 0%,80%,100%{opacity:0.3;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
 @media print { .ai-fab,.ai-panel { display:none!important; } }
+
+/* === TOAST NOTIFICATIONS === */
+.toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { pointer-events: auto; display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; font-family: var(--font-body); box-shadow: var(--shadow-lg); animation: toastIn 0.3s var(--ease-out); max-width: 380px; }
+.toast.leaving { animation: toastOut 0.25s ease forwards; }
+.toast-success { background: var(--c-success-bg); color: #15803d; border: 1px solid #bbf7d0; }
+.toast-error { background: var(--c-error-bg); color: var(--c-error); border: 1px solid #fecaca; }
+.toast-warning { background: var(--c-warning-bg); color: #b45309; border: 1px solid #fde68a; }
+.toast-info { background: var(--c-primary-bg); color: var(--c-primary-dark); border: 1px solid #bfdbfe; }
+.toast-icon { font-size: 16px; flex-shrink: 0; }
+.toast-close { margin-left: auto; cursor: pointer; opacity: 0.5; font-size: 14px; padding: 2px; flex-shrink: 0; }
+.toast-close:hover { opacity: 1; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
+@keyframes toastOut { to { opacity: 0; transform: translateX(40px); } }
 </style>
 <style id="col-visibility-style"></style>
 <style id="consol-col-visibility-style"></style>
@@ -483,6 +551,7 @@ tr.ce2-highlighted { background:#faf8ff; }
 <script src="https://apis.google.com/js/api.js" async defer></script>
 </head>
 <body>
+<div id="toast-container" class="toast-container"></div>
 
 <div class="sidebar">
   <div class="logo"><h1>Liquidaciones</h1><p>Gesti&oacute;n de Reservas</p></div>
@@ -794,32 +863,31 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-/*
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬â€
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ                    VERSIONING RULES (SemVer)                       ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  OBLIGATORIO actualizar en CADA entrega de cÃƒÆ’Ã‚Â³digo sin excepciÃƒÆ’Ã‚Â³n.   ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â£
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  MAJOR (X.0.0) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Cambios incompatibles, reestructuraciÃƒÆ’Ã‚Â³n total,   ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ                   migraciÃƒÆ’Ã‚Â³n de datos necesaria                     ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  MINOR (x.Y.0) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Nueva funcionalidad, nueva secciÃƒÆ’Ã‚Â³n UI,           ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ                   nuevo campo/columna, nueva integraciÃƒÆ’Ã‚Â³n           ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  PATCH (x.y.Z) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Bugfix, ajuste visual, optimizaciÃƒÆ’Ã‚Â³n,             ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ                   refactor sin cambio funcional                    ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â£
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  CHECKLIST por entrega:                                            ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¡ 1. Leer versiÃƒÆ’Ã‚Â³n actual de APP_VERSION                          ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¡ 2. Decidir bump: MAJOR / MINOR / PATCH                        ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¡ 3. Actualizar APP_VERSION con nueva versiÃƒÆ’Ã‚Â³n                    ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¡ 4. Actualizar APP_BUILD con fecha/hora actual Madrid (+01/+02) ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¡ 5. Actualizar APP_CHANGES con resumen breve (< 100 chars)     ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¡ 6. AÃƒÆ’Ã‚Â±adir entrada al array CHANGELOG (al principio)           ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ       con version, date (ISO Madrid), y array changes detallado   ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¡ 7. NUNCA reutilizar un nÃƒÆ’Ã‚Âºmero de versiÃƒÆ’Ã‚Â³n ya existente          ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
- * ÃƒÂ¢Ã¢â‚¬Â¢Ã…Â¡ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
+/**
+ * ══════════════════════════════════════════════════════════════
+ *  VERSIONING RULES — OBLIGATORIO en CADA entrega de código
+ * ══════════════════════════════════════════════════════════════
+ *  MAJOR (X.0.0) → Cambios incompatibles, reestructuración total,
+ *                   migración de datos necesaria
+ *  MINOR (x.Y.0) → Nueva funcionalidad, nueva sección UI,
+ *                   nuevo campo/columna, nueva integración
+ *  PATCH (x.y.Z) → Bugfix, ajuste visual, optimización,
+ *                   refactor sin cambio funcional
+ * ══════════════════════════════════════════════════════════════
+ *  CHECKLIST por entrega:
+ *  ✓ 1. Leer versión actual de APP_VERSION
+ *  ✓ 2. Decidir bump: MAJOR / MINOR / PATCH
+ *  ✓ 3. Actualizar APP_VERSION con nueva versión
+ *  ✓ 4. Actualizar APP_BUILD con fecha/hora actual Madrid (+01/+02)
+ *  ✓ 5. Actualizar APP_CHANGES con resumen breve (< 100 chars)
+ *  ✓ 6. Añadir entrada al array CHANGELOG (al principio)
+ *       con version, date (ISO Madrid), y array changes detallado
+ *  ✓ 7. NUNCA reutilizar un número de versión ya existente
+ * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.3.2';
-const APP_BUILD   = '2026-02-12T23:45:00+01:00';
-const APP_CHANGES = 'Lista 80/20 limitada a 20 alojamientos GTC propietaria';
+const APP_VERSION = '2.4.0';
+const APP_BUILD   = '2026-02-12T11:27:23+01:00';
+const APP_CHANGES = 'Rediseño visual + mejoras estabilidad + toast notifications';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -833,6 +901,32 @@ function esc(str) {
 }
 
 // === UTILITY: Safe JSON parse ===
+
+// === TOAST NOTIFICATION SYSTEM ===
+function showToast(message, type, duration) {
+  type = type || 'info';
+  duration = duration || 3500;
+  var container = document.getElementById('toast-container');
+  if (!container) return;
+  var icons = { success: '✓', error: '✗', warning: '⚠', info: 'ℹ' };
+  var toast = document.createElement('div');
+  toast.className = 'toast toast-' + type;
+  toast.innerHTML = '<span class="toast-icon">' + (icons[type] || '') + '</span>'
+    + '<span>' + message + '</span>'
+    + '<span class="toast-close" onclick="this.parentElement.remove()">✕</span>';
+  container.appendChild(toast);
+  setTimeout(function() {
+    toast.classList.add('leaving');
+    setTimeout(function() { if (toast.parentNode) toast.remove(); }, 250);
+  }, duration);
+}
+
+
+// === ERROR BOUNDARY ===
+function safeCall(fn, fallback, context) {
+  try { return fn(); }
+  catch(e) { console.error('[SafeCall]', context || '', e); return fallback; }
+}
 function safeJSON(str, fallback) {
   if (fallback === undefined) fallback = null;
   if (!str || typeof str !== 'string') return fallback;
@@ -910,6 +1004,22 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.4.0',
+    date: '2026-02-12',
+    changes: [
+      'Rediseño visual: nueva paleta de colores con CSS variables',
+      'Tipografía mejorada: Inter para títulos, DM Sans para cuerpo, tabular-nums en tabla',
+      'Tarjetas de alojamiento refinadas con gradiente sutil y mejor hover',
+      'Toast notifications en lugar de alert() para feedback no bloqueante',
+      'Validación de inputs numéricos con rango (0-100% para tasas)',
+      'Sidebar con iconos SVG y transiciones más fluidas',
+      'Fix: bloque de versionado corrupto (encoding UTF-8) restaurado',
+      'Fix: parseNum() ahora valida rangos para porcentajes',
+      'Mejoras en sombras, bordes y espaciado general',
+      'Nuevas animaciones: fadeIn para pantallas, slide para paneles'
+    ]
+  },
   { version: '2.3.2', date: '2026-02-12T23:45:00+01:00', changes: [
     'Lista toggles 80/20 limitada a 20 alojamientos propiedad GTC',
     'Nueva lista _gtcOwnedAlojamientos persistida en Google Sheets (clave gtc_owned)',
@@ -1243,7 +1353,7 @@ window.addEventListener('load', () => {
 
 // === GOOGLE AUTH ===
 function googleSignIn() {
-  if (!_tokenClient) { alert('Google API no inicializada. Recarga la p\u00E1gina.'); return; }
+  if (!_tokenClient) { showToast('Google API no inicializada. Recarga la página.', 'error'); return; }
   if (_googleToken) { updateGoogleStatus(true); return; }
   _tokenClient.requestAccessToken({ prompt: '' });
 }
@@ -1308,7 +1418,7 @@ function renderDefaultUrlDisplay() {
 function loadDefaultSheet() {
   if (!_defaultSheetUrl) return;
   const id = extractSheetId(_defaultSheetUrl);
-  if (!id) { alert('La URL por defecto no es v\u00E1lida.'); return; }
+  if (!id) { showToast('La URL por defecto no es válida.', 'error'); return; }
   loadSheetById(id, 'Hoja por defecto');
 }
 function autoLoadDefaultSheet() {
@@ -1332,9 +1442,9 @@ function cancelDefaultUrlEdit() {
 }
 function saveDefaultUrlEdit() {
   const url = document.getElementById('default-url-edit-input').value.trim();
-  if (!url) { alert('Introduce una URL v\u00E1lida.'); return; }
+  if (!url) { showToast('Introduce una URL válida.', 'warning'); return; }
   let id = extractSheetId(url);
-  if (!id) { alert('URL no v\u00E1lida. Debe ser una URL de Google Sheets.'); return; }
+  if (!id) { showToast('URL no válida. Debe ser Google Sheets.', 'error'); return; }
   _defaultSheetUrl = url;
   SafeStorage.set('gsheet-default-url', url);
   cancelDefaultUrlEdit();
@@ -1356,9 +1466,9 @@ function showSetDefaultUrl() {
 }
 function saveNewDefaultUrl() {
   const url = document.getElementById('set-default-url-input').value.trim();
-  if (!url) { alert('Introduce una URL v\u00E1lida.'); return; }
+  if (!url) { showToast('Introduce una URL válida.', 'warning'); return; }
   let id = extractSheetId(url);
-  if (!id) { alert('URL no v\u00E1lida. Debe ser una URL de Google Sheets.'); return; }
+  if (!id) { showToast('URL no válida. Debe ser Google Sheets.', 'error'); return; }
   _defaultSheetUrl = url;
   SafeStorage.set('gsheet-default-url', url);
   document.getElementById('set-default-url-form').style.display = 'none';
@@ -1374,7 +1484,7 @@ function getAppId() {
   return m ? m[1] : '';
 }
 function openGooglePicker() {
-  if (!_pickerInited || !_googleToken) { alert('Inicia sesi\u00F3n con Google primero.'); return; }
+  if (!_pickerInited || !_googleToken) { showToast('Inicia sesión con Google primero.', 'warning'); return; }
   const view = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS).setIncludeFolders(true).setSelectFolderEnabled(false);
   const sharedView = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS).setIncludeFolders(true).setOwnedByMe(false);
   const picker = new google.picker.PickerBuilder()
@@ -1397,9 +1507,9 @@ function onPickerCallback(data) {
 // === LOAD FROM URL ===
 function loadFromUrl() {
   const url = document.getElementById('gsheet-url-input').value.trim();
-  if (!url) { alert('Pega la URL de la hoja de Google Sheets'); return; }
+  if (!url) { showToast('Pega la URL de la hoja de Google Sheets', 'warning'); return; }
   const id = extractSheetId(url);
-  if (!id) { alert('URL no v\u00E1lida. Debe ser una URL de Google Sheets.'); return; }
+  if (!id) { showToast('URL no válida. Debe ser Google Sheets.', 'error'); return; }
   loadSheetById(id, 'Google Sheet');
 }
 function extractSheetId(url) {
@@ -1411,21 +1521,21 @@ function extractSheetId(url) {
 
 // === LOAD SHEET DATA ===
 async function loadSheetById(sheetId, sheetName) {
-  if (!_googleToken) { alert('Inicia sesi\u00F3n con Google primero.'); return; }
+  if (!_googleToken) { showToast('Inicia sesión con Google primero.', 'warning'); return; }
   showGSheetLoading('Obteniendo informaci\u00F3n de la hoja...');
   try {
     const meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: sheetId, fields: 'properties.title,sheets.properties' });
     const title = meta.result.properties.title;
     const sheets = meta.result.sheets.map(s => ({ name: s.properties.title, index: s.properties.index }));
     const dataSheets = sheets.filter(s => s.name !== CONFIG_TAB_NAME && s.name !== PROPIETARIOS_TAB_NAME);
-    if (dataSheets.length === 0) { hideGSheetLoading(); alert('No se encontraron hojas de datos.'); return; }
+    if (dataSheets.length === 0) { hideGSheetLoading(); showToast('No se encontraron hojas de datos.', 'warning'); return; }
     if (dataSheets.length === 1) { await loadSheetData(sheetId, dataSheets[0].name, title); }
     else { hideGSheetLoading(); showSheetSelector(sheetId, dataSheets, title); }
   } catch(e) {
     hideGSheetLoading();
     const errMsg = safeGet(e, 'result.error.message', '');
     console.error('[GSheets] Error loading sheet:', errMsg || e);
-    alert(errMsg ? 'Error de Google Sheets: ' + errMsg : 'Error al cargar la hoja. Verifica que tienes acceso y que la URL es correcta.');
+    showToast(errMsg ? 'Error: ' + errMsg : 'Error al cargar la hoja. Verifica acceso y URL.', 'error', 5000);
   }
 }
 function showSheetSelector(sheetId, sheets, title) {
@@ -1455,7 +1565,7 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
       valueRenderOption: 'UNFORMATTED_VALUE', dateTimeRenderOption: 'SERIAL_NUMBER'
     });
     const rows = resp.result.values;
-    if (!rows || rows.length < 2) { hideGSheetLoading(); alert('La hoja est\u00E1 vac\u00EDa o no tiene datos suficientes.'); return; }
+    if (!rows || rows.length < 2) { hideGSheetLoading(); showToast('La hoja está vacía o no tiene datos suficientes.', 'warning'); return; }
     showGSheetLoading('Procesando ' + (rows.length - 1) + ' filas...');
     if (!processRows(rows)) { hideGSheetLoading(); return; }
 
@@ -1481,7 +1591,7 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
     hideGSheetLoading();
     const errMsg = safeGet(e, 'result.error.message', '');
     console.error('[GSheets] Error reading sheet data:', errMsg || e);
-    alert(errMsg ? 'Error al leer datos: ' + errMsg : 'Error al leer los datos de la hoja. Comprueba los permisos.');
+    showToast(errMsg ? 'Error: ' + errMsg : 'Error al leer datos. Comprueba los permisos.', 'error', 5000);
   }
 }
 
@@ -1713,7 +1823,7 @@ function editPropietarioInline(alojamiento, el) {
     if (val !== current) {
       inp.disabled = true; inp.style.opacity = '0.5';
       const ok = await savePropietario(alojamiento, val);
-      if (!ok) { alert('Error al guardar. \u00BFEst\u00E1s conectado a Google Sheets?'); }
+      if (!ok) { showToast('Error al guardar. ¿Estás conectado a Google Sheets?', 'error'); }
     }
     // Rebuild element
     const span = document.createElement('span');
@@ -2329,12 +2439,15 @@ function calcNights(e, s) {
   if (!a || !b) return 0; return Math.max(0, Math.round((b - a) / 86400000));
 }
 function parseNum(v) {
-  if (typeof v === "number") return v;
-  if (!v) return 0;
-  const s = String(v).trim();
-  // Spanish format: 1.400,00 \u2191 remove dots, replace comma with dot
-  if (s.includes(",")) return parseFloat(s.replace(/\./g, "").replace(",", ".")) || 0;
+  if (v == null || v === '') return 0;
+  var s = String(v).replace(/[^\d.,-]/g, '').replace(/\./g, '').replace(',', '.');
   return parseFloat(s) || 0;
+}
+function parseRate(v, min, max) {
+  var n = parseNum(v);
+  if (min !== undefined && n < min) n = min;
+  if (max !== undefined && n > max) n = max;
+  return n;
 }
 function getDefaultForPlatform(plat) { const o = platformOptions[plat]; return o && o.length ? o[0] / 100 : 0.10; }
 
@@ -2388,11 +2501,11 @@ function parseHtmlXls(text) {
 
 function processRows(json) {
   if (!json || !Array.isArray(json) || json.length < 2) {
-    alert("El archivo no contiene datos v\u00E1lidos.");
+    showToast("El archivo no contiene datos válidos.", "error");
     return false;
   }
   const headerRow = json.findIndex(r => r && r[0] && String(r[0]).includes("ID Reserva"));
-  if (headerRow === -1) { alert("No se encontr\u00F3 la cabecera 'ID Reserva'."); return false; }
+  if (headerRow === -1) { showToast("No se encontró la cabecera ID Reserva.", "error"); return false; }
 
   // Detect validation column in header
   const hdr = json[headerRow];
@@ -3957,7 +4070,7 @@ function addConsolExtra(alojName) {
   if (!label || !label.trim()) return;
   let amountStr = prompt('Importe base (sin IVA) en \u20AC:');
   let amount = parseFloat((amountStr||'').replace(',','.'));
-  if (isNaN(amount) || amount <= 0) { alert('Importe no v\u00E1lido'); return; }
+  if (isNaN(amount) || amount <= 0) { showToast('Importe no válido', 'warning'); return; }
   let extras = getConsolExtras(alojName);
   extras.push({ label: label.trim(), amount: amount });
   scheduleGlobalConfigSave();
@@ -4474,7 +4587,7 @@ function renderConfigModal() {
     const safe = name.replace(/[^a-zA-Z0-9]/g,'');
     pH += buildOS(name, "% sobre total reserva (IVA incl.)", platformOptions[name], "%", `add-plat-${safe}`, `addP_${safe}`, `delP_${safe}`);
     window[`addP_${safe}`] = function() { const inp=document.getElementById(`add-plat-${safe}`); const v=parseFloat(inp.value);
-      if(isNaN(v)||v<0||v>100){alert("Porcentaje v\u00E1lido: 0-100");return;} if(platformOptions[name].some(x=>Math.abs(x-v)<0.001)){alert("Ya existe.");return;}
+      if(isNaN(v)||v<0||v>100){showToast("Porcentaje válido: 0-100", "warning");return;} if(platformOptions[name].some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;}
       platformOptions[name].push(v); platformOptions[name].sort((a,b)=>a-b); inp.value=""; renderConfigModal(); };
     window[`delP_${safe}`] = function(i) { if(platformOptions[name].length<=1)return; platformOptions[name].splice(i,1); renderConfigModal(); };
   });
@@ -4504,8 +4617,8 @@ function addGTC(){aL(gtcOptions,"add-gtc",100);} function delGTC(i){dL(gtcOption
 function addAM(){aL(amenitiesOptions,"add-am",99999,false);} function delAM(i){dL(amenitiesOptions,i);}
 function addMT(){aL(maintenanceOptions,"add-mt",99999,false);} function delMT(i){dL(maintenanceOptions,i);}
 function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);const v=parseFloat(inp.value);
-  if(isP!==false){if(isNaN(v)||v<0||v>max){alert("Valor v\u00E1lido.");return;}}else{if(isNaN(v)||v<0){alert("Valor v\u00E1lido.");return;}}
-  if(list.some(x=>Math.abs(x-v)<0.001)){alert("Ya existe.");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}
+  if(isP!==false){if(isNaN(v)||v<0||v>max){showToast("Valor no válido.", "warning");return;}}else{if(isNaN(v)||v<0){showToast("Valor no válido.", "warning");return;}}
+  if(list.some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}
 function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal();}
 
 function buildGtcSplitSection() {

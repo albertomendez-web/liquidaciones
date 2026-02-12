@@ -944,9 +944,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.6.3';
-const APP_BUILD   = '2026-02-12T19:10:00+01:00';
-const APP_CHANGES = 'Fix: eliminar CE/CE2 en vista consolidada no actualizaba resumen inferior';
+const APP_VERSION = '2.6.4';
+const APP_BUILD   = '2026-02-12T19:30:00+01:00';
+const APP_CHANGES = 'Live: importes CE/CE2 se actualizan en tiempo real mientras tecleas (debounce 400ms)';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1063,6 +1063,18 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.6.4',
+    date: '2026-02-12',
+    changes: [
+      'Live input: importes CE/CE2 se actualizan en tiempo real mientras el usuario teclea',
+      'Delegaci\u00F3n de eventos: un solo listener document.input captura .ce-inp-amt y .ce2-inp-amt',
+      'Debounce 400ms evita re-renders excesivos durante escritura r\u00E1pida',
+      'Path ligero: actualiza cache + panel summary + footer stats sin reconstruir DOM completo',
+      'Vista consolidada: viewConsolDetail + re-apertura panel + restauraci\u00F3n cursor/selecci\u00F3n',
+      'Resumen consolidado (caja naranja CE / violeta CE2) se actualiza en tiempo real'
+    ]
+  },
   {
     version: '2.6.3',
     date: '2026-02-12',
@@ -3160,6 +3172,74 @@ function toggleCEPanel(idx, view) {
 }
 
 
+// === CE/CE2 LIVE INPUT DEBOUNCE (event delegation) ===
+var _ceInputTimer = null;
+document.addEventListener('input', function(e) {
+  var el = e.target;
+  var isCE = el.classList.contains('ce-inp-amt');
+  var isCE2 = el.classList.contains('ce2-inp-amt');
+  if (!isCE && !isCE2) return;
+  clearTimeout(_ceInputTimer);
+  _ceInputTimer = setTimeout(function() {
+    var row = el.closest('.ce-item-row') || el.closest('.ce2-item-row');
+    if (!row) return;
+    var panel = el.closest('[id^="ce-"]') || el.closest('[id^="ce2-"]');
+    if (!panel) return;
+    var prefix = isCE2 ? 'ce2-' : 'ce-';
+    var idMatch = panel.id.match(new RegExp(prefix + '([pc])panel-(\\d+)'));
+    if (!idMatch) return;
+    var view = idMatch[1], idx = parseInt(idMatch[2]);
+    var rows = panel.querySelectorAll(isCE2 ? '.ce2-item-row' : '.ce-item-row');
+    var itemIdx = Array.prototype.indexOf.call(rows, row);
+    if (itemIdx < 0) return;
+    var s = settings[idx]; if (!s) return;
+    var arr = isCE2 ? s.conceptosSinIVA : s.conceptosEspeciales;
+    if (!arr || !arr[itemIdx]) return;
+    var v = parseFloat(String(el.value).replace(/\./g,'').replace(',','.'));
+    if (isNaN(v)) v = 0;
+    if (arr[itemIdx].amount === v) return;
+    arr[itemIdx].amount = v;
+    // Lightweight path: update cache + summary without full DOM rebuild
+    var oldC = getLiq(allReservas[idx]);
+    invalidateCache(idx);
+    var newC = getLiq(allReservas[idx]);
+    if (isCE2) { _refreshCE2Summary(idx, view); }
+    else { _refreshCESummary(idx, view); }
+    _patchMainRowCells(idx, oldC, newC);
+    // Update footer stats
+    var st = _cachedFilteredStats;
+    if (st && oldC && newC) {
+      st.fL += (newC.totalLiq - oldC.totalLiq);
+      st.tLiq += (newC.totalLiq - oldC.totalLiq);
+      if (isCE2) { st.tCE2 += (newC.ceSinIvaTotal - oldC.ceSinIvaTotal); }
+      else { st.tCE += (newC.ceTotal - oldC.ceTotal); st.tBase += (newC.baseSinIVA - oldC.baseSinIVA); }
+      st.tSub += (newC.sub - oldC.sub);
+      _renderStatsFromCache(_lastFiltered, st);
+    }
+    // Update consol summary section if in consol view
+    if (view === 'c' && currentConsolAloj) {
+      var savedVal = el.value, savedSel = [el.selectionStart, el.selectionEnd];
+      viewConsolDetail(currentConsolAloj);
+      var newPanel = document.getElementById(prefix + view + 'panel-' + idx);
+      if (newPanel) {
+        newPanel.style.display = '';
+        if (isCE2) { _openCE2Panel = idx; _openCE2View = view; }
+        else { _openCEPanel = idx; _openCEView = view; }
+        var newRows = newPanel.querySelectorAll(isCE2 ? '.ce2-item-row' : '.ce-item-row');
+        if (newRows[itemIdx]) {
+          var newInp = newRows[itemIdx].querySelector(isCE2 ? '.ce2-inp-amt' : '.ce-inp-amt');
+          if (newInp) {
+            newInp.value = savedVal;
+            newInp.focus({preventScroll:true});
+            try { newInp.setSelectionRange(savedSel[0], savedSel[1]); } catch(e){}
+          }
+        }
+      }
+    }
+    scheduleReservaConfigSave(idx);
+  }, 400);
+});
+
 // === CE ENTER KEY HANDLERS (row-first, numbers async) ===
 function _ceKey(e, idx, view, isAmt) {
   if (e.key !== 'Enter') return;
@@ -3265,6 +3345,43 @@ function _ce2Key(e, idx, view, isAmt) {
   });
 }
 // Patch only numeric cells in main table row (no DOM rebuild, no scroll jump)
+// Live CE/CE2 sync: updates button+summary+cells while user types (before blur/save)
+function _liveCESync(idx, view) {
+  var v = view || 'p', s = settings[idx];
+  if (!s || !s.conceptosEspeciales) return;
+  var panel = document.getElementById('ce-' + v + 'panel-' + idx);
+  if (!panel) return;
+  var amts = panel.querySelectorAll('.ce-inp-amt');
+  amts.forEach(function(inp, i) {
+    if (i < s.conceptosEspeciales.length) {
+      var val = parseFloat(String(inp.value).replace(/\./g,'').replace(',','.'));
+      s.conceptosEspeciales[i].amount = isNaN(val) ? 0 : val;
+    }
+  });
+  var oldC = getLiq(allReservas[idx]);
+  invalidateCache(idx);
+  var newC = getLiq(allReservas[idx]);
+  _patchMainRowCells(idx, oldC, newC);
+  _refreshCESummary(idx, v);
+}
+function _liveCE2Sync(idx, view) {
+  var v = view || 'p', s = settings[idx];
+  if (!s || !s.conceptosSinIVA) return;
+  var panel = document.getElementById('ce2-' + v + 'panel-' + idx);
+  if (!panel) return;
+  var amts = panel.querySelectorAll('.ce2-inp-amt');
+  amts.forEach(function(inp, i) {
+    if (i < s.conceptosSinIVA.length) {
+      var val = parseFloat(String(inp.value).replace(/\./g,'').replace(',','.'));
+      s.conceptosSinIVA[i].amount = isNaN(val) ? 0 : val;
+    }
+  });
+  var oldC = getLiq(allReservas[idx]);
+  invalidateCache(idx);
+  var newC = getLiq(allReservas[idx]);
+  _patchMainRowCells(idx, oldC, newC);
+  _refreshCE2Summary(idx, v);
+}
 function _patchMainRowCells(idx, oldC, newC) {
   var mainRow = document.getElementById('row-' + idx);
   if (mainRow) {
@@ -3303,7 +3420,7 @@ function addCEItem(idx, view) {
   // Create new row via DOM (no full re-render)
   let row = document.createElement('div');
   row.className = 'ce-item-row ce-new';
-  row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',false)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',true)" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button>';
+  row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',false)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',true)"+v+"'\',false)" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button>';
   addLink.parentNode.insertBefore(row, addLink);
   row.querySelector('.ce-inp-label').focus({preventScroll:true});
   scheduleReservaConfigSave(idx);

@@ -944,9 +944,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.6.1';
-const APP_BUILD   = '2026-02-12T18:45:00+01:00';
-const APP_CHANGES = 'Fix parseNum: n\u00FAmeros nativos JS (con decimales) perd\u00EDan punto decimal al parsear';
+const APP_VERSION = '2.6.2';
+const APP_BUILD   = '2026-02-12T19:00:00+01:00';
+const APP_CHANGES = 'Resumen consolidado: desglose items C.E. Sin IVA dentro de la caja descontados';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1063,6 +1063,15 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.6.2',
+    date: '2026-02-12',
+    changes: [
+      'Resumen consolidado: caja C.E. Sin IVA descontados ahora muestra desglose de cada concepto',
+      'Cada item muestra nombre, importe y n\u00FAmero de reserva asociada',
+      'Estilo sub-fila: color #9f7aea, font-size 11px, indentado 12px'
+    ]
+  },
   {
     version: '2.6.1',
     date: '2026-02-12',
@@ -4660,6 +4669,7 @@ ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed
         ${buildPasarelaRows(calcs)}
 ${sumCE2 > 0 ? `<div class="no-print" style="background:#faf8ff;border:1px dashed #7c3aed;border-radius:6px;margin:4px 28px;padding:4px 12px;">
           <div class="consol-row" style="color:#7c3aed;font-size:12px;padding:4px 0;"><span>&#9888; C.E. Sin IVA descontados</span><span class="neg">- ${fmt(sumCE2)} &#8364;</span></div>
+          ${calcs.flatMap(x => (x.s.conceptosSinIVA||[]).filter(it=>it.amount>0).map(it=>({label:it.label||'Sin nombre',amount:it.amount,reserva:x.r.id}))).map(it=>`<div class="consol-row sub" style="color:#9f7aea;font-size:11px;padding:2px 0 2px 12px;"><span>${esc(it.label)} <span style="color:#c4b5fd;font-size:10px">(Res. ${esc(it.reserva)})</span></span><span class="neg">- ${fmt(it.amount)} &#8364;</span></div>`).join('')}
         </div>` : ''}
         <div class="consol-subtotal-reservas"><span>Subtotal Reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
 ${_isSplit ? `<div class="consol-split-box">

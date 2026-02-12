@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>Liquidaciones &mdash; Gesti&oacute;n de Reservas</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 
@@ -38,6 +38,24 @@
   /* Typography */
   --font-display: 'Inter', 'DM Sans', sans-serif;
   --font-body: 'DM Sans', 'Helvetica Neue', sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  /* Homity palette */
+  --hm-gold: #d4a843;
+  --hm-gold-bright: #e0b94f;
+  --hm-gold-deep: #b8912e;
+  --hm-gold-muted: #c9a64e;
+  --hm-gold-bg: rgba(212,168,67,0.07);
+  --hm-gold-bg2: rgba(212,168,67,0.12);
+  --hm-gold-border: rgba(212,168,67,0.25);
+  --hm-slate: #6b8a8f;
+  --hm-slate-dark: #4a6b72;
+  --hm-slate-deep: #2e4a52;
+  --hm-slate-night: #1c3038;
+  --hm-cream: #faf7f2;
+  --hm-cream-warm: #f5f0e8;
+  --hm-neg: #c0392b;
+  --hm-pos: #27ae60;
   /* Spacing */
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -259,25 +277,59 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-mini-table .ellip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
 
 /* LIQUIDACIÓN INDIVIDUAL */
-.liq-container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
-.liq-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color: #fff; padding: 36px 40px; }
-.liq-header .type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 4px; }
-.liq-header .name { font-size: 24px; font-weight: 800; font-family: var(--font-display); }
-.liq-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 24px; font-size: 13px; }
-.liq-meta-label { opacity: 0.5; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
-.liq-meta-value { font-weight: 600; margin-top: 2px; }
-.liq-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 40px; font-size: 14px; }
-.liq-row:nth-child(even) { background: #f8f9fb; }
-.liq-row.bold { font-weight: 700; }
-.liq-row .neg { color: #e53935; }
-.liq-row .pos { color: #43a047; }
-.liq-divider { height: 1px; background: #eef0f4; margin: 4px 40px; }
-.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 18px 40px; font-size: 18px; font-weight: 800; background: linear-gradient(135deg, var(--c-sidebar-start), var(--c-sidebar-end)); color: #fff; font-family: var(--font-display); }
-.liq-actions { display: flex; gap: 12px; justify-content: center; margin-top: 28px; }
-.header-top { display: flex; justify-content: space-between; align-items: flex-start; }
-.badge-liq { padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; }
-.badge-liq-green { background: rgba(67,160,71,0.2); color: #81c784; }
-.badge-liq-amber { background: rgba(255,183,77,0.2); color: #ffb74d; }
+.liq-container { max-width: 800px; margin: 0 auto; background: #fff; box-shadow: 0 4px 24px rgba(44,74,82,0.07), 0 1px 3px rgba(0,0,0,0.03); overflow: hidden; border: 1px solid #f0ece5; }
+.liq-gold-line { height: 3px; background: linear-gradient(90deg, var(--hm-gold-deep), var(--hm-gold), var(--hm-gold-bright), var(--hm-gold)); }
+.liq-header { background: linear-gradient(155deg, var(--hm-slate-night) 0%, var(--hm-slate-deep) 50%, var(--hm-slate-dark) 100%); color: #fff; padding: 34px 38px 28px; position: relative; }
+.liq-header .type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--hm-gold); margin-bottom: 6px; }
+.liq-header .name { font-size: 28px; font-weight: 600; font-family: var(--font-serif); line-height: 1.15; }
+.liq-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; margin-top: 0; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px; }
+.liq-meta-item { padding: 0 10px; }
+.liq-meta-item:first-child { padding-left: 0; }
+.liq-meta-item:not(:nth-child(3n)) { border-right: 1px solid rgba(255,255,255,0.06); }
+.liq-meta-item + .liq-meta-item + .liq-meta-item + .liq-meta-item { margin-top: 14px; }
+.liq-meta-label { font-size: 8.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hm-gold-muted); margin-bottom: 3px; }
+.liq-meta-value { font-weight: 500; margin-top: 2px; font-size: 12.5px; color: rgba(255,255,255,0.8); }
+.liq-sec-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: #9ca8ab; padding: 16px 38px 2px; }
+.liq-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 38px; font-size: 13.5px; transition: background 0.12s; }
+.liq-row:hover { background: rgba(107,138,143,0.06); }
+.liq-row.bold { font-weight: 700; font-size: 14px; padding: 13px 38px; background: var(--hm-cream); }
+.liq-row .neg { color: var(--hm-neg); }
+.liq-row .pos { color: var(--hm-pos); }
+.liq-row .liq-val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; min-width: 115px; text-align: right; white-space: nowrap; }
+.liq-divider { height: 1px; background: #f0ece5; margin: 3px 38px; }
+.liq-sec + .liq-sec { border-top: 1px solid #f0ece5; }
+.liq-sel { font-family: var(--font-body); font-size: 11.5px; font-weight: 600; color: var(--hm-slate-deep); background: var(--hm-cream-warm); border: 1px solid #e8e3db; border-radius: 3px; padding: 3px 20px 3px 7px; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M1 1l3 3 3-3' stroke='%234a6b72' fill='none' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 5px center; margin-left: 4px; transition: all 0.15s; }
+.liq-sel:hover { border-color: var(--hm-gold-muted); }
+.liq-sel:focus { border-color: var(--hm-gold); box-shadow: 0 0 0 2px var(--hm-gold-bg2); }
+/* Pasarela integrated row */
+.liq-pas-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 38px; font-size: 13.5px; transition: background 0.12s; }
+.liq-pas-row:hover { background: rgba(107,138,143,0.06); }
+.liq-pas-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+.liq-sw { position: relative; width: 34px; height: 18px; cursor: pointer; flex-shrink: 0; display: inline-block; }
+.liq-sw input { display: none; }
+.liq-sw-track { width: 100%; height: 100%; border-radius: 9px; background: #ccc8be; transition: background 0.2s; position: relative; }
+.liq-sw input:checked + .liq-sw-track { background: var(--hm-gold); }
+.liq-sw-thumb { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,0.15); transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1); }
+.liq-sw input:checked + .liq-sw-track .liq-sw-thumb { transform: translateX(16px); }
+.liq-pas-val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--hm-neg); min-width: 115px; text-align: right; transition: all 0.2s; }
+.liq-pas-val.off { color: #9ca8ab; opacity: 0.4; text-decoration: line-through; }
+/* CE2 section */
+.liq-ce2 { border-top: 1px solid #f0ece5; background: var(--hm-gold-bg); position: relative; }
+.liq-ce2::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--hm-gold), var(--hm-gold-bright), transparent); }
+.liq-ce2 .liq-sec-label { color: var(--hm-gold-deep); }
+.liq-ce2 .liq-val { color: var(--hm-neg); }
+.liq-ce2-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--hm-gold); margin-right: 6px; vertical-align: middle; }
+/* Total */
+.liq-total-bar { }
+.liq-total-bar::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, var(--hm-gold), var(--hm-gold-bright), var(--hm-gold-deep)); }
+.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 38px; background: linear-gradient(155deg, var(--hm-slate-night), var(--hm-slate-deep)); color: #fff; }
+.liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.45); }
+.liq-total-value { font-family: var(--font-serif); font-size: 30px; font-weight: 700; color: var(--hm-gold-bright); }
+.liq-actions { display: flex; gap: 10px; justify-content: center; padding: 24px 38px; background: var(--hm-cream); border-top: 1px solid #f0ece5; }
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 26px; }
+.badge-liq { padding: 4px 14px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.badge-liq-green { background: rgba(39,174,96,0.12); color: #6fcf97; border: 1px solid rgba(39,174,96,0.25); }
+.badge-liq-amber { background: var(--hm-gold-bg2); color: var(--hm-gold-bright); border: 1px solid var(--hm-gold-border); }
 
 .screen { display: none; }
 .screen.active { display: block; animation: screenFadeIn 0.2s ease; }
@@ -348,9 +400,16 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* Individual liquidaci&oacute;n */
   .liq-row { padding: 6px 20px !important; font-size: 11px !important; }
+  .liq-pas-row { padding: 6px 20px !important; font-size: 11px !important; }
   .liq-divider { margin: 2px 20px !important; }
   .liq-total { padding: 10px 20px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-total-value { font-size: 20px !important; }
   .liq-header { padding: 16px 20px !important; }
+  .liq-gold-line, .liq-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-ce2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-sec-label { padding: 8px 20px 2px !important; font-size: 8px !important; }
+  .liq-actions { display: none !important; }
+  .liq-sw { display: none !important; }
 
   /* Print cards: keep each card together, break between them */
   .print-card { page-break-inside: avoid !important; break-inside: avoid !important; margin-bottom: 12px !important; }
@@ -885,9 +944,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.4.9';
-const APP_BUILD   = '2026-02-12T12:50:33+01:00';
-const APP_CHANGES = 'Fix critico: rango Config leía A:I, faltaba columna J (conceptosSinIVA)';
+const APP_VERSION = '2.5.0';
+const APP_BUILD   = '2026-02-12T14:30:00+01:00';
+const APP_CHANGES = 'Redise\u00F1o visual Homity: paleta dorado/slate, tipograf\u00EDa serif, switch pasarela, CE2 gold section';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1004,6 +1063,27 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.5.0',
+    date: '2026-02-12',
+    changes: [
+      'Redise\u00F1o completo detalle liquidaci\u00F3n con identidad Homity Holidays',
+      'Paleta dorado (#d4a843) + slate (#2e4a52) extra\u00EDda del branding h\u00F4mity holidays',
+      'Tipograf\u00EDa: Cormorant Garamond (serif display), JetBrains Mono (importes)',
+      'Header slate con l\u00EDnea dorada separadora, labels dorado muted',
+      'Secciones con liq-sec, liq-sec-label para estructura sem\u00E1ntica',
+      'Pasarela integrada: switch dorado + select + valor en fila \u00FAnica',
+      'Switch desactivado: label gris, select oculto, valor tachado',
+      'Secci\u00F3n CE2 con fondo dorado sutil, l\u00EDnea gold superior, dots dorados',
+      'Total: barra dorada + fondo slate con importe en Cormorant 30px',
+      'Badges: pendiente dorado outline, validada verde outline',
+      'Selects: fondo cream, focus glow dorado, flecha SVG custom',
+      'Bot\u00F3n Validar dorado, Imprimir outlined',
+      'Print styles actualizados para nuevas clases',
+      'Eliminado border-radius (est\u00E9tica editorial resort)',
+      'Valores mon con font-mono JetBrains para alineaci\u00F3n tabular'
+    ]
+  },
   {
     version: '2.4.9',
     date: '2026-02-12',
@@ -3904,88 +3984,92 @@ function goToReserva(idx) {
   }, 100);
 }
 
-// \u2500\u2500\u2500 INDIVIDUAL DETAIL \u2500\u2500\u2500
+// \\u2500\\u2500\\u2500 INDIVIDUAL DETAIL \\u2500\\u2500\\u2500
 function viewDetail(idx) {
   currentDetailIdx = idx;
   const r=allReservas.find(x=>x.idx===idx); if(!r)return;
   const s=settings[r.idx]||{},c=calcLiquidacion(r,s),isV=validated.has(r.idx),isB=r.plataforma==="Booking.com";
   const pasL=isB?"Booking":"Stripe",pasR=s.pasarelaRate!==undefined?s.pasarelaRate:(isB?pasarelaBookingOptions[0]/100:pasarelaStripeOptions[0]/100);
-  const _vd = (idx, key, val) => `changeSetting(${idx},'${key}',parseFloat(this.value));viewDetail(${idx})`;
+  const _vd = (idx, key) => `changeSetting(${idx},'${key}',parseFloat(this.value));viewDetail(${idx})`;
   const _sel = (opts, current, idx, key, unitPct) => {
     if(isV) return unitPct ? `(${(current*100).toFixed(1)}%)` : ``;
-    return `<select class="sel" style="font-size:12px;padding:3px 6px;margin-left:6px;" onchange="${_vd(idx,key)}">` +
+    return `<select class="liq-sel" onchange="${_vd(idx,key)}">` +
       opts.map(o => { const v = unitPct ? o/100 : o;
         return `<option value="${v}" ${Math.abs(current-v)<0.0001?'selected':''}>${unitPct?o+'%':o+' &#8364;'}</option>`;
       }).join('') + `</select>`;
   };
-
+  const fv = (v) => { const d = v < 0 ? `\u2212 ${fmt(Math.abs(v))}` : (v > 0 ? `+ ${fmt(v)}` : fmt(v)); return d + ' \u20AC'; };
   const platOpts = platformOptions[r.plataforma]||[10];
   const pasOpts = isB ? pasarelaBookingOptions : pasarelaStripeOptions;
+  const _prop = getPropietario(r.alojamiento);
+  const _propStyle = _prop === 'Falta propietario' ? ' style="color:#c0392b;cursor:pointer" ' : ' style="cursor:pointer" ';
+  const _propClick = `editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)`;
 
-  const comPlatLabel = `Canal de Venta ${r.plataforma} ` + _sel(platOpts, c.comRate, r.idx, 'comPlataforma', true);
-  const comGTCLabel = `Gesti\u00F3n GTC ` + _sel(gtcOptions, c.gtcRate, r.idx, 'comGTC', true);
-  const limpLabel = `Limpieza ` + _sel(cleaningOptions, c.limp, r.idx, 'limpieza', false);
-  const amenLabel = `Amenities ` + _sel(amenitiesOptions, c.amen, r.idx, 'amenities', false);
+  // Build pasarela row HTML
+  let pasHtml = '';
+  if (!isV) {
+    const chk = s.pasarela ? 'checked' : '';
+    const pasSelHtml = s.pasarela ? _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true) : '';
+    const lblStyle = s.pasarela ? '' : ' style="color:#9ca8ab;opacity:0.5"';
+    const valCls = s.pasarela ? 'liq-pas-val' : 'liq-pas-val off';
+    pasHtml = `<div class="liq-pas-row"><div class="liq-pas-left">` +
+      `<label class="liq-sw" onclick="togglePasarela(${r.idx});setTimeout(function(){viewDetail(${r.idx})},50)"><input type="checkbox" ${chk}><div class="liq-sw-track"><div class="liq-sw-thumb"></div></div></label>` +
+      `<span${lblStyle}>Pasarela ${pasL} ${pasSelHtml}</span></div>` +
+      `<span class="${valCls}">${fv(-c.comPas)}</span></div>`;
+  } else if (s.pasarela) {
+    pasHtml = `<div class="liq-row"><span>Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)</span><span class="liq-val neg">${fv(-c.comPas)}</span></div>`;
+  }
 
-  const rows=[];
-  rows.push({l:"Total Reserva (IVA incluido)",v:c.total,bold:true});
-  rows.push({l:`IVA Reserva (${(IVA_RESERVA*100).toFixed(0)}%)`,v:-(c.total-c.baseSinIVA),neg:true},
-    {l:"Base sin IVA",v:c.baseSinIVA,bold:true},{div:true},
-    {l:comPlatLabel,v:-c.comPlat,neg:true},{div:true},
-    {l:comGTCLabel,v:-c.comGTC,neg:true},
-    {l:limpLabel,v:-c.limp,neg:true},
-    {l:amenLabel,v:-c.amen,neg:true},{div:true}
-  );
-  if(s.pasarela){
-    const pasLabel = isV ? `Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`
-      : `Pasarela de pago ${pasL} ` + _sel(pasOpts, pasR, r.idx, 'pasarelaRate', true);
-    rows.push({l:pasLabel,v:-c.comPas,neg:true});
-  }
-  // Pasarela toggle row (only if not validated)
-  if(!isV){
-    const toggleHtml = `<div style="display:inline-flex;align-items:center;gap:8px;margin-left:6px;">` +
-      `<div class="toggle" onclick="togglePasarela(${r.idx});viewDetail(${r.idx})"><div class="toggle-track ${s.pasarela?'on':''}"><div class="toggle-thumb"></div></div></div>` +
-      `<span style="font-size:12px;color:#6b7280;">${s.pasarela?'Activada':'Desactivada'}</span></div>`;
-    if(!s.pasarela) rows.push({l:`Pasarela ${pasL} ${toggleHtml}`,v:0,custom:true});
-    else rows.push({l:`${toggleHtml}`,v:0,custom:true});
-  }
-  // CE Sin IVA items in detail view
+  // Build CE2 section
+  let ce2Html = '';
   if (c.ceSinIvaTotal > 0) {
     const ce2Items = s.conceptosSinIVA || [];
+    let ce2Rows = '';
     ce2Items.forEach(function(item) {
-      if (item.amount > 0) rows.push({l:`C.E. Sin IVA: ${item.label || 'Sin nombre'}`,v:-item.amount,neg:true});
+      if (item.amount > 0) ce2Rows += `<div class="liq-row"><span><span class="liq-ce2-dot"></span>${esc(item.label || 'Sin nombre')}</span><span class="liq-val">${fv(-item.amount)}</span></div>`;
     });
+    if (ce2Rows) {
+      ce2Html = `<div class="liq-ce2"><div class="liq-sec-label">Conceptos Especiales (sin IVA)</div>${ce2Rows}</div>`;
+    }
   }
-  rows.push({div:true},
-    {l:"Subtotal",v:c.sub,bold:true},
-    {l:"__IRPF__",v:-c.ret,neg:true,irpf:true},
-    {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
-  const irpfSelHtml = isV ? `Retenci&#243;n IRPF (${(c.irpfRate*100).toFixed(0)}%)`
-    : `Retenci&#243;n IRPF ` + _sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true);
-  let rH=rows.map(row=>{if(row.div)return'<div class="liq-divider"></div>';
-    if(row.custom)return`<div class="liq-row" style="justify-content:flex-end;"><span>${row.l}</span></div>`;
-    const cl=row.bold?' bold':'';const vc=row.neg?'neg':row.pos?'pos':'';
-    const d=row.v<0?`- ${fmt(Math.abs(row.v))}`:fmt(row.v);
-    const label=row.irpf?irpfSelHtml:row.l;
-    return`<div class="liq-row${cl}"><span>${label}</span><span class="${vc}">${d} &#8364;</span></div>`;}).join("");
-    const _prop = getPropietario(r.alojamiento);
-    const _propStyle = _prop === 'Falta propietario' ? ' style="color:#e53935;cursor:pointer" ' : ' style="cursor:pointer" ';
-    document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
-    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidaci\u00F3n':'Preliquidaci\u00F3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="editPropietarioInline('${r.alojamiento.replace(/'/g,"\\'")}', this)">${_prop}</div></div>
+
+  document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
+    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidaci\u00F3n':'Preliquidaci\u00F3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="${_propClick}">${_prop}</div></div>
     <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; VALIDADA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div></div>
-    <div class="liq-meta"><div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
-    <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
-    <div><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
-    <div><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
-    <div><div class="liq-meta-label">Localizador</div><div class="liq-meta-value" style="font-size:11px">${r.localizador}</div></div>
-    <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div></div></div>
-    <div style="padding:8px 0;">${rH}</div>
-    <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(c.totalLiq)} \u20AC</span></div></div>
+    <div class="liq-meta"><div class="liq-meta-item"><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
+    <div class="liq-meta-item"><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
+    <div class="liq-meta-item"><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
+    <div class="liq-meta-item"><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
+    <div class="liq-meta-item"><div class="liq-meta-label">Localizador</div><div class="liq-meta-value" style="font-size:11px">${r.localizador}</div></div>
+    <div class="liq-meta-item"><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div></div></div>
+    <div class="liq-gold-line"></div>
+    <div class="liq-sec">
+      <div class="liq-row bold"><span>Total Reserva (IVA incluido)</span><span class="liq-val">${fv(c.total)}</span></div>
+      <div class="liq-row"><span>IVA Reserva (${(IVA_RESERVA*100).toFixed(0)}%)</span><span class="liq-val neg">${fv(-(c.total-c.baseSinIVA))}</span></div>
+      <div class="liq-row bold"><span>Base sin IVA</span><span class="liq-val">${fv(c.baseSinIVA)}</span></div>
+    </div>
+    <div class="liq-sec">
+      <div class="liq-sec-label">Deducciones</div>
+      <div class="liq-row"><span>Canal de Venta ${esc(r.plataforma)} ${_sel(platOpts, c.comRate, r.idx, 'comPlataforma', true)}</span><span class="liq-val neg">${fv(-c.comPlat)}</span></div>
+      <div class="liq-row"><span>Gesti\u00F3n GTC ${_sel(gtcOptions, c.gtcRate, r.idx, 'comGTC', true)}</span><span class="liq-val neg">${fv(-c.comGTC)}</span></div>
+      <div class="liq-row"><span>Limpieza ${_sel(cleaningOptions, c.limp, r.idx, 'limpieza', false)}</span><span class="liq-val neg">${fv(-c.limp)}</span></div>
+      <div class="liq-row"><span>Amenities ${_sel(amenitiesOptions, c.amen, r.idx, 'amenities', false)}</span><span class="liq-val neg">${fv(-c.amen)}</span></div>
+      <div class="liq-divider"></div>
+      ${pasHtml}
+    </div>
+    ${ce2Html}
+    <div class="liq-sec">
+      <div class="liq-row bold"><span>Subtotal</span><span class="liq-val">${fv(c.sub)}</span></div>
+      <div class="liq-row"><span>Retenci\u00F3n IRPF ${_sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true)}</span><span class="liq-val neg">${fv(-c.ret)}</span></div>
+      <div class="liq-row"><span>IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)</span><span class="liq-val pos">${fv(c.iva)}</span></div>
+    </div>
+    <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} \u20AC</span></div></div></div>
     <div class="liq-actions no-print">
-      ${!isV?`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
-      <button class="btn btn-outline" onclick="window.print()">&#128424; Imprimir</button></div>`;
+      ${!isV?`<button class="btn" style="background:var(--hm-gold);color:var(--hm-slate-night);font-weight:700;font-size:11px;padding:10px 26px;text-transform:uppercase;letter-spacing:0.06em;border:none;cursor:pointer;box-shadow:0 2px 8px rgba(212,168,67,0.3)" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
+      <button class="btn" style="background:transparent;color:var(--hm-slate-dark);border:1.5px solid #e8e3db;font-weight:700;font-size:11px;padding:10px 26px;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer" onclick="window.print()">&#128424; Imprimir</button></div>`;
   document.getElementById("nav-detail").style.display="block"; showScreen("detail");
 }
+
 
 // \u2500\u2500\u2500 CONSOLIDATED GRID \u2500\u2500\u2500
 let _alojCache = null;

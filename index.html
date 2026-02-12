@@ -182,6 +182,10 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-monthly-box { background: #f0fdf4; border: 1.5px dashed #16a34a; border-radius: 8px; margin: 8px 20px; padding: 4px 8px; }
 .consol-monthly-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #16a34a; padding: 6px 8px 4px; }
 .consol-monthly-box .consol-row { padding: 8px 8px; border-radius: 4px; }
+.consol-split-box { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border: 2px solid #a855f7; border-radius: 10px; margin: 8px 20px; padding: 4px 8px; }
+.consol-split-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7c3aed; padding: 6px 8px 4px; }
+.consol-split-box .consol-row { padding: 8px 8px; border-radius: 4px; }
+.consol-split-divider { height: 1px; background: #d8b4fe; margin: 2px 8px; }
 .consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; font-size: 15px; font-weight: 700; background: #f0f2f5; }
 .consol-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; font-size: 20px; font-weight: 700; background: #0f1628; color: #fff; border-radius: 0 0 14px 14px; }
 .consol-mini-table { margin: 0; width: 100%; table-layout: auto; }
@@ -802,9 +806,9 @@ function clearSearchConsol() {
  * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¡ 7. NUNCA reutilizar un nÃƒÆ’Ã‚Âºmero de versiÃƒÆ’Ã‚Â³n ya existente          ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
  * ÃƒÂ¢Ã¢â‚¬Â¢Ã…Â¡ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
  */
-const APP_VERSION = '2.2.0';
-const APP_BUILD   = '2026-02-12T22:45:00+01:00';
-const APP_CHANGES = 'Nuevo orden resumen: Subtotal Reservas + Conceptos Ext. Mes';
+const APP_VERSION = '2.3.0';
+const APP_BUILD   = '2026-02-12T23:15:00+01:00';
+const APP_CHANGES = 'Reparto 80/20 GTC para alojamientos con condicion especial';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -895,6 +899,13 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  { version: '2.3.0', date: '2026-02-12T23:15:00+01:00', changes: [
+    'Reparto 80/20 GTC: alojamientos con condici\u00F3n especial retienen 20% para GTC del Subtotal Reservas',
+    'Caja violeta de reparto entre Subtotal Reservas y Conceptos Extraordinarios del Mes',
+    'IRPF e IVA se calculan sobre Subtotal Final Mes (80% \u2212 conceptos ext.)',
+    'Lista de alojamientos especiales persistida en pesta\u00F1a Configuraci\u00F3n de Google Sheets',
+    'Versi\u00F3n impresa incluye desglose del reparto GTC/Propietario'
+  ]},
   { version: '2.2.0', date: '2026-02-12T22:45:00+01:00', changes: [
     'Nuevo orden resumen consolidado: sigue orden columnas tabla (Amenities \u2192 Pasarela \u2192 C.E. Sin IVA)',
     'Nuevo Subtotal Reservas: subtotal intermedio que cierra deducciones por reserva',
@@ -1759,6 +1770,7 @@ function buildGlobalConfigRows() {
   rows.push(['gtc', gtcOptions.join(',')]);
   rows.push(['amenities', amenitiesOptions.join(',')]);
   rows.push(['mantenimiento', maintenanceOptions.join(',')]);
+  rows.push(['gtc_split', _gtcSplitAlojamientos.join(',')]);
   // Per-consolidation monthly deductions
   Object.keys(_consolMaint).forEach(function(k) {
     const m = _consolMaint[k];
@@ -1902,6 +1914,9 @@ function applyConfigFromRows(rows) {
       } else if (key === 'mantenimiento') {
         const newMaint = val.split(',').map(function(v) { return parseFloat(v.trim()); }).filter(function(v) { return !isNaN(v); });
         if (newMaint.length > 0) maintenanceOptions = newMaint;
+      } else if (key === 'gtc_split') {
+        const splitList = val.split(',').map(function(v) { return v.trim(); }).filter(Boolean);
+        if (splitList.length > 0) _gtcSplitAlojamientos = splitList;
       } else if (key.startsWith('maint:')) {
         const maintAloj = key.substring(6);
         const parts = val.split(',');
@@ -2113,6 +2128,11 @@ let maintenanceOptions = [80];
 // Per-consolidation monthly deductions (keyed by alojamiento name)
 let _consolMaint = {}; // { alojName: { enabled:true, amount:80 } }
 let _consolExtras = {}; // { alojName: [ { label:'...', amount:123.45 } ] }
+
+// Special 80/20 GTC split alojamientos
+const GTC_SPLIT_RATE = 0.20; // GTC retains 20%, owner gets 80%
+let _gtcSplitAlojamientos = ['MA-2-P2-1A','MA-2-P3-1C','MA-2-P3-1D','MA-2-P3-1E','MA-2-P4-1C','MG-2-0D'];
+function isGtcSplit(alojName) { return _gtcSplitAlojamientos.some(function(a){ return alojName === a || alojName.indexOf(a) !== -1; }); }
 
 function getConsolMaint(alojName) {
   if (!_consolMaint[alojName]) _consolMaint[alojName] = { enabled: true, amount: maintenanceOptions[0] };
@@ -4053,7 +4073,10 @@ function viewConsolDetail(alojName) {
 
   const _dedHtml = buildConsolDeductionsHtml(alojName);
   const _ded = getConsolDeductions(alojName);
-  const adjSub = sumSub - _ded.totalBase;
+  const _isSplit = isGtcSplit(alojName);
+  const _gtcSplitAmt = _isSplit ? sumSub * GTC_SPLIT_RATE : 0;
+  const _ownerBase = _isSplit ? sumSub - _gtcSplitAmt : sumSub;
+  const adjSub = _ownerBase - _ded.totalBase;
   const avgIrpfRate = sumSub > 0 ? sumRet / sumSub : 0;
   const adjRet = adjSub * avgIrpfRate;
   const adjIva = adjSub * IVA_SUBTOTAL;
@@ -4125,6 +4148,12 @@ ${sumCE2 > 0 ? `<div class="no-print" style="background:#faf8ff;border:1px dashe
           <div class="consol-row" style="color:#7c3aed;font-size:12px;padding:4px 0;"><span>&#9888; C.E. Sin IVA descontados</span><span class="neg">- ${fmt(sumCE2)} &#8364;</span></div>
         </div>` : ''}
         <div class="consol-subtotal-reservas"><span>Subtotal Reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
+${_isSplit ? `<div class="consol-split-box">
+          <div class="consol-split-title">&#8621; Reparto GTC / Propietario &mdash; Condici\u00F3n Especial</div>
+          <div class="consol-row bold" style="color:#7c3aed;"><span>GTC retiene (${(GTC_SPLIT_RATE*100).toFixed(0)}%)</span><span>${fmt(_gtcSplitAmt)} &#8364;</span></div>
+          <div class="consol-split-divider"></div>
+          <div class="consol-row bold" style="color:#16a34a;"><span>Propietario recibe (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span>${fmt(_ownerBase)} &#8364;</span></div>
+        </div>` : ''}
         <div class="consol-monthly-box no-print">
           <div class="consol-monthly-title">&#128197; Conceptos Extraordinarios del Mes</div>
           ${_dedHtml}
@@ -4275,11 +4304,17 @@ function buildPrintCards() {
 
   const _printDed = getConsolDeductions(a.name);
   const _printDedHtml = buildPrintDeductionsHtml(a.name);
-  const _pAdjSub = sumSub - _printDed.totalBase;
+  const _pIsSplit = isGtcSplit(a.name);
+  const _pGtcSplit = _pIsSplit ? sumSub * GTC_SPLIT_RATE : 0;
+  const _pOwnerBase = _pIsSplit ? sumSub - _pGtcSplit : sumSub;
+  const _pAdjSub = _pOwnerBase - _printDed.totalBase;
   const _pAvgIrpf = sumSub > 0 ? sumRet / sumSub : 0;
   const _pAdjRet = _pAdjSub * _pAvgIrpf;
   const _pAdjIva = _pAdjSub * IVA_SUBTOTAL;
   const _pAdjLiq = _pAdjSub - _pAdjRet + _pAdjIva;
+  const _pSplitHtml = _pIsSplit ? `<div class="liq-divider"></div>
+      <div class="liq-row" style="color:#7c3aed;"><span>GTC retiene (${(GTC_SPLIT_RATE*100).toFixed(0)}%)</span><span>${fmt(_pGtcSplit)} &#8364;</span></div>
+      <div class="liq-row bold" style="color:#16a34a;"><span>Propietario recibe (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span>${fmt(_pOwnerBase)} &#8364;</span></div>` : '';
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-header">
       <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
@@ -4291,6 +4326,7 @@ function buildPrintCards() {
     </div>
     <div style="padding:8px 0;">
       <div class="liq-row bold"><span>Subtotal Reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
+      ${_pSplitHtml}
       ${_printDedHtml}
       <div class="liq-divider"></div>
       <div class="liq-row bold"><span>Subtotal Final Mes</span><span>${fmt(_pAdjSub)} &#8364;</span></div>

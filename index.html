@@ -885,9 +885,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.4.3';
-const APP_BUILD   = '2026-02-12T12:05:41+01:00';
-const APP_CHANGES = 'CE Enter sin re-render: guardado directo + patch ligero';
+const APP_VERSION = '2.4.4';
+const APP_BUILD   = '2026-02-12T12:10:27+01:00';
+const APP_CHANGES = 'CE Enter zero-jump: row-first + preventScroll + async numbers';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1004,6 +1004,16 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.4.4',
+    date: '2026-02-12',
+    changes: [
+      'CE Enter zero-jump: fila nueva PRIMERO, números actualizados en siguiente frame',
+      'focus({preventScroll:true}) en todos los focus de CE/CE2 (6 puntos)',
+      'requestAnimationFrame para desacoplar actualización de cache/stats del DOM',
+      'Elimina layout thrashing: no hay lectura+escritura DOM intercalada'
+    ]
+  },
   {
     version: '2.4.3',
     date: '2026-02-12',
@@ -2971,13 +2981,13 @@ function toggleCEPanel(idx, view) {
 }
 
 
-// === CE ENTER KEY HANDLERS (lightweight, no re-render) ===
+// === CE ENTER KEY HANDLERS (row-first, numbers async) ===
 function _ceKey(e, idx, view, isAmt) {
   if (e.key !== 'Enter') return;
   e.preventDefault();
   if (!isAmt) {
     var amt = e.target.parentNode.querySelector('.ce-inp-amt');
-    if (amt) { amt.focus(); amt.select(); }
+    if (amt) { amt.focus({preventScroll:true}); amt.select(); }
     return;
   }
   var inp = e.target;
@@ -2986,31 +2996,32 @@ function _ceKey(e, idx, view, isAmt) {
   if (!panel) return;
   var rows = panel.querySelectorAll('.ce-item-row');
   var itemIdx = Array.prototype.indexOf.call(rows, row);
-  // 1. Save value directly to data model (skip onchange chain)
+  // 1. Save value to model + prevent onchange double-fire
   var val = parseFloat(String(inp.value).replace(/\./g,'').replace(',','.'));
   if (isNaN(val)) val = 0;
   var s = settings[idx];
   if (s && s.conceptosEspeciales && s.conceptosEspeciales[itemIdx]) {
     s.conceptosEspeciales[itemIdx].amount = val;
   }
-  // 2. Prevent onchange from double-firing on natural blur
   inp.removeAttribute('onchange');
-  // 3. Lightweight update: cache + summary + main row cells only
-  var oldC = getLiq(allReservas[idx]);
-  invalidateCache(idx);
-  var newC = getLiq(allReservas[idx]);
-  _refreshCESummary(idx, view);
-  _patchMainRowCells(idx, oldC, newC);
-  scheduleReservaConfigSave(idx);
-  // 4. Add new row smoothly (no re-render)
+  // 2. Add new row FIRST (instant visual feedback, no jump)
   addCEItem(idx, view);
+  // 3. Update numbers in next frame (user doesn't see the delay)
+  requestAnimationFrame(function() {
+    var oldC = getLiq(allReservas[idx]);
+    invalidateCache(idx);
+    var newC = getLiq(allReservas[idx]);
+    _refreshCESummary(idx, view);
+    _patchMainRowCells(idx, oldC, newC);
+    scheduleReservaConfigSave(idx);
+  });
 }
 function _ce2Key(e, idx, view, isAmt) {
   if (e.key !== 'Enter') return;
   e.preventDefault();
   if (!isAmt) {
     var amt = e.target.parentNode.querySelector('.ce2-inp-amt');
-    if (amt) { amt.focus(); amt.select(); }
+    if (amt) { amt.focus({preventScroll:true}); amt.select(); }
     return;
   }
   var inp = e.target;
@@ -3026,13 +3037,15 @@ function _ce2Key(e, idx, view, isAmt) {
     s.conceptosEspeciales2[itemIdx].amount = val;
   }
   inp.removeAttribute('onchange');
-  var oldC = getLiq(allReservas[idx]);
-  invalidateCache(idx);
-  var newC = getLiq(allReservas[idx]);
-  _refreshCE2Summary(idx, view);
-  _patchMainRowCells(idx, oldC, newC);
-  scheduleReservaConfigSave(idx);
   addCE2Item(idx, view);
+  requestAnimationFrame(function() {
+    var oldC = getLiq(allReservas[idx]);
+    invalidateCache(idx);
+    var newC = getLiq(allReservas[idx]);
+    _refreshCE2Summary(idx, view);
+    _patchMainRowCells(idx, oldC, newC);
+    scheduleReservaConfigSave(idx);
+  });
 }
 // Patch only numeric cells in main table row (no DOM rebuild, no scroll jump)
 function _patchMainRowCells(idx, oldC, newC) {
@@ -3070,7 +3083,7 @@ function addCEItem(idx, view) {
   row.className = 'ce-item-row ce-new';
   row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',false)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',true)" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button>';
   addLink.parentNode.insertBefore(row, addLink);
-  row.querySelector('.ce-inp-label').focus();
+  row.querySelector('.ce-inp-label').focus({preventScroll:true});
   scheduleReservaConfigSave(idx);
 }
 
@@ -3198,7 +3211,7 @@ function _refreshCEPanel(idx, view) {
   if (wrap) wrap.scrollTop = scrollY;
   // Auto-focus the last added label input
   let labels = panel.querySelectorAll('.ce-inp-label');
-  if (labels.length > 0) labels[labels.length - 1].focus();
+  if (labels.length > 0) labels[labels.length - 1].focus({preventScroll:true});
 }
 
 // === CE2: CONCEPTOS ESPECIALES SIN IVA (violet) ===
@@ -3267,7 +3280,7 @@ function addCE2Item(idx, view) {
   row.className = 'ce2-item-row ce2-new';
   row.innerHTML = '<input class="ce2-inp-label" type="text" value="" onchange="updateCE2Item('+idx+','+i+',\'label\',this.value,\''+v+'\')" onkeydown="_ce2Key(event,'+idx+',\''+v+'\',false)" placeholder="Ej: Reparaci\u00f3n..." /><input class="ce2-inp-amt" type="text" value="0,00" onchange="updateCE2Item('+idx+','+i+',\'amount\',this.value,\''+v+'\')" onkeydown="_ce2Key(event,'+idx+',\''+v+'\',true)" /><button class="ce2-del" onclick="removeCE2Item('+idx+','+i+',\''+v+'\')">&#215;</button>';
   addLink.parentNode.insertBefore(row, addLink);
-  row.querySelector('.ce2-inp-label').focus();
+  row.querySelector('.ce2-inp-label').focus({preventScroll:true});
   scheduleReservaConfigSave(idx);
 }
 
@@ -3383,7 +3396,7 @@ function _refreshCE2Panel(idx, view) {
   panel.innerHTML = '<td colspan="'+colCount+'" style="padding:0"><div class="ce2-panel-inner"><div class="ce2-panel-left"><div class="ce2-panel-title">&#9888; Conceptos especiales (Sin IVA) <span class="ce2-eye">&#128065; Resta al subtotal</span></div>'+itemsHtml+'<div class="ce2-add-link2" onclick="addCE2Item('+idx+',\''+v+'\')">+ A\u00f1adir concepto</div></div><div class="ce2-panel-summary" style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;"><div style="'+_b+'background:#f3f4f6;"><div class="ce2-sum-label" style="color:#374151">Subtotal<br>antes de C.E.</div><div class="ce2-sum-val" style="color:#1a2744">'+fmt(subBefore)+' &#8364;</div></div><div style="'+_b+'background:#f5f0ff;"><div class="ce2-sum-label" style="color:#6d28d9">Descontar<br>(Sin IVA)</div><div class="ce2-sum-val" style="color:#7c3aed">&#8211; '+fmt(c.ceSinIvaTotal)+' &#8364;</div></div><div style="'+_b+'background:#ede9fe;"><div class="ce2-sum-label" style="color:#5b21b6">Subtotal<br>final</div><div class="ce2-sum-val" style="color:#5b21b6">'+fmt(c.sub)+' &#8364;</div></div></div></div></td>';
   if (wrap) wrap.scrollTop = scrollY;
   let labels = panel.querySelectorAll('.ce2-inp-label');
-  if (labels.length > 0) labels[labels.length - 1].focus();
+  if (labels.length > 0) labels[labels.length - 1].focus({preventScroll:true});
 }
 
 function _renderFull() {

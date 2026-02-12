@@ -885,9 +885,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.4.4';
-const APP_BUILD   = '2026-02-12T12:10:27+01:00';
-const APP_CHANGES = 'CE Enter zero-jump: row-first + preventScroll + async numbers';
+const APP_VERSION = '2.4.5';
+const APP_BUILD   = '2026-02-12T12:15:55+01:00';
+const APP_CHANGES = 'CE Enter: no duplica filas vacías, foco inteligente';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1004,6 +1004,14 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.4.5',
+    date: '2026-02-12',
+    changes: [
+      'CE/CE2: Enter no crea fila nueva si ya existe una vacía abajo',
+      'Si hay fila vacía pendiente, Enter mueve el foco ahí en vez de duplicar'
+    ]
+  },
   {
     version: '2.4.4',
     date: '2026-02-12',
@@ -3004,7 +3012,26 @@ function _ceKey(e, idx, view, isAmt) {
     s.conceptosEspeciales[itemIdx].amount = val;
   }
   inp.removeAttribute('onchange');
-  // 2. Add new row FIRST (instant visual feedback, no jump)
+  // 2. Check if last row is already empty — if so, just focus it
+  var allRows = panel.querySelectorAll('.ce-item-row');
+  var lastRow = allRows.length ? allRows[allRows.length - 1] : null;
+  if (lastRow && lastRow !== row) {
+    var lastLbl = lastRow.querySelector('.ce-inp-label');
+    var lastAmt = lastRow.querySelector('.ce-inp-amt');
+    if (lastLbl && !lastLbl.value.trim() && lastAmt && (!lastAmt.value.trim() || lastAmt.value.trim() === '0,00')) {
+      lastLbl.focus({preventScroll:true});
+      requestAnimationFrame(function() {
+        var oldC = getLiq(allReservas[idx]);
+        invalidateCache(idx);
+        var newC = getLiq(allReservas[idx]);
+        _refreshCESummary(idx, view);
+        _patchMainRowCells(idx, oldC, newC);
+        scheduleReservaConfigSave(idx);
+      });
+      return;
+    }
+  }
+  // 3. Add new row (no empty row exists)
   addCEItem(idx, view);
   // 3. Update numbers in next frame (user doesn't see the delay)
   requestAnimationFrame(function() {
@@ -3037,6 +3064,25 @@ function _ce2Key(e, idx, view, isAmt) {
     s.conceptosEspeciales2[itemIdx].amount = val;
   }
   inp.removeAttribute('onchange');
+  // Check if last row is already empty
+  var allRows2 = panel.querySelectorAll('.ce2-item-row');
+  var lastRow2 = allRows2.length ? allRows2[allRows2.length - 1] : null;
+  if (lastRow2 && lastRow2 !== row) {
+    var lastLbl2 = lastRow2.querySelector('.ce2-inp-label');
+    var lastAmt2 = lastRow2.querySelector('.ce2-inp-amt');
+    if (lastLbl2 && !lastLbl2.value.trim() && lastAmt2 && (!lastAmt2.value.trim() || lastAmt2.value.trim() === '0,00')) {
+      lastLbl2.focus({preventScroll:true});
+      requestAnimationFrame(function() {
+        var oldC = getLiq(allReservas[idx]);
+        invalidateCache(idx);
+        var newC = getLiq(allReservas[idx]);
+        _refreshCE2Summary(idx, view);
+        _patchMainRowCells(idx, oldC, newC);
+        scheduleReservaConfigSave(idx);
+      });
+      return;
+    }
+  }
   addCE2Item(idx, view);
   requestAnimationFrame(function() {
     var oldC = getLiq(allReservas[idx]);

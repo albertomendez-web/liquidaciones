@@ -944,9 +944,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.7.1';
-const APP_BUILD   = '2026-02-12T23:30:00+01:00';
-const APP_CHANGES = 'CEX: label 50%, neg rojo alineado, Enter label>amt, Enter amt>nueva fila';
+const APP_VERSION = '2.7.2';
+const APP_BUILD   = '2026-02-12T23:45:00+01:00';
+const APP_CHANGES = 'Fix CE/CE2 boton desincronizado: _refreshCESummary siempre sincroniza boton en fila principal';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1063,6 +1063,18 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.7.2',
+    date: '2026-02-12',
+    changes: [
+      'Fix: boton CE en fila principal se desincronizaba del panel de resumen',
+      '_refreshCESummary() ahora siempre sincroniza el boton .col-ce en row-{idx}',
+      '_refreshCE2Summary() idem para boton .col-ceSinIva',
+      'CEX removeConsolExtra: eliminacion DOM pura + _rebuildCexIndices (sin re-render)',
+      'CEX inputs importe ahora en color rojo (#e53935)',
+      'Fix changeConsolMaintAmount: span neg se actualiza al cambiar select',
+    ]
+  },
   {
     version: '2.7.1',
     date: '2026-02-12',
@@ -3740,6 +3752,12 @@ function _refreshCESummary(idx, view) {
     vals[2].innerHTML = fmt(c.total) + ' &#8364;';
     vals[3].innerHTML = fmt(c.baseSinIVA) + ' &#8364;';
   }
+  // Always sync the CE button in the main table row
+  var mainRow = document.getElementById('row-' + idx);
+  if (mainRow) {
+    var ceCel = mainRow.querySelector('.col-ce');
+    if (ceCel) ceCel.innerHTML = _buildCEButton(idx, c, v);
+  }
   // Re-index onclick handlers for remaining rows
   let rows = panel.querySelectorAll('.ce-item-row');
   rows.forEach(function(row, i) {
@@ -3929,6 +3947,12 @@ function _refreshCE2Summary(idx, view) {
     vals[0].innerHTML = fmt(subBefore) + ' &#8364;';
     vals[1].innerHTML = '&#8211; ' + fmt(c.ceSinIvaTotal) + ' &#8364;';
     vals[2].innerHTML = fmt(c.sub) + ' &#8364;';
+  }
+  // Always sync the CE2 button in the main table row
+  var mainRow = document.getElementById('row-' + idx);
+  if (mainRow) {
+    var ce2Cel = mainRow.querySelector('.col-ceSinIva');
+    if (ce2Cel) ce2Cel.innerHTML = _buildCE2Button(idx, c, v);
   }
   let rows = panel.querySelectorAll('.ce2-item-row');
   rows.forEach(function(row, i) {

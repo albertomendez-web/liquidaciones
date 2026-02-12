@@ -4760,7 +4760,8 @@ function buildConsolDeductionsHtml(alojName) {
   extras.forEach(function(ex, ei) {
     html += '<div class="cex-item-row" style="display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;">';
     html += '<input class="cex-inp-label" type="text" value="'+(ex.label||'').replace(/"/g,'&quot;')+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="Concepto..." style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />';
-    html += '<input class="cex-inp-amt" type="text" value="'+fmt(ex.amount||0)+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;color:#e53935;" />';
+    html += '<input class="cex-inp-amt" type="text" value="'+fmt(ex.amount||0)+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:80px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />';
+    html += '<span style="font-size:12px;color:#6b7280;flex-shrink:0;">\u20AC</span>';
     html += '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">\u00D7</button>';
     html += '<span class="neg" style="margin-left:auto;white-space:nowrap;">- '+fmt(ex.amount||0)+' \u20AC</span>';
     html += '</div>';
@@ -4820,7 +4821,8 @@ function addConsolExtra(alojName) {
   row.className = 'cex-item-row';
   row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;';
   row.innerHTML = '<input class="cex-inp-label" type="text" value="" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="Concepto..." style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />'
-    + '<input class="cex-inp-amt" type="text" value="0,00" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;color:#e53935;" />'
+    + '<input class="cex-inp-amt" type="text" value="0,00" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:80px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />'
+    + '<span style="font-size:12px;color:#6b7280;flex-shrink:0;">\u20AC</span>'
     + '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">\u00D7</button>'
     + '<span class="neg" style="margin-left:auto;white-space:nowrap;">- 0,00 \u20AC</span>';
   var addLinkWrap = addLink.parentNode;

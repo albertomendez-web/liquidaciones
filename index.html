@@ -885,9 +885,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.4.2';
-const APP_BUILD   = '2026-02-12T11:53:13+01:00';
-const APP_CHANGES = 'Enter key en config, URLs y consol extras inline';
+const APP_VERSION = '2.4.3';
+const APP_BUILD   = '2026-02-12T12:05:41+01:00';
+const APP_CHANGES = 'CE Enter sin re-render: guardado directo + patch ligero';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1004,6 +1004,16 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.4.3',
+    date: '2026-02-12',
+    changes: [
+      'CE/CE2: Enter en importe ya no hace re-render completo (0 saltos)',
+      'Nuevo _patchMainRowCells: actualiza solo celdas numéricas sin tocar DOM del panel',
+      'Enter guarda directo al modelo de datos, bypass de onchange → _applyCEChange → _patchSingleRow',
+      'Stats del footer actualizados incrementalmente sin rebuild'
+    ]
+  },
   {
     version: '2.4.2',
     date: '2026-02-12',
@@ -2961,27 +2971,88 @@ function toggleCEPanel(idx, view) {
 }
 
 
-// === CE ENTER KEY HANDLERS ===
+// === CE ENTER KEY HANDLERS (lightweight, no re-render) ===
 function _ceKey(e, idx, view, isAmt) {
   if (e.key !== 'Enter') return;
   e.preventDefault();
-  if (isAmt) {
-    e.target.blur();
-    setTimeout(function() { addCEItem(idx, view); }, 20);
-  } else {
+  if (!isAmt) {
     var amt = e.target.parentNode.querySelector('.ce-inp-amt');
     if (amt) { amt.focus(); amt.select(); }
+    return;
   }
+  var inp = e.target;
+  var row = inp.closest('.ce-item-row');
+  var panel = inp.closest('[id^="ce-"]');
+  if (!panel) return;
+  var rows = panel.querySelectorAll('.ce-item-row');
+  var itemIdx = Array.prototype.indexOf.call(rows, row);
+  // 1. Save value directly to data model (skip onchange chain)
+  var val = parseFloat(String(inp.value).replace(/\./g,'').replace(',','.'));
+  if (isNaN(val)) val = 0;
+  var s = settings[idx];
+  if (s && s.conceptosEspeciales && s.conceptosEspeciales[itemIdx]) {
+    s.conceptosEspeciales[itemIdx].amount = val;
+  }
+  // 2. Prevent onchange from double-firing on natural blur
+  inp.removeAttribute('onchange');
+  // 3. Lightweight update: cache + summary + main row cells only
+  var oldC = getLiq(allReservas[idx]);
+  invalidateCache(idx);
+  var newC = getLiq(allReservas[idx]);
+  _refreshCESummary(idx, view);
+  _patchMainRowCells(idx, oldC, newC);
+  scheduleReservaConfigSave(idx);
+  // 4. Add new row smoothly (no re-render)
+  addCEItem(idx, view);
 }
 function _ce2Key(e, idx, view, isAmt) {
   if (e.key !== 'Enter') return;
   e.preventDefault();
-  if (isAmt) {
-    e.target.blur();
-    setTimeout(function() { addCE2Item(idx, view); }, 20);
-  } else {
+  if (!isAmt) {
     var amt = e.target.parentNode.querySelector('.ce2-inp-amt');
     if (amt) { amt.focus(); amt.select(); }
+    return;
+  }
+  var inp = e.target;
+  var row = inp.closest('.ce2-item-row');
+  var panel = inp.closest('[id^="ce2-"]');
+  if (!panel) return;
+  var rows = panel.querySelectorAll('.ce2-item-row');
+  var itemIdx = Array.prototype.indexOf.call(rows, row);
+  var val = parseFloat(String(inp.value).replace(/\./g,'').replace(',','.'));
+  if (isNaN(val)) val = 0;
+  var s = settings[idx];
+  if (s && s.conceptosEspeciales2 && s.conceptosEspeciales2[itemIdx]) {
+    s.conceptosEspeciales2[itemIdx].amount = val;
+  }
+  inp.removeAttribute('onchange');
+  var oldC = getLiq(allReservas[idx]);
+  invalidateCache(idx);
+  var newC = getLiq(allReservas[idx]);
+  _refreshCE2Summary(idx, view);
+  _patchMainRowCells(idx, oldC, newC);
+  scheduleReservaConfigSave(idx);
+  addCE2Item(idx, view);
+}
+// Patch only numeric cells in main table row (no DOM rebuild, no scroll jump)
+function _patchMainRowCells(idx, oldC, newC) {
+  var mainRow = document.getElementById('row-' + idx);
+  if (mainRow) {
+    var c = function(cls, val) { var el = mainRow.querySelector(cls); if (el) el.innerHTML = fmt(val) + ' \u20AC'; };
+    c('.col-totalLiquidar', newC.totalLiq);
+    c('.col-subtotal', newC.sub);
+    c('.col-baseSinIVA', newC.baseSinIVA);
+  }
+  // Incremental footer stats update
+  var st = _cachedFilteredStats;
+  if (st && oldC && newC) {
+    st.fL += (newC.totalLiq - oldC.totalLiq);
+    st.tLiq += (newC.totalLiq - oldC.totalLiq);
+    st.tSub += (newC.sub - oldC.sub);
+    st.tBase += (newC.baseSinIVA - oldC.baseSinIVA);
+    st.tCE += (newC.ceTotal - oldC.ceTotal);
+    st.tCE2 += (newC.ceSinIvaTotal - oldC.ceSinIvaTotal);
+    _renderStatsFromCache(_lastFiltered, st);
   }
 }
 function addCEItem(idx, view) {

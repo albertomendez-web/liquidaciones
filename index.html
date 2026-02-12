@@ -944,9 +944,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.7.0';
-const APP_BUILD   = '2026-02-12T23:15:00+01:00';
-const APP_CHANGES = 'Conceptos Extraordinarios del Mes: edicion inline CE-style (label+importe+borrar+anadir)';
+const APP_VERSION = '2.7.1';
+const APP_BUILD   = '2026-02-12T23:30:00+01:00';
+const APP_CHANGES = 'CEX: label 50%, neg rojo alineado, Enter label>amt, Enter amt>nueva fila';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1063,6 +1063,17 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.7.1',
+    date: '2026-02-12',
+    changes: [
+      'CEX: input label reducido a 50% del ancho (flex:0 0 50%)',
+      'CEX: importe negativo en rojo alineado a la derecha como Mantenimiento',
+      'CEX: _cexKey() Enter en label salta a importe, Enter en importe abre nueva fila',
+      'CEX: Escape en fila vacia la elimina automaticamente',
+      'CEX: live input actualiza span rojo inmediatamente + debounce 400ms para totales',
+    ]
+  },
   {
     version: '2.7.0',
     date: '2026-02-12',
@@ -3263,10 +3274,16 @@ var _cexInputTimer = null;
 document.addEventListener('input', function(e) {
   var el = e.target;
   if (!el.classList.contains('cex-inp-amt')) return;
+  // Immediately update the red neg span in the same row
+  var row = el.closest('.cex-item-row');
+  if (row) {
+    var negSpan = row.querySelector('.neg');
+    var v = parseFloat(String(el.value).replace(/\./g,'').replace(',','.'));
+    if (negSpan) negSpan.textContent = '- ' + fmt(isNaN(v) ? 0 : v) + ' \u20AC';
+  }
   clearTimeout(_cexInputTimer);
   _cexInputTimer = setTimeout(function() {
     if (!currentConsolAloj) return;
-    var row = el.closest('.cex-item-row');
     var box = el.closest('.consol-monthly-box');
     if (!row || !box) return;
     var rows = box.querySelectorAll('.cex-item-row');
@@ -3274,14 +3291,46 @@ document.addEventListener('input', function(e) {
     if (itemIdx < 0) return;
     var extras = getConsolExtras(currentConsolAloj);
     if (!extras[itemIdx]) return;
-    var v = parseFloat(String(el.value).replace(/\./g,'').replace(',','.'));
-    if (isNaN(v)) v = 0;
-    if (extras[itemIdx].amount === v) return;
-    extras[itemIdx].amount = v;
+    var v2 = parseFloat(String(el.value).replace(/\./g,'').replace(',','.'));
+    if (isNaN(v2)) v2 = 0;
+    if (extras[itemIdx].amount === v2) return;
+    extras[itemIdx].amount = v2;
     scheduleGlobalConfigSave();
     _patchConsolFinalTotals();
   }, 400);
 });
+
+// === KEYBOARD: Enter label→amt, Enter amt→new row, Escape→remove if empty ===
+function _cexKey(e, alojName, isAmt) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    var row = e.target.closest('.cex-item-row');
+    if (!row) return;
+    if (!isAmt) {
+      // Enter on label → focus amount
+      var amt = row.querySelector('.cex-inp-amt');
+      if (amt) { amt.focus(); amt.select(); }
+    } else {
+      // Enter on amount → trigger change, then add new row
+      e.target.dispatchEvent(new Event('change', {bubbles:true}));
+      addConsolExtra(alojName);
+    }
+  } else if (e.key === 'Escape') {
+    var row2 = e.target.closest('.cex-item-row');
+    if (!row2) return;
+    var lbl = row2.querySelector('.cex-inp-label');
+    var amt2 = row2.querySelector('.cex-inp-amt');
+    // If both empty, remove the row
+    if (lbl && !lbl.value.trim() && amt2 && (!amt2.value.trim() || amt2.value.trim() === '0,00')) {
+      var box = row2.closest('.consol-monthly-box');
+      if (box) {
+        var rows = box.querySelectorAll('.cex-item-row');
+        var idx = Array.prototype.indexOf.call(rows, row2);
+        if (idx >= 0) removeConsolExtra(alojName, idx);
+      }
+    }
+  }
+}
 
 // === LIGHTWEIGHT CONSOL PATCH (no DOM rebuild) ===
 function _getConsolCalcsAndSums(alojName) {
@@ -4686,9 +4735,10 @@ function buildConsolDeductionsHtml(alojName) {
   // Extra concepts — CE-style editable rows
   extras.forEach(function(ex, ei) {
     html += '<div class="cex-item-row" style="display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;">';
-    html += '<input class="cex-inp-label" type="text" value="'+(ex.label||'').replace(/"/g,'&quot;')+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" placeholder="Concepto..." style="flex:1;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />';
-    html += '<input class="cex-inp-amt" type="text" value="'+fmt(ex.amount||0)+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />';
-    html += '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">\u00D7</button>';
+    html += '<input class="cex-inp-label" type="text" value="'+(ex.label||'').replace(/"/g,'&quot;')+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="Concepto..." style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />';
+    html += '<input class="cex-inp-amt" type="text" value="'+fmt(ex.amount||0)+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />';
+    html += '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">\u00D7</button>';
+    html += '<span class="neg" style="margin-left:auto;white-space:nowrap;">- '+fmt(ex.amount||0)+' \u20AC</span>';
     html += '</div>';
   });
 
@@ -4742,9 +4792,10 @@ function addConsolExtra(alojName) {
   var row = document.createElement('div');
   row.className = 'cex-item-row';
   row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;';
-  row.innerHTML = '<input class="cex-inp-label" type="text" value="" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" placeholder="Concepto..." style="flex:1;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />'
-    + '<input class="cex-inp-amt" type="text" value="0,00" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />'
-    + '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">\u00D7</button>';
+  row.innerHTML = '<input class="cex-inp-label" type="text" value="" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="Concepto..." style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />'
+    + '<input class="cex-inp-amt" type="text" value="0,00" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />'
+    + '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">\u00D7</button>'
+    + '<span class="neg" style="margin-left:auto;white-space:nowrap;">- 0,00 \u20AC</span>';
   var addLinkWrap = addLink.parentNode;
   addLinkWrap.parentNode.insertBefore(row, addLinkWrap);
   var inp = row.querySelector('.cex-inp-label');

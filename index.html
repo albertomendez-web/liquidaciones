@@ -750,9 +750,32 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '2.0.1';
-const APP_BUILD   = '2026-02-13T00:15:00+01:00';
-const APP_CHANGES = 'Persistencia robusta: guardado write-first, CE save on add';
+/*
+ * ╔══════════════════════════════════════════════════════════════════════╗
+ * ║                    VERSIONING RULES (SemVer)                       ║
+ * ║  OBLIGATORIO actualizar en CADA entrega de código sin excepción.   ║
+ * ╠══════════════════════════════════════════════════════════════════════╣
+ * ║  MAJOR (X.0.0) — Cambios incompatibles, reestructuración total,   ║
+ * ║                   migración de datos necesaria                     ║
+ * ║  MINOR (x.Y.0) — Nueva funcionalidad, nueva sección UI,           ║
+ * ║                   nuevo campo/columna, nueva integración           ║
+ * ║  PATCH (x.y.Z) — Bugfix, ajuste visual, optimización,             ║
+ * ║                   refactor sin cambio funcional                    ║
+ * ╠══════════════════════════════════════════════════════════════════════╣
+ * ║  CHECKLIST por entrega:                                            ║
+ * ║  □ 1. Leer versión actual de APP_VERSION                          ║
+ * ║  □ 2. Decidir bump: MAJOR / MINOR / PATCH                        ║
+ * ║  □ 3. Actualizar APP_VERSION con nueva versión                    ║
+ * ║  □ 4. Actualizar APP_BUILD con fecha/hora actual Madrid (+01/+02) ║
+ * ║  □ 5. Actualizar APP_CHANGES con resumen breve (< 100 chars)     ║
+ * ║  □ 6. Añadir entrada al array CHANGELOG (al principio)           ║
+ * ║       con version, date (ISO Madrid), y array changes detallado   ║
+ * ║  □ 7. NUNCA reutilizar un número de versión ya existente          ║
+ * ╚══════════════════════════════════════════════════════════════════════╝
+ */
+const APP_VERSION = '2.0.2';
+const APP_BUILD   = '2026-02-13T00:20:00+01:00';
+const APP_CHANGES = 'Bloque VERSIONING RULES embebido + memoria SemVer';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -843,6 +866,10 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  { version: '2.0.2', date: '2026-02-13T00:20:00+01:00', changes: [
+    'Bloque VERSIONING RULES (SemVer) embebido en el c\u00F3digo con checklist obligatorio',
+    'Memoria actualizada para forzar cumplimiento de versionado en cada entrega'
+  ]},
   { version: '2.0.1', date: '2026-02-13T00:15:00+01:00', changes: [
     'Fix: addCEItem ahora persiste inmediatamente al a\u00F1adir concepto especial',
     'Persistencia write-first: datos se escriben antes de limpiar filas obsoletas',

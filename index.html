@@ -885,9 +885,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.4.6';
-const APP_BUILD   = '2026-02-12T12:32:53+01:00';
-const APP_CHANGES = 'Fix CE2: propiedad correcta conceptosSinIVA en _ce2Key';
+const APP_VERSION = '2.4.7';
+const APP_BUILD   = '2026-02-12T12:38:33+01:00';
+const APP_CHANGES = 'Fix: botones CE/CE2 en fila se actualizan con Enter';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1004,6 +1004,14 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.4.7',
+    date: '2026-02-12',
+    changes: [
+      'Fix: _patchMainRowCells ahora actualiza botones CE y CE2 de la fila principal',
+      'El badge "-100,00 \u20AC" refleja el total real tras editar con Enter'
+    ]
+  },
   {
     version: '2.4.6',
     date: '2026-02-12',
@@ -3109,6 +3117,11 @@ function _patchMainRowCells(idx, oldC, newC) {
     c('.col-totalLiquidar', newC.totalLiq);
     c('.col-subtotal', newC.sub);
     c('.col-baseSinIVA', newC.baseSinIVA);
+    // Update CE/CE2 buttons
+    var ceCel = mainRow.querySelector('.col-ce');
+    if (ceCel) ceCel.innerHTML = _buildCEButton(idx, newC);
+    var ce2Cel = mainRow.querySelector('.col-ceSinIva');
+    if (ce2Cel) ce2Cel.innerHTML = _buildCE2Button(idx, newC);
   }
   // Incremental footer stats update
   var st = _cachedFilteredStats;

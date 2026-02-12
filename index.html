@@ -945,7 +945,7 @@ function clearSearchConsol() {
  * ══════════════════════════════════════════════════════════════
  */
 const APP_VERSION = '2.6.4';
-const APP_BUILD   = '2026-02-12T19:30:00+01:00';
+const APP_BUILD   = '2026-02-12T19:35:00+01:00';
 const APP_CHANGES = 'Live: importes CE/CE2 se actualizan en tiempo real mientras tecleas (debounce 400ms)';
 
 // === UTILITY: XSS Escaping ===
@@ -1072,7 +1072,8 @@ const CHANGELOG = [
       'Debounce 400ms evita re-renders excesivos durante escritura r\u00E1pida',
       'Path ligero: actualiza cache + panel summary + footer stats sin reconstruir DOM completo',
       'Vista consolidada: viewConsolDetail + re-apertura panel + restauraci\u00F3n cursor/selecci\u00F3n',
-      'Resumen consolidado (caja naranja CE / violeta CE2) se actualiza en tiempo real'
+      'Resumen consolidado (caja naranja CE / violeta CE2) se actualiza en tiempo real',
+      'Fix: corregido innerHTML corrupto en addCEItem tras limpieza de oninput inline'
     ]
   },
   {
@@ -3420,7 +3421,7 @@ function addCEItem(idx, view) {
   // Create new row via DOM (no full re-render)
   let row = document.createElement('div');
   row.className = 'ce-item-row ce-new';
-  row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',false)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',true)"+v+"'\',false)" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button>';
+  row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',false)" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" onkeydown="_ceKey(event,'+idx+',\''+v+'\',true)" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button>';
   addLink.parentNode.insertBefore(row, addLink);
   row.querySelector('.ce-inp-label').focus({preventScroll:true});
   scheduleReservaConfigSave(idx);

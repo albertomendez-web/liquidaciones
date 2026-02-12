@@ -944,9 +944,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.6.5';
-const APP_BUILD   = '2026-02-12T22:30:00+01:00';
-const APP_CHANGES = 'Consol CE/CE2: patch ligero sin re-render + limpieza codigo muerto';
+const APP_VERSION = '2.7.0';
+const APP_BUILD   = '2026-02-12T23:15:00+01:00';
+const APP_CHANGES = 'Conceptos Extraordinarios del Mes: edicion inline CE-style (label+importe+borrar+anadir)';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1063,6 +1063,19 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.7.0',
+    date: '2026-02-12',
+    changes: [
+      'Conceptos Extraordinarios del Mes: edicion inline estilo CE (label+importe+borrar+anadir)',
+      'Filas editables con input label + input importe + boton eliminar (misma mecanica que CE/CE2)',
+      'Live debounce 400ms en importes: totales finales se actualizan mientras escribes',
+      'Nuevo _patchConsolFinalTotals(): parchea solo Subtotal/IRPF/IVA/TOTAL sin re-render',
+      'addConsolExtra inserta fila DOM directamente (sin prompt ni re-render completo)',
+      'removeConsolExtra con animacion ceRowOut + indices recalculados tras splice',
+      'toggleConsolMaint y changeConsolMaintAmount ya no llaman viewConsolDetail',
+    ]
+  },
   {
     version: '2.6.5',
     date: '2026-02-12',
@@ -3245,6 +3258,31 @@ document.addEventListener('input', function(e) {
   }, 400);
 });
 
+// === LIVE DEBOUNCED INPUT: Conceptos Extraordinarios del Mes ===
+var _cexInputTimer = null;
+document.addEventListener('input', function(e) {
+  var el = e.target;
+  if (!el.classList.contains('cex-inp-amt')) return;
+  clearTimeout(_cexInputTimer);
+  _cexInputTimer = setTimeout(function() {
+    if (!currentConsolAloj) return;
+    var row = el.closest('.cex-item-row');
+    var box = el.closest('.consol-monthly-box');
+    if (!row || !box) return;
+    var rows = box.querySelectorAll('.cex-item-row');
+    var itemIdx = Array.prototype.indexOf.call(rows, row);
+    if (itemIdx < 0) return;
+    var extras = getConsolExtras(currentConsolAloj);
+    if (!extras[itemIdx]) return;
+    var v = parseFloat(String(el.value).replace(/\./g,'').replace(',','.'));
+    if (isNaN(v)) v = 0;
+    if (extras[itemIdx].amount === v) return;
+    extras[itemIdx].amount = v;
+    scheduleGlobalConfigSave();
+    _patchConsolFinalTotals();
+  }, 400);
+});
+
 // === LIGHTWEIGHT CONSOL PATCH (no DOM rebuild) ===
 function _getConsolCalcsAndSums(alojName) {
   var alojamientos = getAlojamientos();
@@ -3317,10 +3355,10 @@ function _buildConsolSummaryInner(calcs, sums, alojName) {
   h += '<div class="consol-monthly-title">\uD83D\uDCC5 Conceptos Extraordinarios del Mes</div>';
   h += _dedHtml;
   h += '</div>';
-  h += '<div class="consol-subtotal"><span>Subtotal Final Mes</span><span>' + fmt(adjSub) + ' \u20AC</span></div>';
-  h += '<div class="consol-row"><span>Retenci\u00F3n IRPF (' + (avgIrpfRate*100).toFixed(0) + '%)</span><span class="neg">- ' + fmt(adjRet) + ' \u20AC</span></div>';
-  h += '<div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ' + fmt(adjIva) + ' \u20AC</span></div>';
-  h += '<div class="consol-total"><span>TOTAL A LIQUIDAR</span><span>' + fmt(adjLiq) + ' \u20AC</span></div>';
+  h += '<div class="consol-subtotal" id="csf-subtotal"><span>Subtotal Final Mes</span><span>' + fmt(adjSub) + ' \u20AC</span></div>';
+  h += '<div class="consol-row" id="csf-irpf"><span>Retenci\u00F3n IRPF (' + (avgIrpfRate*100).toFixed(0) + '%)</span><span class="neg">- ' + fmt(adjRet) + ' \u20AC</span></div>';
+  h += '<div class="consol-row" id="csf-iva"><span>IVA del Subtotal (21%)</span><span class="pos">+ ' + fmt(adjIva) + ' \u20AC</span></div>';
+  h += '<div class="consol-total" id="csf-total"><span>TOTAL A LIQUIDAR</span><span>' + fmt(adjLiq) + ' \u20AC</span></div>';
   return h;
 }
 
@@ -4629,33 +4667,34 @@ function buildPrintDeductionsHtml(alojName) {
 function buildConsolDeductionsHtml(alojName) {
   let maint = getConsolMaint(alojName);
   let extras = getConsolExtras(alojName);
-  let esc = alojName.replace(/'/g, "\\'");
+  let esc2 = alojName.replace(/'/g, "\\'");
   let maintSelOpts = maintenanceOptions.map(function(o) {
     return '<option value="'+o+'"'+(o===maint.amount?' selected':'')+'>'+o+' \u20AC</option>';
   }).join('');
 
   let html = '';
 
-  // Maintenance row \u2014 same consol-row style
+  // Maintenance row — same consol-row style
   html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
-  html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaint(\''+esc+'\')">'+(maint.enabled?'&#10003;':'')+'</span>';
+  html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaint(\''+esc2+'\')">'+(maint.enabled?'&#10003;':'')+'</span>';
   html += '<span style="'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
-  if (maint.enabled) html += ' <select class="sel no-print" onchange="changeConsolMaintAmount(\''+esc+'\',this.value)" style="font-size:11px;padding:2px 6px;">'+maintSelOpts+'</select>';
+  if (maint.enabled) html += ' <select class="sel no-print" onchange="changeConsolMaintAmount(\''+esc2+'\',this.value)" style="font-size:11px;padding:2px 6px;">'+maintSelOpts+'</select>';
   html += '</span>';
   if (maint.enabled) html += '<span class="neg">- '+fmt(maint.amount)+' \u20AC</span>';
   html += '</div>';
 
-  // Extra concepts \u2014 same consol-row style
+  // Extra concepts — CE-style editable rows
   extras.forEach(function(ex, ei) {
-    html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
-    html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:1px solid #fca5a5;background:#fef2f2;color:#e53935;font-size:11px;cursor:pointer;" onclick="removeConsolExtra(\''+esc+'\','+ei+')">&#10005;</span>';
-    html += ex.label;
-    html += '</span><span class="neg">- '+fmt(ex.amount)+' \u20AC</span></div>';
+    html += '<div class="cex-item-row" style="display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;">';
+    html += '<input class="cex-inp-label" type="text" value="'+(ex.label||'').replace(/"/g,'&quot;')+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" placeholder="Concepto..." style="flex:1;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />';
+    html += '<input class="cex-inp-amt" type="text" value="'+fmt(ex.amount||0)+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />';
+    html += '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">\u00D7</button>';
+    html += '</div>';
   });
 
-  // Add concept button
-  html += '<div class="consol-row no-print" style="padding-top:4px;padding-bottom:4px;">';
-  html += '<button onclick="addConsolExtra(\''+esc+'\')" style="font-size:11px;color:#3b82f6;background:none;border:1px dashed #93c5fd;border-radius:5px;padding:3px 10px;cursor:pointer;">+ A\u00f1adir concepto</button>';
+  // Add concept link — same style as CE
+  html += '<div class="no-print" style="padding:4px 8px;">';
+  html += '<a class="cex-add-link" onclick="addConsolExtra(\''+esc2+'\')" style="font-size:12px;color:#3b82f6;cursor:pointer;text-decoration:none;">+ A\u00f1adir concepto</a>';
   html += '</div>';
 
   return html;
@@ -4665,64 +4704,130 @@ function toggleConsolMaint(alojName) {
   let m = getConsolMaint(alojName);
   m.enabled = !m.enabled;
   scheduleGlobalConfigSave();
-  viewConsolDetail(alojName);
+  // Re-render just the maint row + patch totals
+  _refreshConsolMaintRow(alojName);
+  _patchConsolFinalTotals();
 }
 function changeConsolMaintAmount(alojName, val) {
   let m = getConsolMaint(alojName);
   m.amount = parseFloat(val) || maintenanceOptions[0];
   scheduleGlobalConfigSave();
-  viewConsolDetail(alojName);
+  _patchConsolFinalTotals();
+}
+function updateConsolExtra(alojName, idx, field, rawVal) {
+  var extras = getConsolExtras(alojName);
+  if (!extras[idx]) return;
+  if (field === 'label') {
+    extras[idx].label = rawVal;
+    scheduleGlobalConfigSave();
+  } else {
+    var v = parseFloat(String(rawVal).replace(/\./g,'').replace(',','.'));
+    if (isNaN(v)) v = 0;
+    extras[idx].amount = v;
+    scheduleGlobalConfigSave();
+    _patchConsolFinalTotals();
+  }
 }
 function addConsolExtra(alojName) {
-  var esc2 = alojName.replace(/'/g,"\\'");
+  var extras = getConsolExtras(alojName);
+  extras.push({ label: '', amount: 0 });
+  scheduleGlobalConfigSave();
+  // Append DOM row instead of full re-render
   var box = document.querySelector('.consol-monthly-box');
   if (!box) return;
-  // Check if inline form already exists
-  var existing = document.getElementById('consol-extra-inline');
-  if (existing) { existing.querySelector('.cex-inp-label').focus(); return; }
-  // Create inline input row
+  var addLink = box.querySelector('.cex-add-link');
+  if (!addLink) return;
+  var ei = extras.length - 1;
+  var esc2 = alojName.replace(/'/g, "\\'");
   var row = document.createElement('div');
-  row.id = 'consol-extra-inline';
-  row.className = 'consol-row';
-  row.style.cssText = 'gap:8px;padding:6px 8px;animation:ceRowIn .25s ease;';
-  row.innerHTML = '<input class="cex-inp-label" type="text" placeholder="Nombre del concepto..." style="flex:1;border:1.5px solid #16a34a;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />'
-    + '<input class="cex-inp-amt" type="text" placeholder="0,00 \u20AC" style="width:90px;border:1.5px solid #16a34a;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />'
-    + '<button onclick="this.parentNode.remove();" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">\u00D7</button>';
-  var addBtn = box.querySelector('button[onclick*="addConsolExtra"]');
-  if (addBtn) addBtn.parentNode.insertBefore(row, addBtn);
-  else box.appendChild(row);
-
-  var lblInp = row.querySelector('.cex-inp-label');
-  var amtInp = row.querySelector('.cex-inp-amt');
-  lblInp.focus();
-
-  function commitExtra() {
-    var label = lblInp.value.trim();
-    var amount = parseFloat((amtInp.value||'').replace(/[^\d.,-]/g,'').replace(',','.'));
-    if (!label) { row.remove(); return; }
-    if (isNaN(amount) || amount <= 0) { showToast('Importe no válido', 'warning'); amtInp.focus(); amtInp.select(); return; }
-    var extras = getConsolExtras(alojName);
-    extras.push({ label: label, amount: amount });
-    scheduleGlobalConfigSave();
-    viewConsolDetail(alojName);
-  }
-  lblInp.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); amtInp.focus(); amtInp.select(); }
-    if (e.key === 'Escape') row.remove();
-  });
-  amtInp.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); commitExtra(); }
-    if (e.key === 'Escape') row.remove();
-  });
-  amtInp.addEventListener('blur', function() {
-    setTimeout(function() { if (!row.contains(document.activeElement)) { if (lblInp.value.trim() && amtInp.value.trim()) commitExtra(); else if (!lblInp.value.trim() && !amtInp.value.trim()) row.remove(); } }, 150);
-  });
+  row.className = 'cex-item-row';
+  row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;';
+  row.innerHTML = '<input class="cex-inp-label" type="text" value="" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" placeholder="Concepto..." style="flex:1;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />'
+    + '<input class="cex-inp-amt" type="text" value="0,00" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" placeholder="0,00" style="width:90px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />'
+    + '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;">\u00D7</button>';
+  var addLinkWrap = addLink.parentNode;
+  addLinkWrap.parentNode.insertBefore(row, addLinkWrap);
+  var inp = row.querySelector('.cex-inp-label');
+  if (inp) inp.focus();
 }
 function removeConsolExtra(alojName, idx) {
-  let extras = getConsolExtras(alojName);
-  if (idx >= 0 && idx < extras.length) { extras.splice(idx, 1); }
+  var box = document.querySelector('.consol-monthly-box');
+  if (box) {
+    var rows = box.querySelectorAll('.cex-item-row');
+    if (rows[idx]) {
+      rows[idx].style.animation = 'ceRowOut .2s ease forwards';
+      rows[idx].addEventListener('animationend', function() {
+        var extras = getConsolExtras(alojName);
+        if (idx >= 0 && idx < extras.length) extras.splice(idx, 1);
+        scheduleGlobalConfigSave();
+        // Re-render just the deductions section (to fix indices) + patch totals
+        _refreshConsolDeductionsBox(alojName);
+        _patchConsolFinalTotals();
+      }, {once:true});
+      return;
+    }
+  }
+  var extras = getConsolExtras(alojName);
+  if (idx >= 0 && idx < extras.length) extras.splice(idx, 1);
   scheduleGlobalConfigSave();
-  viewConsolDetail(alojName);
+  _refreshConsolDeductionsBox(alojName);
+  _patchConsolFinalTotals();
+}
+
+function _refreshConsolMaintRow(alojName) {
+  var box = document.querySelector('.consol-monthly-box');
+  if (!box) return;
+  // First child is the maint consol-row
+  var maintRow = box.querySelector('.consol-row');
+  if (!maintRow) return;
+  var maint = getConsolMaint(alojName);
+  var esc2 = alojName.replace(/'/g, "\\'");
+  var maintSelOpts = maintenanceOptions.map(function(o) {
+    return '<option value="'+o+'"'+(o===maint.amount?' selected':'')+'>'+o+' \u20AC</option>';
+  }).join('');
+  var html = '<span style="display:flex;align-items:center;gap:8px;">';
+  html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaint(\''+esc2+'\')">'+(maint.enabled?'&#10003;':'')+'</span>';
+  html += '<span style="'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
+  if (maint.enabled) html += ' <select class="sel no-print" onchange="changeConsolMaintAmount(\''+esc2+'\',this.value)" style="font-size:11px;padding:2px 6px;">'+maintSelOpts+'</select>';
+  html += '</span>';
+  if (maint.enabled) html += '<span class="neg">- '+fmt(maint.amount)+' \u20AC</span>';
+  else html += '';
+  maintRow.innerHTML = html;
+}
+
+function _refreshConsolDeductionsBox(alojName) {
+  var box = document.querySelector('.consol-monthly-box');
+  if (!box) return;
+  box.innerHTML = '<div class="consol-monthly-title">&#128197; Conceptos Extraordinarios del Mes</div>' + buildConsolDeductionsHtml(alojName);
+}
+
+function _patchConsolFinalTotals() {
+  if (!currentConsolAloj) return;
+  var data = _getConsolCalcsAndSums(currentConsolAloj);
+  if (!data) return;
+  var sums = data.sums;
+  var _ded = getConsolDeductions(currentConsolAloj);
+  var _isSplit = isGtcSplit(currentConsolAloj);
+  var _gtcSplitAmt = _isSplit ? sums.sub * GTC_SPLIT_RATE : 0;
+  var _ownerBase = _isSplit ? sums.sub - _gtcSplitAmt : sums.sub;
+  var adjSub = _ownerBase - _ded.totalBase;
+  var avgIrpfRate = sums.sub > 0 ? sums.ret / sums.sub : 0;
+  var adjRet = adjSub * avgIrpfRate;
+  var adjIva = adjSub * IVA_SUBTOTAL;
+  var adjLiq = adjSub - adjRet + adjIva;
+  var el;
+  el = document.getElementById('csf-subtotal'); if (el) el.innerHTML = '<span>Subtotal Final Mes</span><span>' + fmt(adjSub) + ' \u20AC</span>';
+  el = document.getElementById('csf-irpf'); if (el) el.innerHTML = '<span>Retenci\u00F3n IRPF (' + (avgIrpfRate*100).toFixed(0) + '%)</span><span class="neg">- ' + fmt(adjRet) + ' \u20AC</span>';
+  el = document.getElementById('csf-iva'); if (el) el.innerHTML = '<span>IVA del Subtotal (21%)</span><span class="pos">+ ' + fmt(adjIva) + ' \u20AC</span>';
+  el = document.getElementById('csf-total'); if (el) el.innerHTML = '<span>TOTAL A LIQUIDAR</span><span>' + fmt(adjLiq) + ' \u20AC</span>';
+}
+
+function _refreshConsolSummaryBlock() {
+  if (!currentConsolAloj) return;
+  var data = _getConsolCalcsAndSums(currentConsolAloj);
+  if (!data) return;
+  var summaryBlock = document.getElementById('consol-summary-block');
+  if (summaryBlock) summaryBlock.innerHTML = _buildConsolSummaryInner(data.calcs, data.sums, currentConsolAloj);
 }
 
 function viewConsolDetail(alojName) {
@@ -4945,10 +5050,10 @@ ${_isSplit ? `<div class="consol-split-box">
           <div class="consol-monthly-title">&#128197; Conceptos Extraordinarios del Mes</div>
           ${_dedHtml}
         </div>
-        <div class="consol-subtotal"><span>Subtotal Final Mes</span><span>${fmt(adjSub)} &#8364;</span></div>
-        <div class="consol-row"><span>Retenci\u00F3n IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
-        <div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
-        <div class="consol-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(adjLiq)} &#8364;</span></div>
+        <div class="consol-subtotal" id="csf-subtotal"><span>Subtotal Final Mes</span><span>${fmt(adjSub)} &#8364;</span></div>
+        <div class="consol-row" id="csf-irpf"><span>Retenci\u00F3n IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
+        <div class="consol-row" id="csf-iva"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
+        <div class="consol-total" id="csf-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(adjLiq)} &#8364;</span></div>
         </div>
       </div>
     </div>

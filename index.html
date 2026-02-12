@@ -944,9 +944,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.6.4';
-const APP_BUILD   = '2026-02-12T21:50:00+01:00';
-const APP_CHANGES = 'Live CE/CE2 sin saltos + panel permanece abierto al borrar items';
+const APP_VERSION = '2.6.5';
+const APP_BUILD   = '2026-02-12T22:30:00+01:00';
+const APP_CHANGES = 'Consol CE/CE2: patch ligero sin re-render + limpieza codigo muerto';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1064,6 +1064,21 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.6.5',
+    date: '2026-02-12',
+    changes: [
+      'Consol lightweight patch: CE/CE2 ahora parchean celdas individuales sin reconstruir DOM',
+      'Mismo path ligero que preliquidaciones \u2014 cero saltos, panel permanece abierto',
+      'Nuevo _patchConsolLightweight(): parchea crow cells + footer + summary innerHTML',
+      'Nuevo _patchConsolRowCells(): actualiza solo celdas num\u00E9ricas en crow-{idx}',
+      'Nuevo _patchConsolFooterRow(): actualiza solo celdas del tfoot consolidado',
+      'Nuevo _buildConsolSummaryInner(): genera HTML del resumen sin tocar tabla ni header',
+      'Nuevo _getConsolCalcsAndSums(): helper reutilizable para recalcular sumas consolidadas',
+      'IDs a\u00F1adidos: consol-tfoot-row, consol-summary-block para patch directo',
+      'Sustituye _viewConsolNoJump/_viewConsolNoJumpKeepPanel en todo el c\u00F3digo CE/CE2'
+    ]
+  },
+  {
     version: '2.6.4',
     date: '2026-02-12',
     changes: [
@@ -1075,7 +1090,9 @@ const CHANGELOG = [
       'Elimina saltos visuales al re-renderizar resumen consolidado durante edici\u00F3n de importes',
       'Usado en: live input, _applyCEChange, _applyCE2Change, removeCEItem, removeCE2Item',
       'Nuevo _viewConsolNoJumpKeepPanel(): re-abre panel CE/CE2 tras re-render consolidado',
-      'Borrar item CE/CE2 ya no cierra el panel \u2014 se mantiene abierto sin salto visual',
+      'REEMPLAZADO: _patchConsolLightweight() hace patch quirurgico sin re-render DOM',
+      'Borrar item CE/CE2 ya no cierra el panel - patch ligero como en preliq',
+      'Limpieza: eliminado codigo muerto (_viewConsolNoJump, _patchConsolInPlace, duplicados)',
       'Fix: corregido innerHTML corrupto en addCEItem tras limpieza de oninput inline'
     ]
   },
@@ -3220,49 +3237,142 @@ document.addEventListener('input', function(e) {
       st.tSub += (newC.sub - oldC.sub);
       _renderStatsFromCache(_lastFiltered, st);
     }
-    // Update consol summary section if in consol view
+    // Update consol view lightweight (no DOM rebuild = no jumps, panel stays open)
     if (view === 'c' && currentConsolAloj) {
-      var savedVal = el.value, savedSel = [el.selectionStart, el.selectionEnd];
-      _viewConsolNoJump();
-      // Re-open the panel after re-render
-      var newPanel = document.getElementById(prefix + view + 'panel-' + idx);
-      if (newPanel) {
-        newPanel.style.display = '';
-        if (isCE2) { _openCE2Panel = idx; _openCE2View = view; }
-        else { _openCEPanel = idx; _openCEView = view; }
-        var newRows = newPanel.querySelectorAll(isCE2 ? '.ce2-item-row' : '.ce-item-row');
-        if (newRows[itemIdx]) {
-          var newInp = newRows[itemIdx].querySelector(isCE2 ? '.ce2-inp-amt' : '.ce-inp-amt');
-          if (newInp) {
-            newInp.value = savedVal;
-            newInp.focus({preventScroll:true});
-            try { newInp.setSelectionRange(savedSel[0], savedSel[1]); } catch(e){}
-          }
-        }
-      }
+      _patchConsolLightweight(idx, oldC, newC);
     }
     scheduleReservaConfigSave(idx);
   }, 400);
 });
 
-// === CONSOL DETAIL RE-RENDER WITHOUT LAYOUT JUMP ===
-function _viewConsolNoJump() {
-  if (!currentConsolAloj) return;
-  var container = document.getElementById('consoldetail-content');
-  var savedScroll = window.scrollY;
-  if (container) container.style.minHeight = container.offsetHeight + 'px';
-  viewConsolDetail(currentConsolAloj);
-  window.scrollTo(0, savedScroll);
-  requestAnimationFrame(function() { if (container) container.style.minHeight = ''; });
+// === LIGHTWEIGHT CONSOL PATCH (no DOM rebuild) ===
+function _getConsolCalcsAndSums(alojName) {
+  var alojamientos = getAlojamientos();
+  var a = alojamientos.find(function(x) { return x.name === alojName; });
+  if (!a) return null;
+  var filteredReservas = a.reservas;
+  if (_mpHasFilter()) filteredReservas = a.reservas.filter(function(r) { return _mpMatchDate(r._dEntrada); });
+  var calcs = filteredReservas.map(function(r) { return { r: r, s: settings[r.idx] || {}, c: getLiq(r) }; });
+  var sums = { CE:0, orig:0, total:0, base:0, comPlat:0, comGTC:0, comPas:0, limp:0, amen:0, CE2:0, sub:0, iva:0, ret:0, liq:0, noches:0 };
+  calcs.forEach(function(x) {
+    sums.CE += x.c.ceTotal; sums.orig += x.r.totalReserva; sums.total += x.c.total;
+    sums.base += x.c.baseSinIVA; sums.comPlat += x.c.comPlat; sums.comGTC += x.c.comGTC;
+    sums.comPas += x.c.comPas; sums.limp += x.c.limp; sums.amen += x.c.amen;
+    sums.CE2 += x.c.ceSinIvaTotal; sums.sub += x.c.sub; sums.iva += x.c.iva;
+    sums.ret += x.c.ret; sums.liq += x.c.totalLiq; sums.noches += x.r._nights;
+  });
+  return { calcs: calcs, sums: sums, a: a };
 }
-function _viewConsolNoJumpKeepPanel(panelPrefix, idx) {
-  _viewConsolNoJump();
-  var panel = document.getElementById(panelPrefix + 'cpanel-' + idx);
-  if (panel) {
-    panel.style.display = '';
-    if (panelPrefix === 'ce2-') { _openCE2Panel = idx; _openCE2View = 'c'; }
-    else { _openCEPanel = idx; _openCEView = 'c'; }
+
+function _buildConsolSummaryInner(calcs, sums, alojName) {
+  var _dedHtml = buildConsolDeductionsHtml(alojName);
+  var _ded = getConsolDeductions(alojName);
+  var _isSplit = isGtcSplit(alojName);
+  var _gtcSplitAmt = _isSplit ? sums.sub * GTC_SPLIT_RATE : 0;
+  var _ownerBase = _isSplit ? sums.sub - _gtcSplitAmt : sums.sub;
+  var adjSub = _ownerBase - _ded.totalBase;
+  var avgIrpfRate = sums.sub > 0 ? sums.ret / sums.sub : 0;
+  var adjRet = adjSub * avgIrpfRate;
+  var adjIva = adjSub * IVA_SUBTOTAL;
+  var adjLiq = adjSub - adjRet + adjIva;
+  var h = '';
+  h += '<div class="consol-section-title">Resumen Consolidado</div>';
+  h += '<div class="consol-row bold"><span>Total Reservas (IVA incluido)</span><span>' + fmt(sums.total) + ' \u20AC</span></div>';
+  if (sums.CE > 0) {
+    h += '<div class="no-print" style="background:#fffdf5;border:1px dashed #f59e0b;border-radius:6px;margin:4px 28px;padding:4px 12px;">';
+    h += '<div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>\u26A0 Total original reservas</span><span>' + fmt(sums.orig) + ' \u20AC</span></div>';
+    h += '<div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>Conceptos especiales descontados</span><span class="neg">- ' + fmt(sums.CE) + ' \u20AC</span></div>';
+    h += '</div>';
   }
+  h += '<div class="consol-row"><span>IVA Reservas (10%)</span><span class="neg">- ' + fmt(sums.total - sums.base) + ' \u20AC</span></div>';
+  h += '<div class="consol-row bold"><span>Base sin IVA</span><span>' + fmt(sums.base) + ' \u20AC</span></div>';
+  h += '<div class="consol-divider"></div>';
+  h += buildComPlatRows(calcs);
+  h += '<div class="consol-divider"></div>';
+  h += buildGTCRows(calcs);
+  h += buildLimpRows(calcs);
+  h += '<div class="consol-row"><span>Amenities</span><span class="neg">- ' + fmt(sums.amen) + ' \u20AC</span></div>';
+  h += '<div class="consol-divider"></div>';
+  h += buildPasarelaRows(calcs);
+  if (sums.CE2 > 0) {
+    h += '<div class="no-print" style="background:#faf8ff;border:1px dashed #7c3aed;border-radius:6px;margin:4px 28px;padding:4px 12px;">';
+    h += '<div class="consol-row" style="color:#7c3aed;font-size:12px;padding:4px 0;"><span>\u26A0 C.E. Sin IVA descontados</span><span class="neg">- ' + fmt(sums.CE2) + ' \u20AC</span></div>';
+    calcs.forEach(function(x) {
+      (x.s.conceptosSinIVA||[]).filter(function(it){return it.amount>0;}).forEach(function(it) {
+        h += '<div class="consol-row sub" style="color:#9f7aea;font-size:11px;padding:2px 0 2px 12px;"><span>' + esc(it.label||'Sin nombre') + ' <span style="color:#c4b5fd;font-size:10px">(Res. ' + esc(x.r.id) + ')</span></span><span class="neg">- ' + fmt(it.amount) + ' \u20AC</span></div>';
+      });
+    });
+    h += '</div>';
+  }
+  h += '<div class="consol-subtotal-reservas"><span>Subtotal Reservas</span><span>' + fmt(sums.sub) + ' \u20AC</span></div>';
+  if (_isSplit) {
+    h += '<div class="consol-split-box">';
+    h += '<div class="consol-split-title">\u21AD Reparto GTC / Propietario \u2014 Condici\u00F3n Especial</div>';
+    h += '<div class="consol-row bold" style="color:#7c3aed;"><span>GTC retiene (' + (GTC_SPLIT_RATE*100).toFixed(0) + '%)</span><span>' + fmt(_gtcSplitAmt) + ' \u20AC</span></div>';
+    h += '<div class="consol-split-divider"></div>';
+    h += '<div class="consol-row bold" style="color:#16a34a;"><span>Propietario recibe (' + ((1-GTC_SPLIT_RATE)*100).toFixed(0) + '%)</span><span>' + fmt(_ownerBase) + ' \u20AC</span></div>';
+    h += '</div>';
+  }
+  h += '<div class="consol-monthly-box no-print">';
+  h += '<div class="consol-monthly-title">\uD83D\uDCC5 Conceptos Extraordinarios del Mes</div>';
+  h += _dedHtml;
+  h += '</div>';
+  h += '<div class="consol-subtotal"><span>Subtotal Final Mes</span><span>' + fmt(adjSub) + ' \u20AC</span></div>';
+  h += '<div class="consol-row"><span>Retenci\u00F3n IRPF (' + (avgIrpfRate*100).toFixed(0) + '%)</span><span class="neg">- ' + fmt(adjRet) + ' \u20AC</span></div>';
+  h += '<div class="consol-row"><span>IVA del Subtotal (21%)</span><span class="pos">+ ' + fmt(adjIva) + ' \u20AC</span></div>';
+  h += '<div class="consol-total"><span>TOTAL A LIQUIDAR</span><span>' + fmt(adjLiq) + ' \u20AC</span></div>';
+  return h;
+}
+
+function _patchConsolRowCells(idx, newC) {
+  var crow = document.getElementById('crow-' + idx);
+  if (!crow) return;
+  // Note: cc-totalReserva shows r.totalReserva (original) which never changes with CE/CE2
+  var el;
+  el = crow.querySelector('.cc-ce'); if (el) el.innerHTML = _buildCEButton(idx, newC, 'c');
+  el = crow.querySelector('.cc-baseSinIVA'); if (el) el.innerHTML = fmt(newC.baseSinIVA) + ' \u20AC';
+  // For cells with select+span, patch only the span
+  var sp;
+  sp = crow.querySelector('.cc-comPlataforma span[style*="tabular"]'); if (sp) sp.innerHTML = '\u2013 ' + fmt(newC.comPlat) + ' \u20AC';
+  sp = crow.querySelector('.cc-comGTC span[style*="tabular"]'); if (sp) sp.innerHTML = '\u2013 ' + fmt(newC.comGTC) + ' \u20AC';
+  sp = crow.querySelector('.cc-pasarela span[style*="tabular"]'); if (sp) sp.innerHTML = '\u2013 ' + fmt(newC.comPas) + ' \u20AC';
+  el = crow.querySelector('.cc-ceSinIva'); if (el) el.innerHTML = _buildCE2Button(idx, newC, 'c');
+  el = crow.querySelector('.cc-subtotal'); if (el) el.innerHTML = fmt(newC.sub) + ' \u20AC';
+  sp = crow.querySelector('.cc-irpf span[style*="tabular"]'); if (sp) sp.innerHTML = '\u2013 ' + fmt(newC.ret) + ' \u20AC';
+  sp = crow.querySelector('.cc-iva21 span[style*="tabular"]'); if (sp) sp.innerHTML = '+ ' + fmt(newC.iva) + ' \u20AC';
+  el = crow.querySelector('.cc-totalLiquidar'); if (el) { el.innerHTML = fmt(newC.totalLiq) + ' \u20AC'; el.style.color = newC.totalLiq >= 0 ? '#1a2744' : '#e53935'; }
+}
+
+function _patchConsolFooterRow(sums, count) {
+  var frow = document.getElementById('consol-tfoot-row');
+  if (!frow) return;
+  var p = function(cls, val) { var el = frow.querySelector('.'+cls); if (el) el.innerHTML = fmt(val) + ' \u20AC'; };
+  // cc-totalReserva shows sum of original r.totalReserva (not affected by CE)
+  p('cc-totalReserva', sums.orig);
+  var ceCel = frow.querySelector('.cc-ce'); if (ceCel) ceCel.innerHTML = sums.CE > 0 ? '\u2013 ' + fmt(sums.CE) + ' \u20AC' : '';
+  p('cc-baseSinIVA', sums.base);
+  p('cc-comPlataforma', sums.comPlat);
+  p('cc-comGTC', sums.comGTC);
+  p('cc-limpieza', sums.limp);
+  p('cc-amenities', sums.amen);
+  var pasCel = frow.querySelector('.cc-pasarela'); if (pasCel) pasCel.innerHTML = sums.comPas > 0 ? fmt(sums.comPas) + ' \u20AC' : '\u2013';
+  var ce2Cel = frow.querySelector('.cc-ceSinIva'); if (ce2Cel) ce2Cel.innerHTML = sums.CE2 > 0 ? '\u2013 ' + fmt(sums.CE2) + ' \u20AC' : '';
+  p('cc-subtotal', sums.sub);
+  var retCel = frow.querySelector('.cc-irpf'); if (retCel) retCel.innerHTML = '\u2013 ' + fmt(sums.ret) + ' \u20AC';
+  var ivaCel = frow.querySelector('.cc-iva21'); if (ivaCel) ivaCel.innerHTML = '+ ' + fmt(sums.iva) + ' \u20AC';
+  p('cc-totalLiquidar', sums.liq);
+}
+
+function _patchConsolLightweight(idx, oldC, newC) {
+  if (!currentConsolAloj) return;
+  // 1. Patch individual row
+  _patchConsolRowCells(idx, newC);
+  // 2. Recalculate sums and patch footer + summary
+  var data = _getConsolCalcsAndSums(currentConsolAloj);
+  if (!data) return;
+  _patchConsolFooterRow(data.sums, data.calcs.length);
+  var summaryBlock = document.getElementById('consol-summary-block');
+  if (summaryBlock) summaryBlock.innerHTML = _buildConsolSummaryInner(data.calcs, data.sums, currentConsolAloj);
 }
 
 // === CE ENTER KEY HANDLERS (row-first, numbers async) ===
@@ -3492,7 +3602,7 @@ function removeCEItem(idx, itemIdx, view) {
         _renderStatsFromCache(_lastFiltered, st);
       }
       scheduleReservaConfigSave(idx);
-      if (v === 'c' && currentConsolAloj) _viewConsolNoJumpKeepPanel('ce-', idx);
+      if (v === 'c' && currentConsolAloj) _patchConsolLightweight(idx, oldC, newC);
     }, {once:true});
   } else {
     s.conceptosEspeciales.splice(itemIdx, 1);
@@ -3522,9 +3632,9 @@ function _applyCEChange(idx, view) {
   _refreshCESummary(idx, v);
   _patchMainRowCells(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
-  // If changed from consol view, re-render consol detail
+  // If changed from consol view, patch lightweight
   if (v === 'c' && currentConsolAloj) {
-    _viewConsolNoJumpKeepPanel('ce-', idx);
+    _patchConsolLightweight(idx, oldC, newC);
   } else {
     let panel = document.getElementById('ce-' + v + 'panel-' + idx);
     if (panel) { panel.style.display = ''; _openCEPanel = idx; _openCEView = v; }
@@ -3683,7 +3793,7 @@ function removeCE2Item(idx, itemIdx, view) {
         _renderStatsFromCache(_lastFiltered, st);
       }
       scheduleReservaConfigSave(idx);
-      if (v === 'c' && currentConsolAloj) _viewConsolNoJumpKeepPanel('ce2-', idx);
+      if (v === 'c' && currentConsolAloj) _patchConsolLightweight(idx, oldC, newC);
     }, {once:true});
   } else {
     s.conceptosSinIVA.splice(itemIdx, 1);
@@ -3714,7 +3824,7 @@ function _applyCE2Change(idx, view) {
   _patchMainRowCells(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
   if (v === 'c' && currentConsolAloj) {
-    _viewConsolNoJumpKeepPanel('ce2-', idx);
+    _patchConsolLightweight(idx, oldC, newC);
   } else {
     let panel = document.getElementById('ce2-' + v + 'panel-' + idx);
     if (panel) { panel.style.display = ''; _openCE2Panel = idx; _openCE2View = v; }
@@ -4716,7 +4826,7 @@ function viewConsolDetail(alojName) {
   // Footer totals - identical dark bar like main table
   const _cfs='border:none;padding:10px 8px;';
   const _cfr='border:none;padding:10px 8px;color:#ff8a80;text-align:center;font-variant-numeric:tabular-nums;';
-  const miniTotals = `<tr style="background:#0f1628;color:#fff;font-weight:700;font-size:12px;">
+  const miniTotals = `<tr id="consol-tfoot-row" style="background:#0f1628;color:#fff;font-weight:700;font-size:12px;">
     <td class="cc-estado" style="${_cfs}"></td>
     <td class="cc-idReserva" style="${_cfs}"></td>
     <td class="cc-localizador" style="${_cfs}"></td>
@@ -4803,7 +4913,7 @@ function viewConsolDetail(alojName) {
         </div>
         </div>
 
-        <div class="consol-summary-block">
+        <div class="consol-summary-block" id="consol-summary-block">
         <div class="consol-section-title">Resumen Consolidado</div>
         <div class="consol-row bold"><span>Total Reservas (IVA incluido)</span><span>${fmt(sumTotal)} &#8364;</span></div>
 ${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed #f59e0b;border-radius:6px;margin:4px 28px;padding:4px 12px;">

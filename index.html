@@ -945,8 +945,8 @@ function clearSearchConsol() {
  * ══════════════════════════════════════════════════════════════
  */
 const APP_VERSION = '2.6.4';
-const APP_BUILD   = '2026-02-12T19:45:00+01:00';
-const APP_CHANGES = 'Live CE/CE2 sin saltos: debounce 400ms + _viewConsolNoJump (freeze height + scroll restore)';
+const APP_BUILD   = '2026-02-12T21:50:00+01:00';
+const APP_CHANGES = 'Live CE/CE2 sin saltos + panel permanece abierto al borrar items';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1074,6 +1074,8 @@ const CHANGELOG = [
       'Nuevo _viewConsolNoJump(): congela altura contenedor + guarda scroll + viewConsolDetail + restaura',
       'Elimina saltos visuales al re-renderizar resumen consolidado durante edici\u00F3n de importes',
       'Usado en: live input, _applyCEChange, _applyCE2Change, removeCEItem, removeCE2Item',
+      'Nuevo _viewConsolNoJumpKeepPanel(): re-abre panel CE/CE2 tras re-render consolidado',
+      'Borrar item CE/CE2 ya no cierra el panel \u2014 se mantiene abierto sin salto visual',
       'Fix: corregido innerHTML corrupto en addCEItem tras limpieza de oninput inline'
     ]
   },
@@ -3253,6 +3255,15 @@ function _viewConsolNoJump() {
   window.scrollTo(0, savedScroll);
   requestAnimationFrame(function() { if (container) container.style.minHeight = ''; });
 }
+function _viewConsolNoJumpKeepPanel(panelPrefix, idx) {
+  _viewConsolNoJump();
+  var panel = document.getElementById(panelPrefix + 'cpanel-' + idx);
+  if (panel) {
+    panel.style.display = '';
+    if (panelPrefix === 'ce2-') { _openCE2Panel = idx; _openCE2View = 'c'; }
+    else { _openCEPanel = idx; _openCEView = 'c'; }
+  }
+}
 
 // === CE ENTER KEY HANDLERS (row-first, numbers async) ===
 function _ceKey(e, idx, view, isAmt) {
@@ -3481,7 +3492,7 @@ function removeCEItem(idx, itemIdx, view) {
         _renderStatsFromCache(_lastFiltered, st);
       }
       scheduleReservaConfigSave(idx);
-      if (v === 'c' && currentConsolAloj) _viewConsolNoJump();
+      if (v === 'c' && currentConsolAloj) _viewConsolNoJumpKeepPanel('ce-', idx);
     }, {once:true});
   } else {
     s.conceptosEspeciales.splice(itemIdx, 1);
@@ -3513,9 +3524,8 @@ function _applyCEChange(idx, view) {
   scheduleReservaConfigSave(idx);
   // If changed from consol view, re-render consol detail
   if (v === 'c' && currentConsolAloj) {
-    _viewConsolNoJump();
+    _viewConsolNoJumpKeepPanel('ce-', idx);
   } else {
-    // Re-open panel if it was open in preliq
     let panel = document.getElementById('ce-' + v + 'panel-' + idx);
     if (panel) { panel.style.display = ''; _openCEPanel = idx; _openCEView = v; }
   }
@@ -3673,7 +3683,7 @@ function removeCE2Item(idx, itemIdx, view) {
         _renderStatsFromCache(_lastFiltered, st);
       }
       scheduleReservaConfigSave(idx);
-      if (v === 'c' && currentConsolAloj) _viewConsolNoJump();
+      if (v === 'c' && currentConsolAloj) _viewConsolNoJumpKeepPanel('ce2-', idx);
     }, {once:true});
   } else {
     s.conceptosSinIVA.splice(itemIdx, 1);
@@ -3704,7 +3714,7 @@ function _applyCE2Change(idx, view) {
   _patchMainRowCells(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
   if (v === 'c' && currentConsolAloj) {
-    _viewConsolNoJump();
+    _viewConsolNoJumpKeepPanel('ce2-', idx);
   } else {
     let panel = document.getElementById('ce2-' + v + 'panel-' + idx);
     if (panel) { panel.style.display = ''; _openCE2Panel = idx; _openCE2View = v; }

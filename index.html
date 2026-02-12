@@ -750,9 +750,9 @@ function clearSearchConsol() {
   onSearchConsol('');
 }
 
-const APP_VERSION = '2.0.0';
-const APP_BUILD   = '2026-02-12T23:30:00+01:00';
-const APP_CHANGES = 'Refactorizaci\u00F3n profunda: robustez, seguridad XSS, validaci\u00F3n, CONFIG centralizado';
+const APP_VERSION = '2.0.1';
+const APP_BUILD   = '2026-02-13T00:15:00+01:00';
+const APP_CHANGES = 'Persistencia robusta: guardado write-first, CE save on add';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -843,6 +843,12 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  { version: '2.0.1', date: '2026-02-13T00:15:00+01:00', changes: [
+    'Fix: addCEItem ahora persiste inmediatamente al a\u00F1adir concepto especial',
+    'Persistencia write-first: datos se escriben antes de limpiar filas obsoletas',
+    'Si la limpieza de filas residuales falla, los datos nuevos ya est\u00E1n seguros',
+    'Eliminado riesgo de p\u00E9rdida de config si la red falla entre clear y update'
+  ]},
   { version: '2.0.0', date: '2026-02-12T22:45:00+01:00', changes: [
     'Refactorizaci\u00F3n profunda del c\u00F3digo base para mayor robustez y mantenibilidad',
     'Nuevo objeto CONFIG centraliza todas las constantes de la aplicaci\u00F3n',
@@ -1907,22 +1913,25 @@ function applyConfigFromRows(rows) {
   invalidateCache();
 }
 
-// Save full global config to sheet
+// Save full global config to sheet (write-first for safety)
 async function saveGlobalConfigToSheet() {
   if (!_sheetSource || !_googleToken || !_configLoaded) return;
   updateSyncIndicator('syncing');
   try {
     let data = buildFullConfigTabData();
-    await gapi.client.sheets.spreadsheets.values.clear({
-      spreadsheetId: _sheetSource.id,
-      range: CONFIG_TAB_NAME + '!A1:I10000'
-    });
+    // Write new data first (safe: if clear fails, data is already saved)
     await gapi.client.sheets.spreadsheets.values.update({
       spreadsheetId: _sheetSource.id,
       range: CONFIG_TAB_NAME + '!A1',
       valueInputOption: 'RAW',
       resource: { values: data }
     });
+    // Clear any stale rows below the new data
+    const clearFrom = data.length + 1;
+    await gapi.client.sheets.spreadsheets.values.clear({
+      spreadsheetId: _sheetSource.id,
+      range: CONFIG_TAB_NAME + '!A' + clearFrom + ':I' + CONFIG.MAX_CONFIG_ROWS
+    }).catch(function(e) { console.warn('[Config] Non-critical: clear stale rows failed', e); });
     updateSyncIndicator('saved');
     console.log('[Config] Saved full config (' + data.length + ' rows)');
   } catch(e) {
@@ -1931,7 +1940,7 @@ async function saveGlobalConfigToSheet() {
   }
 }
 
-// Flush pending per-reservation config saves (batch)
+// Flush pending per-reservation config saves (write-first for safety)
 async function flushReservaConfigSaves() {
   if (!_sheetSource || !_googleToken || !_configLoaded) return;
   if (_pendingReservaConfigSaves.size === 0) return;
@@ -1942,16 +1951,19 @@ async function flushReservaConfigSaves() {
   updateSyncIndicator('syncing');
   try {
     let data = buildFullConfigTabData();
-    await gapi.client.sheets.spreadsheets.values.clear({
-      spreadsheetId: _sheetSource.id,
-      range: CONFIG_TAB_NAME + '!A1:I10000'
-    });
+    // Write new data first (safe: if clear fails, data is already saved)
     await gapi.client.sheets.spreadsheets.values.update({
       spreadsheetId: _sheetSource.id,
       range: CONFIG_TAB_NAME + '!A1',
       valueInputOption: 'RAW',
       resource: { values: data }
     });
+    // Clear any stale rows below the new data
+    const clearFrom = data.length + 1;
+    await gapi.client.sheets.spreadsheets.values.clear({
+      spreadsheetId: _sheetSource.id,
+      range: CONFIG_TAB_NAME + '!A' + clearFrom + ':I' + CONFIG.MAX_CONFIG_ROWS
+    }).catch(function(e) { console.warn('[Config] Non-critical: clear stale rows failed', e); });
     updateSyncIndicator('saved');
     console.log('[Config] Saved config for ' + indices.length + ' reserva(s)');
   } catch(e) {
@@ -2698,6 +2710,7 @@ function addCEItem(idx, view) {
   row.innerHTML = '<input class="ce-inp-label" type="text" value="" onchange="updateCEItem('+idx+','+i+',\'label\',this.value,\''+v+'\')" placeholder="Ej: Mascota..." /><input class="ce-inp-amt" type="text" value="0,00" onchange="updateCEItem('+idx+','+i+',\'amount\',this.value,\''+v+'\')" /><button class="ce-del" onclick="removeCEItem('+idx+','+i+',\''+v+'\')">&#215;</button>';
   addLink.parentNode.insertBefore(row, addLink);
   row.querySelector('.ce-inp-label').focus();
+  scheduleReservaConfigSave(idx);
 }
 
 function removeCEItem(idx, itemIdx, view) {

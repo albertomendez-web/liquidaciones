@@ -329,7 +329,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .col-toggle-wrap { position: relative; }
 .col-toggle-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 8px; border: 1.5px solid #dde1e8; background: #fafbfc; font-size: 12px; font-weight: 600; color: #6b7280; cursor: pointer; font-family: inherit; transition: all 0.2s; }
 .col-toggle-btn:hover { border-color: #4f8cff; color: #4f8cff; background: #f0f5ff; }
-.col-toggle-dd { display: none; position: absolute; top: calc(100% + 4px); right: 0; background: #fff; border: 1.5px solid #dde1e8; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 60; padding: 8px 4px; min-width: 200px; }
+.col-toggle-dd { display: none; position: absolute; top: calc(100% + 4px); right: 0; background: #fff; border: 1.5px solid #dde1e8; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); z-index: 60; padding: 8px 4px; min-width: 200px; max-height: 60vh; overflow-y: auto; }
 .col-toggle-dd.open { display: block; }
 .col-toggle-item { display: flex; align-items: center; gap: 8px; padding: 6px 12px; font-size: 13px; border-radius: 6px; cursor: pointer; transition: background 0.15s; user-select: none; }
 .col-toggle-item:hover { background: #eef3ff; }
@@ -776,31 +776,31 @@ function clearSearchConsol() {
 }
 
 /*
- * â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
- * â•‘                    VERSIONING RULES (SemVer)                       â•‘
- * â•‘  OBLIGATORIO actualizar en CADA entrega de cÃ³digo sin excepciÃ³n.   â•‘
- * â• â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•£
- * â•‘  MAJOR (X.0.0) â€” Cambios incompatibles, reestructuraciÃ³n total,   â•‘
- * â•‘                   migraciÃ³n de datos necesaria                     â•‘
- * â•‘  MINOR (x.Y.0) â€” Nueva funcionalidad, nueva secciÃ³n UI,           â•‘
- * â•‘                   nuevo campo/columna, nueva integraciÃ³n           â•‘
- * â•‘  PATCH (x.y.Z) â€” Bugfix, ajuste visual, optimizaciÃ³n,             â•‘
- * â•‘                   refactor sin cambio funcional                    â•‘
- * â• â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•£
- * â•‘  CHECKLIST por entrega:                                            â•‘
- * â•‘  â–¡ 1. Leer versiÃ³n actual de APP_VERSION                          â•‘
- * â•‘  â–¡ 2. Decidir bump: MAJOR / MINOR / PATCH                        â•‘
- * â•‘  â–¡ 3. Actualizar APP_VERSION con nueva versiÃ³n                    â•‘
- * â•‘  â–¡ 4. Actualizar APP_BUILD con fecha/hora actual Madrid (+01/+02) â•‘
- * â•‘  â–¡ 5. Actualizar APP_CHANGES con resumen breve (< 100 chars)     â•‘
- * â•‘  â–¡ 6. AÃ±adir entrada al array CHANGELOG (al principio)           â•‘
- * â•‘       con version, date (ISO Madrid), y array changes detallado   â•‘
- * â•‘  â–¡ 7. NUNCA reutilizar un nÃºmero de versiÃ³n ya existente          â•‘
- * â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+ * Ã¢â€¢â€Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢â€”
+ * Ã¢â€¢â€˜                    VERSIONING RULES (SemVer)                       Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  OBLIGATORIO actualizar en CADA entrega de cÃƒÂ³digo sin excepciÃƒÂ³n.   Ã¢â€¢â€˜
+ * Ã¢â€¢Â Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â£
+ * Ã¢â€¢â€˜  MAJOR (X.0.0) Ã¢â‚¬â€ Cambios incompatibles, reestructuraciÃƒÂ³n total,   Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜                   migraciÃƒÂ³n de datos necesaria                     Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  MINOR (x.Y.0) Ã¢â‚¬â€ Nueva funcionalidad, nueva secciÃƒÂ³n UI,           Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜                   nuevo campo/columna, nueva integraciÃƒÂ³n           Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  PATCH (x.y.Z) Ã¢â‚¬â€ Bugfix, ajuste visual, optimizaciÃƒÂ³n,             Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜                   refactor sin cambio funcional                    Ã¢â€¢â€˜
+ * Ã¢â€¢Â Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â£
+ * Ã¢â€¢â€˜  CHECKLIST por entrega:                                            Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  Ã¢â€“Â¡ 1. Leer versiÃƒÂ³n actual de APP_VERSION                          Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  Ã¢â€“Â¡ 2. Decidir bump: MAJOR / MINOR / PATCH                        Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  Ã¢â€“Â¡ 3. Actualizar APP_VERSION con nueva versiÃƒÂ³n                    Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  Ã¢â€“Â¡ 4. Actualizar APP_BUILD con fecha/hora actual Madrid (+01/+02) Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  Ã¢â€“Â¡ 5. Actualizar APP_CHANGES con resumen breve (< 100 chars)     Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  Ã¢â€“Â¡ 6. AÃƒÂ±adir entrada al array CHANGELOG (al principio)           Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜       con version, date (ISO Madrid), y array changes detallado   Ã¢â€¢â€˜
+ * Ã¢â€¢â€˜  Ã¢â€“Â¡ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente          Ã¢â€¢â€˜
+ * Ã¢â€¢Å¡Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.1.0';
-const APP_BUILD   = '2026-02-12T17:30:00+01:00';
-const APP_CHANGES = 'Nueva columna C.E. (Sin IVA) en preliquidaciones y consolidado';
+const APP_VERSION = '2.1.1';
+const APP_BUILD   = '2026-02-12T22:15:00+01:00';
+const APP_CHANGES = 'Fix: dropdown columnas cortado en sección Liquidación';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -891,6 +891,10 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  { version: '2.1.1', date: '2026-02-12T22:15:00+01:00', changes: [
+    'Fix: dropdown selector de columnas se cortaba en secci\u00F3n Liquidaci\u00F3n por overflow del contenedor',
+    'A\u00F1adido max-height: 60vh con scroll al desplegable de columnas para evitar desbordamiento'
+  ]},
   { version: '2.1.0', date: '2026-02-12T17:30:00+01:00', changes: [
     'Nueva columna C.E. (Sin IVA): conceptos especiales que restan directamente al subtotal',
     'Panel desplegable violeta con misma mec\u00E1nica que C.E. (IVA inc.) pero en base sin IVA',

@@ -186,6 +186,17 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-split-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7c3aed; padding: 6px 8px 4px; }
 .consol-split-box .consol-row { padding: 8px 8px; border-radius: 4px; }
 .consol-split-divider { height: 1px; background: #d8b4fe; margin: 2px 8px; }
+.gtc-split-section { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border: 1.5px solid #d8b4fe; border-radius: 10px; margin: 8px 0 0; padding: 14px 16px; }
+.gtc-split-title { font-size: 12px; font-weight: 700; color: #7c3aed; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.gtc-split-desc { font-size: 11px; color: #6b7280; margin-bottom: 12px; line-height: 1.5; }
+.gtc-split-list { display: flex; flex-direction: column; gap: 2px; }
+.gtc-split-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; border-radius: 6px; transition: background 0.15s; }
+.gtc-split-row:hover { background: rgba(168,85,247,0.06); }
+.gtc-split-row .name { font-size: 12px; font-weight: 500; }
+.gtc-split-row .name.on { color: #7c3aed; font-weight: 600; }
+.gtc-split-divider-row { height: 1px; background: #ede9fe; margin: 0 10px; }
+.gtc-split-counter { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 8px 10px; background: rgba(168,85,247,0.08); border-radius: 8px; font-size: 11px; color: #6b7280; }
+.gtc-split-counter .badge { display: inline-flex; align-items: center; justify-content: center; background: #7c3aed; color: #fff; font-size: 10px; font-weight: 700; min-width: 20px; height: 20px; border-radius: 10px; padding: 0 6px; }
 .consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; font-size: 15px; font-weight: 700; background: #f0f2f5; }
 .consol-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 28px; font-size: 20px; font-weight: 700; background: #0f1628; color: #fff; border-radius: 0 0 14px 14px; }
 .consol-mini-table { margin: 0; width: 100%; table-layout: auto; }
@@ -806,9 +817,9 @@ function clearSearchConsol() {
  * ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ  ÃƒÂ¢Ã¢â‚¬â€œÃ‚Â¡ 7. NUNCA reutilizar un nÃƒÆ’Ã‚Âºmero de versiÃƒÆ’Ã‚Â³n ya existente          ÃƒÂ¢Ã¢â‚¬Â¢Ã¢â‚¬Ëœ
  * ÃƒÂ¢Ã¢â‚¬Â¢Ã…Â¡ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
  */
-const APP_VERSION = '2.3.0';
-const APP_BUILD   = '2026-02-12T23:15:00+01:00';
-const APP_CHANGES = 'Reparto 80/20 GTC para alojamientos con condicion especial';
+const APP_VERSION = '2.3.1';
+const APP_BUILD   = '2026-02-12T23:30:00+01:00';
+const APP_CHANGES = 'Selector toggles 80/20 en config GTC';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -899,6 +910,11 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  { version: '2.3.1', date: '2026-02-12T23:30:00+01:00', changes: [
+    'Selector visual de alojamientos 80/20 con toggles en pesta\u00F1a Configuraci\u00F3n > GTC',
+    'Lista din\u00E1mica generada a partir de alojamientos cargados',
+    'Contador de alojamientos activos con guardado autom\u00E1tico'
+  ]},
   { version: '2.3.0', date: '2026-02-12T23:15:00+01:00', changes: [
     'Reparto 80/20 GTC: alojamientos con condici\u00F3n especial retienen 20% para GTC del Subtotal Reservas',
     'Caja violeta de reparto entre Subtotal Reservas y Conceptos Extraordinarios del Mes',
@@ -4459,7 +4475,9 @@ function renderConfigModal() {
     '<hr class="section-divider">' +
     buildOS("Amenities","Coste fijo por reserva en \u20AC",amenitiesOptions," \u20AC","add-am","addAM","delAM") +
     '<hr class="section-divider">' +
-    buildOS("Mantenimiento mensual","Importe base (+ 21% IVA) por liquidaci\u00F3n",maintenanceOptions," \u20AC","add-mt","addMT","delMT");
+    buildOS("Mantenimiento mensual","Importe base (+ 21% IVA) por liquidaci\u00F3n",maintenanceOptions," \u20AC","add-mt","addMT","delMT") +
+    '<hr class="section-divider">' +
+    buildGtcSplitSection();
   document.getElementById("tab-impuestos").innerHTML =
     buildOS("Retenci\u00F3n IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR");
 }
@@ -4474,6 +4492,29 @@ function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);con
   if(isP!==false){if(isNaN(v)||v<0||v>max){alert("Valor v\u00E1lido.");return;}}else{if(isNaN(v)||v<0){alert("Valor v\u00E1lido.");return;}}
   if(list.some(x=>Math.abs(x-v)<0.001)){alert("Ya existe.");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}
 function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal();}
+
+function buildGtcSplitSection() {
+  const alojs = [...new Set(allReservas.map(r => r.alojamiento))].sort();
+  if (alojs.length === 0) return '';
+  const rows = alojs.map(function(name) {
+    const on = isGtcSplit(name);
+    return '<div class="gtc-split-row"><span class="name' + (on ? ' on' : '') + '">' + esc(name) + '</span>' +
+      '<div class="toggle" onclick="toggleGtcSplit(\'' + name.replace(/'/g, "\\'") + '\')"><div class="toggle-track' + (on ? ' on' : '') + '" style="' + (on ? 'background:#7c3aed;' : '') + '"><div class="toggle-thumb"></div></div></div></div>';
+  }).join('<div class="gtc-split-divider-row"></div>');
+  const count = alojs.filter(function(n){ return isGtcSplit(n); }).length;
+  return '<div class="gtc-split-section"><div class="gtc-split-title">' +
+    '&#8621; Reparto 80/20 GTC</div>' +
+    '<div class="gtc-split-desc">GTC retiene el 20% del Subtotal Reservas. El propietario recibe el 80% antes de conceptos extraordinarios del mes.</div>' +
+    '<div class="gtc-split-list">' + rows + '</div>' +
+    '<div class="gtc-split-counter"><span class="badge">' + count + '</span> alojamiento' + (count !== 1 ? 's' : '') + ' con reparto 80/20 activo</div></div>';
+}
+function toggleGtcSplit(alojName) {
+  const idx = _gtcSplitAlojamientos.indexOf(alojName);
+  if (idx >= 0) { _gtcSplitAlojamientos.splice(idx, 1); }
+  else { _gtcSplitAlojamientos.push(alojName); _gtcSplitAlojamientos.sort(); }
+  renderConfigModal();
+  scheduleGlobalConfigSave();
+}
 
 // \u2500\u2500\u2500 SEARCHABLE COMBO SYSTEM \u2500\u2500\u2500
 const comboState = { platform: { selected: new Set(), options: [] }, aloj: { selected: new Set(), options: [] } };

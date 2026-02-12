@@ -945,8 +945,8 @@ function clearSearchConsol() {
  * ══════════════════════════════════════════════════════════════
  */
 const APP_VERSION = '2.6.4';
-const APP_BUILD   = '2026-02-12T19:35:00+01:00';
-const APP_CHANGES = 'Live: importes CE/CE2 se actualizan en tiempo real mientras tecleas (debounce 400ms)';
+const APP_BUILD   = '2026-02-12T19:45:00+01:00';
+const APP_CHANGES = 'Live CE/CE2 sin saltos: debounce 400ms + _viewConsolNoJump (freeze height + scroll restore)';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1071,8 +1071,9 @@ const CHANGELOG = [
       'Delegaci\u00F3n de eventos: un solo listener document.input captura .ce-inp-amt y .ce2-inp-amt',
       'Debounce 400ms evita re-renders excesivos durante escritura r\u00E1pida',
       'Path ligero: actualiza cache + panel summary + footer stats sin reconstruir DOM completo',
-      'Vista consolidada: viewConsolDetail + re-apertura panel + restauraci\u00F3n cursor/selecci\u00F3n',
-      'Resumen consolidado (caja naranja CE / violeta CE2) se actualiza en tiempo real',
+      'Nuevo _viewConsolNoJump(): congela altura contenedor + guarda scroll + viewConsolDetail + restaura',
+      'Elimina saltos visuales al re-renderizar resumen consolidado durante edici\u00F3n de importes',
+      'Usado en: live input, _applyCEChange, _applyCE2Change, removeCEItem, removeCE2Item',
       'Fix: corregido innerHTML corrupto en addCEItem tras limpieza de oninput inline'
     ]
   },
@@ -3220,7 +3221,8 @@ document.addEventListener('input', function(e) {
     // Update consol summary section if in consol view
     if (view === 'c' && currentConsolAloj) {
       var savedVal = el.value, savedSel = [el.selectionStart, el.selectionEnd];
-      viewConsolDetail(currentConsolAloj);
+      _viewConsolNoJump();
+      // Re-open the panel after re-render
       var newPanel = document.getElementById(prefix + view + 'panel-' + idx);
       if (newPanel) {
         newPanel.style.display = '';
@@ -3240,6 +3242,17 @@ document.addEventListener('input', function(e) {
     scheduleReservaConfigSave(idx);
   }, 400);
 });
+
+// === CONSOL DETAIL RE-RENDER WITHOUT LAYOUT JUMP ===
+function _viewConsolNoJump() {
+  if (!currentConsolAloj) return;
+  var container = document.getElementById('consoldetail-content');
+  var savedScroll = window.scrollY;
+  if (container) container.style.minHeight = container.offsetHeight + 'px';
+  viewConsolDetail(currentConsolAloj);
+  window.scrollTo(0, savedScroll);
+  requestAnimationFrame(function() { if (container) container.style.minHeight = ''; });
+}
 
 // === CE ENTER KEY HANDLERS (row-first, numbers async) ===
 function _ceKey(e, idx, view, isAmt) {
@@ -3468,7 +3481,7 @@ function removeCEItem(idx, itemIdx, view) {
         _renderStatsFromCache(_lastFiltered, st);
       }
       scheduleReservaConfigSave(idx);
-      if (v === 'c' && currentConsolAloj) viewConsolDetail(currentConsolAloj);
+      if (v === 'c' && currentConsolAloj) _viewConsolNoJump();
     }, {once:true});
   } else {
     s.conceptosEspeciales.splice(itemIdx, 1);
@@ -3500,7 +3513,7 @@ function _applyCEChange(idx, view) {
   scheduleReservaConfigSave(idx);
   // If changed from consol view, re-render consol detail
   if (v === 'c' && currentConsolAloj) {
-    viewConsolDetail(currentConsolAloj);
+    _viewConsolNoJump();
   } else {
     // Re-open panel if it was open in preliq
     let panel = document.getElementById('ce-' + v + 'panel-' + idx);
@@ -3660,7 +3673,7 @@ function removeCE2Item(idx, itemIdx, view) {
         _renderStatsFromCache(_lastFiltered, st);
       }
       scheduleReservaConfigSave(idx);
-      if (v === 'c' && currentConsolAloj) viewConsolDetail(currentConsolAloj);
+      if (v === 'c' && currentConsolAloj) _viewConsolNoJump();
     }, {once:true});
   } else {
     s.conceptosSinIVA.splice(itemIdx, 1);
@@ -3691,7 +3704,7 @@ function _applyCE2Change(idx, view) {
   _patchMainRowCells(idx, oldC, newC);
   scheduleReservaConfigSave(idx);
   if (v === 'c' && currentConsolAloj) {
-    viewConsolDetail(currentConsolAloj);
+    _viewConsolNoJump();
   } else {
     let panel = document.getElementById('ce2-' + v + 'panel-' + idx);
     if (panel) { panel.style.display = ''; _openCE2Panel = idx; _openCE2View = v; }

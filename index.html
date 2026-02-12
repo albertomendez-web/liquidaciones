@@ -944,9 +944,9 @@ function clearSearchConsol() {
  *  ✓ 7. NUNCA reutilizar un número de versión ya existente
  * ══════════════════════════════════════════════════════════════
  */
-const APP_VERSION = '2.6.0';
-const APP_BUILD   = '2026-02-12T18:30:00+01:00';
-const APP_CHANGES = 'Detalle liquidaci\u00F3n: paleta unificada con app (azul #4f8cff, sidebar gradient, Inter/DM Sans)';
+const APP_VERSION = '2.6.1';
+const APP_BUILD   = '2026-02-12T18:45:00+01:00';
+const APP_CHANGES = 'Fix parseNum: n\u00FAmeros nativos JS (con decimales) perd\u00EDan punto decimal al parsear';
 
 // === UTILITY: XSS Escaping ===
 function esc(str) {
@@ -1063,6 +1063,16 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.6.1',
+    date: '2026-02-12',
+    changes: [
+      'Fix cr\u00EDtico parseNum(): cuando Google Sheets devuelve n\u00FAmero nativo JS (ej: 1698.91), se convert\u00EDa a string y se eliminaba el punto decimal como si fuera separador de miles',
+      'Resultado: 1698.91 \u2192 169891 (x100), 416.24 \u2192 41624, etc.',
+      'Soluci\u00F3n: if (typeof v === "number") return v \u2014 devolver directamente sin parsear strings',
+      'Afectaba a totalReserva y cualquier campo num\u00E9rico con decimales desde la API'
+    ]
+  },
   {
     version: '2.6.0',
     date: '2026-02-12',
@@ -2629,6 +2639,7 @@ function calcNights(e, s) {
 }
 function parseNum(v) {
   if (v == null || v === '') return 0;
+  if (typeof v === 'number') return isFinite(v) ? v : 0;
   var s = String(v).replace(/[^\d.,-]/g, '').replace(/\./g, '').replace(',', '.');
   return parseFloat(s) || 0;
 }

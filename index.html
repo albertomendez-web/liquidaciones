@@ -362,7 +362,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .sidebar, .btn, .no-print, .liq-actions, .gear-btn { display: none !important; }
 
   /* Container */
-  .consol-container, .liq-container { max-width: 100% !important; box-shadow: none !important; border-radius: 0 !important; }
+  .consol-container, .liq-container { max-width: 100% !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; border: none !important; }
 
   /* Header */
   .consol-header, .liq-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; padding: 16px 20px !important; }
@@ -389,7 +389,8 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .consol-total { padding: 12px 16px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; }
 
   /* CRITICAL: keep summary + total together \u2014 never split across pages */
-  .consol-summary-block { page-break-inside: avoid !important; break-inside: avoid !important; }
+  .consol-summary-block { page-break-inside: avoid !important; break-inside: avoid !important; max-width: 100% !important; }
+  .consol-subtotal-reservas { padding: 8px 16px !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
   /* Table page break rules */
   table { page-break-inside: auto; }
@@ -399,6 +400,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 
   /* Individual liquidaci&oacute;n */
   .liq-row { padding: 6px 0 !important; font-size: 11px !important; }
+  .liq-row.bold { margin: 0 -20px !important; padding: 8px 20px !important; font-size: 12px !important; }
   .liq-pas-row { padding: 6px 0 !important; font-size: 11px !important; }
   .liq-divider { margin: 2px 0 !important; }
   .liq-total { padding: 10px 20px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -1114,9 +1116,9 @@ function clearSearchConsol() {
  *  âœ“ 7. NUNCA reutilizar un nÃºmero de versiÃ³n ya existente
  * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
-const APP_VERSION = '2.7.4';
-const APP_BUILD   = '2026-02-13T18:00:00+01:00';
-const APP_CHANGES = 'Refactor: documentación exhaustiva interna con Architecture Guide, JSDoc y módulos indexados';
+const APP_VERSION = '2.7.5';
+const APP_BUILD   = '2026-02-13T21:30:00+01:00';
+const APP_CHANGES = 'Fix: print layout - texto recortado en liquidaciones por margin/overflow';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -1256,6 +1258,17 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.7.5',
+    date: '2026-02-13',
+    changes: [
+      'Fix print: liq-row.bold con margin:-80px se recortaba al imprimir (ahora -20px en print)',
+      'Fix print: liq-container overflow:hidden cortaba contenido (ahora overflow:visible en print)',
+      'Fix print: consol-subtotal-reservas sin override de padding 80px en print',
+      'Fix print: consol-summary-block max-width 680px limitaba ancho en print',
+      'Fix: entrada CHANGELOG con &lt;script&gt; rompia renderizado del historial',
+    ]
+  },
   {
     version: '2.7.4',
     date: '2026-02-13',

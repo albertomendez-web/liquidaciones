@@ -230,6 +230,21 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .aloj-bar { height: 4px; border-radius: 2px; background: #eef0f4; margin-top: 16px; overflow: hidden; }
 .aloj-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
 
+/* VALIDATION TOGGLE (consol grid) */
+.val-toggle-wrap { display:flex; align-items:center; border-radius:8px; overflow:hidden; border:2px solid var(--c-border); background:#f0f2f5; transition:border-color 0.2s; flex-shrink:0; }
+.val-toggle-wrap:hover { border-color:var(--c-primary); }
+.val-toggle-btn { display:flex; align-items:center; gap:6px; padding:7px 14px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; border:none; background:transparent; color:var(--c-text-muted); transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1); white-space:nowrap; }
+.val-toggle-btn .vt-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; transition:all 0.25s; }
+.val-toggle-btn.no-val .vt-dot { background:#ff9800; }
+.val-toggle-btn.si-val .vt-dot { background:#43a047; }
+.val-toggle-btn .vt-count { font-size:10px; font-weight:700; padding:1px 5px; border-radius:4px; background:rgba(0,0,0,0.06); color:inherit; transition:all 0.25s; }
+.val-toggle-btn.active { background:var(--c-surface); color:var(--c-text); box-shadow:0 1px 4px rgba(0,0,0,0.08); }
+.val-toggle-btn.active.no-val { color:#e65100; }
+.val-toggle-btn.active.si-val { color:#2e7d32; }
+.val-toggle-btn.active .vt-count { background:currentColor; color:#fff; }
+.aloj-card.dimmed { opacity:0.35; transform:scale(0.97); filter:grayscale(0.3); transition:all 0.3s var(--ease-out); }
+.aloj-card.dimmed:hover { opacity:0.6; transform:scale(0.98); }
+
 /* CONSOLIDATED LIQUIDACION */
 .consol-container { max-width: 100%; margin: 0 auto; }
 .consol-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color: #fff; padding: 32px 80px; border-radius: 14px 14px 0 0; }
@@ -823,8 +838,8 @@ tr.ce2-highlighted { background:#faf8ff; }
         <div class="col-toggle-dd" id="col-toggle-dd"></div>
       </div>
       <div class="filter-sep"></div>
-      <button class="btn btn-sm btn-success" id="btn-validar-todas" onclick="validarTodas()" style="display:none;">&#10004; Validar todas</button>
-      <button class="btn btn-sm btn-orange" id="btn-desvalidar-todas" onclick="desvalidarTodas()" style="display:none;">&#8617; Desvalidar todas</button>
+      <button class="btn btn-sm btn-orange" id="btn-validar-todas" onclick="validarTodas()" style="display:none;">&#10004; Validar todas</button>
+      <button class="btn btn-sm btn-success" id="btn-desvalidar-todas" onclick="desvalidarTodas()" style="display:none;">&#8617; Desvalidar todas</button>
       <span class="count" id="filter-count"></span>
     </div>
     <div class="card" style="padding:0; overflow:hidden;">
@@ -858,6 +873,15 @@ tr.ce2-highlighted { background:#faf8ff; }
         <span class="search-icon">&#128269;</span>
         <input type="text" class="search-input" id="search-consol" placeholder="Buscar alojamiento, importe..." oninput="onSearchConsol(this.value)">
         <div class="search-clear" id="search-consol-clear" onclick="clearSearchConsol()" style="display:none;">&#10005;</div>
+      </div>
+      <div class="filter-sep"></div>
+      <div class="val-toggle-wrap" id="val-toggle">
+        <button class="val-toggle-btn no-val active" id="vt-btn-noval" onclick="toggleConsolVal('noval')">
+          <span class="vt-dot"></span>No Validadas<span class="vt-count" id="vt-count-noval">0</span>
+        </button>
+        <button class="val-toggle-btn si-val" id="vt-btn-val" onclick="toggleConsolVal('val')">
+          <span class="vt-dot"></span>Validadas<span class="vt-count" id="vt-count-val">0</span>
+        </button>
       </div>
       <div class="filter-sep"></div>
       <label>Ordenar por</label>
@@ -1093,6 +1117,10 @@ function clearSearchConsol() {
   document.getElementById('search-consol').value = '';
   onSearchConsol('');
 }
+function toggleConsolVal(mode) {
+  _consolValToggle = (_consolValToggle === mode) ? null : mode;
+  renderConsolGrid();
+}
 
 /**
  * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -1118,7 +1146,7 @@ function clearSearchConsol() {
  */
 const APP_VERSION = '2.7.5';
 const APP_BUILD   = '2026-02-13T21:30:00+01:00';
-const APP_CHANGES = 'Fix: print layout - texto recortado en liquidaciones por margin/overflow';
+const APP_CHANGES = 'Fix: print layout + swap colores validacion (verde=validado, naranja=pendiente)';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -1267,6 +1295,8 @@ const CHANGELOG = [
       'Fix print: consol-subtotal-reservas sin override de padding 80px en print',
       'Fix print: consol-summary-block max-width 680px limitaba ancho en print',
       'Fix: entrada CHANGELOG con &lt;script&gt; rompia renderizado del historial',
+      'Swap colores validacion: validado=verde (positivo), pendiente=naranja (atencion)',
+      'Afecta: botones individuales, Validar/Desvalidar todas, vista detalle y consoldetail',
     ]
   },
   {
@@ -2951,6 +2981,7 @@ function scheduleRender(mode) {
 // Cached filter+sort result \u2014 invalidated on filter/sort/data changes, NOT on pagination
 let _cachedFiltered = null, _filterSortKey = '', _validatedVersion = 0;
 let _searchText = '', _searchTextConsol = '';
+let _consolValToggle = 'noval'; // 'noval' | 'val' | null (default: No Validadas primero)
 function getFilterSortKey() {
   const pKey = [...comboState.platform.selected].sort().join(',') || 'all';
   const aKey = [...comboState.aloj.selected].sort().join(',') || 'all';
@@ -3590,7 +3621,7 @@ function _buildRowHtml(r) {
     <td class="col-observacion ellip muted" style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;" title="${esc(r.observacion)}">${esc(r.observacion)}</td>
     <td class="col-acciones"><div style="display:flex;gap:6px;">
       <button class="btn btn-sm btn-primary" onclick="viewDetail(${r.idx})">&#128065;</button>
-      ${!isV ? `<button class="btn btn-sm btn-success" onclick="toggleValidate(${r.idx})">&#10004;</button>` : `<button class="btn btn-sm btn-orange" onclick="toggleValidate(${r.idx})">&#8617;</button>`}
+      ${!isV ? `<button class="btn btn-sm btn-orange" onclick="toggleValidate(${r.idx})">&#10004;</button>` : `<button class="btn btn-sm btn-success" onclick="toggleValidate(${r.idx})">&#8617;</button>`}
     </div></td>
   </tr>` + _buildCEPanelRow(r.idx, s, c) + _buildCE2PanelRow(r.idx, s, c);
 }
@@ -4966,7 +4997,7 @@ function viewDetail(idx) {
     </div>
     <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} \u20AC</span></div></div></div>
     <div class="liq-actions no-print">
-      ${!isV?`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
+      ${!isV?`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
       <button class="btn btn-outline" onclick="window.print()">&#128424; Imprimir</button></div>`;
   document.getElementById("nav-detail").style.display="block"; showScreen("detail");
 }
@@ -5050,9 +5081,19 @@ function renderConsolGrid() {
     totalLiq += a.sumLiq;
   });
 
-  // Sort
+  // Sort: toggle takes priority, then dropdown sort as tiebreaker
   const sortMode = simpleComboState.consolsort.value;
+  const _vtMode = _consolValToggle; // 'noval' | 'val' | null
   alojData.sort((a, b) => {
+    // Primary: toggle-based validation sort
+    if (_vtMode === 'noval') {
+      const d = (a.allVal?1:0) - (b.allVal?1:0);
+      if (d !== 0) return d;
+    } else if (_vtMode === 'val') {
+      const d = (b.allVal?1:0) - (a.allVal?1:0);
+      if (d !== 0) return d;
+    }
+    // Secondary: dropdown sort
     switch(sortMode) {
       case 'name': return a.name.localeCompare(b.name);
       case 'name-desc': return b.name.localeCompare(a.name);
@@ -5062,8 +5103,6 @@ function renderConsolGrid() {
       case 'liq-asc': return a.sumLiq - b.sumLiq || a.name.localeCompare(b.name);
       case 'total-desc': return b.sumReservas - a.sumReservas || a.name.localeCompare(b.name);
       case 'total-asc': return a.sumReservas - b.sumReservas || a.name.localeCompare(b.name);
-      case 'pending': return (a.allVal?1:0) - (b.allVal?1:0) || a.name.localeCompare(b.name);
-      case 'ready': return (b.allVal?1:0) - (a.allVal?1:0) || a.name.localeCompare(b.name);
       default: return a.name.localeCompare(b.name);
     }
   });
@@ -5071,14 +5110,22 @@ function renderConsolGrid() {
   // Render position badges for top sorts
   const showRank = ['reservas-desc','liq-desc','total-desc'].includes(sortMode);
 
+  // Counts for toggle badges
+  const pendingCount = alojData.filter(a => !a.allVal).length;
+  const readyCountBadge = alojData.filter(a => a.allVal).length;
+
   let cardsHTML = '';
   alojData.forEach((a, idx) => {
     const pct = a.total > 0 ? (a.valCount / a.total * 100) : 0;
     const barColor = a.allVal ? '#43a047' : '#ff9800';
     const rankBadge = showRank ? `<div style="position:absolute;top:12px;left:12px;width:24px;height:24px;border-radius:12px;background:${idx<3?'#4f8cff':'#e0e4ea'};color:${idx<3?'#fff':'#6b7280'};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">${idx+1}</div>` : '';
+    // Dimmed: when toggle is active, dim the non-priority group
+    const dimmed = _vtMode !== null && (
+      (_vtMode === 'noval' && a.allVal) || (_vtMode === 'val' && !a.allVal)
+    );
 
     cardsHTML += `
-      <div class="aloj-card ${a.allVal ? 'ready' : 'pending'}" onclick="viewConsolDetail('${a.name.replace(/'/g, "\\'")}')">
+      <div class="aloj-card ${a.allVal ? 'ready' : 'pending'}${dimmed ? ' dimmed' : ''}" onclick="viewConsolDetail('${a.name.replace(/'/g, "\\'")}')">
         ${rankBadge}
         <div class="aloj-semaforo">${a.allVal ? '&#128994;' : '&#128992;'}</div>
         <div class="aloj-name" ${showRank?'style="padding-left:28px;"':''}>${a.name}</div>
@@ -5101,6 +5148,16 @@ function renderConsolGrid() {
     <div class="stat-card"><div class="stat-label">Total a Liquidar</div><div class="stat-value" style="color:#4f8cff">${fmt(totalLiq)} \u20AC</div></div>
     <div class="stat-card"><div class="stat-label">Listos para liquidar</div><div class="stat-value" style="color:#43a047">${readyCount} / ${totalAloj}</div></div>`;
   document.getElementById("aloj-grid").innerHTML = cardsHTML;
+
+  // Update validation toggle buttons and counts
+  const btnNo = document.getElementById('vt-btn-noval');
+  const btnYes = document.getElementById('vt-btn-val');
+  if (btnNo && btnYes) {
+    btnNo.classList.toggle('active', _vtMode === 'noval');
+    btnYes.classList.toggle('active', _vtMode === 'val');
+    document.getElementById('vt-count-noval').textContent = pendingCount;
+    document.getElementById('vt-count-val').textContent = readyCountBadge;
+  }
 }
 
 // \u2500\u2500\u2500 CONSOLIDATED DETAIL \u2500\u2500\u2500
@@ -5528,7 +5585,7 @@ function viewConsolDetail(alojName) {
       <td class="cc-totalLiquidar right bold" style="color:${c.totalLiq>=0?'#1a2744':'#e53935'}">${fmt(c.totalLiq)} &#8364;</td>
       <td class="cc-observacion ellip" style="font-size:11px;color:#6b7280;max-width:180px;overflow:hidden;text-overflow:ellipsis;" title="${esc(r.observacion)}">${esc(r.observacion)}</td>
       <td class="cc-acciones"><div style="display:flex;gap:6px;">
-        ${!isV?`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#10004;</button>`:`<button class="btn btn-sm btn-orange" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#8617;</button>`}
+        ${!isV?`<button class="btn btn-sm btn-orange" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#10004;</button>`:`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#8617;</button>`}
       </div></td>
     </tr>${_buildCEPanelRow(r.idx, settings[r.idx], c, 'c')}${_buildCE2PanelRow(r.idx, settings[r.idx], c, 'c')}`;
   }).join("");
@@ -5598,8 +5655,8 @@ function viewConsolDetail(alojName) {
       <div class="consol-body">
         <div class="no-print" style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #eef0f4;background:#f8f9fb;position:relative;z-index:10;">
           <div style="display:flex;gap:8px;align-items:center;">
-            ${!allVal ? `<button class="btn btn-sm btn-success" onclick="validarTodasConsol('${a.name.replace(/'/g, "\\'")}')">&#10004; Validar todas (${filteredReservas.filter(r=>!validated.has(r.idx)).length})</button>` : ''}
-            ${filteredReservas.some(r=>validated.has(r.idx)) ? `<button class="btn btn-sm btn-orange" onclick="desvalidarTodasConsol('${a.name.replace(/'/g, "\\'")}')">&#8617; Desvalidar todas</button>` : ''}
+            ${!allVal ? `<button class="btn btn-sm btn-orange" onclick="validarTodasConsol('${a.name.replace(/'/g, "\\'")}')">&#10004; Validar todas (${filteredReservas.filter(r=>!validated.has(r.idx)).length})</button>` : ''}
+            ${filteredReservas.some(r=>validated.has(r.idx)) ? `<button class="btn btn-sm btn-success" onclick="desvalidarTodasConsol('${a.name.replace(/'/g, "\\'")}')">&#8617; Desvalidar todas</button>` : ''}
           </div>
           <div class="col-toggle-wrap">
             <button class="col-toggle-btn" onclick="toggleConsolColDropdown()" title="Mostrar/ocultar columnas">&#9783; Columnas</button>

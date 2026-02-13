@@ -1144,9 +1144,9 @@ function toggleConsolVal(mode) {
  *  âœ“ 7. NUNCA reutilizar un nÃºmero de versiÃ³n ya existente
  * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
-const APP_VERSION = '2.7.5';
-const APP_BUILD   = '2026-02-13T21:30:00+01:00';
-const APP_CHANGES = 'Fix: print layout + swap colores validacion (verde=validado, naranja=pendiente)';
+const APP_VERSION = '2.8.0';
+const APP_BUILD   = '2026-02-13T22:00:00+01:00';
+const APP_CHANGES = 'Nuevo: toggle Validadas/No Validadas en grid consolidado + swap colores validacion';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -1286,6 +1286,20 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.8.0',
+    date: '2026-02-13',
+    changes: [
+      'Nuevo: toggle segmentado Validadas/No Validadas en barra de filtros del grid consolidado',
+      'Por defecto: No Validadas primero (pendientes destacados, validados atenuados)',
+      'Clic en boton activo = estado neutral (sin prioridad de validacion)',
+      'Contadores dinamicos en cada boton del toggle',
+      'Tarjetas del grupo no prioritario se atenuan (dimmed) pero siguen clicables',
+      'Toggle es primario en orden, dropdown Ordenar por actua como secundario',
+      'Eliminadas opciones Pendientes/Listas primero del dropdown (ahora en toggle)',
+      'Swap colores validacion: validado=verde (positivo), pendiente=naranja (atencion)',
+    ]
+  },
   {
     version: '2.7.5',
     date: '2026-02-13',
@@ -6421,9 +6435,7 @@ const simpleComboOptions = {
     { value: 'liq-desc', label: 'Mayor liquidaci\u00F3n' },
     { value: 'liq-asc', label: 'Menor liquidaci\u00F3n' },
     { value: 'total-desc', label: 'Mayor facturaci\u00F3n' },
-    { value: 'total-asc', label: 'Menor facturaci\u00F3n' },
-    { value: 'pending', label: 'Pendientes primero' },
-    { value: 'ready', label: 'Listas primero' }
+    { value: 'total-asc', label: 'Menor facturaci\u00F3n' }
   ]
 };
 

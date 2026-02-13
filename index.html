@@ -241,7 +241,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-body { background: #fff; border-radius: 0 0 14px 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
 .consol-section-title { padding: 14px 80px 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; background: #f8f9fb; border-top: 2px solid #eef0f4; }
 .consol-section-title:first-child { border-top: none; }
-.consol-summary-block { padding: 0; max-width: 680px; margin: 0 auto; background: #fff3f3; border: 3px solid red; }
+.consol-summary-block { padding: 0; max-width: 680px; margin: 0 auto; }
 .consol-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 80px; font-size: 13px; }
 .consol-row:nth-child(even) { background: #fafbfc; }
 .consol-row.sub { padding-left: 44px; font-size: 12px; color: #6b7280; }
@@ -314,7 +314,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-pas-val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--c-error); min-width: 115px; text-align: right; transition: all 0.2s; }
 .liq-pas-val.off { color: var(--c-text-muted); opacity: 0.4; text-decoration: line-through; }
 /* CE2 section */
-.liq-ce2 { background: var(--c-primary-bg); border-top: 2px solid var(--c-primary); position: relative; padding: 0 36px; }
+.liq-ce2 { background: var(--c-primary-bg); border-top: 2px solid var(--c-primary); position: relative; padding: 0 80px; }
 .liq-ce2 .liq-sec-label { color: var(--c-primary-dark); padding: 18px 0 10px; }
 .liq-ce2 .liq-val { color: var(--c-error); }
 .liq-ce2-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--c-primary); margin-right: 6px; vertical-align: middle; }
@@ -406,7 +406,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .liq-header { padding: 16px 20px !important; }
   .liq-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-header::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .liq-ce2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-ce2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 0 20px !important; }
   .liq-sec { padding: 0 20px !important; }
   .liq-sec-label { padding: 8px 0 2px !important; font-size: 8px !important; }
   .liq-actions { display: none !important; }
@@ -5296,7 +5296,7 @@ function buildPrintCards() {
           <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div>
         </div>
       </div>
-      <div style="padding:8px 0;">${rowsHtml}</div>
+      <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">${rowsHtml}</div>
       <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(c.totalLiq)} &#8364;</span></div>
     </div>`;
   }).join('');
@@ -5328,7 +5328,7 @@ function buildPrintCards() {
         <div></div>
       </div>
     </div>
-    <div style="padding:8px 0;">
+    <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">
       <div class="liq-row bold"><span>Subtotal Reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
       ${_pSplitHtml}
       ${_printDedHtml}

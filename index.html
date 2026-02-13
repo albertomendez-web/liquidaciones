@@ -247,45 +247,86 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* CONSOLIDATED LIQUIDACION */
 .consol-container { max-width: 100%; margin: 0 auto; }
-.consol-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 100%); color: #fff; padding: 32px 80px; border-radius: 14px 14px 0 0; }
-.consol-header .type { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 4px; }
-.consol-header .name { font-size: 24px; font-weight: 800; font-family: var(--font-display); }
-.consol-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 24px; font-size: 13px; }
-.consol-meta-label { opacity: 0.5; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; }
-.consol-meta-value { font-weight: 600; margin-top: 2px; }
+.consol-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 60%, #1e3055 100%); color: #fff; border-radius: 14px 14px 0 0; position: relative; overflow: hidden; }
+.consol-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff, var(--c-primary)); }
+.consol-header::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+.consol-header .header-top { padding: 28px 32px 0; position: relative; z-index: 1; }
+.consol-header .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--c-primary); margin-bottom: 6px; }
+.consol-header .name { font-size: 28px; font-weight: 800; font-family: var(--font-display); letter-spacing: -0.02em; }
+.cd-progress-wrap { padding: 0 32px; position: relative; z-index: 1; }
+.cd-progress { display: flex; align-items: center; gap: 12px; padding: 10px 0 14px; }
+.cd-progress-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+.cd-progress-fill { height: 100%; border-radius: 3px; transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.cd-progress-text { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); white-space: nowrap; }
+.cd-progress-text strong { color: rgba(255,255,255,0.85); }
+.consol-meta-strip { display: flex; gap: 0; background: rgba(0,0,0,0.15); position: relative; z-index: 1; }
+.consol-meta-strip .consol-meta-item { flex: 1; padding: 14px 32px; border-right: 1px solid rgba(255,255,255,0.06); }
+.consol-meta-strip .consol-meta-item:last-child { border-right: none; }
+.consol-meta-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-primary); opacity: 0.8; margin-bottom: 4px; }
+.consol-meta-value { font-weight: 600; font-size: 14px; color: rgba(255,255,255,0.9); }
+.consol-meta-value.alert { color: #ef5350; }
 .consol-body { background: #fff; border-radius: 0 0 14px 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
-.consol-section-title { padding: 14px 80px 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; background: #f8f9fb; border-top: 2px solid #eef0f4; }
+.consol-section-title { padding: 14px 32px 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; background: #f8f9fb; border-top: 2px solid #eef0f4; }
 .consol-section-title:first-child { border-top: none; }
-.consol-summary-block { padding: 0; max-width: 680px; margin: 0 auto; }
-.consol-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 80px; font-size: 13px; }
-.consol-row:nth-child(even) { background: #fafbfc; }
-.consol-row.sub { padding-left: 44px; font-size: 12px; color: #6b7280; }
+/* 2-column summary layout */
+.cd-summary-section { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 2px solid #eef0f4; }
+.cd-summary-left { padding: 24px 32px; border-right: 1px solid #eef0f4; }
+.cd-summary-right { padding: 24px 32px; display: flex; flex-direction: column; }
+.cd-sum-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-muted); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #eef0f4; }
+.consol-summary-block { padding: 0; }
+.consol-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; font-size: 13px; }
+.consol-row + .consol-row { border-top: 1px solid #f5f6f8; }
+.consol-row.sub { padding-left: 16px; font-size: 12px; color: #6b7280; }
 .consol-row .neg { color: #e53935; font-variant-numeric: tabular-nums; }
 .cex-item-row .neg { color: #e53935; font-variant-numeric: tabular-nums; }
 .consol-row .pos { color: #43a047; font-variant-numeric: tabular-nums; }
-.consol-row.bold { font-weight: 700; }
-.consol-divider { height: 1px; background: #eef0f4; margin: 4px 72px; }
-.consol-subtotal-reservas { display: flex; justify-content: space-between; align-items: center; padding: 12px 80px; font-size: 14px; font-weight: 700; background: linear-gradient(90deg,#eef3ff,#f8f9fb); border-top: 2px solid #4f8cff; border-bottom: 2px solid #4f8cff; color: #1a2744; }
-.consol-monthly-box { background: #f0fdf4; border: 1.5px dashed #16a34a; border-radius: 8px; margin: 8px 48px; padding: 4px 8px; }
-.consol-monthly-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #16a34a; padding: 6px 8px 4px; }
-.consol-monthly-box .consol-row { padding: 8px 8px; border-radius: 4px; }
-.consol-split-box { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border: 2px solid #a855f7; border-radius: 10px; margin: 8px 48px; padding: 4px 8px; }
-.consol-split-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7c3aed; padding: 6px 8px 4px; }
-.consol-split-box .consol-row { padding: 8px 8px; border-radius: 4px; }
-.consol-split-divider { height: 1px; background: #d8b4fe; margin: 2px 8px; }
-.gtc-split-section { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border: 1.5px solid #d8b4fe; border-radius: 10px; margin: 8px 0 0; padding: 14px 16px; }
-.gtc-split-title { font-size: 12px; font-weight: 700; color: #7c3aed; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-.gtc-split-desc { font-size: 11px; color: #6b7280; margin-bottom: 12px; line-height: 1.5; }
-.gtc-split-list { display: flex; flex-direction: column; gap: 2px; }
-.gtc-split-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; border-radius: 6px; transition: background 0.15s; }
-.gtc-split-row:hover { background: rgba(168,85,247,0.06); }
-.gtc-split-row .name { font-size: 12px; font-weight: 500; }
-.gtc-split-row .name.on { color: #7c3aed; font-weight: 600; }
-.gtc-split-divider-row { height: 1px; background: #ede9fe; margin: 0 10px; }
-.gtc-split-counter { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 8px 10px; background: rgba(168,85,247,0.08); border-radius: 8px; font-size: 11px; color: #6b7280; }
-.gtc-split-counter .badge { display: inline-flex; align-items: center; justify-content: center; background: #7c3aed; color: #fff; font-size: 10px; font-weight: 700; min-width: 20px; height: 20px; border-radius: 10px; padding: 0 6px; }
-.consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 14px 80px; font-size: 15px; font-weight: 700; background: #f0f2f5; }
-.consol-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 80px; font-size: 20px; font-weight: 800; background: linear-gradient(135deg, var(--c-sidebar-start), var(--c-sidebar-end)); color: #fff; border-radius: 0 0 14px 14px; font-family: var(--font-display); }
+.consol-row.bold { font-weight: 700; color: var(--c-text); font-size: 14px; padding: 10px 0; }
+.consol-divider { height: 1px; background: #eef0f4; margin: 6px 0; }
+.consol-subtotal-reservas { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; font-size: 14px; font-weight: 700; background: linear-gradient(90deg,#eef3ff,#f8f9fb); border: 1.5px solid var(--c-primary); border-radius: var(--radius-md); color: #1a2744; margin: 12px 0; }
+.consol-monthly-box { background: #f0fdf4; border: 1.5px dashed #16a34a; border-radius: 8px; margin: 12px 0; padding: 12px 16px; }
+.consol-monthly-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #16a34a; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.consol-monthly-box .consol-row { padding: 6px 0; border-radius: 4px; }
+/* Split box with visual bar */
+.consol-split-box { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border: 2px solid #a855f7; border-radius: 10px; margin: 12px 0; overflow: hidden; }
+.consol-split-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7c3aed; padding: 10px 16px 6px; display: flex; align-items: center; gap: 8px; }
+.consol-split-box .consol-row { padding: 8px 16px; border-radius: 0; }
+.consol-split-divider { height: 1px; background: #d8b4fe; margin: 0 16px; }
+.consol-split-bar { display: flex; height: 8px; }
+.consol-split-bar-gtc { background: linear-gradient(90deg,#7c3aed,#9333ea); color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.consol-split-bar-owner { background: linear-gradient(90deg,#16a34a,#22c55e); color: #fff; font-size: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.consol-split-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+/* Quick stats */
+.cd-quick-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.cd-qs-item { background: #f8f9fb; border-radius: var(--radius-md); padding: 12px; text-align: center; border: 1px solid #eef0f4; }
+.cd-qs-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-muted); margin-bottom: 4px; }
+.cd-qs-value { font-size: 18px; font-weight: 800; color: var(--c-text); font-variant-numeric: tabular-nums; }
+/* Total breakdown (right column) */
+.cd-tb-row { display: flex; justify-content: space-between; padding: 8px 12px; font-size: 12px; color: var(--c-text-secondary); border-radius: 6px; }
+.cd-tb-row:nth-child(odd) { background: #fafbfc; }
+.cd-tb-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+/* Split mini-card (right column) */
+.cd-split-mini { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border: 1.5px solid #d8b4fe; border-radius: var(--radius-md); padding: 10px 12px; margin: 8px 0; }
+.cd-split-mini-header { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7c3aed; margin-bottom: 6px; }
+.cd-split-mini-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 12px; color: var(--c-text-secondary); }
+/* Total hero */
+.cd-total-hero { text-align: center; padding: 32px 24px; background: linear-gradient(135deg,#f8faff,#eef3ff); border-radius: var(--radius-lg); border: 1.5px solid #d6e4ff; margin: 16px 0; }
+.cd-total-hero-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--c-primary-dark); margin-bottom: 8px; }
+.cd-total-hero-amount { font-size: 36px; font-weight: 800; color: var(--c-text); letter-spacing: -0.02em; line-height: 1; }
+.cd-total-hero-amount .eur { font-size: 24px; font-weight: 600; color: var(--c-text-secondary); }
+/* Generate button */
+.cd-btn-generate { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: var(--radius-md); background: linear-gradient(135deg,#43a047,#66bb6a); color: #fff; font-size: 15px; font-weight: 700; font-family: var(--font-body); border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(67,160,71,0.3); transition: all 0.2s; width: 100%; }
+.cd-btn-generate:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(67,160,71,0.4); }
+.cd-btn-generate.disabled { background: #e0e4ea; color: #9ca3af; box-shadow: none; cursor: not-allowed; }
+.cd-btn-generate.disabled:hover { transform: none; }
+/* Full-width total bar */
+.cd-total-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px 32px; background: linear-gradient(135deg, var(--c-sidebar-start), var(--c-sidebar-end)); color: #fff; position: relative; }
+.cd-total-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff); }
+.cd-total-bar-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.4); }
+.cd-total-bar-label strong { display: block; font-size: 14px; color: #fff; letter-spacing: normal; margin-top: 2px; }
+.cd-total-bar-amount { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; font-family: var(--font-display); }
+/* Legacy compat */
+.consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 15px; font-weight: 700; }
+.consol-total { display: none; }
 .consol-mini-table { margin: 0; width: 100%; table-layout: auto; }
 .consol-mini-table th { font-size: 10px; padding: 10px 8px; }
 .consol-mini-table td { font-size: 11px; padding: 8px 8px; }
@@ -293,57 +334,59 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .consol-mini-table .ellip { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
 
 /* LIQUIDACI\u00D3N INDIVIDUAL */
-.liq-container { max-width: 680px; margin: 0 auto; background: var(--c-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--c-border-light); overflow: hidden; }
-.liq-header { background: linear-gradient(195deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 100%); color: #fff; padding: 32px 80px 26px; position: relative; }
+.liq-container { max-width: 720px; margin: 0 auto; background: var(--c-surface); border-radius: var(--radius-lg); box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
+.liq-header { background: linear-gradient(135deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 60%, #1e3055 100%); color: #fff; position: relative; overflow: hidden; }
 .liq-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff, var(--c-primary)); }
-.liq-header .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--c-primary); margin-bottom: 6px; }
-.liq-header .name { font-size: 26px; font-weight: 800; font-family: var(--font-display); letter-spacing: -0.02em; line-height: 1.15; }
-.liq-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; font-size: 13px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 18px; }
-.liq-meta-item { padding: 10px 0; }
-.liq-meta-item:not(:nth-child(3n)) { border-right: 1px solid rgba(255,255,255,0.06); }
-.liq-meta-item:nth-child(2), .liq-meta-item:nth-child(5) { padding-left: 20px; }
-.liq-meta-item:nth-child(3), .liq-meta-item:nth-child(6) { padding-left: 20px; }
-.liq-meta-item:nth-child(n+4) { border-top: 1px solid rgba(255,255,255,0.05); }
-.liq-meta-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-primary); opacity: 0.8; margin-bottom: 3px; }
-.liq-meta-value { font-weight: 500; font-size: 13px; color: rgba(255,255,255,0.85); }
-.liq-sec { padding: 0 80px; }
+.liq-header::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+.liq-header .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--c-primary); margin-bottom: 6px; }
+.liq-header .name { font-size: 24px; font-weight: 800; font-family: var(--font-display); letter-spacing: -0.02em; line-height: 1.15; }
+.liq-header-top { display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 32px 16px; position: relative; z-index: 1; }
+.liq-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: rgba(0,0,0,0.15); position: relative; z-index: 1; }
+.liq-meta-strip .liq-meta-item { padding: 12px 32px; border-right: 1px solid rgba(255,255,255,0.06); }
+.liq-meta-strip .liq-meta-item:nth-child(3n) { border-right: none; }
+.liq-meta-strip .liq-meta-item:nth-child(n+4) { border-top: 1px solid rgba(255,255,255,0.05); }
+.liq-meta-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-primary); opacity: 0.8; margin-bottom: 3px; }
+.liq-meta-value { font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.9); }
+.liq-meta-value.sm { font-size: 11px; }
+.liq-sec { padding: 20px 32px; }
 .liq-sec + .liq-sec { border-top: 1px solid var(--c-border-light); }
-.liq-sec-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-text-secondary); padding: 18px 0 10px; }
-.liq-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; font-size: 13.5px; color: var(--c-text-secondary); }
-.liq-row + .liq-row { border-top: 1px solid var(--c-border-light); }
-.liq-row.bold { font-weight: 700; font-size: 14px; padding: 13px 0; margin: 0 -80px; padding-left: 80px; padding-right: 80px; background: #f8f9fb; color: var(--c-text); }
+.liq-sec-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-muted); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--c-border-light); }
+.liq-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; font-size: 13px; color: var(--c-text-secondary); }
+.liq-row + .liq-row { border-top: 1px solid #f5f6f8; }
+.liq-row.bold { font-weight: 700; font-size: 14px; padding: 12px 0; margin: 0 -32px; padding-left: 32px; padding-right: 32px; background: #f8f9fb; color: var(--c-text); }
 .liq-row .neg { color: var(--c-error); }
 .liq-row .pos { color: var(--c-success); }
-.liq-row .liq-val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; min-width: 115px; text-align: right; white-space: nowrap; }
-.liq-divider { height: 1px; background: var(--c-border); margin: 4px 0; }
-.liq-sel { font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--c-text); background: #fafbfc; border: 1.5px solid #dde1e8; border-radius: 8px; padding: 6px 10px; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; margin-left: 4px; transition: border-color 0.2s; text-align: center; text-align-last: center; }
+.liq-row .liq-val { font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; min-width: 110px; text-align: right; white-space: nowrap; }
+.liq-divider { height: 1px; background: var(--c-border-light); margin: 6px 0; }
+.liq-sel { font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--c-text); background: #f0f2f5; border: 1px solid var(--c-border); border-radius: 4px; padding: 3px 10px; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; margin-left: 4px; transition: border-color 0.2s; text-align: center; text-align-last: center; }
 .liq-sel:focus { border-color: #4f8cff; box-shadow: 0 0 0 2px rgba(79,140,255,0.08); }
+.liq-subtotal-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 32px; margin: 0 -32px; font-size: 14px; font-weight: 700; background: linear-gradient(90deg,#eef3ff,#f8f9fb); border-top: 1.5px solid var(--c-primary); border-bottom: 1.5px solid var(--c-primary); color: var(--c-text); }
 /* Pasarela integrated row */
-.liq-pas-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; font-size: 13.5px; border-top: 1px solid var(--c-border-light); }
+.liq-pas-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; font-size: 13px; border-top: 1px solid #f5f6f8; }
 .liq-pas-left { display: flex; align-items: center; gap: 10px; flex: 1; }
-.liq-sw { position: relative; width: 38px; height: 22px; cursor: pointer; flex-shrink: 0; display: inline-block; }
-.liq-sw-track { width: 100%; height: 100%; border-radius: 11px; background: #d1d5db; transition: background 0.2s; position: relative; }
+.liq-sw { position: relative; width: 36px; height: 20px; cursor: pointer; flex-shrink: 0; display: inline-block; }
+.liq-sw-track { width: 100%; height: 100%; border-radius: 10px; background: #d1d5db; transition: background 0.2s; position: relative; }
 .liq-sw-track.on { background: #4f8cff; }
-.liq-sw-thumb { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 9px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: transform 0.2s var(--ease-bounce); }
+.liq-sw-thumb { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 8px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: transform 0.2s var(--ease-bounce); }
 .liq-sw-track.on .liq-sw-thumb { transform: translateX(16px); }
-.liq-pas-val { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--c-error); min-width: 115px; text-align: right; transition: all 0.2s; }
+.liq-pas-val { font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; color: var(--c-error); min-width: 110px; text-align: right; transition: all 0.2s; }
 .liq-pas-val.off { color: var(--c-text-muted); opacity: 0.4; text-decoration: line-through; }
 /* CE2 section */
-.liq-ce2 { background: var(--c-primary-bg); border-top: 2px solid var(--c-primary); position: relative; padding: 0 80px; }
-.liq-ce2 .liq-sec-label { color: var(--c-primary-dark); padding: 18px 0 10px; }
+.liq-ce2 { background: var(--c-primary-bg); border-top: 2px solid var(--c-primary); position: relative; padding: 0 32px; }
+.liq-ce2 .liq-sec-label { color: var(--c-primary-dark); }
 .liq-ce2 .liq-val { color: var(--c-error); }
 .liq-ce2-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--c-primary); margin-right: 6px; vertical-align: middle; }
 /* Total */
 .liq-total-bar { position: relative; }
 .liq-total-bar::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff, var(--c-primary)); }
-.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 24px 80px; background: linear-gradient(195deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 100%); color: #fff; }
+.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 22px 32px; background: linear-gradient(135deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 100%); color: #fff; }
 .liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.4); }
-.liq-total-value { font-family: var(--font-display); font-size: 30px; font-weight: 800; color: var(--c-primary); letter-spacing: -0.02em; font-style: italic; }
-.liq-actions { display: flex; gap: 12px; justify-content: center; padding: 24px 36px; background: #f8f9fb; border-top: 1px solid var(--c-border-light); }
-.header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 22px; }
-.badge-liq { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.02em; }
-.badge-liq-green { background: rgba(46,125,50,0.2); color: #81c784; border: 1px solid rgba(46,125,50,0.3); }
-.badge-liq-amber { background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+.liq-total-value { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--c-primary); letter-spacing: -0.02em; font-style: italic; }
+.liq-actions { display: flex; gap: 12px; justify-content: center; padding: 20px 32px; background: #f8f9fb; border-top: 1px solid var(--c-border-light); }
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.badge-liq { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+.badge-liq-green { background: rgba(67,160,71,0.15); color: #81c784; border: 1px solid rgba(67,160,71,0.3); }
+.badge-liq-amber { background: rgba(255,152,0,0.15); color: #ffb74d; border: 1px solid rgba(255,152,0,0.3); }
 
 .screen { display: none; }
 .screen.active { display: block; animation: screenFadeIn 0.2s ease; }
@@ -380,32 +423,49 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .consol-container, .liq-container { max-width: 100% !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; border: none !important; }
 
   /* Header */
-  .consol-header, .liq-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; padding: 16px 20px !important; }
+  .consol-header, .liq-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; }
+  .consol-header .header-top, .liq-header-top { padding: 12px 20px 8px !important; }
   .consol-header .name { font-size: 18px !important; }
-  .consol-meta { gap: 12px !important; margin-top: 14px !important; font-size: 11px !important; }
+  .consol-meta-strip, .liq-meta-strip { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-meta-strip .consol-meta-item, .liq-meta-strip .liq-meta-item { padding: 8px 16px !important; }
+  .cd-progress-wrap { padding: 0 20px !important; }
+  .cd-progress-bar, .cd-progress-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
   /* Body */
   .consol-body { box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; }
   .table-wrap { overflow: visible !important; }
 
-  /* Mini table \u2014 compact for landscape A4 */
+  /* Mini table — compact for landscape A4 */
   .consol-mini-table { table-layout: fixed !important; width: 100% !important; }
   .consol-mini-table th { padding: 4px 5px !important; font-size: 8px !important; }
   .consol-mini-table td { padding: 4px 5px !important; font-size: 9px !important; }
   .consol-mini-table .ellip { max-width: 0; }
   .badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 7px !important; padding: 1px 4px !important; }
 
-  /* Summary rows */
+  /* Summary 2-column print */
+  .cd-summary-section { grid-template-columns: 1.2fr 0.8fr !important; }
+  .cd-summary-left, .cd-summary-right { padding: 12px 16px !important; }
   .consol-section-title { padding: 8px 16px 4px !important; font-size: 9px !important; }
-  .consol-row { padding: 5px 16px !important; font-size: 10px !important; }
-  .consol-row.sub { padding-left: 28px !important; font-size: 9px !important; }
-  .consol-divider { margin: 2px 16px !important; }
-  .consol-subtotal { padding: 8px 16px !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .consol-total { padding: 12px 16px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; }
+  .consol-row { padding: 4px 0 !important; font-size: 10px !important; }
+  .consol-row.sub { padding-left: 12px !important; font-size: 9px !important; }
+  .consol-divider { margin: 2px 0 !important; }
+  .consol-subtotal { padding: 6px 0 !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-subtotal-reservas { padding: 6px 12px !important; font-size: 11px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-monthly-box { margin: 6px 0 !important; padding: 8px 12px !important; }
+  .consol-split-box { margin: 6px 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-split-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cd-total-hero { padding: 16px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cd-total-hero-amount { font-size: 24px !important; }
+  .cd-btn-generate { display: none !important; }
+  .cd-total-bar { padding: 12px 16px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; }
+  .cd-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cd-total-bar-amount { font-size: 22px !important; }
+  .cd-quick-stats { gap: 8px !important; margin-bottom: 12px !important; }
+  .cd-qs-item { padding: 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cd-qs-value { font-size: 14px !important; }
 
-  /* CRITICAL: keep summary + total together \u2014 never split across pages */
-  .consol-summary-block { page-break-inside: avoid !important; break-inside: avoid !important; max-width: 100% !important; }
-  .consol-subtotal-reservas { padding: 8px 16px !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* CRITICAL: keep summary + total together */
+  .consol-summary-block, .cd-summary-section { page-break-inside: avoid !important; break-inside: avoid !important; max-width: 100% !important; }
 
   /* Table page break rules */
   table { page-break-inside: auto; }
@@ -413,23 +473,25 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   tr { page-break-inside: avoid; }
   .consol-section-title { page-break-after: avoid; }
 
-  /* Individual liquidaci&oacute;n */
-  .liq-row { padding: 6px 0 !important; font-size: 11px !important; }
+  /* Individual liquidacion */
+  .liq-sec { padding: 12px 20px !important; }
+  .liq-row { padding: 5px 0 !important; font-size: 11px !important; }
   .liq-row.bold { margin: 0 -20px !important; padding: 8px 20px !important; font-size: 12px !important; }
-  .liq-pas-row { padding: 6px 0 !important; font-size: 11px !important; }
+  .liq-subtotal-bar { margin: 0 -20px !important; padding: 8px 20px !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-pas-row { padding: 5px 0 !important; font-size: 11px !important; }
   .liq-divider { margin: 2px 0 !important; }
-  .liq-total { padding: 10px 20px !important; font-size: 15px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-total { padding: 10px 20px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-total-value { font-size: 20px !important; }
-  .liq-header { padding: 16px 20px !important; }
   .liq-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-header::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-header::before { display: none !important; }
+  .consol-header::before { display: none !important; }
   .liq-ce2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 0 20px !important; }
-  .liq-sec { padding: 0 20px !important; }
-  .liq-sec-label { padding: 8px 0 2px !important; font-size: 8px !important; }
+  .liq-sec-label { font-size: 8px !important; }
   .liq-actions { display: none !important; }
   .liq-sw { display: none !important; }
 
-  /* Print cards: keep each card together, break between them */
+  /* Print cards */
   .print-card { page-break-inside: avoid !important; break-inside: avoid !important; margin-bottom: 12px !important; }
   .print-summary { page-break-inside: avoid !important; break-inside: avoid !important; margin-top: 12px !important; }
 }
@@ -1144,9 +1206,9 @@ function toggleConsolVal(mode) {
  *  âœ“ 7. NUNCA reutilizar un nÃºmero de versiÃ³n ya existente
  * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
-const APP_VERSION = '2.8.0';
-const APP_BUILD   = '2026-02-13T22:00:00+01:00';
-const APP_CHANGES = 'Nuevo: toggle Validadas/No Validadas en grid consolidado + swap colores validacion';
+const APP_VERSION = '2.9.0';
+const APP_BUILD   = '2026-02-14T00:30:00+01:00';
+const APP_CHANGES = 'Redise\u00F1o visual: preliquidaci\u00F3n individual + consolidado detalle (2 columnas, progress bar, total hero, split bar)';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -1287,6 +1349,33 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.9.0',
+    date: '2026-02-14',
+    changes: [
+      'Redise\u00F1o preliquidaci\u00F3n individual: header con meta-strip en franja oscura, textura grid, badge pill',
+      'Nuevo liq-header-top + liq-meta-strip reemplaza estructura anterior header+liq-meta',
+      'Selectores redise\u00F1ados: pills compactas (liq-sel) con fondo gris, menor padding',
+      'Subtotal destacado: nueva barra liq-subtotal-bar con gradiente azul y borde (como consolidado)',
+      'Label Deducciones renombrado a Venta, gesti\u00F3n y operaciones (coherente con consolidado)',
+      'Badge redise\u00F1ado: pill rounded con fondo semitransparente (badge-liq-green/amber)',
+      'Padding reducido: 80px a 32px en liq-sec, liq-total, liq-header, liq-ce2',
+      'Redise\u00F1o consolidado detalle: header con barra de progreso de validaci\u00F3n animada',
+      'Nuevo layout 2 columnas (cd-summary-section): desglose izquierda + resumen rapido derecha',
+      'Quick Stats: 3 tarjetas compactas (Reservas, Noches, Facturacion) en columna derecha',
+      'Total Hero: tarjeta destacada con gradiente azul y importe 36px centrado',
+      'Bot\u00F3n Generar Liquidaci\u00F3n integrado debajo del total hero (verde con shadow)',
+      'Split box mejorado: barra visual proporcional (consol-split-bar-gtc/owner) con porcentajes',
+      'Dots de color en split: 8px morado para GTC, verde para propietario',
+      'Mini-tarjeta split en columna derecha (cd-split-mini) entre subtotal y otros conceptos',
+      'Total bar full-width: cd-total-bar oscura con contexto (alojamiento + mes)',
+      'Nomenclatura Reparto a Acuerdo en split boxes y panel de configuraci\u00F3n',
+      'Nomenclatura Otros Conceptos: reemplaza Conceptos Extraordinarios del Mes',
+      'Print: header estructura actualizada a liq-header-top + liq-meta-strip en buildPrintCards',
+      'Print: resumen consolidado con propietario en meta-strip y total-label con contexto split',
+      'Print CSS actualizado: soporte 2 columnas, progress bar, total hero, meta-strip',
+    ]
+  },
+  {
     version: '2.8.0',
     date: '2026-02-13',
     changes: [
@@ -1366,7 +1455,7 @@ const CHANGELOG = [
     version: '2.7.0',
     date: '2026-02-12',
     changes: [
-      'Conceptos Extraordinarios del Mes: edicion inline estilo CE (label+importe+borrar+anadir)',
+      'Otros Conceptos: edicion inline estilo CE (label+importe+borrar+anadir)',
       'Filas editables con input label + input importe + boton eliminar (misma mecanica que CE/CE2)',
       'Live debounce 400ms en importes: totales finales se actualizan mientras escribes',
       'Nuevo _patchConsolFinalTotals(): parchea solo Subtotal/IRPF/IVA/TOTAL sin re-render',
@@ -1595,7 +1684,7 @@ const CHANGELOG = [
   ]},
   { version: '2.3.0', date: '2026-02-12T23:15:00+01:00', changes: [
     'Reparto 80/20 GTC: alojamientos con condici\u00F3n especial retienen 20% para GTC del Subtotal Reservas',
-    'Caja violeta de reparto entre Subtotal Reservas y Conceptos Extraordinarios del Mes',
+    'Caja violeta de reparto entre Subtotal Reservas y Otros Conceptos',
     'IRPF e IVA se calculan sobre Subtotal Final Mes (80% \u2212 conceptos ext.)',
     'Lista de alojamientos especiales persistida en pesta\u00F1a Configuraci\u00F3n de Google Sheets',
     'Versi\u00F3n impresa incluye desglose del reparto GTC/Propietario'
@@ -1603,7 +1692,7 @@ const CHANGELOG = [
   { version: '2.2.0', date: '2026-02-12T22:45:00+01:00', changes: [
     'Nuevo orden resumen consolidado: sigue orden columnas tabla (Amenities \u2192 Pasarela \u2192 C.E. Sin IVA)',
     'Nuevo Subtotal Reservas: subtotal intermedio que cierra deducciones por reserva',
-    'Secci\u00F3n Conceptos Extraordinarios del Mes separada en caja verde',
+    'Secci\u00F3n Otros Conceptos separada en caja verde',
     'Subtotal renombrado a Subtotal Final Mes para distinguir del Subtotal Reservas',
     'Versi\u00F3n impresa actualizada con nuevos nombres de subtotales'
   ]},
@@ -3748,7 +3837,7 @@ document.addEventListener('input', function(e) {
   }, 400);
 });
 
-// === LIVE DEBOUNCED INPUT: Conceptos Extraordinarios del Mes ===
+// === LIVE DEBOUNCED INPUT: Otros Conceptos ===
 var _cexInputTimer = null;
 document.addEventListener('input', function(e) {
   var el = e.target;
@@ -3853,11 +3942,16 @@ function _buildConsolSummaryInner(calcs, sums, alojName) {
   var adjRet = adjSub * avgIrpfRate;
   var adjIva = adjSub * IVA_SUBTOTAL;
   var adjLiq = adjSub - adjRet + adjIva;
+  var sumNoches = calcs.reduce(function(s,x){return s+x.r._nights;},0);
+  var sumVGO = sums.comPlat + sums.comGTC + sums.limp + sums.amen + sums.comPas;
+  var allVal = calcs.every(function(x){return validated.has(x.r.idx);});
   var h = '';
-  h += '<div class="consol-section-title">Resumen Consolidado</div>';
+  // LEFT column
+  h += '<div class="cd-summary-left">';
+  h += '<div class="cd-sum-title">Resumen Consolidado</div>';
   h += '<div class="consol-row bold"><span>Total Reservas (IVA incluido)</span><span>' + fmt(sums.total) + ' \u20AC</span></div>';
   if (sums.CE > 0) {
-    h += '<div class="no-print" style="background:#fffdf5;border:1px dashed #f59e0b;border-radius:6px;margin:4px 48px;padding:4px 12px;">';
+    h += '<div class="no-print" style="background:#fffdf5;border:1px dashed #f59e0b;border-radius:6px;margin:4px 0;padding:4px 12px;">';
     h += '<div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>\u26A0 Total original reservas</span><span>' + fmt(sums.orig) + ' \u20AC</span></div>';
     h += '<div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>Conceptos especiales descontados</span><span class="neg">- ' + fmt(sums.CE) + ' \u20AC</span></div>';
     h += '</div>';
@@ -3873,7 +3967,7 @@ function _buildConsolSummaryInner(calcs, sums, alojName) {
   h += '<div class="consol-divider"></div>';
   h += buildPasarelaRows(calcs);
   if (sums.CE2 > 0) {
-    h += '<div class="no-print" style="background:#faf8ff;border:1px dashed #7c3aed;border-radius:6px;margin:4px 48px;padding:4px 12px;">';
+    h += '<div class="no-print" style="background:#faf8ff;border:1px dashed #7c3aed;border-radius:6px;margin:4px 0;padding:4px 12px;">';
     h += '<div class="consol-row" style="color:#7c3aed;font-size:12px;padding:4px 0;"><span>\u26A0 C.E. Sin IVA descontados</span><span class="neg">- ' + fmt(sums.CE2) + ' \u20AC</span></div>';
     calcs.forEach(function(x) {
       (x.s.conceptosSinIVA||[]).filter(function(it){return it.amount>0;}).forEach(function(it) {
@@ -3885,20 +3979,50 @@ function _buildConsolSummaryInner(calcs, sums, alojName) {
   h += '<div class="consol-subtotal-reservas"><span>Subtotal Reservas</span><span>' + fmt(sums.sub) + ' \u20AC</span></div>';
   if (_isSplit) {
     h += '<div class="consol-split-box">';
-    h += '<div class="consol-split-title">\u21AD Reparto GTC / Propietario \u2014 Condici\u00F3n Especial</div>';
-    h += '<div class="consol-row bold" style="color:#7c3aed;"><span>GTC retiene (' + (GTC_SPLIT_RATE*100).toFixed(0) + '%)</span><span>' + fmt(_gtcSplitAmt) + ' \u20AC</span></div>';
+    h += '<div class="consol-split-title">\u21AD Acuerdo GTC / Propietario \u2014 Condici\u00F3n Especial</div>';
+    h += '<div class="consol-row bold" style="color:#7c3aed;padding:8px 16px;"><span><span class="consol-split-dot" style="background:#7c3aed;"></span>GTC retiene (' + (GTC_SPLIT_RATE*100).toFixed(0) + '%)</span><span>' + fmt(_gtcSplitAmt) + ' \u20AC</span></div>';
     h += '<div class="consol-split-divider"></div>';
-    h += '<div class="consol-row bold" style="color:#16a34a;"><span>Propietario recibe (' + ((1-GTC_SPLIT_RATE)*100).toFixed(0) + '%)</span><span>' + fmt(_ownerBase) + ' \u20AC</span></div>';
+    h += '<div class="consol-row bold" style="color:#16a34a;padding:8px 16px;"><span><span class="consol-split-dot" style="background:#16a34a;"></span>Propietario recibe (' + ((1-GTC_SPLIT_RATE)*100).toFixed(0) + '%)</span><span>' + fmt(_ownerBase) + ' \u20AC</span></div>';
+    h += '<div class="consol-split-bar"><div class="consol-split-bar-gtc" style="width:' + (GTC_SPLIT_RATE*100).toFixed(0) + '%;">' + (GTC_SPLIT_RATE*100).toFixed(0) + '%</div><div class="consol-split-bar-owner" style="width:' + ((1-GTC_SPLIT_RATE)*100).toFixed(0) + '%;">' + ((1-GTC_SPLIT_RATE)*100).toFixed(0) + '%</div></div>';
     h += '</div>';
   }
   h += '<div class="consol-monthly-box no-print">';
-  h += '<div class="consol-monthly-title">\uD83D\uDCC5 Conceptos Extraordinarios del Mes</div>';
+  h += '<div class="consol-monthly-title">\uD83D\uDCC5 Otros Conceptos</div>';
   h += _dedHtml;
   h += '</div>';
-  h += '<div class="consol-subtotal" id="csf-subtotal"><span>Subtotal Final Mes</span><span>' + fmt(adjSub) + ' \u20AC</span></div>';
+  h += '<div class="consol-row bold" id="csf-subtotal"><span>Subtotal Final Mes</span><span>' + fmt(adjSub) + ' \u20AC</span></div>';
   h += '<div class="consol-row" id="csf-irpf"><span>Retenci\u00F3n IRPF (' + (avgIrpfRate*100).toFixed(0) + '%)</span><span class="neg">- ' + fmt(adjRet) + ' \u20AC</span></div>';
   h += '<div class="consol-row" id="csf-iva"><span>IVA del Subtotal (21%)</span><span class="pos">+ ' + fmt(adjIva) + ' \u20AC</span></div>';
-  h += '<div class="consol-total" id="csf-total"><span>TOTAL A LIQUIDAR</span><span>' + fmt(adjLiq) + ' \u20AC</span></div>';
+  h += '</div>';
+  // RIGHT column
+  h += '<div class="cd-summary-right">';
+  h += '<div class="cd-sum-title">Resumen R\u00E1pido</div>';
+  h += '<div class="cd-quick-stats">';
+  h += '<div class="cd-qs-item"><div class="cd-qs-label">Reservas</div><div class="cd-qs-value">' + calcs.length + '</div></div>';
+  h += '<div class="cd-qs-item"><div class="cd-qs-label">Noches</div><div class="cd-qs-value">' + sumNoches + '</div></div>';
+  h += '<div class="cd-qs-item"><div class="cd-qs-label">Facturaci\u00F3n</div><div class="cd-qs-value">' + fmt(sums.total) + ' \u20AC</div></div>';
+  h += '</div>';
+  h += '<div style="margin-bottom:16px;">';
+  h += '<div class="cd-tb-row"><span>Base sin IVA</span><span class="cd-tb-val">' + fmt(sums.base) + ' \u20AC</span></div>';
+  h += '<div class="cd-tb-row"><span>Venta, gesti\u00F3n y operaciones</span><span class="cd-tb-val neg">\u2212 ' + fmt(sumVGO) + ' \u20AC</span></div>';
+  h += '<div class="cd-tb-row" style="font-weight:700;"><span>Subtotal reservas</span><span class="cd-tb-val">' + fmt(sums.sub) + ' \u20AC</span></div>';
+  if (_isSplit) {
+    h += '<div class="cd-split-mini"><div class="cd-split-mini-header">\u21AD Acuerdo especial</div>';
+    h += '<div class="cd-split-mini-row"><span><span class="consol-split-dot" style="background:#7c3aed;"></span>GTC (' + (GTC_SPLIT_RATE*100).toFixed(0) + '%)</span><span style="color:#7c3aed;font-weight:600;">\u2212 ' + fmt(_gtcSplitAmt) + ' \u20AC</span></div>';
+    h += '<div class="cd-split-mini-row"><span><span class="consol-split-dot" style="background:#16a34a;"></span>Propietario (' + ((1-GTC_SPLIT_RATE)*100).toFixed(0) + '%)</span><span style="color:#16a34a;font-weight:700;">' + fmt(_ownerBase) + ' \u20AC</span></div>';
+    h += '</div>';
+  }
+  h += '<div class="cd-tb-row"><span>Otros conceptos</span><span class="cd-tb-val neg">\u2212 ' + fmt(_ded.totalBase) + ' \u20AC</span></div>';
+  h += '<div class="cd-tb-row" style="font-weight:700;"><span>Subtotal final mes</span><span class="cd-tb-val">' + fmt(adjSub) + ' \u20AC</span></div>';
+  h += '<div class="cd-tb-row"><span>Retenci\u00F3n IRPF (' + (avgIrpfRate*100).toFixed(0) + '%)</span><span class="cd-tb-val neg">\u2212 ' + fmt(adjRet) + ' \u20AC</span></div>';
+  h += '<div class="cd-tb-row"><span>IVA Subtotal (21%)</span><span class="cd-tb-val pos">+ ' + fmt(adjIva) + ' \u20AC</span></div>';
+  h += '</div>';
+  h += '<div style="flex:1;"></div>';
+  h += '<div class="cd-total-hero" id="csf-total"><div class="cd-total-hero-label">Total a Liquidar' + (_isSplit ? ' \u2014 Propietario' : '') + '</div><div class="cd-total-hero-amount">' + fmt(adjLiq) + ' <span class="eur">\u20AC</span></div></div>';
+  h += '<div class="no-print" style="margin-top:12px;">';
+  h += allVal ? '<button class="cd-btn-generate" onclick="handleGenerar()">\uD83D\uDDA8 Generar Liquidaci\u00F3n</button>' : '<button class="cd-btn-generate disabled">\u26A0 Valida todas las reservas primero</button>';
+  h += '</div>';
+  h += '</div>';
   return h;
 }
 
@@ -4981,13 +5105,13 @@ function viewDetail(idx) {
   }
 
   document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
-    <div class="liq-header"><div class="header-top"><div><div class="type">${isV?'Liquidaci\u00F3n':'Preliquidaci\u00F3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="${_propClick}">${_prop}</div></div>
-    <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; VALIDADA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div></div>
-    <div class="liq-meta"><div class="liq-meta-item"><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
+    <div class="liq-header"><div class="liq-header-top"><div><div class="type">${isV?'Liquidaci\u00F3n':'Preliquidaci\u00F3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="${_propClick}">${_prop}</div></div>
+    <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; Validada</span>':'<span class="badge-liq badge-liq-amber">Pendiente</span>'}</div></div>
+    <div class="liq-meta-strip"><div class="liq-meta-item"><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
-    <div class="liq-meta-item"><div class="liq-meta-label">Localizador</div><div class="liq-meta-value" style="font-size:11px">${r.localizador}</div></div>
+    <div class="liq-meta-item"><div class="liq-meta-label">Localizador</div><div class="liq-meta-value sm">${r.localizador}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div></div></div>
     <div class="liq-sec">
       <div class="liq-row bold"><span>Total Reserva (IVA incluido)</span><span class="liq-val">${fv(c.total)}</span></div>
@@ -4995,7 +5119,7 @@ function viewDetail(idx) {
       <div class="liq-row bold"><span>Base sin IVA</span><span class="liq-val">${fv(c.baseSinIVA)}</span></div>
     </div>
     <div class="liq-sec">
-      <div class="liq-sec-label">Deducciones</div>
+      <div class="liq-sec-label">Venta, gesti\u00F3n y operaciones</div>
       <div class="liq-row"><span>Canal de Venta ${esc(r.plataforma)} ${_sel(platOpts, c.comRate, r.idx, 'comPlataforma', true)}</span><span class="liq-val neg">${fv(-c.comPlat)}</span></div>
       <div class="liq-row"><span>Gesti\u00F3n GTC ${_sel(gtcOptions, c.gtcRate, r.idx, 'comGTC', true)}</span><span class="liq-val neg">${fv(-c.comGTC)}</span></div>
       <div class="liq-row"><span>Limpieza ${_sel(cleaningOptions, c.limp, r.idx, 'limpieza', false)}</span><span class="liq-val neg">${fv(-c.limp)}</span></div>
@@ -5005,8 +5129,8 @@ function viewDetail(idx) {
     </div>
     ${ce2Html}
     <div class="liq-sec">
-      <div class="liq-row bold"><span>Subtotal</span><span class="liq-val">${fv(c.sub)}</span></div>
-      <div class="liq-row"><span>Retenci\u00F3n IRPF ${_sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true)}</span><span class="liq-val neg">${fv(-c.ret)}</span></div>
+      <div class="liq-subtotal-bar"><span>Subtotal</span><span>${fv(c.sub)}</span></div>
+      <div class="liq-row" style="margin-top:8px"><span>Retenci\u00F3n IRPF ${_sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true)}</span><span class="liq-val neg">${fv(-c.ret)}</span></div>
       <div class="liq-row"><span>IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)</span><span class="liq-val pos">${fv(c.iva)}</span></div>
     </div>
     <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} \u20AC</span></div></div></div>
@@ -5469,7 +5593,7 @@ function _refreshConsolMaintRow(alojName) {
 function _refreshConsolDeductionsBox(alojName) {
   var box = document.querySelector('.consol-monthly-box');
   if (!box) return;
-  box.innerHTML = '<div class="consol-monthly-title">&#128197; Conceptos Extraordinarios del Mes</div>' + buildConsolDeductionsHtml(alojName);
+  box.innerHTML = '<div class="consol-monthly-title">&#128197; Otros Conceptos</div>' + buildConsolDeductionsHtml(alojName);
 }
 
 function _patchConsolFinalTotals() {
@@ -5490,7 +5614,8 @@ function _patchConsolFinalTotals() {
   el = document.getElementById('csf-subtotal'); if (el) el.innerHTML = '<span>Subtotal Final Mes</span><span>' + fmt(adjSub) + ' \u20AC</span>';
   el = document.getElementById('csf-irpf'); if (el) el.innerHTML = '<span>Retenci\u00F3n IRPF (' + (avgIrpfRate*100).toFixed(0) + '%)</span><span class="neg">- ' + fmt(adjRet) + ' \u20AC</span>';
   el = document.getElementById('csf-iva'); if (el) el.innerHTML = '<span>IVA del Subtotal (21%)</span><span class="pos">+ ' + fmt(adjIva) + ' \u20AC</span>';
-  el = document.getElementById('csf-total'); if (el) el.innerHTML = '<span>TOTAL A LIQUIDAR</span><span>' + fmt(adjLiq) + ' \u20AC</span>';
+  el = document.getElementById('csf-total'); if (el) el.innerHTML = '<div class="cd-total-hero-label">Total a Liquidar' + (_isSplit ? ' \u2014 Propietario' : '') + '</div><div class="cd-total-hero-amount">' + fmt(adjLiq) + ' <span class="eur">\u20AC</span></div>';
+  el = document.getElementById('csf-total-bar'); if (el) { el.querySelector('.cd-total-bar-amount').textContent = fmt(adjLiq) + ' \u20AC'; }
 }
 
 function _refreshConsolSummaryBlock() {
@@ -5648,6 +5773,14 @@ function viewConsolDetail(alojName) {
   const adjRet = adjSub * avgIrpfRate;
   const adjIva = adjSub * IVA_SUBTOTAL;
   const adjLiq = adjSub - adjRet + adjIva;
+  const valCount = filteredReservas.filter(r=>validated.has(r.idx)).length;
+  const valPct = filteredReservas.length > 0 ? Math.round(valCount / filteredReservas.length * 100) : 0;
+  const progressColor = allVal ? 'linear-gradient(90deg,#43a047,#66bb6a)' : 'linear-gradient(90deg,#ff9800,#ffb74d)';
+  const _propName = getPropietario(a.name);
+  const _propIsMissing = _propName === 'Falta propietario';
+  const sumNoches = calcs.reduce((s, x) => s + x.r._nights, 0);
+  const sumVGO = sumComPlat + sumComGTC + sumLimp + sumAmen + sumComPas;
+
   const content = `
     <div class="consol-container print-target" id="print-zone">
       <div class="consol-header">
@@ -5656,13 +5789,19 @@ function viewConsolDetail(alojName) {
             <div class="type">Liquidaci\u00F3n Mensual Consolidada</div>
             <div class="name">${a.name}</div>
           </div>
-          <div>${allVal?'<span class="badge-liq badge-liq-green">&#10003; LISTA</span>':'<span class="badge-liq badge-liq-amber">PENDIENTE</span>'}</div>
+          <div>${allVal?'<span class="badge-liq badge-liq-green">&#10003; Lista</span>':'<span class="badge-liq badge-liq-amber">Pendiente</span>'}</div>
         </div>
-        <div class="consol-meta">
-          <div><div class="consol-meta-label">Propietario</div><div class="consol-meta-value" style="cursor:pointer;${getPropietario(a.name)==='Falta propietario'?'color:#e53935':''}" title="Clic para editar propietario" onclick="editPropietarioInline('${a.name.replace(/'/g,"\\'")}', this)">${getPropietario(a.name)}</div></div>
-          <div><div class="consol-meta-label">Edificio</div><div class="consol-meta-value">${a.edificio}</div></div>
-          <div><div class="consol-meta-label">N\u00BA Reservas</div><div class="consol-meta-value">${filteredReservas.length}</div></div>
-          <div><div class="consol-meta-label">Validadas</div><div class="consol-meta-value">${filteredReservas.filter(r=>validated.has(r.idx)).length} / ${filteredReservas.length}</div></div>
+        <div class="cd-progress-wrap">
+          <div class="cd-progress">
+            <div class="cd-progress-bar"><div class="cd-progress-fill" style="width:${valPct}%;background:${progressColor};"></div></div>
+            <div class="cd-progress-text"><strong>${valCount} / ${filteredReservas.length}</strong> validadas</div>
+          </div>
+        </div>
+        <div class="consol-meta-strip">
+          <div class="consol-meta-item"><div class="consol-meta-label">Propietario</div><div class="consol-meta-value${_propIsMissing?' alert':''}" style="cursor:pointer" title="Clic para editar propietario" onclick="editPropietarioInline('${a.name.replace(/'/g,"\\'")}', this)">${_propName}</div></div>
+          <div class="consol-meta-item"><div class="consol-meta-label">Edificio</div><div class="consol-meta-value">${a.edificio}</div></div>
+          <div class="consol-meta-item"><div class="consol-meta-label">N\u00BA Reservas</div><div class="consol-meta-value">${filteredReservas.length}</div></div>
+          <div class="consol-meta-item"><div class="consol-meta-label">Facturaci\u00F3n</div><div class="consol-meta-value">${fmt(sumTotal)} \u20AC</div></div>
         </div>
       </div>
 
@@ -5694,71 +5833,105 @@ function viewConsolDetail(alojName) {
         </div>
         </div>
 
-        <div class="consol-summary-block" id="consol-summary-block">
-        <div class="consol-section-title">Resumen Consolidado</div>
-        <div class="consol-row bold"><span>Total Reservas (IVA incluido)</span><span>${fmt(sumTotal)} &#8364;</span></div>
-${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed #f59e0b;border-radius:6px;margin:4px 48px;padding:4px 12px;">
-          <div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>&#9888; Total original reservas</span><span>${fmt(sumOriginal)} &#8364;</span></div>
-          <div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>Conceptos especiales descontados</span><span class="neg">- ${fmt(sumCE)} &#8364;</span></div>
-        </div>` : ''}
-        <div class="consol-row"><span>IVA Reservas (10%)</span><span class="neg">- ${fmt(sumTotal - sumBase)} &#8364;</span></div>
-        <div class="consol-row bold"><span>Base sin IVA</span><span>${fmt(sumBase)} &#8364;</span></div>
-        <div class="consol-divider"></div>
-        ${buildComPlatRows(calcs)}
-        <div class="consol-divider"></div>
-        ${buildGTCRows(calcs)}
-        ${buildLimpRows(calcs)}
-        <div class="consol-row"><span>Amenities</span><span class="neg">- ${fmt(sumAmen)} &#8364;</span></div>
-        <div class="consol-divider"></div>
-        ${buildPasarelaRows(calcs)}
-${sumCE2 > 0 ? `<div class="no-print" style="background:#faf8ff;border:1px dashed #7c3aed;border-radius:6px;margin:4px 48px;padding:4px 12px;">
-          <div class="consol-row" style="color:#7c3aed;font-size:12px;padding:4px 0;"><span>&#9888; C.E. Sin IVA descontados</span><span class="neg">- ${fmt(sumCE2)} &#8364;</span></div>
-          ${calcs.flatMap(x => (x.s.conceptosSinIVA||[]).filter(it=>it.amount>0).map(it=>({label:it.label||'Sin nombre',amount:it.amount,reserva:x.r.id}))).map(it=>`<div class="consol-row sub" style="color:#9f7aea;font-size:11px;padding:2px 0 2px 12px;"><span>${esc(it.label)} <span style="color:#c4b5fd;font-size:10px">(Res. ${esc(it.reserva)})</span></span><span class="neg">- ${fmt(it.amount)} &#8364;</span></div>`).join('')}
-        </div>` : ''}
-        <div class="consol-subtotal-reservas"><span>Subtotal Reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
+        <div class="cd-summary-section" id="consol-summary-block">
+          <!-- LEFT: Detailed breakdown -->
+          <div class="cd-summary-left">
+            <div class="cd-sum-title">Resumen Consolidado</div>
+            <div class="consol-row bold"><span>Total Reservas (IVA incluido)</span><span>${fmt(sumTotal)} \u20AC</span></div>
+${sumCE > 0 ? `<div class="no-print" style="background:#fffdf5;border:1px dashed #f59e0b;border-radius:6px;margin:4px 0;padding:4px 12px;">
+              <div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>&#9888; Total original reservas</span><span>${fmt(sumOriginal)} \u20AC</span></div>
+              <div class="consol-row" style="color:#d97706;font-size:12px;padding:4px 0;"><span>Conceptos especiales descontados</span><span class="neg">- ${fmt(sumCE)} \u20AC</span></div>
+            </div>` : ''}
+            <div class="consol-row"><span>IVA Reservas (10%)</span><span class="neg">- ${fmt(sumTotal - sumBase)} \u20AC</span></div>
+            <div class="consol-row bold"><span>Base sin IVA</span><span>${fmt(sumBase)} \u20AC</span></div>
+            <div class="consol-divider"></div>
+            ${buildComPlatRows(calcs)}
+            <div class="consol-divider"></div>
+            ${buildGTCRows(calcs)}
+            ${buildLimpRows(calcs)}
+            <div class="consol-row"><span>Amenities</span><span class="neg">- ${fmt(sumAmen)} \u20AC</span></div>
+            <div class="consol-divider"></div>
+            ${buildPasarelaRows(calcs)}
+${sumCE2 > 0 ? `<div class="no-print" style="background:#faf8ff;border:1px dashed #7c3aed;border-radius:6px;margin:4px 0;padding:4px 12px;">
+              <div class="consol-row" style="color:#7c3aed;font-size:12px;padding:4px 0;"><span>&#9888; C.E. Sin IVA descontados</span><span class="neg">- ${fmt(sumCE2)} \u20AC</span></div>
+              ${calcs.flatMap(x => (x.s.conceptosSinIVA||[]).filter(it=>it.amount>0).map(it=>({label:it.label||'Sin nombre',amount:it.amount,reserva:x.r.id}))).map(it=>`<div class="consol-row sub" style="color:#9f7aea;font-size:11px;padding:2px 0 2px 12px;"><span>${esc(it.label)} <span style="color:#c4b5fd;font-size:10px">(Res. ${esc(it.reserva)})</span></span><span class="neg">- ${fmt(it.amount)} \u20AC</span></div>`).join('')}
+            </div>` : ''}
+            <div class="consol-subtotal-reservas"><span>Subtotal Reservas</span><span>${fmt(sumSub)} \u20AC</span></div>
 ${_isSplit ? `<div class="consol-split-box">
-          <div class="consol-split-title">&#8621; Reparto GTC / Propietario &mdash; Condici\u00F3n Especial</div>
-          <div class="consol-row bold" style="color:#7c3aed;"><span>GTC retiene (${(GTC_SPLIT_RATE*100).toFixed(0)}%)</span><span>${fmt(_gtcSplitAmt)} &#8364;</span></div>
-          <div class="consol-split-divider"></div>
-          <div class="consol-row bold" style="color:#16a34a;"><span>Propietario recibe (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span>${fmt(_ownerBase)} &#8364;</span></div>
-        </div>` : ''}
-        <div class="consol-monthly-box no-print">
-          <div class="consol-monthly-title">&#128197; Conceptos Extraordinarios del Mes</div>
-          ${_dedHtml}
+              <div class="consol-split-title">&#8621; Acuerdo GTC / Propietario \u2014 Condici\u00F3n Especial</div>
+              <div class="consol-row bold" style="color:#7c3aed;padding:8px 16px;"><span><span class="consol-split-dot" style="background:#7c3aed;"></span>GTC retiene (${(GTC_SPLIT_RATE*100).toFixed(0)}%)</span><span>${fmt(_gtcSplitAmt)} \u20AC</span></div>
+              <div class="consol-split-divider"></div>
+              <div class="consol-row bold" style="color:#16a34a;padding:8px 16px;"><span><span class="consol-split-dot" style="background:#16a34a;"></span>Propietario recibe (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span>${fmt(_ownerBase)} \u20AC</span></div>
+              <div class="consol-split-bar"><div class="consol-split-bar-gtc" style="width:${(GTC_SPLIT_RATE*100).toFixed(0)}%;">${(GTC_SPLIT_RATE*100).toFixed(0)}%</div><div class="consol-split-bar-owner" style="width:${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%;">${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%</div></div>
+            </div>` : ''}
+            <div class="consol-monthly-box no-print">
+              <div class="consol-monthly-title">&#128197; Otros Conceptos</div>
+              ${_dedHtml}
+            </div>
+            <div class="consol-row bold" id="csf-subtotal"><span>Subtotal Final Mes</span><span>${fmt(adjSub)} \u20AC</span></div>
+            <div class="consol-row" id="csf-irpf"><span>Retenci\u00F3n IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} \u20AC</span></div>
+            <div class="consol-row" id="csf-iva"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} \u20AC</span></div>
+          </div>
+
+          <!-- RIGHT: Quick stats + Total hero -->
+          <div class="cd-summary-right">
+            <div class="cd-sum-title">Resumen R\u00E1pido</div>
+            <div class="cd-quick-stats">
+              <div class="cd-qs-item"><div class="cd-qs-label">Reservas</div><div class="cd-qs-value">${filteredReservas.length}</div></div>
+              <div class="cd-qs-item"><div class="cd-qs-label">Noches</div><div class="cd-qs-value">${sumNoches}</div></div>
+              <div class="cd-qs-item"><div class="cd-qs-label">Facturaci\u00F3n</div><div class="cd-qs-value">${fmt(sumTotal)} \u20AC</div></div>
+            </div>
+            <div style="margin-bottom:16px;">
+              <div class="cd-tb-row"><span>Base sin IVA</span><span class="cd-tb-val">${fmt(sumBase)} \u20AC</span></div>
+              <div class="cd-tb-row"><span>Venta, gesti\u00F3n y operaciones</span><span class="cd-tb-val neg">\u2212 ${fmt(sumVGO)} \u20AC</span></div>
+              <div class="cd-tb-row" style="font-weight:700;"><span>Subtotal reservas</span><span class="cd-tb-val">${fmt(sumSub)} \u20AC</span></div>
+${_isSplit ? `<div class="cd-split-mini">
+                <div class="cd-split-mini-header">&#8621; Acuerdo especial</div>
+                <div class="cd-split-mini-row"><span><span class="consol-split-dot" style="background:#7c3aed;"></span>GTC (${(GTC_SPLIT_RATE*100).toFixed(0)}%)</span><span style="color:#7c3aed;font-weight:600;">\u2212 ${fmt(_gtcSplitAmt)} \u20AC</span></div>
+                <div class="cd-split-mini-row"><span><span class="consol-split-dot" style="background:#16a34a;"></span>Propietario (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span style="color:#16a34a;font-weight:700;">${fmt(_ownerBase)} \u20AC</span></div>
+              </div>` : ''}
+              <div class="cd-tb-row"><span>Otros conceptos</span><span class="cd-tb-val neg">\u2212 ${fmt(_ded.totalBase)} \u20AC</span></div>
+              <div class="cd-tb-row" style="font-weight:700;"><span>Subtotal final mes</span><span class="cd-tb-val">${fmt(adjSub)} \u20AC</span></div>
+              <div class="cd-tb-row"><span>Retenci\u00F3n IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="cd-tb-val neg">\u2212 ${fmt(adjRet)} \u20AC</span></div>
+              <div class="cd-tb-row"><span>IVA Subtotal (21%)</span><span class="cd-tb-val pos">+ ${fmt(adjIva)} \u20AC</span></div>
+            </div>
+            <div style="flex:1;"></div>
+            <div class="cd-total-hero" id="csf-total">
+              <div class="cd-total-hero-label">Total a Liquidar${_isSplit ? ' \u2014 Propietario' : ''}</div>
+              <div class="cd-total-hero-amount">${fmt(adjLiq)} <span class="eur">\u20AC</span></div>
+            </div>
+            <div class="no-print" style="margin-top:12px;">
+              ${allVal
+                ? `<button class="cd-btn-generate" onclick="handleGenerar()">&#128424; Generar Liquidaci\u00F3n</button>`
+                : `<button class="cd-btn-generate disabled">&#9888; Valida todas las reservas primero</button>`}
+            </div>
+            ${allVal && _previewPref !== null
+              ? `<div class="no-print" style="text-align:center;font-size:12px;color:#9ca3af;margin-top:8px;">
+                  ${_previewPref ? '\ud83d\udc41 Se mostrar\u00E1 previsualizaci\u00F3n' : '\ud83d\udda8 Se imprimir\u00E1 directamente'}
+                  &nbsp;\u00B7&nbsp; <a href="#" onclick="resetPreviewPref();return false;" style="color:#4f8cff;">Cambiar</a>
+                </div>`
+              : allVal ? `<div class="no-print" id="preview-options" style="display:flex;flex-direction:column;gap:8px;align-items:center;margin-top:8px;">
+                  <label style="display:flex;align-items:center;gap:6px;font-size:12px;cursor:pointer;">
+                    <input type="checkbox" id="chk-preview" checked style="width:14px;height:14px;cursor:pointer;">
+                    Ver previsualizaci\u00F3n antes
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:#9ca3af;cursor:pointer;">
+                    <input type="checkbox" id="chk-remember" style="width:13px;height:13px;cursor:pointer;">
+                    No preguntar m\u00E1s
+                  </label>
+                </div>` : ''}
+          </div>
         </div>
-        <div class="consol-subtotal" id="csf-subtotal"><span>Subtotal Final Mes</span><span>${fmt(adjSub)} &#8364;</span></div>
-        <div class="consol-row" id="csf-irpf"><span>Retenci\u00F3n IRPF (${(avgIrpfRate*100).toFixed(0)}%)</span><span class="neg">- ${fmt(adjRet)} &#8364;</span></div>
-        <div class="consol-row" id="csf-iva"><span>IVA del Subtotal (21%)</span><span class="pos">+ ${fmt(adjIva)} &#8364;</span></div>
-        <div class="consol-total" id="csf-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(adjLiq)} &#8364;</span></div>
+
+        <div class="cd-total-bar" id="csf-total-bar">
+          <div class="cd-total-bar-label">Total a Liquidar${_isSplit ? ' \u2014 Propietario' : ''}<strong>${a.name}</strong></div>
+          <div class="cd-total-bar-amount">${fmt(adjLiq)} \u20AC</div>
         </div>
       </div>
     </div>
 
-    <div class="liq-actions no-print" style="margin-top:28px;" id="consol-actions">
-      ${allVal
-        ? `<div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
-            <div style="display:flex;gap:12px;align-items:center;">
-              <button class="btn btn-success" onclick="handleGenerar()">&#128424; Generar Liquidaci\u00F3n</button>
-              <button class="btn btn-outline" onclick="showScreen('consol')">&#8592; Volver</button>
-            </div>
-            ${_previewPref !== null
-              ? `<div style="font-size:12px;color:#9ca3af;">
-                  ${_previewPref ? '\ud83d\udc41 Se mostrar\u00E1 previsualizaci\u00F3n' : '\ud83d\udda8 Se imprimir\u00E1 directamente'}
-                  &nbsp;\u00B7&nbsp; <a href="#" onclick="resetPreviewPref();return false;" style="color:#4f8cff;">Cambiar</a>
-                </div>`
-              : `<div id="preview-options" style="display:flex;gap:16px;align-items:center;">
-                  <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;">
-                    <input type="checkbox" id="chk-preview" checked style="width:16px;height:16px;cursor:pointer;">
-                    Ver previsualizaci\u00F3n antes de imprimir
-                  </label>
-                  <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:#9ca3af;cursor:pointer;">
-                    <input type="checkbox" id="chk-remember" style="width:14px;height:14px;cursor:pointer;">
-                    No preguntar m\u00E1s
-                  </label>
-                </div>`}
-          </div>`
-        : `<button class="btn btn-disabled">&#9888; Valida todas las reservas primero</button>
-           <button class="btn btn-outline" onclick="showScreen('consol')">&#8592; Volver</button>`}
+    <div class="no-print" style="display:flex;justify-content:center;padding:16px;">
+      <button class="btn btn-outline" onclick="showScreen('consol')">&#8592; Volver</button>
     </div>
 
     <div id="preview-zone" style="display:none;"></div>`;
@@ -5858,18 +6031,18 @@ function buildPrintCards() {
 
     return `<div class="liq-container print-card" style="margin-bottom:24px;">
       <div class="liq-header">
-        <div class="header-top"><div><div class="type">Liquidaci\u00F3n ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div></div>
-        <div class="liq-meta">
-          <div><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
-          <div><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
-          <div><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
-          <div><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
-          <div><div class="liq-meta-label">Localizador</div><div class="liq-meta-value" style="font-size:11px">${r.localizador}</div></div>
-          <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div>
+        <div class="liq-header-top"><div><div class="type">Liquidaci\u00F3n ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div></div>
+        <div class="liq-meta-strip">
+          <div class="liq-meta-item"><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">Localizador</div><div class="liq-meta-value sm">${r.localizador}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div>
         </div>
       </div>
       <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">${rowsHtml}</div>
-      <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(c.totalLiq)} &#8364;</span></div>
+      <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} &#8364;</span></div></div>
     </div>`;
   }).join('');
 
@@ -5893,11 +6066,11 @@ function buildPrintCards() {
       <div class="liq-row bold" style="color:#16a34a;"><span>Propietario recibe (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span>${fmt(_pOwnerBase)} &#8364;</span></div>` : '';
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-header">
-      <div class="header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
-      <div class="liq-meta">
-        <div><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${a.edificio}</div></div>
-        <div><div class="liq-meta-label">N\u00BA Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
-        <div></div>
+      <div class="liq-header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
+      <div class="liq-meta-strip">
+        <div class="liq-meta-item"><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${a.edificio}</div></div>
+        <div class="liq-meta-item"><div class="liq-meta-label">N\u00BA Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
+        <div class="liq-meta-item"><div class="liq-meta-label">Propietario</div><div class="liq-meta-value">${getPropietario(a.name)}</div></div>
       </div>
     </div>
     <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">
@@ -5909,7 +6082,7 @@ function buildPrintCards() {
       <div class="liq-row"><span>Retenci\u00F3n IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
       <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>
-    <div class="liq-total"><span>TOTAL A LIQUIDAR</span><span>${fmt(_pAdjLiq)} &#8364;</span></div>
+    <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar${_pIsSplit ? ' \u2014 Propietario' : ''}</span><span class="liq-total-value">${fmt(_pAdjLiq)} &#8364;</span></div></div>
   </div>`;
 
   return { cardsHtml, summaryHtml };
@@ -6069,7 +6242,7 @@ function buildGtcSplitSection() {
   }).join('<div class="gtc-split-divider-row"></div>');
   const count = alojs.filter(function(n){ return isGtcSplit(n); }).length;
   return '<div class="gtc-split-section"><div class="gtc-split-title">' +
-    '&#8621; Reparto 80/20 GTC</div>' +
+    '&#8621; Acuerdo 80/20 GTC</div>' +
     '<div class="gtc-split-desc">Alojamientos propiedad GTC. Activa los que ya est\u00E1n vendidos: GTC retiene el 20% del Subtotal Reservas, el propietario recibe el 80%.</div>' +
     '<div class="gtc-split-list">' + rows + '</div>' +
     '<div class="gtc-split-counter"><span class="badge">' + count + '</span> de ' + alojs.length + ' vendido' + (count !== 1 ? 's' : '') + ' (80/20 activo)</div></div>';

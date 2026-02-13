@@ -419,81 +419,112 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .print-target { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none !important; border-radius: 0 !important; }
   .sidebar, .btn, .no-print, .liq-actions, .gear-btn { display: none !important; }
 
-  /* Container */
+  /* ── Containers ── */
   .consol-container, .liq-container { max-width: 100% !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; border: none !important; }
 
-  /* Header */
-  .consol-header, .liq-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; }
-  .consol-header .header-top, .liq-header-top { padding: 12px 20px 8px !important; }
-  .consol-header .name { font-size: 18px !important; }
-  .consol-meta-strip, .liq-meta-strip { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .consol-meta-strip .consol-meta-item, .liq-meta-strip .liq-meta-item { padding: 8px 16px !important; }
-  .cd-progress-wrap { padding: 0 20px !important; }
-  .cd-progress-bar, .cd-progress-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  /* ── Consolidated header (CRITICAL: overflow + z-index reset) ── */
+  .consol-header { overflow: visible !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-header::before { display: none !important; }
+  .consol-header .header-top { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; padding: 14px 20px 6px !important; position: static !important; z-index: auto !important; }
+  .consol-header .type { font-size: 9px !important; }
+  .consol-header .name { font-size: 17px !important; line-height: 1.2 !important; }
+  .cd-progress-wrap { padding: 2px 20px 0 !important; position: static !important; z-index: auto !important; }
+  .cd-progress { display: flex !important; align-items: center !important; gap: 10px !important; padding: 4px 0 6px !important; }
+  .cd-progress-bar { height: 4px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cd-progress-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cd-progress-text { font-size: 9px !important; }
+  .consol-meta-strip { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 0 !important; position: static !important; z-index: auto !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-meta-strip .consol-meta-item { padding: 8px 16px !important; }
+  .consol-meta-label { font-size: 7px !important; margin-bottom: 2px !important; }
+  .consol-meta-value { font-size: 11px !important; }
 
-  /* Body */
+  /* ── Individual header ── */
+  .liq-header { overflow: visible !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-header::before { display: none !important; }
+  .liq-header::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-header-top { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; padding: 12px 20px 6px !important; position: static !important; z-index: auto !important; }
+  .liq-header .type { font-size: 9px !important; }
+  .liq-header .name { font-size: 17px !important; line-height: 1.2 !important; }
+  .liq-meta-strip { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; position: static !important; z-index: auto !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-meta-strip .liq-meta-item { padding: 8px 16px !important; }
+  .liq-meta-label { font-size: 7px !important; margin-bottom: 2px !important; }
+  .liq-meta-value { font-size: 11px !important; }
+
+  /* ── Badge ── */
+  .badge-liq { font-size: 8px !important; padding: 3px 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* ── Consolidated body & table ── */
   .consol-body { box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; }
   .table-wrap { overflow: visible !important; }
+  table { page-break-inside: auto; }
+  thead { display: table-header-group; }
+  tr { page-break-inside: avoid; }
 
-  /* Mini table — compact for landscape A4 */
+  /* ── Mini table — compact for landscape A4 ── */
   .consol-mini-table { table-layout: fixed !important; width: 100% !important; }
   .consol-mini-table th { padding: 4px 5px !important; font-size: 8px !important; }
   .consol-mini-table td { padding: 4px 5px !important; font-size: 9px !important; }
   .consol-mini-table .ellip { max-width: 0; }
   .badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 7px !important; padding: 1px 4px !important; }
 
-  /* Summary 2-column print */
-  .cd-summary-section { grid-template-columns: 1.2fr 0.8fr !important; }
-  .cd-summary-left, .cd-summary-right { padding: 12px 16px !important; }
-  .consol-section-title { padding: 8px 16px 4px !important; font-size: 9px !important; }
-  .consol-row { padding: 4px 0 !important; font-size: 10px !important; }
+  /* ── Summary 2-column ── */
+  .cd-summary-section { display: grid !important; grid-template-columns: 1.2fr 0.8fr !important; page-break-inside: avoid !important; break-inside: avoid !important; max-width: 100% !important; }
+  .cd-summary-left { padding: 14px 18px !important; }
+  .cd-summary-right { padding: 14px 18px !important; display: flex !important; flex-direction: column !important; }
+  .cd-sum-title { font-size: 9px !important; margin-bottom: 8px !important; padding-bottom: 4px !important; }
+  .consol-section-title { padding: 8px 0 4px !important; font-size: 9px !important; page-break-after: avoid; }
+  .consol-row { padding: 3px 0 !important; font-size: 10px !important; }
+  .consol-row.bold { font-size: 11px !important; }
   .consol-row.sub { padding-left: 12px !important; font-size: 9px !important; }
   .consol-divider { margin: 2px 0 !important; }
-  .consol-subtotal { padding: 6px 0 !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .consol-subtotal-reservas { padding: 6px 12px !important; font-size: 11px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .consol-monthly-box { margin: 6px 0 !important; padding: 8px 12px !important; }
-  .consol-split-box { margin: 6px 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-subtotal { padding: 5px 0 !important; font-size: 11px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-subtotal-reservas { padding: 5px 10px !important; font-size: 10px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .consol-monthly-box { margin: 4px 0 !important; padding: 6px 10px !important; }
+  .consol-split-box { margin: 6px 0 !important; padding: 6px 10px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .consol-split-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .cd-total-hero { padding: 16px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .cd-total-hero-amount { font-size: 24px !important; }
+  .consol-split-bar-gtc, .consol-split-bar-owner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* ── Quick stats (right column) ── */
+  .cd-quick-stats { gap: 6px !important; margin-bottom: 10px !important; }
+  .cd-qs-item { padding: 6px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cd-qs-label { font-size: 7px !important; }
+  .cd-qs-value { font-size: 13px !important; }
+  .cd-tb-row { font-size: 10px !important; padding: 2px 0 !important; }
+  .cd-split-mini { padding: 4px 8px !important; margin: 4px 0 !important; }
+
+  /* ── Total hero ── */
+  .cd-total-hero { padding: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cd-total-hero-label { font-size: 8px !important; }
+  .cd-total-hero-amount { font-size: 22px !important; }
   .cd-btn-generate { display: none !important; }
-  .cd-total-bar { padding: 12px 16px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border-radius: 0 !important; }
+
+  /* ── Total bar (full-width) ── */
+  .cd-total-bar { padding: 10px 16px !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .cd-total-bar-amount { font-size: 22px !important; }
-  .cd-quick-stats { gap: 8px !important; margin-bottom: 12px !important; }
-  .cd-qs-item { padding: 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .cd-qs-value { font-size: 14px !important; }
+  .cd-total-bar-label { font-size: 10px !important; }
+  .cd-total-bar-amount { font-size: 20px !important; }
 
-  /* CRITICAL: keep summary + total together */
-  .consol-summary-block, .cd-summary-section { page-break-inside: avoid !important; break-inside: avoid !important; max-width: 100% !important; }
-
-  /* Table page break rules */
-  table { page-break-inside: auto; }
-  thead { display: table-header-group; }
-  tr { page-break-inside: avoid; }
-  .consol-section-title { page-break-after: avoid; }
-
-  /* Individual liquidacion */
-  .liq-sec { padding: 12px 20px !important; }
-  .liq-row { padding: 5px 0 !important; font-size: 11px !important; }
-  .liq-row.bold { margin: 0 -20px !important; padding: 8px 20px !important; font-size: 12px !important; }
-  .liq-subtotal-bar { margin: 0 -20px !important; padding: 8px 20px !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .liq-pas-row { padding: 5px 0 !important; font-size: 11px !important; }
+  /* ── Individual liquidacion rows ── */
+  .liq-sec { padding: 10px 20px !important; }
+  .liq-row { padding: 4px 0 !important; font-size: 11px !important; }
+  .liq-row.bold { margin: 0 -20px !important; padding: 6px 20px !important; font-size: 12px !important; }
+  .liq-subtotal-bar { margin: 0 -20px !important; padding: 6px 20px !important; font-size: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-pas-row { padding: 4px 0 !important; font-size: 11px !important; }
   .liq-divider { margin: 2px 0 !important; }
   .liq-total { padding: 10px 20px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .liq-total-value { font-size: 20px !important; }
+  .liq-total-label { font-size: 8px !important; }
+  .liq-total-value { font-size: 18px !important; }
   .liq-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .liq-header::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .liq-header::before { display: none !important; }
-  .consol-header::before { display: none !important; }
   .liq-ce2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 0 20px !important; }
-  .liq-sec-label { font-size: 8px !important; }
+  .liq-sec-label { font-size: 8px !important; margin-bottom: 6px !important; }
   .liq-actions { display: none !important; }
   .liq-sw { display: none !important; }
+  .liq-sel { font-size: 10px !important; }
 
-  /* Print cards */
+  /* ── Print cards ── */
   .print-card { page-break-inside: avoid !important; break-inside: avoid !important; margin-bottom: 12px !important; }
   .print-summary { page-break-inside: avoid !important; break-inside: avoid !important; margin-top: 12px !important; }
+  .consol-summary-block { page-break-inside: avoid !important; break-inside: avoid !important; }
 }
 ::-webkit-scrollbar { height: 6px; width: 6px; }
 ::-webkit-scrollbar-thumb { background: #cfd5de; border-radius: 3px; }
@@ -1207,8 +1238,8 @@ function toggleConsolVal(mode) {
  * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 const APP_VERSION = '2.9.0';
-const APP_BUILD   = '2026-02-14T00:45:00+01:00';
-const APP_CHANGES = 'Redise\u00F1o visual + fix bot\u00F3n Generar (null-safe consol-actions)';
+const APP_BUILD   = '2026-02-14T01:10:00+01:00';
+const APP_CHANGES = 'Redise\u00F1o visual + fix print: headers con position:static/z-index:auto + overflow:visible';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -1374,6 +1405,9 @@ const CHANGELOG = [
       'Print: resumen consolidado con propietario en meta-strip y total-label con contexto split',
       'Print CSS actualizado: soporte 2 columnas, progress bar, total hero, meta-strip',
       'Fix: boton Generar Liquidacion no funcionaba (consol-actions eliminado, null-safe en showPrintPreview/exitPreview/printConsolDirect)',
+      'Fix print: header consolidado solapado - position:static + z-index:auto + overflow:visible en consol-header/progress/meta-strip',
+      'Fix print: consol-meta-strip forzado a grid 4 columnas (evita colapso flex en impresion)',
+      'Print CSS reescrito completo: secciones organizadas, todos los componentes nuevos cubiertos',
     ]
   },
   {

@@ -1207,8 +1207,8 @@ function toggleConsolVal(mode) {
  * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  */
 const APP_VERSION = '2.9.0';
-const APP_BUILD   = '2026-02-14T00:30:00+01:00';
-const APP_CHANGES = 'Redise\u00F1o visual: preliquidaci\u00F3n individual + consolidado detalle (2 columnas, progress bar, total hero, split bar)';
+const APP_BUILD   = '2026-02-14T00:45:00+01:00';
+const APP_CHANGES = 'Redise\u00F1o visual + fix bot\u00F3n Generar (null-safe consol-actions)';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -1373,6 +1373,7 @@ const CHANGELOG = [
       'Print: header estructura actualizada a liq-header-top + liq-meta-strip en buildPrintCards',
       'Print: resumen consolidado con propietario en meta-strip y total-label con contexto split',
       'Print CSS actualizado: soporte 2 columnas, progress bar, total hero, meta-strip',
+      'Fix: boton Generar Liquidacion no funcionaba (consol-actions eliminado, null-safe en showPrintPreview/exitPreview/printConsolDirect)',
     ]
   },
   {
@@ -6109,7 +6110,7 @@ function showPrintPreview() {
   // Toggle visibility: hide table, show preview
   printZone.style.display = 'none';
   printZone.classList.remove('print-target');
-  actions.style.display = 'none';
+  if (actions) actions.style.display = 'none';
   previewZone.style.display = 'block';
   previewZone.classList.add('print-target');
   _previewActive = true;
@@ -6134,7 +6135,7 @@ function exitPreview() {
   previewZone.innerHTML = '';
   printZone.style.display = '';
   printZone.classList.add('print-target');
-  actions.style.display = '';
+  if (actions) actions.style.display = '';
   _previewActive = false;
 }
 
@@ -6150,7 +6151,7 @@ function printConsolDirect() {
   previewZone.innerHTML = result.cardsHtml + result.summaryHtml;
   printZone.style.display = 'none';
   printZone.classList.remove('print-target');
-  actions.style.display = 'none';
+  if (actions) actions.style.display = 'none';
   previewZone.style.display = 'block';
   previewZone.classList.add('print-target');
 
@@ -6163,7 +6164,7 @@ function printConsolDirect() {
       previewZone.innerHTML = '';
       printZone.style.display = '';
       printZone.classList.add('print-target');
-      actions.style.display = '';
+      if (actions) actions.style.display = '';
     }, 500);
   }, 100);
 }

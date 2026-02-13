@@ -5034,7 +5034,6 @@ function viewConsolDetail(alojName) {
       <td class="cc-totalLiquidar right bold" style="color:${c.totalLiq>=0?'#1a2744':'#e53935'}">${fmt(c.totalLiq)} &#8364;</td>
       <td class="cc-observacion ellip" style="font-size:11px;color:#6b7280;max-width:180px;overflow:hidden;text-overflow:ellipsis;" title="${esc(r.observacion)}">${esc(r.observacion)}</td>
       <td class="cc-acciones"><div style="display:flex;gap:6px;">
-        <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();goToReserva(${r.idx})">&#128065;</button>
         ${!isV?`<button class="btn btn-sm btn-success" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#10004;</button>`:`<button class="btn btn-sm btn-orange" onclick="event.stopPropagation();toggleValidateConsol(${r.idx})">&#8617;</button>`}
       </div></td>
     </tr>${_buildCEPanelRow(r.idx, settings[r.idx], c, 'c')}${_buildCE2PanelRow(r.idx, settings[r.idx], c, 'c')}`;

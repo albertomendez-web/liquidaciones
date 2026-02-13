@@ -617,10 +617,10 @@ tr.ce2-highlighted { background:#faf8ff; }
   <div class="logo"><h1>Liquidaciones</h1><p>Gesti&oacute;n de Reservas</p></div>
   <nav style="margin-top:16px; flex:1;">
     <div class="nav-item active" id="nav-upload" onclick="showScreen('upload')">&#128228; Cargar Fichero</div>
-    <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; Detalle Preliquidaci&oacute;n</div>
-    <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; Liquidaci&oacute;n Por Alojamiento</div>
-    <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; Detalle</div>
-    <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; Liquidaci&oacute;n</div>
+    <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; Preliquidaci&oacute;n</div>
+    <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; Detalle Preliquidaci&oacute;n</div>
+    <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; Por Alojamiento</div>
+    <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; Liquidaci&oacute;n Alojamiento</div>
   </nav>
   <div class="sidebar-google" id="sidebar-google" style="display:none;">
     <span class="status-dot" id="google-dot"></span>
@@ -773,7 +773,7 @@ tr.ce2-highlighted { background:#faf8ff; }
   <!-- LIST -->
   <div class="screen" id="screen-list">
     <div class="page-header" style="margin-bottom:28px;">
-      <h1>Detalle Preliquidaci&oacute;n</h1>
+      <h1>Preliquidaci&oacute;n</h1>
       <p>Revisa, ajusta y valida cada reserva antes de generar la liquidaci&oacute;n definitiva</p>
     </div>
     <div class="stats-row" id="stats-row"></div>
@@ -842,7 +842,7 @@ tr.ce2-highlighted { background:#faf8ff; }
   <!-- CONSOLIDATED: grid of alojamientos -->
   <div class="screen" id="screen-consol">
     <div class="page-header" style="margin-bottom:28px;">
-      <h1>Liquidaci&oacute;n Por Alojamiento</h1>
+      <h1>Por Alojamiento</h1>
       <p>Consolida las reservas validadas de cada alojamiento para generar la liquidaci&oacute;n mensual</p>
     </div>
     <div class="stats-row" id="consol-stats"></div>

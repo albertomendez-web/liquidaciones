@@ -1277,9 +1277,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.11.7';
-const APP_BUILD   = '2026-02-14T22:45:00+01:00';
-const APP_CHANGES = 'Fix PDF: monkey-patch createPattern para canvas 0px (bug html2canvas)';
+const APP_VERSION = '2.11.8';
+const APP_BUILD   = '2026-02-14T23:00:00+01:00';
+const APP_CHANGES = 'Fix PDF: patch createPattern al cargar m\u00F3dulo (antes de html2canvas)';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1419,6 +1419,14 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.11.8',
+    date: '2026-02-14',
+    changes: [
+      'Fix PDF: createPattern parcheado al cargar modulo (antes de html2canvas)',
+      'Fix PDF: try/catch en createPattern como fallback adicional',
+    ]
+  },
   {
     version: '2.11.7',
     date: '2026-02-14',

@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════════
- *  EMAIL MODULE v2.2.0 — PDF generation + Gmail sending for liquidaciones
+ *  EMAIL MODULE v2.2.1 — PDF generation + Gmail sending for liquidaciones
  * ═══════════════════════════════════════════════════════════════════════════════
  *
  *  Satellite file for index.html (Liquidaciones GTC).
@@ -43,6 +43,28 @@ let _pdfLibsPromise = null;
 function _loadPdfLibs() {
   if (_pdfLibsLoaded) return Promise.resolve();
   if (_pdfLibsPromise) return _pdfLibsPromise;
+
+  // Patch createPattern BEFORE html2canvas loads (it captures the reference at load time)
+  if (!CanvasRenderingContext2D.prototype._origCreatePattern) {
+    CanvasRenderingContext2D.prototype._origCreatePattern = CanvasRenderingContext2D.prototype.createPattern;
+    CanvasRenderingContext2D.prototype.createPattern = function(img, rep) {
+      try {
+        if (img && ('width' in img) && ('height' in img) && (img.width === 0 || img.height === 0)) {
+          console.warn('[Email] createPattern: blocked 0-dim image, using 1x1 fallback');
+          const fallback = document.createElement('canvas');
+          fallback.width = 1; fallback.height = 1;
+          return this._origCreatePattern(fallback, rep);
+        }
+        return this._origCreatePattern(img, rep);
+      } catch(e) {
+        console.warn('[Email] createPattern error caught:', e.message);
+        const fallback = document.createElement('canvas');
+        fallback.width = 1; fallback.height = 1;
+        return this._origCreatePattern(fallback, rep);
+      }
+    };
+    console.log('[Email] createPattern patched');
+  }
 
   _pdfLibsPromise = (async () => {
     const loads = [];
@@ -224,18 +246,6 @@ async function _generatePdf(onProgress) {
   // Small delay to let browser render and fonts apply
   await new Promise(r => setTimeout(r, 400));
 
-  // Monkey-patch createPattern to survive 0-dimension canvas (html2canvas bug)
-  const _origCreatePattern = CanvasRenderingContext2D.prototype.createPattern;
-  CanvasRenderingContext2D.prototype.createPattern = function(img, rep) {
-    if (img && (img.width === 0 || img.height === 0)) {
-      console.warn('[Email] createPattern blocked: 0-dim canvas');
-      const c = document.createElement('canvas');
-      c.width = 1; c.height = 1;
-      return _origCreatePattern.call(this, c, rep);
-    }
-    return _origCreatePattern.call(this, img, rep);
-  };
-
   try {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
@@ -301,8 +311,6 @@ async function _generatePdf(onProgress) {
     console.log('[Email] PDF generated:', totalCards, 'pages,', Math.round(blob.size / 1024), 'KB');
     return blob;
   } finally {
-    // Restore original createPattern
-    CanvasRenderingContext2D.prototype.createPattern = _origCreatePattern;
     document.body.removeChild(container);
   }
 }
@@ -796,4 +804,22 @@ function _getCurrentLiqMonth() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════════════════════════════
-console.log('[Email Module] v2.0.1 loaded');
+// Patch createPattern immediately at module load (before any lib loads)
+if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D.prototype._origCreatePattern) {
+  CanvasRenderingContext2D.prototype._origCreatePattern = CanvasRenderingContext2D.prototype.createPattern;
+  CanvasRenderingContext2D.prototype.createPattern = function(img, rep) {
+    try {
+      if (img && ('width' in img) && ('height' in img) && (img.width === 0 || img.height === 0)) {
+        console.warn('[Email] createPattern: blocked 0-dim image');
+        const fb = document.createElement('canvas'); fb.width = 1; fb.height = 1;
+        return this._origCreatePattern(fb, rep);
+      }
+      return this._origCreatePattern(img, rep);
+    } catch(e) {
+      console.warn('[Email] createPattern fallback:', e.message);
+      const fb = document.createElement('canvas'); fb.width = 1; fb.height = 1;
+      return this._origCreatePattern(fb, rep);
+    }
+  };
+}
+console.log('[Email Module] v2.2.1 loaded');

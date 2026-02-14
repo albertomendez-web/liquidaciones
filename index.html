@@ -767,8 +767,8 @@ tr.ce2-highlighted { background:#faf8ff; }
   <div class="logo"><h1>Liquidaciones</h1><p>Gesti&oacute;n de Reservas</p></div>
   <nav style="margin-top:16px; flex:1;">
     <div class="nav-item active" id="nav-upload" onclick="showScreen('upload')">&#128228; Cargar Fichero</div>
-    <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; Preliquidaci&oacute;n</div>
-    <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; Detalle Preliquidaci&oacute;n</div>
+    <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; Por Reserva</div>
+    <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; Liquidaci&oacute;n Reserva</div>
     <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; Por Alojamiento</div>
     <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; Liquidaci&oacute;n Alojamiento</div>
   </nav>
@@ -923,7 +923,7 @@ tr.ce2-highlighted { background:#faf8ff; }
   <!-- LIST -->
   <div class="screen" id="screen-list">
     <div class="page-header" style="margin-bottom:28px;">
-      <h1>Preliquidaci&oacute;n</h1>
+      <h1>Por Reserva</h1>
       <p>Revisa, ajusta y valida cada reserva antes de generar la liquidaci&oacute;n definitiva</p>
     </div>
     <div class="stats-row" id="stats-row"></div>
@@ -1277,9 +1277,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.11.3';
-const APP_BUILD   = '2026-02-14T21:15:00+01:00';
-const APP_CHANGES = 'Total bar estilo D: label dorado + subtitulo blanco grande';
+const APP_VERSION = '2.11.4';
+const APP_BUILD   = '2026-02-14T21:45:00+01:00';
+const APP_CHANGES = 'Renombrado: Preliquidaci\u00F3n \u2192 Por Reserva, Detalle \u2192 Liquidaci\u00F3n Reserva';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1419,6 +1419,15 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.11.4',
+    date: '2026-02-14',
+    changes: [
+      'Sidebar: Preliquidacion renombrado a Por Reserva',
+      'Sidebar: Detalle Preliquidacion renombrado a Liquidacion Reserva',
+      'Tarjeta detalle: tipo muestra Liquidacion Reserva cuando no validada',
+    ]
+  },
   {
     version: '2.11.3',
     date: '2026-02-14',
@@ -5300,7 +5309,7 @@ function viewDetail(idx) {
 
   document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
     <div class="liq-gold-bar-top"></div>
-    <div class="liq-header"><div class="liq-header-top"><div><div class="type">${isV?'Liquidaci\u00F3n':'Preliquidaci\u00F3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="${_propClick}">${_prop}</div></div>
+    <div class="liq-header"><div class="liq-header-top"><div><div class="type">${isV?'Liquidaci\u00F3n':'Liquidaci\u00F3n Reserva'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="${_propClick}">${_prop}</div></div>
     <div style="display:flex;align-items:center;gap:12px;"><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div>
     ${isV?'<span class="badge-liq badge-liq-green">&#10003; Validada</span>':'<span class="badge-liq badge-liq-amber">Pendiente</span>'}</div></div>
     <div class="liq-meta-strip"><div class="liq-meta-item"><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>

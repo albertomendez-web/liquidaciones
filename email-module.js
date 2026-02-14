@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════════
- *  EMAIL MODULE v2.2.1 — PDF generation + Gmail sending for liquidaciones
+ *  EMAIL MODULE v2.3.0 — PDF generation + Gmail sending for liquidaciones
  * ═══════════════════════════════════════════════════════════════════════════════
  *
  *  Satellite file for index.html (Liquidaciones GTC).
@@ -482,9 +482,28 @@ async function _sendGmail({ to, cc, subject, htmlBody, pdfBlob, filename }) {
  * @param {string} propName - Owner name
  * @param {string} alojName - Property name
  * @param {string} mes - Month string (e.g. "Enero 2026")
+ * @param {string} lang - Language: 'es' or 'en'
  * @returns {string} HTML email body
  */
-function _buildEmailBody(propName, alojName, mes) {
+function _buildEmailBody(propName, alojName, mes, lang) {
+  const isEN = lang === 'en';
+  const t = {
+    badge:       isEN ? 'Settlement'      : 'Liquidaci\u00F3n',
+    greeting:    isEN ? 'Dear'            : 'Estimado/a',
+    body:        isEN
+      ? `Please find attached the settlement statement for <strong>${_escHtml(mes)}</strong> regarding the property <strong>${_escHtml(alojName)}</strong>.`
+      : `Adjunto encontrar\u00E1 la liquidaci\u00F3n correspondiente a <strong>${_escHtml(mes)}</strong> para el alojamiento <strong>${_escHtml(alojName)}</strong>.`,
+    pdfNote:     isEN
+      ? 'The attached <strong style="color:#1D4B56;">PDF document</strong> contains the full settlement breakdown with all reservations and items for the period.'
+      : 'El documento <strong style="color:#1D4B56;">PDF adjunto</strong> contiene el desglose completo de la liquidaci\u00F3n con todas las reservas y conceptos del periodo.',
+    contact:     isEN
+      ? 'Should you have any questions or require clarification on any item, please do not hesitate to contact us.'
+      : 'Si tiene alguna duda o necesidad de aclaraci\u00F3n sobre alg\u00FAn concepto, no dude en ponerse en contacto con nosotros.',
+    closing:     isEN ? 'Kind regards,'   : 'Un cordial saludo,',
+    extraLabel:  isEN ? 'Additional note' : 'Nota adicional',
+    footer:      isEN ? 'This email has been automatically generated' : 'Este email ha sido generado autom\u00E1ticamente',
+  };
+
   return `<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
@@ -507,7 +526,7 @@ function _buildEmailBody(propName, alojName, mes) {
         </td>
         <td style="text-align:right;vertical-align:middle;">
           <div style="display:inline-block;background:rgba(224,174,0,0.15);border:1px solid rgba(224,174,0,0.3);border-radius:6px;padding:6px 14px;">
-            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#E8BE4B;line-height:1;">Liquidaci\u00F3n</div>
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#E8BE4B;line-height:1;">${t.badge}</div>
             <div style="font-family:Georgia,'Times New Roman',serif;font-size:15px;font-weight:500;color:#FFFFFF;margin-top:2px;">${_escHtml(mes)}</div>
           </div>
         </td>
@@ -515,16 +534,16 @@ function _buildEmailBody(propName, alojName, mes) {
     </div>
     <!-- Body -->
     <div id="email-body-content" style="background:#FFFFFF;padding:32px 36px;">
-      <p style="margin:0 0 16px;font-size:14px;color:#1D4B56;line-height:1.7;">Estimado/a <strong>${_escHtml(propName)}</strong>,</p>
-      <p style="margin:0 0 16px;font-size:14px;color:#1D4B56;line-height:1.7;">Adjunto encontrar\u00E1 la liquidaci\u00F3n correspondiente a <strong>${_escHtml(mes)}</strong> para el alojamiento <strong>${_escHtml(alojName)}</strong>.</p>
+      <p style="margin:0 0 16px;font-size:14px;color:#1D4B56;line-height:1.7;">${t.greeting} <strong>${_escHtml(propName)}</strong>,</p>
+      <p style="margin:0 0 16px;font-size:14px;color:#1D4B56;line-height:1.7;">${t.body}</p>
       <!-- Highlight box -->
       <div style="background:#FBF4E8;border-left:3px solid #E0AE00;border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
-        <p style="margin:0;font-size:13px;color:#4D7A97;line-height:1.6;">&#128206; El documento <strong style="color:#1D4B56;">PDF adjunto</strong> contiene el desglose completo de la liquidaci\u00F3n con todas las reservas y conceptos del periodo.</p>
+        <p style="margin:0;font-size:13px;color:#4D7A97;line-height:1.6;">&#128206; ${t.pdfNote}</p>
       </div>
-      <p style="margin:16px 0 0;font-size:14px;color:#4D7A97;line-height:1.7;">Si tiene alguna duda o necesidad de aclaraci\u00F3n sobre alg\u00FAn concepto, no dude en ponerse en contacto con nosotros.</p>
+      <p style="margin:16px 0 0;font-size:14px;color:#4D7A97;line-height:1.7;">${t.contact}</p>
       <!-- Signature -->
       <div style="margin-top:28px;padding-top:20px;border-top:1px solid #D1E8E6;">
-        <p style="margin:0;font-size:14px;color:#1D4B56;">Un cordial saludo,</p>
+        <p style="margin:0;font-size:14px;color:#1D4B56;">${t.closing}</p>
         <table cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;"><tr>
           <td style="padding-right:14px;border-right:2px solid #E0AE00;">
             <div style="font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:600;color:#1D4B56;">David Fraidiaz</div>
@@ -538,7 +557,7 @@ function _buildEmailBody(propName, alojName, mes) {
     </div>
     <!-- Footer -->
     <div id="email-footer" style="background:#EFF1F6;padding:14px 36px;border-top:1px solid #D5DAE5;text-align:center;">
-      <div style="font-size:11px;color:#ACB8C0;line-height:1.5;">Este email ha sido generado autom\u00E1ticamente \u00B7 <span style="color:#7191AC;">granadabeachgolf.com</span></div>
+      <div style="font-size:11px;color:#ACB8C0;line-height:1.5;">${t.footer} \u00B7 <span style="color:#7191AC;">granadabeachgolf.com</span></div>
     </div>
     <!-- Bottom gold accent bar -->
     <div style="height:4px;background:#E0AE00;border-radius:0 0 8px 8px;"></div>
@@ -608,6 +627,17 @@ function handleEmailLiquidacion() {
         <div class="email-modal-field">
           <label>Mensaje adicional (opcional)</label>
           <textarea id="email-extra-msg" placeholder="A\u00F1ade un mensaje personalizado..."></textarea>
+        </div>
+        <div class="email-modal-field" style="margin-bottom:8px;">
+          <label>Idioma del email</label>
+          <div style="display:flex;gap:8px;margin-top:4px;">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400;text-transform:none;letter-spacing:normal;font-size:13px;">
+              <input type="radio" name="email-lang" value="es" checked style="width:14px;height:14px;"> Espa\u00F1ol
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400;text-transform:none;letter-spacing:normal;font-size:13px;">
+              <input type="radio" name="email-lang" value="en" style="width:14px;height:14px;"> English
+            </label>
+          </div>
         </div>
         <div class="email-modal-field" style="margin-bottom:0;">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
@@ -722,13 +752,15 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     _setStatus(statusEl, 'sending', '&#9203; Enviando email a ' + _escHtml(toFinal) + (cc ? ' (CC: ' + _escHtml(cc) + ')' : '') + '...');
     sendBtn.textContent = 'Enviando...';
 
-    let htmlBody = _buildEmailBody(propName, alojName, mes);
+    const lang = document.querySelector('input[name="email-lang"]:checked')?.value || 'es';
+    let htmlBody = _buildEmailBody(propName, alojName, mes, lang);
     const extra = (extraMsg?.value || '').trim();
     if (extra) {
       // Insert custom message before the signature divider
       const sigMarker = '<div style="margin-top:28px;padding-top:20px;border-top:1px solid #D1E8E6;">';
+      const extraLabel = lang === 'en' ? 'Additional note' : 'Nota adicional';
       const customBlock = `<div style="background:#FBF4E8;border:1px solid #E8BE4B;border-radius:8px;padding:14px 18px;margin-top:20px;">
-          <div style="font-size:11px;text-transform:uppercase;color:#1D4B56;font-weight:700;margin-bottom:4px;letter-spacing:0.05em;">Nota adicional</div>
+          <div style="font-size:11px;text-transform:uppercase;color:#1D4B56;font-weight:700;margin-bottom:4px;letter-spacing:0.05em;">${extraLabel}</div>
           <div style="font-size:13px;color:#4D7A97;line-height:1.6;">${_escHtml(extra).replace(/\n/g, '<br>')}</div>
         </div>
       `;
@@ -822,4 +854,4 @@ if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D
     }
   };
 }
-console.log('[Email Module] v2.2.1 loaded');
+console.log('[Email Module] v2.3.0 loaded');

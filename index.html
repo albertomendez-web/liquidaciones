@@ -1277,9 +1277,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.11.8';
-const APP_BUILD   = '2026-02-14T23:00:00+01:00';
-const APP_CHANGES = 'Fix PDF: patch createPattern al cargar m\u00F3dulo (antes de html2canvas)';
+const APP_VERSION = '2.12.0';
+const APP_BUILD   = '2026-02-14T23:30:00+01:00';
+const APP_CHANGES = 'Defaults: Booking % m\u00E1ximo, ID Reserva visible, mes anterior, email EN/ES';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1419,6 +1419,16 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.12.0',
+    date: '2026-02-14',
+    changes: [
+      'Default comision plataforma y pasarela: siempre la opcion mas alta',
+      'Columna ID Reserva visible por defecto en ambas vistas (reserva y alojamiento)',
+      'Filtro de mes por defecto: mes anterior al actual',
+      'Email: selector de idioma Espanol/English en el modal',
+    ]
+  },
   {
     version: '2.11.8',
     date: '2026-02-14',
@@ -3500,7 +3510,7 @@ function calcLiquidacion(r, s) {
   let comPas = 0;
   if (s.pasarela) {
     const isB = r.plataforma === "Booking.com";
-    const pr = s.pasarelaRate !== undefined ? s.pasarelaRate : (isB ? pasarelaBookingOptions[0]/100 : pasarelaStripeOptions[0]/100);
+    const pr = s.pasarelaRate !== undefined ? s.pasarelaRate : (isB ? pasarelaBookingOptions[pasarelaBookingOptions.length-1]/100 : pasarelaStripeOptions[pasarelaStripeOptions.length-1]/100);
     comPas = total * pr;
   }
   const limp = s.limpieza !== undefined ? s.limpieza : cleaningOptions[0];
@@ -3605,7 +3615,7 @@ function processRows(json) {
     settings[r.idx] = {
       comPlataforma: getDefaultForPlatform(r.plataforma), comGTC: gtcOptions[0]/100,
       limpieza: cleaningOptions[0], amenities: amenitiesOptions[0], irpf: irpfOptions[0]/100, pasarela: false,
-      pasarelaRate: isB ? pasarelaBookingOptions[0]/100 : pasarelaStripeOptions[0]/100,
+      pasarelaRate: isB ? pasarelaBookingOptions[pasarelaBookingOptions.length-1]/100 : pasarelaStripeOptions[pasarelaStripeOptions.length-1]/100,
       conceptosEspeciales: [],
       conceptosSinIVA: [],
     };
@@ -3782,7 +3792,7 @@ CONSOL_COLUMNS.forEach(c => { consolColVis[c.key] = true; });
 consolColVis['irpf'] = false;
 consolColVis['iva21'] = false;
 consolColVis['subtotal'] = false;
-consolColVis['idReserva'] = false;
+consolColVis['idReserva'] = true;
 consolColVis['localizador'] = false;
 consolColVis['fechaAlta'] = false;
 consolColVis['edificio'] = false;
@@ -5297,7 +5307,7 @@ function viewDetail(idx) {
   currentDetailIdx = idx;
   const r=allReservas.find(x=>x.idx===idx); if(!r)return;
   const s=settings[r.idx]||{},c=calcLiquidacion(r,s),isV=validated.has(r.idx),isB=r.plataforma==="Booking.com";
-  const pasL=isB?"Booking":"Stripe",pasR=s.pasarelaRate!==undefined?s.pasarelaRate:(isB?pasarelaBookingOptions[0]/100:pasarelaStripeOptions[0]/100);
+  const pasL=isB?"Booking":"Stripe",pasR=s.pasarelaRate!==undefined?s.pasarelaRate:(isB?pasarelaBookingOptions[pasarelaBookingOptions.length-1]/100:pasarelaStripeOptions[pasarelaStripeOptions.length-1]/100);
   const _vd = (idx, key) => `changeSetting(${idx},'${key}',parseFloat(this.value));viewDetail(${idx})`;
   const _sel = (opts, current, idx, key, unitPct) => {
     if(isV) return unitPct ? `(${(current*100).toFixed(1)}%)` : ``;
@@ -5590,7 +5600,7 @@ function buildPasarelaRows(calcs) {
   withPas.forEach(x => {
     const isB = x.r.plataforma === 'Booking.com';
     const label = isB ? 'Booking' : 'Stripe';
-    const rate = x.s.pasarelaRate || (isB ? pasarelaBookingOptions[0]/100 : pasarelaStripeOptions[0]/100);
+    const rate = x.s.pasarelaRate || (isB ? pasarelaBookingOptions[pasarelaBookingOptions.length-1]/100 : pasarelaStripeOptions[pasarelaStripeOptions.length-1]/100);
     const key = label + '|' + (rate * 100).toFixed(1);
     if (!groups[key]) groups[key] = { label, rate, sum: 0, count: 0 };
     groups[key].sum += x.c.comPas;
@@ -6244,7 +6254,7 @@ function buildPrintCards() {
     const r = x.r, s = x.s, c = x.c;
     const isB = r.plataforma === 'Booking.com';
     const pasL = isB ? 'Booking' : 'Stripe';
-    const pasR = s.pasarelaRate !== undefined ? s.pasarelaRate : (isB ? pasarelaBookingOptions[0]/100 : pasarelaStripeOptions[0]/100);
+    const pasR = s.pasarelaRate !== undefined ? s.pasarelaRate : (isB ? pasarelaBookingOptions[pasarelaBookingOptions.length-1]/100 : pasarelaStripeOptions[pasarelaStripeOptions.length-1]/100);
 
     let rows = [
       {l:"Total Reserva (IVA incluido)",v:c.total,bold:true},
@@ -6546,8 +6556,11 @@ function buildAvailableMonths() {
     _mpAvailable[y][m] = (_mpAvailable[y][m] || 0) + 1;
   });
   _mpAllYears = Object.keys(_mpAvailable).map(Number).sort((a,b) => b-a);
-  const curY = new Date().getFullYear();
-  const curM = new Date().getMonth();
+  // Default to previous month (liquidations are always for the month before)
+  const now = new Date();
+  now.setMonth(now.getMonth() - 1);
+  const curY = now.getFullYear();
+  const curM = now.getMonth();
   _mpSelYears = new Set();
   _mpSelMonths = new Set();
   if (_mpAvailable[curY]) {

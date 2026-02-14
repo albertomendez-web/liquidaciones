@@ -830,12 +830,12 @@ tr.ce2-highlighted { background:#faf8ff; }
   <div class="ai-messages" id="ai-messages">
     <div class="ai-msg system">Preg&uacute;ntame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.</div>
     <div class="ai-chips" id="ai-chips">
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Dame un resumen ejecutivo de ventas con KPIs principales">&#x1F4CA; Resumen ejecutivo</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="&iquest;Cu&aacute;les son los 10 alojamientos con mayor facturaci&oacute;n? Incluye reservas, noches e importe">&#x1F3E0; Top alojamientos</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Desglose de comisiones pagadas por plataforma: comisi&oacute;n canal, pasarela de pago, y total por cada una">&#x1F4B0; Comisiones por canal</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="An&aacute;lisis de estacionalidad: &iquest;cu&aacute;les son los meses m&aacute;s fuertes y m&aacute;s d&eacute;biles en reservas e ingresos?">&#x1F4C8; Estacionalidad</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Resumen por propietario: lista cada propietario con sus pisos, n&uacute;mero de reservas, importe total y liquidaci&oacute;n">&#x1F464; Por propietario</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="&iquest;Cu&aacute;ntas reservas est&aacute;n pendientes de validar? &iquest;Qu&eacute; porcentaje del total representan?">&#x2705; Estado validaciones</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Dame un resumen ejecutivo con KPIs principales: ADR, estancia media, comisi&oacute;n efectiva, margen propietario, top y bottom 5 pisos">&#x1F4CA; KPIs y resumen</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Comparativa interanual completa: reservas, noches, importe, liquidaci&oacute;n, ADR. Incluye top 5 pisos que m&aacute;s crecen y top 5 que m&aacute;s bajan">&#x1F4C8; Comparar a&ntilde;os</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="An&aacute;lisis de estacionalidad por trimestre y plataforma: &iquest;cu&aacute;l es el trimestre pico? &iquest;Qu&eacute; plataforma rinde mejor en cada temporada?">&#x2600;&#xFE0F; Estacionalidad</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Desglose de comisiones pagadas por plataforma: comisi&oacute;n canal, pasarela de pago, y total. &iquest;Cu&aacute;l es la m&aacute;s cara?">&#x1F4B0; Comisiones</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Resumen por propietario: lista cada propietario con sus pisos, n&uacute;mero de reservas, importe total y liquidaci&oacute;n">&#x1F464; Propietarios</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="&iquest;Cu&aacute;les son los 10 alojamientos con mayor ADR (tarifa media por noche)? &iquest;Y los 10 con menor ADR?">&#x1F3E0; Ranking ADR</button>
     </div>
   </div>
   <div class="ai-input-wrap">
@@ -1310,9 +1310,9 @@ function toggleConsolVal(mode) {
  *  ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ 7. NUNCA reutilizar un nÃƒÆ’Ã‚Âºmero de versiÃƒÆ’Ã‚Â³n ya existente
  * ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
  */
-const APP_VERSION = '2.16.0';
-const APP_BUILD   = '2026-02-15T16:00:00+01:00';
-const APP_CHANGES = 'Asistente IA Fase 2: contexto inteligente + historial compactado';
+const APP_VERSION = '2.17.0';
+const APP_BUILD   = '2026-02-15T17:00:00+01:00';
+const APP_CHANGES = 'Asistente IA Fase 3: KPIs + comparativa interanual + estacionalidad cruzada';
 
 // Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 //  [M02] UTILITIES Ã¢â‚¬â€ Funciones auxiliares reutilizables
@@ -1455,6 +1455,19 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.17.0',
+    date: '2026-02-15',
+    changes: [
+      'Asistente IA Fase 3: KPIs avanzados (ADR, estancia media, comisi\u00F3n efectiva, margen propietario)',
+      'Rankings autom\u00E1ticos: Top 5 y Bottom 5 pisos por liquidaci\u00F3n y por ADR',
+      'Comparativa interanual completa con tabla \u0394% y top movers por alojamiento',
+      'Estacionalidad cruzada: tabla plataforma x trimestre con pico/valle',
+      'Nuevas categor\u00EDas clasificador: KPI, YOY, SEASON (15 categor\u00EDas totales)',
+      'Chips actualizados: KPIs, Comparar a\u00F1os, Estacionalidad, Comisiones, Propietarios, Ranking ADR',
+      'System prompt enriquecido con definiciones de KPIs para respuestas m\u00E1s precisas',
+    ]
+  },
   {
     version: '2.16.0',
     date: '2026-02-15',
@@ -7461,7 +7474,10 @@ function _classifyQuery(text) {
     MAINT:     /mantenimiento|extra(ordinari)?|cuota|gasto.*fijo/i,
     VALIDATE:  /validar?|validaci|pendiente|estado|revisar/i,
     DETAIL:    /detalle|lista|reserva.*(de|del|para)|cliente|localizador|busca|espec[ií]fic/i,
-    SUMMARY:   /resumen|ejecutivo|general|total|global|kpi|indicador|overview|todo|completo/i,
+    SUMMARY:   /resumen|ejecutivo|general|total|global|overview|todo|completo/i,
+    KPI:       /kpi|indicador|adr|revpar|ocupaci|media|promedio|ratio|eficiencia|rendimiento|m[eé]trica|estad[ií]stic/i,
+    YOY:       /interanual|yoy|year.over|a[ñn]o.a.a[ñn]o|compar.*(a[ñn]o|anual|201|202)|creci.*anual|vs\s*20[12]/i,
+    SEASON:    /estacion|temporada|verano|invierno|alta|baja|trimestre|q[1234]|t[1234]|pico|valle/i,
   };
 
   Object.keys(patterns).forEach(function(cat) {
@@ -7485,10 +7501,10 @@ function buildAIContext(cats) {
   if (!cats) cats = new Set(['GLOBAL', 'SUMMARY']);
 
   var total = allReservas.length;
-  var needAloj = cats.has('PROPERTY') || cats.has('SUMMARY') || cats.has('FINANCIAL') || cats.has('OWNER') || cats.has('MAINT');
-  var needPlat = cats.has('PLATFORM') || cats.has('SUMMARY') || cats.has('FINANCIAL');
-  var needMes = cats.has('TIME') || cats.has('SUMMARY');
-  var needYear = cats.has('TIME') || cats.has('SUMMARY');
+  var needAloj = cats.has('PROPERTY') || cats.has('SUMMARY') || cats.has('FINANCIAL') || cats.has('OWNER') || cats.has('MAINT') || cats.has('KPI') || cats.has('YOY');
+  var needPlat = cats.has('PLATFORM') || cats.has('SUMMARY') || cats.has('FINANCIAL') || cats.has('SEASON');
+  var needMes = cats.has('TIME') || cats.has('SUMMARY') || cats.has('SEASON');
+  var needYear = cats.has('TIME') || cats.has('SUMMARY') || cats.has('YOY');
   var needAgent = cats.has('AGENT') || cats.has('SUMMARY');
   var needMkt = cats.has('MARKETING') || cats.has('SUMMARY');
   var needOwner = cats.has('OWNER') || cats.has('SUMMARY');
@@ -7496,9 +7512,14 @@ function buildAIContext(cats) {
   var needMaint = cats.has('MAINT') || cats.has('OWNER') || cats.has('SUMMARY');
   var needDetail = cats.has('DETAIL');
   var needVal = cats.has('VALIDATE');
+  var needKpi = cats.has('KPI') || cats.has('SUMMARY');
+  var needYoy = cats.has('YOY') || cats.has('TIME');
+  var needSeason = cats.has('SEASON') || cats.has('TIME');
 
   // Always compute global
   var byAloj = {}, byPlat = {}, byMes = {}, byYear = {}, byAgent = {}, byMarketing = {};
+  var byPlatQ = {}; // plataforma × trimestre (seasonality)
+  var byAlojYear = {}; // alojamiento × a\u00F1o (YoY)
   var G = {n:0, noch:0, imp:0, base:0, cPlat:0, cGTC:0, cPas:0, limp:0, amen:0, ce:0, ce2:0, irpf:0, liq:0, val:0, pend:0};
 
   allReservas.forEach(function(r) {
@@ -7533,6 +7554,19 @@ function buildAIContext(cats) {
         if (!byYear[yr]) byYear[yr] = {n:0, noch:0, imp:0, base:0, liq:0, cPlat:0, cGTC:0};
         var dy = byYear[yr]; dy.n++; dy.noch += n; dy.imp += c.total; dy.base += c.baseSinIVA; dy.liq += c.totalLiq;
         dy.cPlat += c.comPlat; dy.cGTC += c.comGTC;
+      }
+      // Estacionalidad: plataforma x trimestre
+      if (needSeason) {
+        var q = 'T' + (Math.floor(fE.getMonth() / 3) + 1);
+        var pk = (r.plataforma || 'Desconocida') + '|' + q;
+        if (!byPlatQ[pk]) byPlatQ[pk] = {n:0, noch:0, imp:0};
+        byPlatQ[pk].n++; byPlatQ[pk].noch += n; byPlatQ[pk].imp += c.total;
+      }
+      // YoY por alojamiento
+      if (needYoy) {
+        var yk = (r.alojamiento || 'Sin') + '|' + fE.getFullYear();
+        if (!byAlojYear[yk]) byAlojYear[yk] = {n:0, noch:0, imp:0, liq:0};
+        byAlojYear[yk].n++; byAlojYear[yk].noch += n; byAlojYear[yk].imp += c.total; byAlojYear[yk].liq += c.totalLiq;
       }
     }
     if (needAgent) {
@@ -7665,6 +7699,131 @@ function buildAIContext(cats) {
     }
   }
 
+  // KPIs AVANZADOS
+  if (needKpi && G.n > 0) {
+    ctx += '\n=== KPIs ===\n';
+    var adr = G.noch > 0 ? G.imp / G.noch : 0;
+    var estanciaMedia = G.noch / G.n;
+    var numAloj = Object.keys(byAloj).length || 1;
+    var impPorPiso = G.imp / numAloj;
+    var liqPorPiso = G.liq / numAloj;
+    var comEfectiva = G.imp > 0 ? (G.cPlat + G.cGTC + G.cPas) / G.imp * 100 : 0;
+    var margenProp = G.imp > 0 ? G.liq / G.imp * 100 : 0;
+    ctx += 'ADR (tarifa media diaria): ' + f(adr) + ' EUR/noche (IVA incl.)\n';
+    ctx += 'Estancia media: ' + estanciaMedia.toFixed(1) + ' noches/reserva\n';
+    ctx += 'Ingreso medio por piso: ' + f(impPorPiso) + ' EUR (' + numAloj + ' alojamientos)\n';
+    ctx += 'Liquidaci\u00F3n media por piso: ' + f(liqPorPiso) + ' EUR\n';
+    ctx += 'Comisi\u00F3n efectiva total: ' + comEfectiva.toFixed(1) + '% (canal+GTC+pasarela sobre importe)\n';
+    ctx += 'Margen propietario: ' + margenProp.toFixed(1) + '% (liquidaci\u00F3n/importe)\n';
+    ctx += 'Reservas/piso: ' + (G.n / numAloj).toFixed(1) + ', Noches/piso: ' + (G.noch / numAloj).toFixed(1) + '\n';
+    // Top 5 alojamientos por liquidaci\u00F3n
+    if (needAloj) {
+      var topAloj = Object.keys(byAloj).sort(function(a,b){ return byAloj[b].liq - byAloj[a].liq; }).slice(0,5);
+      ctx += 'Top 5 pisos (liq): ';
+      ctx += topAloj.map(function(a){ return a + '=' + f(byAloj[a].liq); }).join(', ') + '\n';
+      // Bottom 5
+      var botAloj = Object.keys(byAloj).sort(function(a,b){ return byAloj[a].liq - byAloj[b].liq; }).slice(0,5);
+      ctx += 'Bottom 5 pisos (liq): ';
+      ctx += botAloj.map(function(a){ return a + '=' + f(byAloj[a].liq); }).join(', ') + '\n';
+      // ADR por alojamiento (top 5 + bottom 5)
+      var alojByAdr = Object.keys(byAloj).filter(function(a){ return byAloj[a].noch > 0; })
+        .sort(function(a,b){ return (byAloj[b].imp/byAloj[b].noch) - (byAloj[a].imp/byAloj[a].noch); });
+      if (alojByAdr.length > 0) {
+        ctx += 'Top 5 ADR: ' + alojByAdr.slice(0,5).map(function(a){ return a + '=' + f(byAloj[a].imp/byAloj[a].noch); }).join(', ') + '\n';
+        ctx += 'Bottom 5 ADR: ' + alojByAdr.slice(-5).reverse().map(function(a){ return a + '=' + f(byAloj[a].imp/byAloj[a].noch); }).join(', ') + '\n';
+      }
+    }
+  }
+
+  // COMPARATIVA INTERANUAL (YoY)
+  if (needYoy) {
+    var yoyYears = Object.keys(byYear).sort();
+    if (yoyYears.length >= 2) {
+      ctx += '\n=== COMPARATIVA INTERANUAL ===\n';
+      // Table header
+      ctx += 'Concepto|' + yoyYears.join('|') + '|\u0394% \u00FAlt.\n';
+      var last = yoyYears[yoyYears.length - 1], prev = yoyYears[yoyYears.length - 2];
+      var dl = byYear[last], dp = byYear[prev];
+      var pct = function(a,b){ return b > 0 ? ((a-b)/b*100).toFixed(1)+'%' : 'n/a'; };
+      ctx += 'Reservas|' + yoyYears.map(function(y){ return byYear[y].n; }).join('|') + '|' + pct(dl.n,dp.n) + '\n';
+      ctx += 'Noches|' + yoyYears.map(function(y){ return byYear[y].noch; }).join('|') + '|' + pct(dl.noch,dp.noch) + '\n';
+      ctx += 'Importe|' + yoyYears.map(function(y){ return f(byYear[y].imp); }).join('|') + '|' + pct(dl.imp,dp.imp) + '\n';
+      ctx += 'Liquidaci\u00F3n|' + yoyYears.map(function(y){ return f(byYear[y].liq); }).join('|') + '|' + pct(dl.liq,dp.liq) + '\n';
+      ctx += 'ADR|' + yoyYears.map(function(y){ return byYear[y].noch>0 ? f(byYear[y].imp/byYear[y].noch) : '-'; }).join('|') + '|' + pct(dl.noch>0?dl.imp/dl.noch:0, dp.noch>0?dp.imp/dp.noch:0) + '\n';
+
+      // Top movers por alojamiento (solo los que existen en ambos a\u00F1os)
+      var alojYoy = {};
+      Object.keys(byAlojYear).forEach(function(k) {
+        var parts = k.split('|'), aloj = parts[0], yr = parts[1];
+        if (!alojYoy[aloj]) alojYoy[aloj] = {};
+        alojYoy[aloj][yr] = byAlojYear[k];
+      });
+      var movers = Object.keys(alojYoy).filter(function(a){ return alojYoy[a][last] && alojYoy[a][prev]; })
+        .map(function(a){
+          var curImp = alojYoy[a][last].imp, prevImp = alojYoy[a][prev].imp;
+          return { name: a, cur: curImp, prev: prevImp, delta: prevImp > 0 ? (curImp-prevImp)/prevImp*100 : 999 };
+        })
+        .sort(function(a,b){ return b.delta - a.delta; });
+      if (movers.length > 0) {
+        ctx += '\nTop 5 crecimiento (' + prev + '\u2192' + last + '):\n';
+        movers.slice(0,5).forEach(function(m) {
+          ctx += m.name + ': ' + f(m.prev) + ' \u2192 ' + f(m.cur) + ' (' + (m.delta >= 999 ? 'nuevo' : (m.delta>0?'+':'') + m.delta.toFixed(1) + '%') + ')\n';
+        });
+        if (movers.length > 5) {
+          var decliners = movers.slice().reverse().slice(0,5);
+          ctx += 'Top 5 descenso:\n';
+          decliners.forEach(function(m) {
+            ctx += m.name + ': ' + f(m.prev) + ' \u2192 ' + f(m.cur) + ' (' + (m.delta>0?'+':'') + m.delta.toFixed(1) + '%)\n';
+          });
+        }
+      }
+    }
+  }
+
+  // ESTACIONALIDAD CRUZADA (plataforma x trimestre)
+  if (needSeason && Object.keys(byPlatQ).length > 0) {
+    ctx += '\n=== ESTACIONALIDAD (PLATAFORMA x TRIMESTRE) ===\n';
+    // Collect all platforms and quarters
+    var sPlats = {}, sQuarts = {};
+    Object.keys(byPlatQ).forEach(function(k) {
+      var parts = k.split('|');
+      sPlats[parts[0]] = true; sQuarts[parts[1]] = true;
+    });
+    var platList = Object.keys(sPlats).sort();
+    var qList = Object.keys(sQuarts).sort();
+    ctx += 'Plataforma|' + qList.join('|') + '|Total\n';
+    platList.forEach(function(p) {
+      var totalP = 0;
+      var row = p;
+      qList.forEach(function(q) {
+        var d = byPlatQ[p + '|' + q];
+        var val = d ? d.imp : 0;
+        totalP += val;
+        row += '|' + (d ? d.n + 'res/' + f(val) : '-');
+      });
+      row += '|' + f(totalP);
+      ctx += row + '\n';
+    });
+    // Quarter totals
+    var rowT = 'TOTAL';
+    var grandT = 0;
+    qList.forEach(function(q) {
+      var qTotal = 0;
+      platList.forEach(function(p) { var d = byPlatQ[p+'|'+q]; if(d) qTotal += d.imp; });
+      grandT += qTotal;
+      rowT += '|' + f(qTotal);
+    });
+    rowT += '|' + f(grandT);
+    ctx += rowT + '\n';
+    // Pico vs valle
+    var qTotals = qList.map(function(q) {
+      var t = 0; platList.forEach(function(p) { var d = byPlatQ[p+'|'+q]; if(d) t += d.imp; }); return {q:q, imp:t};
+    }).sort(function(a,b){ return b.imp - a.imp; });
+    if (qTotals.length >= 2) {
+      ctx += 'Trimestre pico: ' + qTotals[0].q + ' (' + f(qTotals[0].imp) + '), Valle: ' + qTotals[qTotals.length-1].q + ' (' + f(qTotals[qTotals.length-1].imp) + ')\n';
+    }
+  }
+
   // DETALLE (solo si se piden datos espec\u00EDficos o hay pocas filtradas)
   if (needDetail || needVal) {
     var filtered = (typeof getFilteredSorted === 'function') ? getFilteredSorted() : allReservas;
@@ -7787,7 +7946,15 @@ async function sendAIMessage() {
       '5. Cifras con 2 decimales y \u20AC. Indica siempre si son con/sin IVA.\n' +
       '6. Res\u00FAmenes = TODAS las reservas. Detalle = filtradas (max 50).\n' +
       '7. Si falta info, sugiere filtrar la tabla o reformular.\n' +
-      '8. Los datos se seleccionan seg\u00FAn tu pregunta. Si necesitas una secci\u00F3n que no ves, p\u00EDdela expl\u00EDcitamente.\n\n' +
+      '8. Los datos se seleccionan seg\u00FAn tu pregunta. Si necesitas una secci\u00F3n que no ves, p\u00EDdela.\n\n' +
+      'KPIs DISPONIBLES:\n' +
+      '- ADR (Average Daily Rate): tarifa media por noche = importe/noches\n' +
+      '- Estancia media: noches/reserva\n' +
+      '- Comisi\u00F3n efectiva: (canal+GTC+pasarela)/importe en %\n' +
+      '- Margen propietario: liquidaci\u00F3n/importe en %\n' +
+      '- Rankings top/bottom por liquidaci\u00F3n y ADR\n' +
+      '- Comparativa interanual con \u0394% y top movers\n' +
+      '- Estacionalidad cruzada: plataforma x trimestre\n\n' +
       'DATOS:\n' + context;
 
     let messages = _aiHistory.slice(-CONFIG.MAX_AI_HISTORY);

@@ -449,10 +449,10 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .print-target { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none !important; border-radius: 0 !important; }
   .sidebar, .btn, .no-print, .liq-actions, .gear-btn, .email-btn, .pdf-download-btn { display: none !important; }
 
-  /* ── Containers ── */
+  /* â”€â”€ Containers â”€â”€ */
   .consol-container, .liq-container { max-width: 100% !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; border: none !important; }
 
-  /* ── Consolidated header (CRITICAL: overflow + z-index reset) ── */
+  /* â”€â”€ Consolidated header (CRITICAL: overflow + z-index reset) â”€â”€ */
   .consol-header { overflow: visible !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .consol-header::before { display: none !important; }
   .consol-header .header-top { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; padding: 14px 20px 6px !important; position: static !important; z-index: auto !important; }
@@ -468,7 +468,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .consol-meta-label { font-size: 7px !important; margin-bottom: 2px !important; }
   .consol-meta-value { font-size: 11px !important; }
 
-  /* ── Individual header ── */
+  /* â”€â”€ Individual header â”€â”€ */
   .liq-header { overflow: visible !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-header::before { display: none !important; }
   .liq-header::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -480,24 +480,24 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .liq-meta-label { font-size: 7px !important; margin-bottom: 2px !important; }
   .liq-meta-value { font-size: 11px !important; }
 
-  /* ── Badge ── */
+  /* â”€â”€ Badge â”€â”€ */
   .badge-liq { font-size: 8px !important; padding: 3px 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-  /* ── Consolidated body & table ── */
+  /* â”€â”€ Consolidated body & table â”€â”€ */
   .consol-body { box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; }
   .table-wrap { overflow: visible !important; }
   table { page-break-inside: auto; }
   thead { display: table-header-group; }
   tr { page-break-inside: avoid; }
 
-  /* ── Mini table — compact for landscape A4 ── */
+  /* â”€â”€ Mini table â€” compact for landscape A4 â”€â”€ */
   .consol-mini-table { table-layout: fixed !important; width: 100% !important; }
   .consol-mini-table th { padding: 4px 5px !important; font-size: 8px !important; }
   .consol-mini-table td { padding: 4px 5px !important; font-size: 9px !important; }
   .consol-mini-table .ellip { max-width: 0; }
   .badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 7px !important; padding: 1px 4px !important; }
 
-  /* ── Summary 2-column ── */
+  /* â”€â”€ Summary 2-column â”€â”€ */
   .cd-summary-section { display: grid !important; grid-template-columns: 1.2fr 0.8fr !important; page-break-inside: avoid !important; break-inside: avoid !important; max-width: 100% !important; }
   .cd-summary-left { padding: 14px 18px !important; }
   .cd-summary-right { padding: 14px 18px !important; display: flex !important; flex-direction: column !important; }
@@ -514,7 +514,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .consol-split-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .consol-split-bar-gtc, .consol-split-bar-owner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-  /* ── Quick stats (right column) ── */
+  /* â”€â”€ Quick stats (right column) â”€â”€ */
   .cd-quick-stats { gap: 6px !important; margin-bottom: 10px !important; }
   .cd-qs-item { padding: 6px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-qs-label { font-size: 7px !important; }
@@ -522,19 +522,19 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .cd-tb-row { font-size: 10px !important; padding: 2px 0 !important; }
   .cd-split-mini { padding: 4px 8px !important; margin: 4px 0 !important; }
 
-  /* ── Total hero ── */
+  /* â”€â”€ Total hero â”€â”€ */
   .cd-total-hero { padding: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-total-hero-label { font-size: 8px !important; }
   .cd-total-hero-amount { font-size: 22px !important; }
   .cd-btn-generate { display: none !important; }
 
-  /* ── Total bar (full-width) ── */
+  /* â”€â”€ Total bar (full-width) â”€â”€ */
   .cd-total-bar { padding: 10px 16px !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-total-bar-label { font-size: 10px !important; }
   .cd-total-bar-amount { font-size: 20px !important; }
 
-  /* ── Individual liquidacion rows ── */
+  /* â”€â”€ Individual liquidacion rows â”€â”€ */
   .liq-sec { padding: 10px 20px !important; }
   .liq-row { padding: 4px 0 !important; font-size: 11px !important; }
   .liq-row.bold { margin: 0 -20px !important; padding: 6px 20px !important; font-size: 12px !important; }
@@ -551,7 +551,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .liq-sw { display: none !important; }
   .liq-sel { font-size: 10px !important; }
 
-  /* ── Print cards ── */
+  /* â”€â”€ Print cards â”€â”€ */
   .print-card { page-break-inside: avoid !important; break-inside: avoid !important; margin-bottom: 12px !important; }
   .print-summary { page-break-inside: avoid !important; break-inside: avoid !important; margin-top: 12px !important; }
   .consol-summary-block { page-break-inside: avoid !important; break-inside: avoid !important; }
@@ -1048,87 +1048,87 @@ tr.ce2-highlighted { background:#faf8ff; }
 
 <script>
 /**
- * ══════════════════════════════════════════════════════════════════════════════
- *  LIQUIDACIONES — Gestión de Reservas Vacacionales
- *  Aplicación SPA (Single Page Application) en archivo único
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+ *  LIQUIDACIONES â€” GestiÃ³n de Reservas Vacacionales
+ *  AplicaciÃ³n SPA (Single Page Application) en archivo Ãºnico
  *  Deploy: https://albertomendez-web.github.io/liquidaciones/
- * ══════════════════════════════════════════════════════════════════════════════
+ * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
  *
- * ┌─────────────────────────────────────────────────────────────────────────────┐
- * │  ARCHITECTURE GUIDE — Documentación interna para Claude / AI Assistants    │
- * │  Lee este bloque ANTES de hacer cualquier cambio en el proyecto            │
- * └─────────────────────────────────────────────────────────────────────────────┘
+ * â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+ * â”‚  ARCHITECTURE GUIDE â€” DocumentaciÃ³n interna para Claude / AI Assistants    â”‚
+ * â”‚  Lee este bloque ANTES de hacer cualquier cambio en el proyecto            â”‚
+ * â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
  *
  * ============================================================================
- * 1. PROPÓSITO DE LA APLICACIÓN
+ * 1. PROPÃ“SITO DE LA APLICACIÃ“N
  * ============================================================================
- * Sistema de liquidación financiera para empresa de gestión de propiedades
+ * Sistema de liquidaciÃ³n financiera para empresa de gestiÃ³n de propiedades
  * vacacionales (GTC). Procesa reservas desde Google Sheets o Excel y genera
  * liquidaciones detalladas para propietarios, calculando:
- *   - Comisiones por plataforma (Airbnb, Booking, etc.) y gestión GTC
+ *   - Comisiones por plataforma (Airbnb, Booking, etc.) y gestiÃ³n GTC
  *   - Limpieza, amenities, pasarela de pago
  *   - Conceptos extraordinarios con IVA (CE) y sin IVA (CE2)
- *   - Retención IRPF e IVA 21% sobre subtotal
- *   - Reparto especial 80/20 GTC para propiedades con mínimo garantizado
+ *   - RetenciÃ³n IRPF e IVA 21% sobre subtotal
+ *   - Reparto especial 80/20 GTC para propiedades con mÃ­nimo garantizado
  *   - Mantenimiento y deducciones mensuales por alojamiento
  *
  * ============================================================================
  * 2. PANTALLAS / VISTAS (controladas por showScreen())
  * ============================================================================
- *   upload        → Cargar fichero Excel o conectar Google Sheets
- *   list          → Preliquidación: tabla con todas las reservas + filtros
- *   detail        → Detalle de una reserva individual (preliquidación)
- *   consol        → Grid de tarjetas por alojamiento (vista consolidada)
- *   consoldetail  → Liquidación completa de un alojamiento (tabla + resumen)
+ *   upload        â†’ Cargar fichero Excel o conectar Google Sheets
+ *   list          â†’ PreliquidaciÃ³n: tabla con todas las reservas + filtros
+ *   detail        â†’ Detalle de una reserva individual (preliquidaciÃ³n)
+ *   consol        â†’ Grid de tarjetas por alojamiento (vista consolidada)
+ *   consoldetail  â†’ LiquidaciÃ³n completa de un alojamiento (tabla + resumen)
  *
  * ============================================================================
  * 3. MODELO DE DATOS (variables globales principales)
  * ============================================================================
  *
- *   allReservas[]  — Array de objetos reserva. Cada reserva tiene:
- *     .idx           Índice en el array (clave primaria interna)
+ *   allReservas[]  â€” Array de objetos reserva. Cada reserva tiene:
+ *     .idx           Ãndice en el array (clave primaria interna)
  *     .id            ID Reserva (string del Sheet)
- *     .localizador   Código localizador
+ *     .localizador   CÃ³digo localizador
  *     .cliente       Nombre del cliente
- *     .alojamiento   Código del alojamiento (ej: "MA-2-P2-1A")
+ *     .alojamiento   CÃ³digo del alojamiento (ej: "MA-2-P2-1A")
  *     .edificio      Nombre del edificio
  *     .plataforma    Canal de venta ("Booking.com", "Airbnb.com", etc.)
- *     .totalReserva  Importe total con IVA (número)
+ *     .totalReserva  Importe total con IVA (nÃºmero)
  *     .fechaEntrada/.fechaSalida  Fechas originales del Sheet
  *     ._dEntrada/_dSalida         Objetos Date parseados
  *     ._fmtEntrada/_fmtSalida     Strings formateados "dd/mm/yyyy"
- *     ._nights       Número de noches calculado
+ *     ._nights       NÃºmero de noches calculado
  *     ._sheetRow     Fila 1-indexed en el Sheet (para write-back)
- *     ._clienteLc/_alojLc/_platLc  Versiones lowercase para búsqueda
- *     ._isBooking    Boolean: ¿es Booking.com?
+ *     ._clienteLc/_alojLc/_platLc  Versiones lowercase para bÃºsqueda
+ *     ._isBooking    Boolean: Â¿es Booking.com?
  *
- *   settings{}     — Objeto indexado por reserva.idx. Cada entrada tiene:
- *     .comPlataforma   Comisión plataforma (decimal, ej: 0.155 = 15.5%)
- *     .comGTC          Comisión GTC (decimal)
- *     .limpieza        Importe fijo limpieza (€)
- *     .amenities       Importe fijo amenities (€)
- *     .irpf            Retención IRPF (decimal)
- *     .pasarela        Boolean: ¿aplicar pasarela?
+ *   settings{}     â€” Objeto indexado por reserva.idx. Cada entrada tiene:
+ *     .comPlataforma   ComisiÃ³n plataforma (decimal, ej: 0.155 = 15.5%)
+ *     .comGTC          ComisiÃ³n GTC (decimal)
+ *     .limpieza        Importe fijo limpieza (â‚¬)
+ *     .amenities       Importe fijo amenities (â‚¬)
+ *     .irpf            RetenciÃ³n IRPF (decimal)
+ *     .pasarela        Boolean: Â¿aplicar pasarela?
  *     .pasarelaRate    Tasa pasarela (decimal)
  *     .conceptosEspeciales[]  CE con IVA: [{name, amount}]
  *     .conceptosSinIVA[]      CE sin IVA: [{name, amount}]
  *
- *   validated      — Set<idx>: índices de reservas validadas
+ *   validated      â€” Set<idx>: Ã­ndices de reservas validadas
  *
  * ============================================================================
- * 4. FLUJO DE CÁLCULO (calcLiquidacion)
+ * 4. FLUJO DE CÃLCULO (calcLiquidacion)
  * ============================================================================
  *   totalOriginal = r.totalReserva
- *   ceTotal       = Σ conceptosEspeciales[].amount
+ *   ceTotal       = Î£ conceptosEspeciales[].amount
  *   total         = totalOriginal - ceTotal
- *   baseSinIVA    = total / (1 + 0.10)              // IVA turístico 10%
- *   comPlat       = total × comRate                  // comisión plataforma
- *   comGTC        = baseSinIVA × gtcRate             // comisión gestión
- *   comPas        = total × pasarelaRate (si activa) // pasarela de pago
- *   ceSinIvaTotal = Σ conceptosSinIVA[].amount
+ *   baseSinIVA    = total / (1 + 0.10)              // IVA turÃ­stico 10%
+ *   comPlat       = total Ã— comRate                  // comisiÃ³n plataforma
+ *   comGTC        = baseSinIVA Ã— gtcRate             // comisiÃ³n gestiÃ³n
+ *   comPas        = total Ã— pasarelaRate (si activa) // pasarela de pago
+ *   ceSinIvaTotal = Î£ conceptosSinIVA[].amount
  *   sub = baseSinIVA - comPlat - comGTC - comPas - limp - amen - ceSinIvaTotal
- *   iva = sub × 0.21        // IVA sobre subtotal
- *   ret = sub × irpfRate    // Retención IRPF
+ *   iva = sub Ã— 0.21        // IVA sobre subtotal
+ *   ret = sub Ã— irpfRate    // RetenciÃ³n IRPF
  *   totalLiq = sub + iva - ret
  *
  *   Para propiedades 80/20 GTC (isGtcSplit):
@@ -1138,85 +1138,85 @@ tr.ce2-highlighted { background:#faf8ff; }
  * ============================================================================
  * 5. FLUJO DE DATOS GOOGLE SHEETS
  * ============================================================================
- *   1. OAuth → onTokenResponse() → updateGoogleStatus(true)
- *   2. loadSheetById() → loadSheetData() → processRows()
- *   3. setupSheetSource() → configura write-back validaciones
- *   4. loadOrCreateConfigTab() → carga pestaña "Configuracion"
- *   5. loadPropietariosTab() → mapeo alojamiento→propietario
- *   6. Cambios → schedule*Save() con debounce → API write
+ *   1. OAuth â†’ onTokenResponse() â†’ updateGoogleStatus(true)
+ *   2. loadSheetById() â†’ loadSheetData() â†’ processRows()
+ *   3. setupSheetSource() â†’ configura write-back validaciones
+ *   4. loadOrCreateConfigTab() â†’ carga pestaÃ±a "Configuracion"
+ *   5. loadPropietariosTab() â†’ mapeo alojamientoâ†’propietario
+ *   6. Cambios â†’ schedule*Save() con debounce â†’ API write
  *
  * ============================================================================
- * 6. SISTEMA DE CACHÉ / PERFORMANCE
+ * 6. SISTEMA DE CACHÃ‰ / PERFORMANCE
  * ============================================================================
- *   _liqCache{}          — Cálculos por reserva (invalidateCache)
- *   _cachedFiltered      — Resultado filtrado+ordenado (invalidateFilterCache)
- *   _cachedFilteredStats — Estadísticas filtradas
- *   _globalStatsCache    — Estadísticas globales (invalidateGlobalStats)
- *   _selectCache{}       — HTML de <select> preconstruidos
- *   _alojCache           — Agrupación por alojamiento
- *   _fmtCache{}          — Formateo numérico
+ *   _liqCache{}          â€” CÃ¡lculos por reserva (invalidateCache)
+ *   _cachedFiltered      â€” Resultado filtrado+ordenado (invalidateFilterCache)
+ *   _cachedFilteredStats â€” EstadÃ­sticas filtradas
+ *   _globalStatsCache    â€” EstadÃ­sticas globales (invalidateGlobalStats)
+ *   _selectCache{}       â€” HTML de <select> preconstruidos
+ *   _alojCache           â€” AgrupaciÃ³n por alojamiento
+ *   _fmtCache{}          â€” Formateo numÃ©rico
  *
- *   Patrón delta: changeSetting() → actualiza cache incremental
+ *   PatrÃ³n delta: changeSetting() â†’ actualiza cache incremental
  *   _patchSingleRow() actualiza solo la fila DOM afectada
  *   _patchConsolLightweight() parchea celdas sin reconstruir DOM
  *
  * ============================================================================
- * 7. ÍNDICE DE MÓDULOS (buscar por [M01], [M02], etc.)
+ * 7. ÃNDICE DE MÃ“DULOS (buscar por [M01], [M02], etc.)
  * ============================================================================
- *   [M01] VERSIONING      — APP_VERSION, CHANGELOG, toast actualización
- *   [M02] UTILITIES       — esc(), SafeStorage, debounce(), safeGet()
- *   [M03] CONFIG          — CONFIG object, constantes de la aplicación
- *   [M04] TOAST           — showToast() - notificaciones no bloqueantes
- *   [M05] GOOGLE_AUTH     — OAuth, tokens, estado de conexión
- *   [M06] GOOGLE_SHEETS   — Carga datos, write-back, config persistence
- *   [M07] PROPIETARIOS    — Mapeo alojamiento→propietario, edición inline
- *   [M08] DATA_MODEL      — allReservas, settings, opciones globales
- *   [M09] CALCULATIONS    — calcLiquidacion, parseNum, fmt()
- *   [M10] SEARCH_FILTER   — Búsqueda, filtrado, combos, month picker
- *   [M11] TABLE_RENDER    — renderTable, columnas, paginación, footer
- *   [M12] CE_SYSTEM       — Conceptos extraordinarios (CE + CE2)
- *   [M13] DETAIL_VIEW     — Vista detalle individual
- *   [M14] CONSOL_VIEW     — Vista consolidada por alojamiento
- *   [M15] CONSOL_DEDUCT   — Mantenimiento y extras mensuales
- *   [M16] PRINT           — Generación impresión y preview
- *   [M17] SETTINGS_UI     — Modal configuración, opciones editables
- *   [M18] AI_ASSISTANT    — Chat IA integrado
+ *   [M01] VERSIONING      â€” APP_VERSION, CHANGELOG, toast actualizaciÃ³n
+ *   [M02] UTILITIES       â€” esc(), SafeStorage, debounce(), safeGet()
+ *   [M03] CONFIG          â€” CONFIG object, constantes de la aplicaciÃ³n
+ *   [M04] TOAST           â€” showToast() - notificaciones no bloqueantes
+ *   [M05] GOOGLE_AUTH     â€” OAuth, tokens, estado de conexiÃ³n
+ *   [M06] GOOGLE_SHEETS   â€” Carga datos, write-back, config persistence
+ *   [M07] PROPIETARIOS    â€” Mapeo alojamientoâ†’propietario, ediciÃ³n inline
+ *   [M08] DATA_MODEL      â€” allReservas, settings, opciones globales
+ *   [M09] CALCULATIONS    â€” calcLiquidacion, parseNum, fmt()
+ *   [M10] SEARCH_FILTER   â€” BÃºsqueda, filtrado, combos, month picker
+ *   [M11] TABLE_RENDER    â€” renderTable, columnas, paginaciÃ³n, footer
+ *   [M12] CE_SYSTEM       â€” Conceptos extraordinarios (CE + CE2)
+ *   [M13] DETAIL_VIEW     â€” Vista detalle individual
+ *   [M14] CONSOL_VIEW     â€” Vista consolidada por alojamiento
+ *   [M15] CONSOL_DEDUCT   â€” Mantenimiento y extras mensuales
+ *   [M16] PRINT           â€” GeneraciÃ³n impresiÃ³n y preview
+ *   [M17] SETTINGS_UI     â€” Modal configuraciÃ³n, opciones editables
+ *   [M18] AI_ASSISTANT    â€” Chat IA integrado
  *
  * ============================================================================
- * 8. CONVENCIONES DE CÓDIGO
+ * 8. CONVENCIONES DE CÃ“DIGO
  * ============================================================================
  *   - Prefijo _ en funciones: internas (no llamar desde onclick HTML)
  *   - Prefijo _ en variables: estado interno/global
  *   - esc() OBLIGATORIO en todo innerHTML con datos del usuario (XSS)
  *   - schedule*Save() para persistencia con debounce
  *   - invalidateCache() tras cualquier cambio en datos/settings
- *   - Vista 'p' = preliquidación, 'c' = consolidada (en IDs de CE)
+ *   - Vista 'p' = preliquidaciÃ³n, 'c' = consolidada (en IDs de CE)
  *   - SemVer obligatorio en cada entrega (ver VERSIONING RULES)
  *
  * ============================================================================
  * 9. ESTRUCTURA HTML (fuera del <script>)
  * ============================================================================
- *   <div class="sidebar">         — Navegación lateral fija
- *   <div class="main">            — Contenido principal con pantallas
- *     #screen-upload              — Carga de datos
- *     #screen-list                — Preliquidación (tabla + filtros)
- *     #screen-detail              — Detalle individual
- *     #screen-consol              — Grid alojamientos
- *     #screen-consoldetail        — Liquidación consolidada
- *   <div id="config-modal">       — Modal de configuración
- *   <div class="ai-panel">        — Panel lateral IA
- *   <div class="changelog-overlay"> — Modal historial de cambios
+ *   <div class="sidebar">         â€” NavegaciÃ³n lateral fija
+ *   <div class="main">            â€” Contenido principal con pantallas
+ *     #screen-upload              â€” Carga de datos
+ *     #screen-list                â€” PreliquidaciÃ³n (tabla + filtros)
+ *     #screen-detail              â€” Detalle individual
+ *     #screen-consol              â€” Grid alojamientos
+ *     #screen-consoldetail        â€” LiquidaciÃ³n consolidada
+ *   <div id="config-modal">       â€” Modal de configuraciÃ³n
+ *   <div class="ai-panel">        â€” Panel lateral IA
+ *   <div class="changelog-overlay"> â€” Modal historial de cambios
  */
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M01] VERSIONING — Control de versiones, CHANGELOG y notificaciones
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M01] VERSIONING â€” Control de versiones, CHANGELOG y notificaciones
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // ===
 // CONTROL DE VERSIONES
 // ===
-// ─── [M10-SEARCH] Funciones de búsqueda global (se necesitan antes del render) ───
+// â”€â”€â”€ [M10-SEARCH] Funciones de bÃºsqueda global (se necesitan antes del render) â”€â”€â”€
 
-/** @description Filtra la tabla de preliquidación por texto libre en tiempo real */
+/** @description Filtra la tabla de preliquidaciÃ³n por texto libre en tiempo real */
 function onSearchPreliq(val) {
   _searchText = val.trim().toLowerCase();
   document.getElementById('search-preliq-clear').style.display = _searchText ? 'block' : 'none';
@@ -1224,7 +1224,7 @@ function onSearchPreliq(val) {
   _currentPage = 1;
   renderTable();
 }
-/** @description Limpia el filtro de búsqueda de preliquidación */
+/** @description Limpia el filtro de bÃºsqueda de preliquidaciÃ³n */
 function clearSearchPreliq() {
   document.getElementById('search-preliq').value = '';
   onSearchPreliq('');
@@ -1235,7 +1235,7 @@ function onSearchConsol(val) {
   document.getElementById('search-consol-clear').style.display = _searchTextConsol ? 'block' : 'none';
   renderConsolGrid();
 }
-/** @description Limpia el filtro de búsqueda del grid consolidado */
+/** @description Limpia el filtro de bÃºsqueda del grid consolidado */
 function clearSearchConsol() {
   document.getElementById('search-consol').value = '';
   onSearchConsol('');
@@ -1246,34 +1246,34 @@ function toggleConsolVal(mode) {
 }
 
 /**
- * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
- *  VERSIONING RULES â€” OBLIGATORIO en CADA entrega de cÃ³digo
- * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
- *  MAJOR (X.0.0) â†’ Cambios incompatibles, reestructuraciÃ³n total,
- *                   migraciÃ³n de datos necesaria
- *  MINOR (x.Y.0) â†’ Nueva funcionalidad, nueva secciÃ³n UI,
- *                   nuevo campo/columna, nueva integraciÃ³n
- *  PATCH (x.y.Z) â†’ Bugfix, ajuste visual, optimizaciÃ³n,
+ * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
+ *  VERSIONING RULES Ã¢â‚¬â€ OBLIGATORIO en CADA entrega de cÃƒÂ³digo
+ * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
+ *  MAJOR (X.0.0) Ã¢â€ â€™ Cambios incompatibles, reestructuraciÃƒÂ³n total,
+ *                   migraciÃƒÂ³n de datos necesaria
+ *  MINOR (x.Y.0) Ã¢â€ â€™ Nueva funcionalidad, nueva secciÃƒÂ³n UI,
+ *                   nuevo campo/columna, nueva integraciÃƒÂ³n
+ *  PATCH (x.y.Z) Ã¢â€ â€™ Bugfix, ajuste visual, optimizaciÃƒÂ³n,
  *                   refactor sin cambio funcional
- * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+ * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  *  CHECKLIST por entrega:
- *  âœ“ 1. Leer versiÃ³n actual de APP_VERSION
- *  âœ“ 2. Decidir bump: MAJOR / MINOR / PATCH
- *  âœ“ 3. Actualizar APP_VERSION con nueva versiÃ³n
- *  âœ“ 4. Actualizar APP_BUILD con fecha/hora actual Madrid (+01/+02)
- *  âœ“ 5. Actualizar APP_CHANGES con resumen breve (< 100 chars)
- *  âœ“ 6. AÃ±adir entrada al array CHANGELOG (al principio)
+ *  Ã¢Å“â€œ 1. Leer versiÃƒÂ³n actual de APP_VERSION
+ *  Ã¢Å“â€œ 2. Decidir bump: MAJOR / MINOR / PATCH
+ *  Ã¢Å“â€œ 3. Actualizar APP_VERSION con nueva versiÃƒÂ³n
+ *  Ã¢Å“â€œ 4. Actualizar APP_BUILD con fecha/hora actual Madrid (+01/+02)
+ *  Ã¢Å“â€œ 5. Actualizar APP_CHANGES con resumen breve (< 100 chars)
+ *  Ã¢Å“â€œ 6. AÃƒÂ±adir entrada al array CHANGELOG (al principio)
  *       con version, date (ISO Madrid), y array changes detallado
- *  âœ“ 7. NUNCA reutilizar un nÃºmero de versiÃ³n ya existente
- * â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+ *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
+ * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.10.1';
-const APP_BUILD   = '2026-02-14T01:50:00+01:00';
-const APP_CHANGES = 'email-module v2.0: PDF robusto (CSS clonado, font-wait), bot\u00F3n Descargar PDF, Gmail mejorado';
+const APP_VERSION = '2.10.2';
+const APP_BUILD   = '2026-02-14T18:30:00+01:00';
+const APP_CHANGES = 'Fix: iconos toast corruptos (mojibake UTF-8) reemplazados por HTML entities';
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M02] UTILITIES — Funciones auxiliares reutilizables
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M02] UTILITIES â€” Funciones auxiliares reutilizables
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // === UTILITY: XSS Escaping ===
 /**
@@ -1294,9 +1294,9 @@ function esc(str) {
 
 // === UTILITY: Safe JSON parse ===
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M04] TOAST — Sistema de notificaciones no bloqueantes
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M04] TOAST â€” Sistema de notificaciones no bloqueantes
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // === TOAST NOTIFICATION SYSTEM ===
 function showToast(message, type, duration) {
@@ -1304,12 +1304,12 @@ function showToast(message, type, duration) {
   duration = duration || 3500;
   var container = document.getElementById('toast-container');
   if (!container) return;
-  var icons = { success: 'âœ“', error: 'âœ—', warning: 'âš ', info: 'â„¹' };
+  var icons = { success: '&#10003;', error: '&#10007;', warning: '&#9888;', info: '&#8505;' };
   var toast = document.createElement('div');
   toast.className = 'toast toast-' + type;
   toast.innerHTML = '<span class="toast-icon">' + (icons[type] || '') + '</span>'
     + '<span>' + message + '</span>'
-    + '<span class="toast-close" onclick="this.parentElement.remove()">âœ•</span>';
+    + '<span class="toast-close" onclick="this.parentElement.remove()">&#10005;</span>';
   container.appendChild(toast);
   setTimeout(function() {
     toast.classList.add('leaving');
@@ -1380,9 +1380,9 @@ function safeGet(obj, path, fallback) {
   return current !== undefined ? current : fallback;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M03] CONFIG — Constantes de la aplicación (inmutables)
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M03] CONFIG â€” Constantes de la aplicaciÃ³n (inmutables)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // === CONFIG: Application Constants ===
 const CONFIG = Object.freeze({
@@ -1409,6 +1409,14 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.10.2',
+    date: '2026-02-14',
+    changes: [
+      'Fix: iconos toast (success/error/warning/info/close) corruptos por triple-encoding UTF-8',
+      'Reemplazados caracteres mojibake por HTML entities ASCII-safe (&#10003; &#10007; etc.)',
+    ]
+  },
   {
     version: '2.10.1',
     date: '2026-02-14',
@@ -1500,15 +1508,15 @@ const CHANGELOG = [
     date: '2026-02-13',
     changes: [
       'Architecture Guide: bloque de documentacion exhaustiva al inicio del &lt;script&gt; para Claude/AI',
-      'Modelo de datos documentado: allReservas[], settings{}, validated Set, flujo de cálculo',
-      'Índice de 18 módulos [M01]-[M18] con marcadores buscables en el código',
-      'JSDoc en 49+ funciones críticas: calcLiquidacion, processRows, renderTable, etc.',
-      'Documentación de flujo Google Sheets: OAuth → load → persist → write-back',
-      'Documentación de sistema de caché: _liqCache, _cachedFiltered, delta-updates',
-      'Documentación de convenciones: prefijos _, esc() obligatorio, SemVer',
-      'Módulos marcados con separadores ═══ para navegación rápida',
-      'Sub-módulos marcados con ─── para secciones dentro de un módulo',
-      'Zero cambios funcionales: solo documentación y organización del código',
+      'Modelo de datos documentado: allReservas[], settings{}, validated Set, flujo de cÃ¡lculo',
+      'Ãndice de 18 mÃ³dulos [M01]-[M18] con marcadores buscables en el cÃ³digo',
+      'JSDoc en 49+ funciones crÃ­ticas: calcLiquidacion, processRows, renderTable, etc.',
+      'DocumentaciÃ³n de flujo Google Sheets: OAuth â†’ load â†’ persist â†’ write-back',
+      'DocumentaciÃ³n de sistema de cachÃ©: _liqCache, _cachedFiltered, delta-updates',
+      'DocumentaciÃ³n de convenciones: prefijos _, esc() obligatorio, SemVer',
+      'MÃ³dulos marcados con separadores â•â•â• para navegaciÃ³n rÃ¡pida',
+      'Sub-mÃ³dulos marcados con â”€â”€â”€ para secciones dentro de un mÃ³dulo',
+      'Zero cambios funcionales: solo documentaciÃ³n y organizaciÃ³n del cÃ³digo',
     ]
   },
   {
@@ -1672,7 +1680,7 @@ const CHANGELOG = [
     date: '2026-02-12',
     changes: [
       'Fix critico persistencia CE2: rango de lectura Config era A1:I (9 cols), faltaba columna J',
-      'conceptosSinIVA se escribÃ­a en col J pero nunca se leÃ­a de vuelta',
+      'conceptosSinIVA se escribÃƒÂ­a en col J pero nunca se leÃƒÂ­a de vuelta',
       'Corregido a A1:J en lectura y A:J en limpieza de filas obsoletas'
     ]
   },
@@ -1705,17 +1713,17 @@ const CHANGELOG = [
     version: '2.4.5',
     date: '2026-02-12',
     changes: [
-      'CE/CE2: Enter no crea fila nueva si ya existe una vacÃ­a abajo',
-      'Si hay fila vacÃ­a pendiente, Enter mueve el foco ahÃ­ en vez de duplicar'
+      'CE/CE2: Enter no crea fila nueva si ya existe una vacÃƒÂ­a abajo',
+      'Si hay fila vacÃƒÂ­a pendiente, Enter mueve el foco ahÃƒÂ­ en vez de duplicar'
     ]
   },
   {
     version: '2.4.4',
     date: '2026-02-12',
     changes: [
-      'CE Enter zero-jump: fila nueva PRIMERO, nÃºmeros actualizados en siguiente frame',
+      'CE Enter zero-jump: fila nueva PRIMERO, nÃƒÂºmeros actualizados en siguiente frame',
       'focus({preventScroll:true}) en todos los focus de CE/CE2 (6 puntos)',
-      'requestAnimationFrame para desacoplar actualizaciÃ³n de cache/stats del DOM',
+      'requestAnimationFrame para desacoplar actualizaciÃƒÂ³n de cache/stats del DOM',
       'Elimina layout thrashing: no hay lectura+escritura DOM intercalada'
     ]
   },
@@ -1724,8 +1732,8 @@ const CHANGELOG = [
     date: '2026-02-12',
     changes: [
       'CE/CE2: Enter en importe ya no hace re-render completo (0 saltos)',
-      'Nuevo _patchMainRowCells: actualiza solo celdas numÃ©ricas sin tocar DOM del panel',
-      'Enter guarda directo al modelo de datos, bypass de onchange â†’ _applyCEChange â†’ _patchSingleRow',
+      'Nuevo _patchMainRowCells: actualiza solo celdas numÃƒÂ©ricas sin tocar DOM del panel',
+      'Enter guarda directo al modelo de datos, bypass de onchange Ã¢â€ â€™ _applyCEChange Ã¢â€ â€™ _patchSingleRow',
       'Stats del footer actualizados incrementalmente sin rebuild'
     ]
   },
@@ -1733,10 +1741,10 @@ const CHANGELOG = [
     version: '2.4.2',
     date: '2026-02-12',
     changes: [
-      'Config modal: Enter en campo valor ejecuta AÃ±adir directamente',
+      'Config modal: Enter en campo valor ejecuta AÃƒÂ±adir directamente',
       'URLs Google Sheets: Enter en los 3 inputs dispara Cargar/Guardar',
       'Conceptos Extraordinarios: prompt() reemplazado por inputs inline',
-      'Consol extras: flujo nombre â†’ Enter â†’ importe â†’ Enter â†’ guardado suave',
+      'Consol extras: flujo nombre Ã¢â€ â€™ Enter Ã¢â€ â€™ importe Ã¢â€ â€™ Enter Ã¢â€ â€™ guardado suave',
       'Consol extras: Escape cancela, blur inteligente auto-guarda si hay datos'
     ]
   },
@@ -1746,19 +1754,19 @@ const CHANGELOG = [
     changes: [
       'CE/CE2: Pulsar Enter en el campo importe abre nuevo concepto suavemente',
       'CE/CE2: Pulsar Enter en el campo nombre mueve foco al importe',
-      'Flujo sin ratÃ³n: nombre â†’ Enter â†’ importe â†’ Enter â†’ nuevo concepto'
+      'Flujo sin ratÃƒÂ³n: nombre Ã¢â€ â€™ Enter Ã¢â€ â€™ importe Ã¢â€ â€™ Enter Ã¢â€ â€™ nuevo concepto'
     ]
   },
   {
     version: '2.4.0',
     date: '2026-02-12',
     changes: [
-      'RediseÃ±o visual: nueva paleta de colores con CSS variables',
-      'TipografÃ­a mejorada: Inter para tÃ­tulos, DM Sans para cuerpo, tabular-nums en tabla',
+      'RediseÃƒÂ±o visual: nueva paleta de colores con CSS variables',
+      'TipografÃƒÂ­a mejorada: Inter para tÃƒÂ­tulos, DM Sans para cuerpo, tabular-nums en tabla',
       'Tarjetas de alojamiento refinadas con gradiente sutil y mejor hover',
       'Toast notifications en lugar de alert() para feedback no bloqueante',
-      'ValidaciÃ³n de inputs numÃ©ricos con rango (0-100% para tasas)',
-      'Sidebar con iconos SVG y transiciones mÃ¡s fluidas',
+      'ValidaciÃƒÂ³n de inputs numÃƒÂ©ricos con rango (0-100% para tasas)',
+      'Sidebar con iconos SVG y transiciones mÃƒÂ¡s fluidas',
       'Fix: bloque de versionado corrupto (encoding UTF-8) restaurado',
       'Fix: parseNum() ahora valida rangos para porcentajes',
       'Mejoras en sombras, bordes y espaciado general',
@@ -2039,11 +2047,11 @@ function closeChangelog() {
   document.getElementById('changelog-overlay').style.display = 'none';
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M05] GOOGLE_AUTH — Autenticación OAuth y gestión de tokens
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M05] GOOGLE_AUTH â€” AutenticaciÃ³n OAuth y gestiÃ³n de tokens
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-// === CONFIGURACIÓN GOOGLE — Credenciales OAuth ===
+// === CONFIGURACIÃ“N GOOGLE â€” Credenciales OAuth ===
 const GOOGLE_CLIENT_ID = '658971789892-cnsnbr36hus5jablgkuj2qk8ipic5ptf.apps.googleusercontent.com';
 const GOOGLE_API_KEY   = 'AIzaSyAqn7NyL_QRC97KW-huBjzZjTLPGpEoT-k';
 const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/gmail.send';
@@ -2102,7 +2110,7 @@ window.addEventListener('load', () => {
 
 // === GOOGLE AUTH ===
 function googleSignIn() {
-  if (!_tokenClient) { showToast('Google API no inicializada. Recarga la pÃ¡gina.', 'error'); return; }
+  if (!_tokenClient) { showToast('Google API no inicializada. Recarga la pÃƒÂ¡gina.', 'error'); return; }
   if (_googleToken) { updateGoogleStatus(true); return; }
   _tokenClient.requestAccessToken({ prompt: '' });
 }
@@ -2167,7 +2175,7 @@ function renderDefaultUrlDisplay() {
 function loadDefaultSheet() {
   if (!_defaultSheetUrl) return;
   const id = extractSheetId(_defaultSheetUrl);
-  if (!id) { showToast('La URL por defecto no es vÃ¡lida.', 'error'); return; }
+  if (!id) { showToast('La URL por defecto no es vÃƒÂ¡lida.', 'error'); return; }
   loadSheetById(id, 'Hoja por defecto');
 }
 function autoLoadDefaultSheet() {
@@ -2191,9 +2199,9 @@ function cancelDefaultUrlEdit() {
 }
 function saveDefaultUrlEdit() {
   const url = document.getElementById('default-url-edit-input').value.trim();
-  if (!url) { showToast('Introduce una URL vÃ¡lida.', 'warning'); return; }
+  if (!url) { showToast('Introduce una URL vÃƒÂ¡lida.', 'warning'); return; }
   let id = extractSheetId(url);
-  if (!id) { showToast('URL no vÃ¡lida. Debe ser Google Sheets.', 'error'); return; }
+  if (!id) { showToast('URL no vÃƒÂ¡lida. Debe ser Google Sheets.', 'error'); return; }
   _defaultSheetUrl = url;
   SafeStorage.set('gsheet-default-url', url);
   cancelDefaultUrlEdit();
@@ -2215,9 +2223,9 @@ function showSetDefaultUrl() {
 }
 function saveNewDefaultUrl() {
   const url = document.getElementById('set-default-url-input').value.trim();
-  if (!url) { showToast('Introduce una URL vÃ¡lida.', 'warning'); return; }
+  if (!url) { showToast('Introduce una URL vÃƒÂ¡lida.', 'warning'); return; }
   let id = extractSheetId(url);
-  if (!id) { showToast('URL no vÃ¡lida. Debe ser Google Sheets.', 'error'); return; }
+  if (!id) { showToast('URL no vÃƒÂ¡lida. Debe ser Google Sheets.', 'error'); return; }
   _defaultSheetUrl = url;
   SafeStorage.set('gsheet-default-url', url);
   document.getElementById('set-default-url-form').style.display = 'none';
@@ -2233,7 +2241,7 @@ function getAppId() {
   return m ? m[1] : '';
 }
 function openGooglePicker() {
-  if (!_pickerInited || !_googleToken) { showToast('Inicia sesiÃ³n con Google primero.', 'warning'); return; }
+  if (!_pickerInited || !_googleToken) { showToast('Inicia sesiÃƒÂ³n con Google primero.', 'warning'); return; }
   const view = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS).setIncludeFolders(true).setSelectFolderEnabled(false);
   const sharedView = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS).setIncludeFolders(true).setOwnedByMe(false);
   const picker = new google.picker.PickerBuilder()
@@ -2258,7 +2266,7 @@ function loadFromUrl() {
   const url = document.getElementById('gsheet-url-input').value.trim();
   if (!url) { showToast('Pega la URL de la hoja de Google Sheets', 'warning'); return; }
   const id = extractSheetId(url);
-  if (!id) { showToast('URL no vÃ¡lida. Debe ser Google Sheets.', 'error'); return; }
+  if (!id) { showToast('URL no vÃƒÂ¡lida. Debe ser Google Sheets.', 'error'); return; }
   loadSheetById(id, 'Google Sheet');
 }
 function extractSheetId(url) {
@@ -2268,13 +2276,13 @@ function extractSheetId(url) {
   return null;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M06] GOOGLE_SHEETS — Carga de datos, write-back y persistencia
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M06] GOOGLE_SHEETS â€” Carga de datos, write-back y persistencia
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // === LOAD SHEET DATA ===
 async function loadSheetById(sheetId, sheetName) {
-  if (!_googleToken) { showToast('Inicia sesiÃ³n con Google primero.', 'warning'); return; }
+  if (!_googleToken) { showToast('Inicia sesiÃƒÂ³n con Google primero.', 'warning'); return; }
   showGSheetLoading('Obteniendo informaci\u00F3n de la hoja...');
   try {
     const meta = await gapi.client.sheets.spreadsheets.get({ spreadsheetId: sheetId, fields: 'properties.title,sheets.properties' });
@@ -2310,11 +2318,11 @@ async function selectSheetTab(sheetId, sheetTab, title) {
   await loadSheetData(sheetId, sheetTab, title + ' / ' + sheetTab);
 }
 /**
- * @description Carga los datos de una hoja específica del Google Sheet.
- * Es la función principal del flujo de carga desde Google Sheets.
+ * @description Carga los datos de una hoja especÃ­fica del Google Sheet.
+ * Es la funciÃ³n principal del flujo de carga desde Google Sheets.
  * Tras cargar los datos, configura write-back, config y propietarios.
  * @param {string} sheetId - ID del spreadsheet de Google
- * @param {string} sheetTab - Nombre de la pestaña a leer
+ * @param {string} sheetTab - Nombre de la pestaÃ±a a leer
  * @param {string} displayName - Nombre para mostrar al usuario
  */
 async function loadSheetData(sheetId, sheetTab, displayName) {
@@ -2326,7 +2334,7 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
       valueRenderOption: 'UNFORMATTED_VALUE', dateTimeRenderOption: 'SERIAL_NUMBER'
     });
     const rows = resp.result.values;
-    if (!rows || rows.length < 2) { hideGSheetLoading(); showToast('La hoja estÃ¡ vacÃ­a o no tiene datos suficientes.', 'warning'); return; }
+    if (!rows || rows.length < 2) { hideGSheetLoading(); showToast('La hoja estÃƒÂ¡ vacÃƒÂ­a o no tiene datos suficientes.', 'warning'); return; }
     showGSheetLoading('Procesando ' + (rows.length - 1) + ' filas...');
     if (!processRows(rows)) { hideGSheetLoading(); return; }
 
@@ -2502,9 +2510,9 @@ function updateSyncIndicator(state) {
 }
 
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M06-PERSIST] CONFIG PERSISTENCE — Pestaña "Configuracion" en Google Sheets
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M06-PERSIST] CONFIG PERSISTENCE â€” PestaÃ±a "Configuracion" en Google Sheets
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // === CONFIG PERSISTENCE: "Configuracion" tab in Google Sheets ===
 const CONFIG_TAB_NAME = CONFIG.CONFIG_TAB_NAME;
@@ -2515,14 +2523,14 @@ let _propietariosKeys = []; // sorted by length desc for best match
 let _propietariosRowMap = {}; // alojamiento code (normalized) -> sheet row number (1-based)
 let _propietariosSheetId = null;
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M07] PROPIETARIOS — Mapeo alojamiento→propietario y edición inline
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M07] PROPIETARIOS â€” Mapeo alojamientoâ†’propietario y ediciÃ³n inline
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 /**
  * @description Busca el propietario de un alojamiento.
  * Primero intenta match exacto, luego match parcial (substring).
- * @param {string} alojamiento - Nombre/código del alojamiento
+ * @param {string} alojamiento - Nombre/cÃ³digo del alojamiento
  * @returns {string} Nombre del propietario o 'Falta propietario'
  */
 function getPropietario(alojamiento) {
@@ -2537,8 +2545,8 @@ function getPropietario(alojamiento) {
 
 /**
  * @description Busca el email del propietario de un alojamiento.
- * @param {string} alojamiento - Nombre/código del alojamiento
- * @returns {string} Email del propietario o cadena vacía
+ * @param {string} alojamiento - Nombre/cÃ³digo del alojamiento
+ * @returns {string} Email del propietario o cadena vacÃ­a
  */
 function getPropietarioEmail(alojamiento) {
   if (!alojamiento) return '';
@@ -2552,9 +2560,9 @@ function getPropietarioEmail(alojamiento) {
 
 /**
  * @description Guarda el email del propietario en Google Sheets (columna C).
- * @param {string} alojamiento - Nombre/código del alojamiento
+ * @param {string} alojamiento - Nombre/cÃ³digo del alojamiento
  * @param {string} email - Email del propietario
- * @returns {Promise<boolean>} true si se guardó correctamente
+ * @returns {Promise<boolean>} true si se guardÃ³ correctamente
  */
 async function savePropietarioEmail(alojamiento, email) {
   const matchedKey = _getPropietarioKey(alojamiento);
@@ -2636,7 +2644,7 @@ function editPropietarioInline(alojamiento, el) {
     if (val !== current) {
       inp.disabled = true; inp.style.opacity = '0.5';
       const ok = await savePropietario(alojamiento, val);
-      if (!ok) { showToast('Error al guardar. Â¿EstÃ¡s conectado a Google Sheets?', 'error'); }
+      if (!ok) { showToast('Error al guardar. Ã‚Â¿EstÃƒÂ¡s conectado a Google Sheets?', 'error'); }
     }
     // Rebuild element
     const span = document.createElement('span');
@@ -2692,8 +2700,8 @@ let _reservaConfigSaveTimer = null;
 let _pendingReservaConfigSaves = new Set();
 
 /**
- * @description Programa el guardado de configuración global con debounce de 1500ms.
- * Cada llamada reinicia el timer. Solo se ejecuta si hay conexión a Google Sheets.
+ * @description Programa el guardado de configuraciÃ³n global con debounce de 1500ms.
+ * Cada llamada reinicia el timer. Solo se ejecuta si hay conexiÃ³n a Google Sheets.
  */
 function scheduleGlobalConfigSave() {
   if (!_sheetSource || !_googleToken) return;
@@ -2702,9 +2710,9 @@ function scheduleGlobalConfigSave() {
 }
 
 /**
- * @description Programa el guardado de configuración de una reserva con debounce.
- * Acumula múltiples cambios y los guarda en batch tras 1000ms de inactividad.
- * @param {number} idx - Índice de la reserva modificada
+ * @description Programa el guardado de configuraciÃ³n de una reserva con debounce.
+ * Acumula mÃºltiples cambios y los guarda en batch tras 1000ms de inactividad.
+ * @param {number} idx - Ãndice de la reserva modificada
  */
 function scheduleReservaConfigSave(idx) {
   if (!_sheetSource || !_googleToken) return;
@@ -2785,8 +2793,8 @@ function buildFullConfigTabData() {
 
 // Load or create the Configuracion tab
 /**
- * @description Carga o crea la pestaña "Configuracion" del Google Sheet.
- * Esta pestaña almacena todas las opciones globales y ajustes por reserva.
+ * @description Carga o crea la pestaÃ±a "Configuracion" del Google Sheet.
+ * Esta pestaÃ±a almacena todas las opciones globales y ajustes por reserva.
  * Si no existe, la crea con los datos actuales.
  * @param {string} sheetId - ID del spreadsheet
  */
@@ -2973,9 +2981,9 @@ function applyConfigFromRows(rows) {
 
 // Save full global config to sheet (write-first for safety)
 /**
- * @description Guarda toda la configuración en la pestaña "Configuracion".
- * Usa patrón write-first: escribe datos nuevos ANTES de limpiar obsoletos.
- * Esto garantiza que si la limpieza falla, los datos ya están salvados.
+ * @description Guarda toda la configuraciÃ³n en la pestaÃ±a "Configuracion".
+ * Usa patrÃ³n write-first: escribe datos nuevos ANTES de limpiar obsoletos.
+ * Esto garantiza que si la limpieza falla, los datos ya estÃ¡n salvados.
  */
 async function saveGlobalConfigToSheet() {
   if (!_sheetSource || !_googleToken || !_configLoaded) return;
@@ -3076,22 +3084,22 @@ function renderSheetHistory() {
   });
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M08] DATA_MODEL — Estado de la aplicación y opciones globales
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M08] DATA_MODEL â€” Estado de la aplicaciÃ³n y opciones globales
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 /**
- * @description Opciones de configuración editables por el usuario.
+ * @description Opciones de configuraciÃ³n editables por el usuario.
  * Cada array contiene los valores disponibles para los <select> de la UI.
- * Se persisten en la pestaña "Configuracion" del Google Sheet.
+ * Se persisten en la pestaÃ±a "Configuracion" del Google Sheet.
  *
- * platformOptions    → comisiones por plataforma (% sobre total con IVA)
- * pasarelaStripeOptions/pasarelaBookingOptions → tasa pasarela de pago (%)
- * cleaningOptions    → importes fijos de limpieza (€)
- * irpfOptions        → tasas de retención IRPF (%)
- * gtcOptions         → tasas de gestión GTC (%)
- * amenitiesOptions   → importes fijos de amenities (€)
- * maintenanceOptions → importes fijos de mantenimiento mensual (€)
+ * platformOptions    â†’ comisiones por plataforma (% sobre total con IVA)
+ * pasarelaStripeOptions/pasarelaBookingOptions â†’ tasa pasarela de pago (%)
+ * cleaningOptions    â†’ importes fijos de limpieza (â‚¬)
+ * irpfOptions        â†’ tasas de retenciÃ³n IRPF (%)
+ * gtcOptions         â†’ tasas de gestiÃ³n GTC (%)
+ * amenitiesOptions   â†’ importes fijos de amenities (â‚¬)
+ * maintenanceOptions â†’ importes fijos de mantenimiento mensual (â‚¬)
  */
 
 // IVA constants now in CONFIG object
@@ -3126,7 +3134,7 @@ let _consolExtras = {};
 
 // Special 80/20 GTC split alojamientos
 /**
- * @description Tasa de retención GTC para propiedades con mínimo garantizado.
+ * @description Tasa de retenciÃ³n GTC para propiedades con mÃ­nimo garantizado.
  * GTC retiene 20% del subtotal de reservas, el propietario recibe el 80%.
  * @const {number}
  */
@@ -3140,7 +3148,7 @@ let _gtcOwnedAlojamientos = [
 /**
  * @description Comprueba si un alojamiento tiene reparto 80/20 GTC.
  * @param {string} alojName - Nombre del alojamiento
- * @returns {boolean} true si tiene condición especial de mínimo garantizado
+ * @returns {boolean} true si tiene condiciÃ³n especial de mÃ­nimo garantizado
  */
 function isGtcSplit(alojName) { return _gtcSplitAlojamientos.some(function(a){ return alojName === a || alojName.indexOf(a) !== -1; }); }
 /**
@@ -3171,12 +3179,12 @@ let currentConsolAloj = null, currentDetailIdx = null;
 // Google Sheets write-back state
 /**
  * @description Fuente de datos Google Sheets para write-back.
- * null cuando se cargó desde fichero local. Contiene:
+ * null cuando se cargÃ³ desde fichero local. Contiene:
  *   .id           - ID del spreadsheet
- *   .tab          - Nombre de la pestaña de datos
- *   .valColIdx    - Índice de la columna "Validada"
+ *   .tab          - Nombre de la pestaÃ±a de datos
+ *   .valColIdx    - Ãndice de la columna "Validada"
  *   .valColLetter - Letra de la columna (ej: "Q")
- *   .headerRow    - Índice de la fila de cabecera
+ *   .headerRow    - Ãndice de la fila de cabecera
  * @type {Object|null}
  */
 let _sheetSource = null; // null when loaded from file
@@ -3186,12 +3194,12 @@ let _syncActive = false; // true while a write is in flight
 let _pageSize = CONFIG.DEFAULT_PAGE_SIZE;
 let _liqCache = {}, _currentPage = 1, _fmtCache = {};
 /**
- * @description Invalida la caché de cálculos.
+ * @description Invalida la cachÃ© de cÃ¡lculos.
  * @param {number} [idx] - Si se pasa, invalida solo esa reserva. Sin param = invalida todo.
  */
 function invalidateCache(idx) { if (idx !== undefined) { delete _liqCache[idx]; } else { _liqCache = {}; invalidateGlobalStats(); invalidateFilterCache(); } }
 /**
- * @description Obtiene los cálculos de liquidación de una reserva (con caché).
+ * @description Obtiene los cÃ¡lculos de liquidaciÃ³n de una reserva (con cachÃ©).
  * @param {Object} r - Objeto reserva de allReservas[]
  * @returns {Object} Resultado de calcLiquidacion() (cacheado)
  */
@@ -3228,8 +3236,8 @@ function getFilterSortKey() {
 }
 function invalidateFilterCache() { _cachedFiltered = null; _filterSortKey = ''; _cachedFilteredStats = null; }
 /**
- * @description Obtiene las reservas filtradas y ordenadas según los filtros activos.
- * Usa caché: solo recalcula si los filtros han cambiado.
+ * @description Obtiene las reservas filtradas y ordenadas segÃºn los filtros activos.
+ * Usa cachÃ©: solo recalcula si los filtros han cambiado.
  * @returns {Array} Array de reservas que pasan todos los filtros
  */
 function getFilteredSorted() {
@@ -3339,10 +3347,10 @@ function calcNights(e, s) {
   if (!a || !b) return 0; return Math.max(0, Math.round((b - a) / 86400000));
 }
 /**
- * @description Parsea un valor a número, manejando formatos españoles (1.234,56).
+ * @description Parsea un valor a nÃºmero, manejando formatos espaÃ±oles (1.234,56).
  * IMPORTANTE: Si v ya es number nativo (de Google Sheets API), lo devuelve directo.
  * @param {*} v - Valor a parsear (number, string, null)
- * @returns {number} Valor numérico (0 si no parseable)
+ * @returns {number} Valor numÃ©rico (0 si no parseable)
  */
 function parseNum(v) {
   if (v == null || v === '') return 0;
@@ -3359,8 +3367,8 @@ function parseRate(v, min, max) {
 function getDefaultForPlatform(plat) { const o = platformOptions[plat]; return o && o.length ? o[0] / 100 : 0.10; }
 
 /**
- * @description Calcula la liquidación completa de una reserva.
- * Este es el CORAZÓN del sistema de cálculo financiero.
+ * @description Calcula la liquidaciÃ³n completa de una reserva.
+ * Este es el CORAZÃ“N del sistema de cÃ¡lculo financiero.
  *
  * @param {Object} r - Objeto reserva de allReservas[]
  * @param {Object} s - Settings de la reserva (settings[r.idx])
@@ -3368,19 +3376,19 @@ function getDefaultForPlatform(plat) { const o = platformOptions[plat]; return o
  *   .totalOriginal - Importe original de la reserva
  *   .ceTotal       - Total de conceptos extraordinarios con IVA
  *   .total         - totalOriginal - ceTotal
- *   .baseSinIVA    - Base imponible sin IVA turístico (10%)
- *   .comRate       - Tasa de comisión de plataforma aplicada
- *   .comPlat       - Importe comisión plataforma
- *   .gtcRate       - Tasa de gestión GTC aplicada
- *   .comGTC        - Importe comisión GTC
- *   .comPas        - Importe comisión pasarela (0 si desactivada)
+ *   .baseSinIVA    - Base imponible sin IVA turÃ­stico (10%)
+ *   .comRate       - Tasa de comisiÃ³n de plataforma aplicada
+ *   .comPlat       - Importe comisiÃ³n plataforma
+ *   .gtcRate       - Tasa de gestiÃ³n GTC aplicada
+ *   .comGTC        - Importe comisiÃ³n GTC
+ *   .comPas        - Importe comisiÃ³n pasarela (0 si desactivada)
  *   .limp          - Importe limpieza
  *   .amen          - Importe amenities
  *   .ceSinIvaTotal - Total conceptos extraordinarios sin IVA
  *   .sub           - Subtotal (base - todas las deducciones)
  *   .iva           - IVA 21% sobre subtotal
  *   .irpfRate      - Tasa IRPF aplicada
- *   .ret           - Retención IRPF
+ *   .ret           - RetenciÃ³n IRPF
  *   .totalLiq      - TOTAL A LIQUIDAR (sub + iva - ret)
  */
 function calcLiquidacion(r, s) {
@@ -3433,10 +3441,10 @@ function parseHtmlXls(text) {
 
 /**
  * @description Procesa los datos crudos del Sheet/Excel y construye el modelo de datos.
- * Esta función es el PUNTO DE ENTRADA de datos en la aplicación.
+ * Esta funciÃ³n es el PUNTO DE ENTRADA de datos en la aplicaciÃ³n.
  * Llena allReservas[], settings{}, validated Set, y construye los combos de filtro.
  *
- * @param {Array[]} json - Array de arrays (filas del Sheet). Primera fila útil = cabecera.
+ * @param {Array[]} json - Array de arrays (filas del Sheet). Primera fila Ãºtil = cabecera.
  * @returns {boolean} true si se procesaron datos correctamente
  *
  * @sideeffects Modifica: allReservas, settings, validated, platformOptions,
@@ -3444,11 +3452,11 @@ function parseHtmlXls(text) {
  */
 function processRows(json) {
   if (!json || !Array.isArray(json) || json.length < 2) {
-    showToast("El archivo no contiene datos vÃ¡lidos.", "error");
+    showToast("El archivo no contiene datos vÃƒÂ¡lidos.", "error");
     return false;
   }
   const headerRow = json.findIndex(r => r && r[0] && String(r[0]).includes("ID Reserva"));
-  if (headerRow === -1) { showToast("No se encontrÃ³ la cabecera ID Reserva.", "error"); return false; }
+  if (headerRow === -1) { showToast("No se encontrÃƒÂ³ la cabecera ID Reserva.", "error"); return false; }
 
   // Detect validation column in header
   const hdr = json[headerRow];
@@ -3567,7 +3575,7 @@ function handleFile(file) {
 let _navigating = false;
 /**
  * @description Cambia la pantalla activa de la SPA.
- * Gestiona la navegación entre las 5 vistas principales.
+ * Gestiona la navegaciÃ³n entre las 5 vistas principales.
  * @param {string} name - Nombre de la pantalla: 'upload'|'list'|'detail'|'consol'|'consoldetail'
  */
 function showScreen(name) {
@@ -3586,12 +3594,12 @@ function showScreen(name) {
 }
 
 // \u2500\u2500\u2500 TABLE \u2500\u2500\u2500
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M11] TABLE_RENDER — Tabla de preliquidación, columnas, paginación
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M11] TABLE_RENDER â€” Tabla de preliquidaciÃ³n, columnas, paginaciÃ³n
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 /**
- * @description Definición de columnas de la tabla principal de preliquidación.
+ * @description DefiniciÃ³n de columnas de la tabla principal de preliquidaciÃ³n.
  * Cada columna tiene: key (CSS class), label (cabecera HTML), sortable, right (alinear), locked.
  * Las columnas locked no se pueden ocultar desde el toggle de columnas.
  */
@@ -3798,14 +3806,14 @@ function getGlobalStats() {
 function invalidateGlobalStats() { _globalStatsCache = null; }
 
 /**
- * @description Renderiza la tabla principal de preliquidación.
- * Delega en _renderFull() que aplica filtros, ordenación, paginación y stats.
- * Es el punto de entrada público — las funciones internas son _renderFull() y _renderPageOnly().
+ * @description Renderiza la tabla principal de preliquidaciÃ³n.
+ * Delega en _renderFull() que aplica filtros, ordenaciÃ³n, paginaciÃ³n y stats.
+ * Es el punto de entrada pÃºblico â€” las funciones internas son _renderFull() y _renderPageOnly().
  */
 function renderTable() { _renderFull(); }
 
 /**
- * @description Genera el HTML completo de una fila de la tabla de preliquidación.
+ * @description Genera el HTML completo de una fila de la tabla de preliquidaciÃ³n.
  * Incluye todas las celdas, selects, botones CE/CE2 y acciones.
  * @param {Object} r - Objeto reserva
  * @returns {string} HTML de la fila <tr> + paneles CE/CE2
@@ -3915,9 +3923,9 @@ function toggleCEPanel(idx, view) {
 }
 
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M12] CE_SYSTEM — Conceptos Extraordinarios (CE con IVA + CE2 sin IVA)
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M12] CE_SYSTEM â€” Conceptos Extraordinarios (CE con IVA + CE2 sin IVA)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // === CE/CE2 LIVE INPUT DEBOUNCE (event delegation) ===
 var _ceInputTimer = null;
@@ -4002,18 +4010,18 @@ document.addEventListener('input', function(e) {
   }, 400);
 });
 
-// === KEYBOARD: Enter labelâ†’amt, Enter amtâ†’new row, Escapeâ†’remove if empty ===
+// === KEYBOARD: Enter labelÃ¢â€ â€™amt, Enter amtÃ¢â€ â€™new row, EscapeÃ¢â€ â€™remove if empty ===
 function _cexKey(e, alojName, isAmt) {
   if (e.key === 'Enter') {
     e.preventDefault();
     var row = e.target.closest('.cex-item-row');
     if (!row) return;
     if (!isAmt) {
-      // Enter on label â†’ focus amount
+      // Enter on label Ã¢â€ â€™ focus amount
       var amt = row.querySelector('.cex-inp-amt');
       if (amt) { amt.focus(); amt.select(); }
     } else {
-      // Enter on amount â†’ trigger change, then add new row
+      // Enter on amount Ã¢â€ â€™ trigger change, then add new row
       e.target.dispatchEvent(new Event('change', {bubbles:true}));
       addConsolExtra(alojName);
     }
@@ -4034,16 +4042,16 @@ function _cexKey(e, alojName, isAmt) {
   }
 }
 
-// ─── [M14-PATCH] Patch ligero consolidado (sin reconstruir DOM) ─────────────
+// â”€â”€â”€ [M14-PATCH] Patch ligero consolidado (sin reconstruir DOM) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /**
- * @description Sistema de actualización ligera para la vista consolidada.
+ * @description Sistema de actualizaciÃ³n ligera para la vista consolidada.
  * En vez de reconstruir todo el DOM con viewConsolDetail(), estas funciones
  * parchean solo las celdas/secciones que han cambiado:
- *   - _patchConsolRowCells() → actualiza celdas numéricas de una fila
- *   - _patchConsolFooterRow() → actualiza totales del tfoot
- *   - _buildConsolSummaryInner() → regenera HTML del resumen financiero
- *   - _getConsolCalcsAndSums() → helper de cálculo reutilizable
+ *   - _patchConsolRowCells() â†’ actualiza celdas numÃ©ricas de una fila
+ *   - _patchConsolFooterRow() â†’ actualiza totales del tfoot
+ *   - _buildConsolSummaryInner() â†’ regenera HTML del resumen financiero
+ *   - _getConsolCalcsAndSums() â†’ helper de cÃ¡lculo reutilizable
  */
 
 // === LIGHTWEIGHT CONSOL PATCH (no DOM rebuild) ===
@@ -4211,13 +4219,13 @@ function _patchConsolLightweight(idx, oldC, newC) {
   if (summaryBlock) summaryBlock.innerHTML = _buildConsolSummaryInner(data.calcs, data.sums, currentConsolAloj);
 }
 
-// ─── [M12-KEYBOARD] Atajos de teclado para CE/CE2 ───────────────────────────
+// â”€â”€â”€ [M12-KEYBOARD] Atajos de teclado para CE/CE2 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 /**
  * @description Manejo de Enter/Escape en campos CE/CE2:
- *   - Enter en nombre → mueve foco a importe
- *   - Enter en importe → crea nueva fila
- *   - Escape en fila vacía → la elimina
- * Patrón zero-jump: la fila se inserta PRIMERO, los números se actualizan
+ *   - Enter en nombre â†’ mueve foco a importe
+ *   - Enter en importe â†’ crea nueva fila
+ *   - Escape en fila vacÃ­a â†’ la elimina
+ * PatrÃ³n zero-jump: la fila se inserta PRIMERO, los nÃºmeros se actualizan
  * en el siguiente frame con requestAnimationFrame para evitar layout thrashing.
  */
 
@@ -4244,7 +4252,7 @@ function _ceKey(e, idx, view, isAmt) {
     s.conceptosEspeciales[itemIdx].amount = val;
   }
   inp.removeAttribute('onchange');
-  // 2. Check if last row is already empty â€” if so, just focus it
+  // 2. Check if last row is already empty Ã¢â‚¬â€ if so, just focus it
   var allRows = panel.querySelectorAll('.ce-item-row');
   var lastRow = allRows.length ? allRows[allRows.length - 1] : null;
   if (lastRow && lastRow !== row) {
@@ -4541,7 +4549,7 @@ function _refreshCEPanel(idx, view) {
   if (labels.length > 0) labels[labels.length - 1].focus({preventScroll:true});
 }
 
-// ─── [M12-CE2] Conceptos Extraordinarios Sin IVA (CE2) ─────────────────────
+// â”€â”€â”€ [M12-CE2] Conceptos Extraordinarios Sin IVA (CE2) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 // === CE2: CONCEPTOS ESPECIALES SIN IVA (violet) ===
 function _buildCE2Button(idx, c, view) {
@@ -4737,8 +4745,8 @@ function _refreshCE2Panel(idx, view) {
 }
 
 /**
- * @description Render completo de la tabla: filtrado + stats + cabecera + filas + footer + paginación.
- * Se llama tras cambios en filtros, datos o navegación.
+ * @description Render completo de la tabla: filtrado + stats + cabecera + filas + footer + paginaciÃ³n.
+ * Se llama tras cambios en filtros, datos o navegaciÃ³n.
  * @private
  */
 function _renderFull() {
@@ -4939,7 +4947,7 @@ function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, 
 /**
  * @description Cambia un ajuste individual de una reserva y actualiza la UI.
  * Usa delta-update: actualiza solo la fila afectada sin re-render completo.
- * @param {number} i - Índice de la reserva
+ * @param {number} i - Ãndice de la reserva
  * @param {string} k - Clave del setting ('comPlataforma', 'comGTC', etc.)
  * @param {*} v - Nuevo valor
  */
@@ -5031,12 +5039,12 @@ function _getOrComputeStats(fil) {
 // \u2500\u2500\u2500 IN-PLACE ROW UPDATE O(1) \u2500\u2500\u2500
 /**
  * @description Actualiza una sola fila de la tabla sin reconstruir todo el DOM.
- * Técnica delta-update: compara cálculos antiguos vs nuevos y actualiza solo
- * las celdas numéricas que han cambiado, más el footer incrementalmente.
- * @param {number} idx - Índice de la reserva
- * @param {Object} oldC - Cálculos anteriores (de calcLiquidacion)
- * @param {Object} newC - Cálculos nuevos
- * @param {boolean} validationFlipped - Si cambió el estado de validación
+ * TÃ©cnica delta-update: compara cÃ¡lculos antiguos vs nuevos y actualiza solo
+ * las celdas numÃ©ricas que han cambiado, mÃ¡s el footer incrementalmente.
+ * @param {number} idx - Ãndice de la reserva
+ * @param {Object} oldC - CÃ¡lculos anteriores (de calcLiquidacion)
+ * @param {Object} newC - CÃ¡lculos nuevos
+ * @param {boolean} validationFlipped - Si cambiÃ³ el estado de validaciÃ³n
  * @private
  */
 function _patchSingleRow(idx, oldC, newC, validationFlipped) {
@@ -5146,13 +5154,13 @@ function _renderStatsFromCache(fil, st) {
 }
 
 let highlightIdx = null;
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M13] DETAIL_VIEW — Vista de detalle individual de una reserva
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M13] DETAIL_VIEW â€” Vista de detalle individual de una reserva
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 /**
- * @description Navega a una reserva específica: cambia de página si necesario y la resalta.
- * @param {number} idx - Índice de la reserva en allReservas[]
+ * @description Navega a una reserva especÃ­fica: cambia de pÃ¡gina si necesario y la resalta.
+ * @param {number} idx - Ãndice de la reserva en allReservas[]
  */
 function goToReserva(idx) {
   // Reset filters so the reservation is visible
@@ -5187,8 +5195,8 @@ function goToReserva(idx) {
 // \\u2500\\u2500\\u2500 INDIVIDUAL DETAIL \\u2500\\u2500\\u2500
 /**
  * @description Renderiza la vista de detalle de una reserva individual.
- * Muestra desglose completo de la liquidación con controles editables.
- * @param {number} idx - Índice de la reserva en allReservas[]
+ * Muestra desglose completo de la liquidaciÃ³n con controles editables.
+ * @param {number} idx - Ãndice de la reserva en allReservas[]
  */
 function viewDetail(idx) {
   currentDetailIdx = idx;
@@ -5277,16 +5285,16 @@ function viewDetail(idx) {
 
 // \u2500\u2500\u2500 CONSOLIDATED GRID \u2500\u2500\u2500
 let _alojCache = null;
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M14] CONSOL_VIEW — Vista consolidada por alojamiento
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M14] CONSOL_VIEW â€” Vista consolidada por alojamiento
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-/** @description Invalida la caché de agrupación por alojamiento */
+/** @description Invalida la cachÃ© de agrupaciÃ³n por alojamiento */
 function invalidateAlojCache() { _alojCache = null; }
 /**
  * @description Agrupa reservas por alojamiento para la vista consolidada.
- * Solo incluye reservas VALIDADAS. Usa caché para evitar recálculos.
- * @returns {Object.<string, Object>} Mapa alojamiento → { items[], totalR, totalL }
+ * Solo incluye reservas VALIDADAS. Usa cachÃ© para evitar recÃ¡lculos.
+ * @returns {Object.<string, Object>} Mapa alojamiento â†’ { items[], totalR, totalL }
  */
 function getAlojamientos() {
   if (_alojCache) return _alojCache;
@@ -5547,9 +5555,9 @@ function buildLimpRows(calcs) {
   return `<div class="consol-row"><span>Limpieza</span><span class="neg">- ${fmt(total)} &#8364;</span></div>` + html;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M15] CONSOL_DEDUCT — Mantenimiento y extras mensuales por alojamiento
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M15] CONSOL_DEDUCT â€” Mantenimiento y extras mensuales por alojamiento
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // === Consolidated monthly deductions management ===
 function buildPrintDeductionsHtml(alojName) {
@@ -5575,7 +5583,7 @@ function buildConsolDeductionsHtml(alojName) {
 
   let html = '';
 
-  // Maintenance row â€” same consol-row style
+  // Maintenance row Ã¢â‚¬â€ same consol-row style
   html += '<div class="consol-row"><span style="display:flex;align-items:center;gap:8px;">';
   html += '<span class="no-print" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:3px;border:2px solid '+(maint.enabled?'#16a34a':'#d1d5db')+';background:'+(maint.enabled?'#16a34a':'#fff')+';color:#fff;font-size:11px;cursor:pointer;" onclick="toggleConsolMaint(\''+esc2+'\')">'+(maint.enabled?'&#10003;':'')+'</span>';
   html += '<span style="'+(maint.enabled?'':'color:#9ca3af;text-decoration:line-through;')+'">Mantenimiento</span>';
@@ -5584,7 +5592,7 @@ function buildConsolDeductionsHtml(alojName) {
   if (maint.enabled) html += '<span class="neg">- '+fmt(maint.amount)+' \u20AC</span>';
   html += '</div>';
 
-  // Extra concepts â€” CE-style editable rows
+  // Extra concepts Ã¢â‚¬â€ CE-style editable rows
   extras.forEach(function(ex, ei) {
     html += '<div class="cex-item-row" style="display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;">';
     html += '<input class="cex-inp-label" type="text" value="'+(ex.label||'').replace(/"/g,'&quot;')+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="Concepto..." style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />';
@@ -5595,7 +5603,7 @@ function buildConsolDeductionsHtml(alojName) {
     html += '</div>';
   });
 
-  // Add concept link â€” same style as CE
+  // Add concept link Ã¢â‚¬â€ same style as CE
   html += '<div class="no-print" style="padding:4px 8px;">';
   html += '<a class="cex-add-link" onclick="addConsolExtra(\''+esc2+'\')" style="font-size:12px;color:#3b82f6;cursor:pointer;text-decoration:none;">+ A\u00f1adir concepto</a>';
   html += '</div>';
@@ -5761,7 +5769,7 @@ function _refreshConsolSummaryBlock() {
 }
 
 /**
- * @description Renderiza la liquidación consolidada completa de un alojamiento.
+ * @description Renderiza la liquidaciÃ³n consolidada completa de un alojamiento.
  * Incluye tabla de reservas, resumen financiero, deducciones mensuales,
  * reparto 80/20 GTC (si aplica), y totales con IRPF/IVA.
  * @param {string} alojName - Nombre del alojamiento
@@ -6086,12 +6094,12 @@ let _previewPref = null; // null = show options, true = always preview, false = 
 
 function getPreviewPref() { return _previewPref === null ? true : _previewPref; }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M16] PRINT — Generación de impresión y vista previa
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M16] PRINT â€” GeneraciÃ³n de impresiÃ³n y vista previa
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 /**
- * @description Genera la liquidación para imprimir: muestra preview o imprime directo.
+ * @description Genera la liquidaciÃ³n para imprimir: muestra preview o imprime directo.
  * Respeta la preferencia del usuario (ver preview o ir directo a imprimir).
  */
 function handleGenerar() {
@@ -6226,7 +6234,7 @@ function buildPrintCards() {
   return { cardsHtml, summaryHtml };
 }
 
-/** @description Estado del modo preview de impresión */
+/** @description Estado del modo preview de impresiÃ³n */
 let _previewActive = false;
 
 function showPrintPreview() {
@@ -6307,11 +6315,11 @@ function printConsolDirect() {
 }
 
 // \u2500\u2500\u2500 CONFIG MODAL \u2500\u2500\u2500
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M17] SETTINGS_UI — Modal de configuración y gestión de opciones
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M17] SETTINGS_UI â€” Modal de configuraciÃ³n y gestiÃ³n de opciones
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-/** @description Cambia de pestaña en el modal de configuración */
+/** @description Cambia de pestaÃ±a en el modal de configuraciÃ³n */
 function switchTab(tabId, btn) {
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".modal-tab").forEach(t => t.classList.remove("active"));
@@ -6336,7 +6344,7 @@ function renderConfigModal() {
     const safe = name.replace(/[^a-zA-Z0-9]/g,'');
     pH += buildOS(name, "% sobre total reserva (IVA incl.)", platformOptions[name], "%", `add-plat-${safe}`, `addP_${safe}`, `delP_${safe}`);
     window[`addP_${safe}`] = function() { const inp=document.getElementById(`add-plat-${safe}`); const v=parseFloat(inp.value);
-      if(isNaN(v)||v<0||v>100){showToast("Porcentaje vÃ¡lido: 0-100", "warning");return;} if(platformOptions[name].some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;}
+      if(isNaN(v)||v<0||v>100){showToast("Porcentaje vÃƒÂ¡lido: 0-100", "warning");return;} if(platformOptions[name].some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;}
       platformOptions[name].push(v); platformOptions[name].sort((a,b)=>a-b); inp.value=""; renderConfigModal(); };
     window[`delP_${safe}`] = function(i) { if(platformOptions[name].length<=1)return; platformOptions[name].splice(i,1); renderConfigModal(); };
   });
@@ -6366,7 +6374,7 @@ function addGTC(){aL(gtcOptions,"add-gtc",100);} function delGTC(i){dL(gtcOption
 function addAM(){aL(amenitiesOptions,"add-am",99999,false);} function delAM(i){dL(amenitiesOptions,i);}
 function addMT(){aL(maintenanceOptions,"add-mt",99999,false);} function delMT(i){dL(maintenanceOptions,i);}
 function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);const v=parseFloat(inp.value);
-  if(isP!==false){if(isNaN(v)||v<0||v>max){showToast("Valor no vÃ¡lido.", "warning");return;}}else{if(isNaN(v)||v<0){showToast("Valor no vÃ¡lido.", "warning");return;}}
+  if(isP!==false){if(isNaN(v)||v<0||v>max){showToast("Valor no vÃƒÂ¡lido.", "warning");return;}}else{if(isNaN(v)||v<0){showToast("Valor no vÃƒÂ¡lido.", "warning");return;}}
   if(list.some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}
 function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal();}
 
@@ -6406,11 +6414,11 @@ let _mpAvailable = {};
 let _mpAllYears = [];
 let _mpActiveSrc = 'p';
 
-// ─── [M10-MONTHPICKER] Selector de mes/año con multi-selección ─────────────
+// â”€â”€â”€ [M10-MONTHPICKER] Selector de mes/aÃ±o con multi-selecciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /**
- * @description Comprueba si una fecha coincide con los filtros de mes/año activos.
- * Soporta multi-selección: varios años y/o varios meses simultáneamente.
+ * @description Comprueba si una fecha coincide con los filtros de mes/aÃ±o activos.
+ * Soporta multi-selecciÃ³n: varios aÃ±os y/o varios meses simultÃ¡neamente.
  * @param {Date} d - Fecha a comprobar
  * @returns {boolean} true si la fecha pasa el filtro
  */
@@ -6592,12 +6600,12 @@ function updateMonthPickerBtn() {
   });
 }
 
-// ─── [M10-COMBO] Combobox searchable con multi-selección ─────────────────────
+// â”€â”€â”€ [M10-COMBO] Combobox searchable con multi-selecciÃ³n â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 /**
  * @description Rellena un combobox con las opciones disponibles.
  * @param {string} id - ID del combo ('platform', 'aloj')
- * @param {string[]} items - Array de opciones únicas
+ * @param {string[]} items - Array de opciones Ãºnicas
  */
 function populateCombo(id, items) {
   comboState[id].options = items;
@@ -6837,9 +6845,9 @@ document.querySelectorAll('.combo-input').forEach(input => {
   });
 });
 
-// ═══════════════════════════════════════════════════════════════════════════════
-//  [M18] AI_ASSISTANT — Chat con IA integrado (Claude API)
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+//  [M18] AI_ASSISTANT â€” Chat con IA integrado (Claude API)
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // === AI ASSISTANT ===
 let _aiPanelOpen = false;
@@ -6868,8 +6876,8 @@ function _getAIKey() {
 
 /**
  * @description Construye el contexto completo de datos para el asistente IA.
- * Incluye resúmenes por alojamiento, plataforma, mes, y detalle de reservas filtradas.
- * El contexto se envía como system prompt para que la IA responda con datos reales.
+ * Incluye resÃºmenes por alojamiento, plataforma, mes, y detalle de reservas filtradas.
+ * El contexto se envÃ­a como system prompt para que la IA responda con datos reales.
  * @returns {string} Texto con el contexto estructurado de todas las reservas
  */
 function buildAIContext() {

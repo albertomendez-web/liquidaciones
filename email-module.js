@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════════
- *  EMAIL MODULE v2.1.0 — PDF generation + Gmail sending for liquidaciones
+ *  EMAIL MODULE v2.1.1 — PDF generation + Gmail sending for liquidaciones
  * ═══════════════════════════════════════════════════════════════════════════════
  *
  *  Satellite file for index.html (Liquidaciones GTC).
@@ -458,18 +458,18 @@ function _buildEmailBody(propName, alojName, mes) {
         <p style="margin:0;font-size:14px;color:#1D4B56;">Un cordial saludo,</p>
         <table cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;"><tr>
           <td style="padding-right:14px;border-right:2px solid #E0AE00;">
-            <div style="font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:600;color:#1D4B56;">Homity Holidays</div>
+            <div style="font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:600;color:#1D4B56;">David Fraidiaz</div>
             <div style="font-size:12px;color:#7191AC;margin-top:2px;">Green Tropical Coast, S.L.</div>
           </td>
           <td style="padding-left:14px;">
-            <div style="font-size:12px;color:#7191AC;line-height:1.6;">608 626 555<br>hola@homityholidays.com</div>
+            <div style="font-size:12px;color:#7191AC;line-height:1.6;">&#9993; david.fraidiaz@granadabeachgolf.com<br>&#9742; 608 626 555</div>
           </td>
         </tr></table>
       </div>
     </div>
     <!-- Footer -->
     <div id="email-footer" style="background:#EFF1F6;padding:14px 36px;border-top:1px solid #D5DAE5;text-align:center;">
-      <div style="font-size:11px;color:#ACB8C0;line-height:1.5;">Este email ha sido generado autom\u00E1ticamente \u00B7 <span style="color:#7191AC;">homityholidays.com</span></div>
+      <div style="font-size:11px;color:#ACB8C0;line-height:1.5;">Este email ha sido generado autom\u00E1ticamente \u00B7 <span style="color:#7191AC;">granadabeachgolf.com</span></div>
     </div>
     <!-- Bottom gold accent bar -->
     <div style="height:4px;background:#E0AE00;border-radius:0 0 8px 8px;"></div>

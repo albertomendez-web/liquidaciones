@@ -323,7 +323,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .cd-total-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--hm-gold); }
 .cd-total-bar-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--hm-blue-gray); }
 .cd-total-bar-label strong { display: block; font-size: 14px; color: #fff; letter-spacing: normal; margin-top: 2px; }
-.cd-total-bar-amount { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; font-family: Georgia, 'Times New Roman', serif; color: var(--hm-gold); }
+.cd-total-bar-amount { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; font-family: Georgia, 'Times New Roman', serif; color: #FFFFFF; }
 /* Legacy compat */
 .consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 15px; font-weight: 700; }
 .consol-total { display: none; }
@@ -386,7 +386,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-total-bar::before { content: ''; display: block; height: 5px; background: var(--hm-gold); }
 .liq-total { display: flex; justify-content: space-between; align-items: center; padding: 22px 32px; background: var(--hm-teal); color: #fff; border-left: 5px solid var(--hm-gold); }
 .liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--hm-blue-gray); }
-.liq-total-value { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: var(--hm-gold); letter-spacing: -0.02em; }
+.liq-total-value { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.02em; }
 .liq-actions { display: flex; gap: 12px; justify-content: center; padding: 20px 32px; background: #f8f9fb; border-top: 1px solid var(--c-border-light); }
 .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
 .badge-liq { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -1274,9 +1274,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.11.1';
-const APP_BUILD   = '2026-02-14T20:30:00+01:00';
-const APP_CHANGES = 'Email modal: bot\u00F3n y status bar con colores Homity (teal + dorado)';
+const APP_VERSION = '2.11.2';
+const APP_BUILD   = '2026-02-14T21:00:00+01:00';
+const APP_CHANGES = 'Total a liquidar en blanco, firma email: David Fraidiaz / granadabeachgolf.com';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1416,6 +1416,15 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.11.2',
+    date: '2026-02-14',
+    changes: [
+      'Total a liquidar: importe en blanco en vez de dorado (mejor contraste sobre teal)',
+      'Firma email: David Fraidiaz | Green Tropical Coast, S.L. | granadabeachgolf.com',
+      'Footer email: granadabeachgolf.com en vez de homityholidays.com',
+    ]
+  },
   {
     version: '2.11.1',
     date: '2026-02-14',

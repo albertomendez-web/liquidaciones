@@ -741,6 +741,7 @@ tr.ce2-highlighted { background:#faf8ff; }
 .ai-msg.assistant strong { font-weight:700; }
 .ai-msg.system { align-self:center; background:transparent; color:#9ca3af; font-size:11px; text-align:center; padding:4px; }
 .ai-msg.error { align-self:center; background:#fef2f2; color:#dc2626; font-size:12px; text-align:center; border-radius:8px; }
+.ai-msg.info { align-self:center; background:#eff6ff; color:#2563eb; font-size:12px; text-align:center; border-radius:8px; font-style:italic; }
 .ai-input-wrap { padding:12px 16px; border-top:1px solid #eef0f4; display:flex; gap:8px; background:#fff; }
 .ai-input-wrap textarea { flex:1; border:1.5px solid #dde1e8; border-radius:10px; padding:10px 12px; font-size:13px; font-family:inherit; resize:none; outline:none; min-height:20px; max-height:100px; line-height:1.4; }
 .ai-input-wrap textarea:focus { border-color:#4f8cff; }
@@ -1297,8 +1298,8 @@ function toggleConsolVal(mode) {
  * ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
  */
 const APP_VERSION = '2.15.0';
-const APP_BUILD   = '2026-02-15T12:00:00+01:00';
-const APP_CHANGES = 'Sync multi-usuario + validaciones persistentes en Configuracion';
+const APP_BUILD   = '2026-02-15T13:00:00+01:00';
+const APP_CHANGES = 'Sync multi-usuario + validaciones en Config + fix IA rate limit';
 
 // Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 //  [M02] UTILITIES Ã¢â‚¬â€ Funciones auxiliares reutilizables
@@ -1419,7 +1420,7 @@ const CONFIG = Object.freeze({
   IVA_SUBTOTAL: 0.21,
   MAX_SHEET_ROWS: 10000,
   MAX_CONFIG_ROWS: 10000,
-  MAX_AI_DETAIL_ROWS: 200,
+  MAX_AI_DETAIL_ROWS: 50,
   MAX_AI_HISTORY: 20,
   DEFAULT_PAGE_SIZE: 100,
   PAGE_SIZES: [100, 500, 1000],
@@ -1452,6 +1453,8 @@ const CHANGELOG = [
       'Bot\u00F3n sync on/off en sidebar con indicador visual',
       'Pausa autom\u00E1tica del polling durante saves pendientes locales',
       'Delta-merge inteligente: solo aplica cambios en reservas no editadas localmente',
+      'Fix asistente IA: contexto reducido de ~25k a ~4k tokens (eliminadas secciones redundantes, detalle 50 filas compactas)',
+      'Retry autom\u00E1tico con backoff en rate limits (429) del asistente IA',
     ]
   },
   {
@@ -7379,31 +7382,29 @@ function _getAIKey() {
 }
 
 /**
- * @description Construye el contexto completo de datos para el asistente IA.
- * Incluye resÃƒÂºmenes por alojamiento, plataforma, mes, y detalle de reservas filtradas.
- * El contexto se envÃƒÂ­a como system prompt para que la IA responda con datos reales.
- * @returns {string} Texto con el contexto estructurado de todas las reservas
+ * @description Construye el contexto de datos para el asistente IA.
+ * Dos niveles: res\u00FAmenes siempre, detalle solo si hay pocas reservas filtradas.
+ * Objetivo: mantener el prompt < 6000 tokens para respetar rate limits.
+ * @returns {string} Texto con el contexto estructurado
  */
 function buildAIContext() {
   if (!allReservas || allReservas.length === 0) return 'No hay datos cargados.';
 
   let total = allReservas.length;
-  let byAloj = {}, byPlat = {}, byMes = {}, byEdificio = {}, byAtendido = {}, byTipo = {};
+  let byAloj = {}, byPlat = {}, byMes = {};
   let sumImporte = 0, sumLiq = 0, sumNoches = 0, sumBase = 0;
-  let sumComPlat = 0, sumComGTC = 0, sumLimp = 0, sumAmen = 0, sumPas = 0, sumCE = 0, sumCE2 = 0;
   let numVal = 0, numPend = 0;
 
   allReservas.forEach(function(r) {
     let c = getLiq(r);
     let n = r._nights || 0;
     sumImporte += c.total; sumLiq += c.totalLiq; sumNoches += n;
-    sumBase += c.baseSinIVA; sumComPlat += c.comPlat; sumComGTC += c.comGTC;
-    sumLimp += c.limp; sumAmen += c.amen; sumPas += c.comPas; sumCE += c.ceTotal; sumCE2 += c.ceSinIvaTotal;
+    sumBase += c.baseSinIVA;
     if (validated.has(r.idx)) numVal++; else numPend++;
 
     let a = r.alojamiento || 'Sin alojamiento';
-    if (!byAloj[a]) byAloj[a] = {n:0, imp:0, liq:0, noch:0, base:0};
-    byAloj[a].n++; byAloj[a].imp += c.total; byAloj[a].liq += c.totalLiq; byAloj[a].noch += n; byAloj[a].base += c.baseSinIVA;
+    if (!byAloj[a]) byAloj[a] = {n:0, imp:0, liq:0, noch:0};
+    byAloj[a].n++; byAloj[a].imp += c.total; byAloj[a].liq += c.totalLiq; byAloj[a].noch += n;
 
     let p = r.plataforma || 'Desconocida';
     if (!byPlat[p]) byPlat[p] = {n:0, imp:0, liq:0};
@@ -7415,99 +7416,50 @@ function buildAIContext() {
       if (!byMes[mes]) byMes[mes] = {n:0, imp:0, liq:0, noch:0};
       byMes[mes].n++; byMes[mes].imp += c.total; byMes[mes].liq += c.totalLiq; byMes[mes].noch += n;
     }
-
-    let ed = r.edificio || 'Sin edificio';
-    if (!byEdificio[ed]) byEdificio[ed] = {n:0, imp:0};
-    byEdificio[ed].n++; byEdificio[ed].imp += c.total;
-
-    let at = r.atendidoPor || 'Sin asignar';
-    if (!byAtendido[at]) byAtendido[at] = {n:0, imp:0};
-    byAtendido[at].n++; byAtendido[at].imp += c.total;
-
-    let tp = r.tipoReserva || 'Sin tipo';
-    if (!byTipo[tp]) byTipo[tp] = {n:0, imp:0};
-    byTipo[tp].n++; byTipo[tp].imp += c.total;
   });
 
   let f = function(v){ return v.toFixed(2); };
   let ctx = '=== RESUMEN GLOBAL ===\n';
   ctx += 'Total reservas: ' + total + ' (Validadas: ' + numVal + ', Pendientes: ' + numPend + ')\n';
-  ctx += 'Total noches: ' + sumNoches + '\n';
-  ctx += 'Importe total reservas (IVA inc.): ' + f(sumImporte) + ' EUR\n';
-  ctx += 'Base sin IVA total: ' + f(sumBase) + ' EUR\n';
-  ctx += 'Comision canal total: ' + f(sumComPlat) + ' EUR\n';
-  ctx += 'Comision GTC total: ' + f(sumComGTC) + ' EUR\n';
-  ctx += 'Limpieza total: ' + f(sumLimp) + ' EUR\n';
-  ctx += 'Amenities total: ' + f(sumAmen) + ' EUR\n';
-  ctx += 'Pasarela total: ' + f(sumPas) + ' EUR\n';
-  ctx += 'Conceptos Especiales total: ' + f(sumCE) + ' EUR\n';
-  ctx += 'Conceptos Especiales Sin IVA total: ' + f(sumCE2) + ' EUR\n';
-  ctx += 'Total a liquidar: ' + f(sumLiq) + ' EUR\n\n';
+  ctx += 'Noches: ' + sumNoches + ', Importe(IVA): ' + f(sumImporte) + ' EUR, Base: ' + f(sumBase) + ' EUR, A liquidar: ' + f(sumLiq) + ' EUR\n\n';
 
   ctx += '=== POR ALOJAMIENTO ===\n';
   Object.keys(byAloj).sort().forEach(function(a) {
     let d = byAloj[a];
-    ctx += a + ': ' + d.n + ' reservas, ' + d.noch + ' noches, importe(IVA) ' + f(d.imp) + ' EUR, base ' + f(d.base) + ' EUR, liquidar ' + f(d.liq) + ' EUR\n';
+    ctx += a + ': ' + d.n + 'res, ' + d.noch + 'noch, ' + f(d.imp) + ' EUR, liq ' + f(d.liq) + '\n';
   });
 
-  ctx += '\n=== POR PLATAFORMA/CANAL DE VENTA ===\n';
+  ctx += '\n=== POR PLATAFORMA ===\n';
   Object.keys(byPlat).sort().forEach(function(p) {
     let d = byPlat[p];
-    ctx += p + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR, liquidar ' + f(d.liq) + ' EUR\n';
+    ctx += p + ': ' + d.n + 'res, ' + f(d.imp) + ' EUR, liq ' + f(d.liq) + '\n';
   });
 
   ctx += '\n=== POR MES ===\n';
   Object.keys(byMes).sort().forEach(function(m) {
     let d = byMes[m];
-    ctx += m + ': ' + d.n + ' reservas, ' + d.noch + ' noches, importe(IVA) ' + f(d.imp) + ' EUR, liquidar ' + f(d.liq) + ' EUR\n';
+    ctx += m + ': ' + d.n + 'res, ' + d.noch + 'noch, ' + f(d.imp) + ' EUR, liq ' + f(d.liq) + '\n';
   });
 
-  ctx += '\n=== POR EDIFICIO ===\n';
-  Object.keys(byEdificio).sort().forEach(function(e) {
-    let d = byEdificio[e];
-    ctx += e + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR\n';
-  });
-
-  ctx += '\n=== POR ATENDIDO POR ===\n';
-  Object.keys(byAtendido).sort().forEach(function(a) {
-    let d = byAtendido[a];
-    ctx += a + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR\n';
-  });
-
-  ctx += '\n=== POR TIPO DE RESERVA ===\n';
-  Object.keys(byTipo).sort().forEach(function(t) {
-    let d = byTipo[t];
-    ctx += t + ': ' + d.n + ' reservas, importe(IVA) ' + f(d.imp) + ' EUR\n';
-  });
-
-  // Detail: use FILTERED rows (what user sees) instead of all, max 200
+  // Detalle: solo reservas filtradas, max 50, formato compacto
   let filtered = (typeof getFilteredSorted === 'function') ? getFilteredSorted() : allReservas;
-  let maxDetail = 200;
-  let detailRows = filtered.slice(0, maxDetail);
-  let filteredTotal = filtered.length;
-  ctx += '\n=== DETALLE RESERVAS ';
-  if (filteredTotal < total) {
-    ctx += '(FILTRO ACTIVO: ' + filteredTotal + ' de ' + total + ' reservas';
-  } else {
-    ctx += '(' + total + ' reservas totales';
-  }
-  ctx += ', mostrando ' + detailRows.length + ') ===\n';
-  ctx += 'ID | Localizador | Cliente | Alojamiento | Edificio | Plataforma | AtendidoPor | TipoReserva | Entrada | Salida | Noches | ImporteIVA | BaseSinIVA | ComCanal | ComGTC | Limpieza | Amenities | CE | Pasarela | Subtotal | ALiquidar | Estado\n';
-  for (let i = 0; i < detailRows.length; i++) {
-    const r = detailRows[i];
-    let c = getLiq(r);
-    ctx += [
-      r.id||'-', r.localizador||'-', (r.cliente||'-').substring(0,25), (r.alojamiento||'-').substring(0,20),
-      (r.edificio||'-').substring(0,15), r.plataforma||'-', (r.atendidoPor||'-').substring(0,15),
-      (r.tipoReserva||'-').substring(0,10),
-      r._fmtEntrada||'-', r._fmtSalida||'-', r._nights||0,
-      f(c.total), f(c.baseSinIVA), f(c.comPlat), f(c.comGTC),
-      f(c.limp), f(c.amen), f(c.ceTotal||0), f(c.comPas),
-      f(c.sub), f(c.totalLiq), validated.has(r.idx)?'Validada':'Pendiente'
-    ].join(' | ') + '\n';
-  }
-  if (filteredTotal > maxDetail) {
-    ctx += '... (' + (filteredTotal - maxDetail) + ' reservas mas no incluidas en detalle, pero SI contabilizadas en los resumenes globales)\n';
+  let maxDetail = Math.min(CONFIG.MAX_AI_DETAIL_ROWS, filtered.length);
+  if (maxDetail > 0) {
+    ctx += '\n=== DETALLE (' + maxDetail + ' de ' + filtered.length + ' filtradas, ' + total + ' totales) ===\n';
+    ctx += 'ID|Cliente|Aloj|Plat|Entrada|Salida|Noch|ImpIVA|Liq|Estado\n';
+    for (let i = 0; i < maxDetail; i++) {
+      const r = filtered[i];
+      let c = getLiq(r);
+      ctx += [
+        r.id||'-', (r.cliente||'-').substring(0,20), (r.alojamiento||'-').substring(0,18),
+        (r.plataforma||'-').substring(0,12),
+        r._fmtEntrada||'-', r._fmtSalida||'-', r._nights||0,
+        f(c.total), f(c.totalLiq), validated.has(r.idx)?'V':'P'
+      ].join('|') + '\n';
+    }
+    if (filtered.length > maxDetail) {
+      ctx += '...(' + (filtered.length - maxDetail) + ' m\u00E1s no incluidas, totales en res\u00FAmenes)\n';
+    }
   }
 
   return ctx;
@@ -7567,43 +7519,53 @@ async function sendAIMessage() {
     let context = buildAIContext();
     let sysPrompt = 'Eres el "Asistente Hist\u00F3rico Reservas" de la aplicaci\u00F3n Liquidaciones GTC, una herramienta de gesti\u00F3n de reservas vacacionales.\n\n' +
       'REGLAS ESTRICTAS:\n' +
-      '1. SOLO puedes responder bas\u00E1ndote en los datos proporcionados abajo. NUNCA inventes cifras, fechas, nombres de clientes, alojamientos ni importes.\n' +
-      '2. Si no tienes la informaci\u00F3n para responder, di: "No tengo esa informaci\u00F3n en los datos cargados."\n' +
+      '1. SOLO puedes responder bas\u00E1ndote en los datos proporcionados abajo. NUNCA inventes cifras.\n' +
+      '2. Si no tienes la informaci\u00F3n, di: "No tengo esa informaci\u00F3n en los datos cargados."\n' +
       '3. NUNCA des consejos financieros, legales ni fiscales. Solo reporta datos.\n' +
-      '4. Responde siempre en espa\u00F1ol.\n' +
-      '5. S\u00E9 conciso y directo. Usa cifras exactas con 2 decimales y el s\u00EDmbolo \u20AC.\n' +
-      '6. Cuando cites importes, especifica si son con IVA incluido o sin IVA (base).\n' +
-      '7. NUNCA accedas a informaci\u00F3n externa. Solo los datos de abajo.\n' +
-      '8. Si te preguntan algo que no son datos de reservas, responde amablemente que solo puedes responder sobre los datos de reservas cargados.\n' +
-      '9. Los res\u00FAmenes (por alojamiento, plataforma, mes, edificio, atendido por, tipo) son EXACTOS y cubren TODAS las reservas.\n' +
-      '10. El detalle individual muestra las reservas que el usuario tiene filtradas en pantalla (m\u00E1ximo 200). Los totales de los res\u00FAmenes siempre incluyen TODAS las reservas.\n' +
-      '11. Si el usuario necesita datos espec\u00EDficos de reservas individuales y hay muchas, sugi\u00E9rele que filtre en la tabla (por alojamiento, plataforma, mes...) y vuelva a preguntar, as\u00ED tendr\u00E1s el detalle exacto.\n\n' +
-      'CAMPOS DISPONIBLES POR RESERVA:\n' +
-      '- ID Reserva, Localizador, Cliente, Alojamiento, Edificio, Plataforma (canal de venta)\n' +
-      '- Atendido Por, Tipo Reserva, Origen Marketing, Observaciones\n' +
-      '- Fecha Entrada, Fecha Salida, Noches\n' +
-      '- Importe total (IVA inc.), Base sin IVA\n' +
-      '- Comisi\u00F3n Canal de Venta, Comisi\u00F3n GTC, Limpieza, Amenities, Conceptos Especiales, Pasarela\n' +
-      '- Subtotal, Total a Liquidar, Estado (Validada/Pendiente)\n\n' +
-      'DATOS ACTUALES:\n' + context;
+      '4. Responde en espa\u00F1ol salvo que el usuario pida otro idioma. S\u00E9 conciso.\n' +
+      '5. Usa cifras exactas con 2 decimales y \u20AC. Especifica si son con/sin IVA.\n' +
+      '6. Los res\u00FAmenes cubren TODAS las reservas. El detalle muestra las filtradas (max 50).\n' +
+      '7. Si necesita m\u00E1s detalle, sugiere filtrar en la tabla y volver a preguntar.\n\n' +
+      'DATOS:\n' + context;
 
     let messages = _aiHistory.slice(-CONFIG.MAX_AI_HISTORY);
 
-    let resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: CONFIG.AI_MODEL,
-        max_tokens: CONFIG.AI_MAX_TOKENS,
-        system: sysPrompt,
-        messages: messages
-      })
-    });
+    // Retry logic for rate limits (429)
+    let maxRetries = 2;
+    let resp = null;
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: CONFIG.AI_MODEL,
+          max_tokens: CONFIG.AI_MAX_TOKENS,
+          system: sysPrompt,
+          messages: messages
+        })
+      });
+
+      if (resp.status === 429 && attempt < maxRetries) {
+        // Rate limited \u2014 wait and retry
+        let waitSec = (attempt + 1) * 30; // 30s, 60s
+        let retryAfter = resp.headers.get('retry-after');
+        if (retryAfter) waitSec = Math.min(parseInt(retryAfter) || waitSec, 90);
+        _removeTyping();
+        _addAIMsg('info', '\u23F3 L\u00EDmite de API alcanzado. Reintentando en ' + waitSec + 's...');
+        await new Promise(function(resolve) { setTimeout(resolve, waitSec * 1000); });
+        // Remove the info message
+        const infoMsgs = document.querySelectorAll('.ai-msg.info');
+        infoMsgs.forEach(function(el) { el.remove(); });
+        _showTyping();
+        continue;
+      }
+      break; // success or non-retryable error
+    }
 
     _removeTyping();
 

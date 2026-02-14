@@ -438,14 +438,14 @@ function _buildEmailBody(propName, alojName, mes) {
           <span style="font-size:12px;color:#6b7280;">Green Tropical Coast, S.L.</span>
         </td>
         <td style="padding-left:16px;">
-          <span style="font-size:12px;color:#6b7280;">\u2709 david.fraidiaz@granadabeachgolf.com</span><br>
+          <span style="font-size:12px;color:#6b7280;">\u2709 <a href="mailto:david.fraidiaz@granadabeachgolf.com" style="color:#6b7280;text-decoration:none;">david.fraidiaz@granadabeachgolf.com</a></span><br>
           <span style="font-size:12px;color:#6b7280;">\u260E 608 626 555</span>
         </td>
       </tr>
     </table>
   </div>
   <div style="text-align:center;padding:16px;font-size:11px;color:#9ca3af;">
-    Este email ha sido generado autom\u00E1ticamente desde el sistema de liquidaciones GTC.
+    Este email ha sido generado autom\u00E1ticamente \u00B7 <a href="https://www.granadabeachgolf.com/" style="color:#d4a843;text-decoration:none;">granadabeachgolf.com</a>
   </div>
 </body>
 </html>`;

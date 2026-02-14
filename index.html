@@ -1277,9 +1277,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.11.4';
-const APP_BUILD   = '2026-02-14T21:45:00+01:00';
-const APP_CHANGES = 'Renombrado: Preliquidaci\u00F3n \u2192 Por Reserva, Detalle \u2192 Liquidaci\u00F3n Reserva';
+const APP_VERSION = '2.11.6';
+const APP_BUILD   = '2026-02-14T22:30:00+01:00';
+const APP_CHANGES = 'Fix PDF: protecci\u00F3n canvas 0px, min-height barras doradas, delay render';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1419,6 +1419,24 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.11.6',
+    date: '2026-02-14',
+    changes: [
+      'Fix PDF: proteccion contra canvas con dimension 0 (error createPattern)',
+      'PDF render: min-height forzado en barras doradas y logo para evitar colapso',
+      'PDF render: delay aumentado a 400ms para navegadores lentos',
+    ]
+  },
+  {
+    version: '2.11.5',
+    date: '2026-02-14',
+    changes: [
+      'Default comision plataforma: siempre la opcion mas alta (Booking 22% en vez de 15%)',
+      'Columna ID Reserva visible por defecto en la tabla',
+      'Sidebar: Preliquidacion > Por Reserva, Detalle > Liquidacion Reserva',
+    ]
+  },
   {
     version: '2.11.4',
     date: '2026-02-14',
@@ -3425,7 +3443,7 @@ function parseRate(v, min, max) {
   if (max !== undefined && n > max) n = max;
   return n;
 }
-function getDefaultForPlatform(plat) { const o = platformOptions[plat]; return o && o.length ? o[0] / 100 : 0.10; }
+function getDefaultForPlatform(plat) { const o = platformOptions[plat]; return o && o.length ? o[o.length-1] / 100 : 0.10; }
 
 /**
  * @description Calcula la liquidaciÃ³n completa de una reserva.
@@ -3702,7 +3720,7 @@ COLUMNS.forEach(c => { colVisibility[c.key] = true; });
 colVisibility['irpf'] = false;
 colVisibility['iva21'] = false;
 colVisibility['subtotal'] = false;
-colVisibility['idReserva'] = false;
+colVisibility['idReserva'] = true;
 colVisibility['localizador'] = false;
 colVisibility['fechaAlta'] = false;
 colVisibility['edificio'] = false;

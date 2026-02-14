@@ -167,6 +167,18 @@ async function _generatePdf(onProgress) {
     #_pdf-render-root .liq-header {
       overflow: hidden !important;
     }
+    #_pdf-render-root .liq-gold-bar-top {
+      min-height: 5px !important;
+      display: block !important;
+    }
+    #_pdf-render-root .liq-gold-bar-bottom {
+      min-height: 4px !important;
+      display: block !important;
+    }
+    #_pdf-render-root .liq-header-logo {
+      min-width: 1px !important;
+      min-height: 1px !important;
+    }
     #_pdf-render-root .no-print { display: none !important; }
     #_pdf-render-root .liq-sw { display: none !important; }
     #_pdf-render-root .liq-sel { display: none !important; }
@@ -185,7 +197,7 @@ async function _generatePdf(onProgress) {
   document.body.appendChild(container);
 
   // Small delay to let browser render and fonts apply
-  await new Promise(r => setTimeout(r, 200));
+  await new Promise(r => setTimeout(r, 400));
 
   try {
     const { jsPDF } = window.jspdf;
@@ -215,12 +227,19 @@ async function _generatePdf(onProgress) {
         logging: false,
         width: 1100,
         windowWidth: 1100,
+        removeContainer: true,
         onclone: (doc) => {
           // Ensure cloned doc has proper font rendering
           const root = doc.getElementById('_pdf-render-root');
           if (root) root.style.visibility = 'visible';
         }
       });
+
+      // Safety check: skip cards with zero-dimension canvas
+      if (!canvas.width || !canvas.height) {
+        console.warn('[Email] Card', ci, 'rendered with 0 dimensions, skipping');
+        continue;
+      }
 
       const imgData = canvas.toDataURL('image/jpeg', 0.92);
       const imgW = contentW;

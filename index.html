@@ -382,6 +382,23 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-total { display: flex; justify-content: space-between; align-items: center; padding: 22px 32px; background: linear-gradient(135deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 100%); color: #fff; }
 .liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.4); }
 .liq-total-value { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--c-primary); letter-spacing: -0.02em; font-style: italic; }
+
+/* ── Homity print card branding ── */
+.print-card, .print-summary { border: 3px solid var(--hm-gold); border-radius: 14px; overflow: hidden; position: relative; }
+.print-card .liq-header::after, .print-summary .liq-header::after { background: linear-gradient(90deg, var(--hm-gold-deep), var(--hm-gold), var(--hm-gold-bright), var(--hm-gold)) !important; }
+.hm-logo { font-family: var(--font-serif); font-size: 22px; font-weight: 400; color: rgba(255,255,255,0.55); line-height: 1.1; white-space: nowrap; }
+.hm-logo b { font-weight: 600; font-style: italic; color: rgba(255,255,255,0.7); }
+.hm-logo span { font-size: 16px; font-weight: 300; opacity: 0.5; margin-left: 4px; }
+.liq-row.bold.hm-bracket { position: relative; padding-left: 44px !important; margin-left: -32px; margin-right: -32px; padding-right: 32px !important; }
+.liq-row.bold.hm-bracket::before { content: ''; position: absolute; left: 20px; top: 6px; bottom: 6px; width: 3px; background: var(--hm-gold-deep); border-radius: 2px; }
+.liq-row.bold.hm-bracket::after { content: ''; position: absolute; left: 20px; top: 6px; width: 8px; height: calc(100% - 12px); border: 3px solid var(--hm-gold-deep); border-right: none; border-radius: 3px 0 0 3px; background: transparent; }
+.hm-total-bar { position: relative; }
+.hm-total-bar::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, var(--hm-gold-deep), var(--hm-gold), var(--hm-gold-bright), var(--hm-gold)); }
+.hm-total { display: flex; justify-content: space-between; align-items: center; padding: 20px 32px; background: linear-gradient(135deg, var(--hm-gold-deep), var(--hm-gold)); border-radius: 0 0 10px 10px; }
+.hm-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.8); }
+.hm-total-value { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: #0f1628; letter-spacing: -0.02em; font-style: italic; }
+.hm-footer { display: flex; justify-content: space-between; align-items: center; padding: 8px 24px; background: #f0f0eb; font-size: 10px; color: #9ca3af; }
+.hm-footer a { color: #9ca3af; text-decoration: none; }
 .liq-actions { display: flex; gap: 12px; justify-content: center; padding: 20px 32px; background: #f8f9fb; border-top: 1px solid var(--c-border-light); }
 .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
 .badge-liq { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -1267,9 +1284,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.11.2';
-const APP_BUILD   = '2026-02-14T12:00:00+01:00';
-const APP_CHANGES = 'Nav: Preliquidaci\u00F3n renombrado a Por Reserva';
+const APP_VERSION = '2.12.0';
+const APP_BUILD   = '2026-02-14T12:30:00+01:00';
+const APP_CHANGES = 'PDF Homity branding: borde dorado, brackets, logo, footer granadabeachgolf.com';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1409,6 +1426,16 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.12.0',
+    date: '2026-02-14',
+    changes: [
+      'PDF Homity branding restaurado: borde dorado, brackets en filas bold, logo homity holidays',
+      'Total a liquidar con fondo dorado en PDF',
+      'Footer con mes de liquidacion + link granadabeachgolf.com',
+      'Nav: Preliquidacion renombrado a Por Reserva',
+    ]
+  },
   {
     version: '2.11.2',
     date: '2026-02-14',
@@ -6168,15 +6195,19 @@ function buildPrintCards() {
 
     const rowsHtml = rows.map(row => {
       if (row.div) return '<div class="liq-divider"></div>';
-      const cl = row.bold ? ' bold' : '';
+      const cl = row.bold ? ' bold hm-bracket' : '';
       const vc = row.neg ? 'neg' : row.pos ? 'pos' : '';
       const d = row.v < 0 ? `- ${fmt(Math.abs(row.v))}` : fmt(row.v);
       return `<div class="liq-row${cl}"><span>${row.l}</span><span class="${vc}">${d} &#8364;</span></div>`;
     }).join('');
 
+    const _hmLogo = '<div class="hm-logo"><b>h\u00F4mity</b> <span>holidays</span></div>';
+    const _hmMes = (function(){const M=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];try{if(typeof _mpSelYears!=='undefined'&&_mpSelYears.size>0){const y=[..._mpSelYears].sort()[0];if(typeof _mpSelMonths!=='undefined'&&_mpSelMonths.size===1)return M[[..._mpSelMonths][0]]+' '+y;return y.toString();}}catch(e){}const n=new Date();return M[n.getMonth()]+' '+n.getFullYear();})();
+    const _hmFooter = `<div class="hm-footer"><span>Liquidaci\u00F3n generada autom\u00E1ticamente \u00B7 ${_hmMes}</span><a href="https://www.granadabeachgolf.com/">granadabeachgolf.com</a></div>`;
+
     return `<div class="liq-container print-card" style="margin-bottom:24px;">
       <div class="liq-header">
-        <div class="liq-header-top"><div><div class="type">Liquidaci\u00F3n ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div></div>
+        <div class="liq-header-top"><div><div class="type">Liquidaci\u00F3n ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div>${_hmLogo}</div>
         <div class="liq-meta-strip">
           <div class="liq-meta-item"><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
           <div class="liq-meta-item"><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
@@ -6187,7 +6218,8 @@ function buildPrintCards() {
         </div>
       </div>
       <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">${rowsHtml}</div>
-      <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} &#8364;</span></div></div>
+      <div class="hm-total-bar"><div class="hm-total"><span class="hm-total-label">Total a liquidar</span><span class="hm-total-value">${fmt(c.totalLiq)} &#8364;</span></div></div>
+      ${_hmFooter}
     </div>`;
   }).join('');
 
@@ -6209,9 +6241,12 @@ function buildPrintCards() {
   const _pSplitHtml = _pIsSplit ? `<div class="liq-divider"></div>
       <div class="liq-row" style="color:#7c3aed;"><span>GTC retiene (${(GTC_SPLIT_RATE*100).toFixed(0)}%)</span><span>${fmt(_pGtcSplit)} &#8364;</span></div>
       <div class="liq-row bold" style="color:#16a34a;"><span>Propietario recibe (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span>${fmt(_pOwnerBase)} &#8364;</span></div>` : '';
+  const _hmLogoS = '<div class="hm-logo"><b>h\u00F4mity</b> <span>holidays</span></div>';
+  const _hmMesS = (function(){const M=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];try{if(typeof _mpSelYears!=='undefined'&&_mpSelYears.size>0){const y=[..._mpSelYears].sort()[0];if(typeof _mpSelMonths!=='undefined'&&_mpSelMonths.size===1)return M[[..._mpSelMonths][0]]+' '+y;return y.toString();}}catch(e){}const n=new Date();return M[n.getMonth()]+' '+n.getFullYear();})();
+  const _hmFooterS = `<div class="hm-footer"><span>Liquidaci\u00F3n generada autom\u00E1ticamente \u00B7 ${_hmMesS}</span><a href="https://www.granadabeachgolf.com/">granadabeachgolf.com</a></div>`;
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-header">
-      <div class="liq-header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
+      <div class="liq-header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div>${_hmLogoS}</div>
       <div class="liq-meta-strip">
         <div class="liq-meta-item"><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${a.edificio}</div></div>
         <div class="liq-meta-item"><div class="liq-meta-label">N\u00BA Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
@@ -6219,15 +6254,16 @@ function buildPrintCards() {
       </div>
     </div>
     <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">
-      <div class="liq-row bold"><span>Subtotal Reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
+      <div class="liq-row bold hm-bracket"><span>Subtotal Reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
       ${_pSplitHtml}
       ${_printDedHtml}
       <div class="liq-divider"></div>
-      <div class="liq-row bold"><span>Subtotal Final Mes</span><span>${fmt(_pAdjSub)} &#8364;</span></div>
+      <div class="liq-row bold hm-bracket"><span>Subtotal Final Mes</span><span>${fmt(_pAdjSub)} &#8364;</span></div>
       <div class="liq-row"><span>Retenci\u00F3n IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
       <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>
-    <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar${_pIsSplit ? ' \u2014 Propietario' : ''}</span><span class="liq-total-value">${fmt(_pAdjLiq)} &#8364;</span></div></div>
+    <div class="hm-total-bar"><div class="hm-total"><span class="hm-total-label">Total a liquidar${_pIsSplit ? ' \u2014 Propietario' : ''}</span><span class="hm-total-value">${fmt(_pAdjLiq)} &#8364;</span></div></div>
+    ${_hmFooterS}
   </div>`;
 
   return { cardsHtml, summaryHtml };

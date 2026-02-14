@@ -529,7 +529,7 @@ function handleEmailLiquidacion() {
       <div class="email-modal-body">
         <div class="email-modal-field">
           <label>Destinatario (${_escHtml(propName)})</label>
-          <input type="email" id="email-to" value="${_escHtml(propEmail)}" placeholder="email@ejemplo.com" autocomplete="email">
+          <input type="text" id="email-to" value="${_escHtml(propEmail)}" placeholder="email@ejemplo.com, otro@ejemplo.com" autocomplete="email">
         </div>
         <div class="email-modal-field">
           <label>CC <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:#9ca3af;">\u2014 copia (opcional, separar con comas)</span></label>
@@ -604,18 +604,21 @@ async function _doSendEmail(alojName, propName, mes, filename) {
   const ccList = ccRaw ? ccRaw.split(',').map(e => e.trim()).filter(e => e) : [];
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // Validate TO email
+  // Validate TO email(s) - accepts comma-separated
   if (!to) {
     toInput.style.borderColor = '#ef4444';
     toInput.focus();
     return;
   }
-  if (!emailRegex.test(to)) {
+  const toList = to.split(',').map(e => e.trim()).filter(e => e);
+  const badTo = toList.find(e => !emailRegex.test(e));
+  if (badTo) {
     toInput.style.borderColor = '#ef4444';
-    _setStatus(statusEl, 'error', 'Email no v\u00E1lido. Revisa la direcci\u00F3n.');
+    _setStatus(statusEl, 'error', 'Email no v\u00E1lido: ' + _escHtml(badTo));
     toInput.focus();
     return;
   }
+  const toFinal = toList.join(', ');
 
   // Validate CC emails
   if (ccList.length > 0) {
@@ -650,7 +653,7 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     });
 
     // Step 2: Build HTML body
-    _setStatus(statusEl, 'sending', '&#9203; Enviando email a ' + _escHtml(to) + (cc ? ' (CC: ' + _escHtml(cc) + ')' : '') + '...');
+    _setStatus(statusEl, 'sending', '&#9203; Enviando email a ' + _escHtml(toFinal) + (cc ? ' (CC: ' + _escHtml(cc) + ')' : '') + '...');
     sendBtn.textContent = 'Enviando...';
 
     let htmlBody = _buildEmailBody(propName, alojName, mes);
@@ -667,23 +670,23 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     }
 
     // Step 3: Send via Gmail
-    await _sendGmail({ to, cc, subject, htmlBody, pdfBlob, filename });
+    await _sendGmail({ to: toFinal, cc, subject, htmlBody, pdfBlob, filename });
 
-    // Step 4: Save email if checkbox checked
-    if (saveCheck?.checked && to) {
+    // Step 4: Save email if checkbox checked (save first address only)
+    if (saveCheck?.checked && toList[0]) {
       try {
-        await savePropietarioEmail(alojName, to);
+        await savePropietarioEmail(alojName, toList[0]);
       } catch (e) {
         console.warn('[Email] Could not save email address:', e);
       }
     }
 
     // Success
-    _setStatus(statusEl, 'success', `&#10004; Email enviado correctamente a <strong>${_escHtml(to)}</strong>`);
+    _setStatus(statusEl, 'success', `&#10004; Email enviado correctamente a <strong>${_escHtml(toFinal)}</strong>`);
     sendBtn.textContent = '\u00A1Enviado! \u2714';
     sendBtn.style.background = 'linear-gradient(135deg, #1D4B56, #306472)';
     sendBtn.style.color = '#E0AE00';
-    showToast('Email enviado a ' + to, 'success');
+    showToast('Email enviado a ' + toFinal, 'success');
 
     // Auto-close after 2.5 seconds
     setTimeout(closeEmailModal, 2500);

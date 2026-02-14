@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════════
- *  EMAIL MODULE v2.1.0 — PDF generation + Gmail sending for liquidaciones
+ *  EMAIL MODULE v2.0.0 — PDF generation + Gmail sending for liquidaciones
  * ═══════════════════════════════════════════════════════════════════════════════
  *
  *  Satellite file for index.html (Liquidaciones GTC).
@@ -13,7 +13,7 @@
  *    - html2canvas 1.4.1
  *    - jsPDF 2.5.2
  *
- *  @version 2.1.0
+ *  @version 2.0.1
  *  @date 2026-02-14
  */
 
@@ -419,60 +419,33 @@ function _buildEmailBody(propName, alojName, mes) {
   return `<!DOCTYPE html>
 <html>
 <head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:20px;background:#e8ecf0;font-family:'Roboto',Arial,Helvetica,sans-serif;color:#1D4B56;">
-  <div style="max-width:600px;margin:0 auto;">
-    <!-- Top gold accent bar -->
-    <div style="height:5px;background:#E0AE00;border-radius:8px 8px 0 0;"></div>
-    <!-- Header with logo -->
-    <div style="background:#1D4B56;padding:28px 36px 24px;">
-      <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td>
-        <span style="font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:300;color:#E0AE00;letter-spacing:0.01em;">h\u00F4mity</span>
-        <span style="font-family:Georgia,'Times New Roman',serif;font-size:14px;font-weight:300;color:#7191AC;letter-spacing:0.08em;margin-left:6px;">holidays</span>
-      </td></tr></table>
-    </div>
-    <!-- Info band -->
-    <div style="background:#163E47;padding:18px 36px;">
-      <table cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
-        <td style="vertical-align:middle;">
-          <div style="font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:600;color:#FFFFFF;letter-spacing:0.01em;">${_escHtml(alojName)}</div>
+<body style="font-family:Arial,Helvetica,sans-serif;color:#1f2937;line-height:1.6;max-width:600px;margin:0 auto;padding:20px;">
+  <div style="background:linear-gradient(135deg,#0f1628,#1a2744);color:#fff;padding:24px 28px;border-radius:12px 12px 0 0;">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;opacity:0.7;margin-bottom:4px;">Liquidaci\u00F3n Mensual</div>
+    <div style="font-size:22px;font-weight:800;">${_escHtml(alojName)}</div>
+    <div style="font-size:13px;opacity:0.6;margin-top:4px;">${_escHtml(mes)}</div>
+  </div>
+  <div style="background:#f8f9fb;padding:24px 28px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px;">
+    <p>Estimado/a <strong>${_escHtml(propName)}</strong>,</p>
+    <p>Adjunto encontrar\u00E1 la liquidaci\u00F3n correspondiente a <strong>${_escHtml(mes)}</strong> para el alojamiento <strong>${_escHtml(alojName)}</strong>.</p>
+    <p>El documento PDF adjunto contiene el desglose completo de la liquidaci\u00F3n con todas las reservas y conceptos del periodo.</p>
+    <p>Si tiene alguna duda o necesidad de aclaraci\u00F3n sobre alg\u00FAn concepto, no dude en ponerse en contacto con nosotros.</p>
+    <p style="margin-top:24px;">Un cordial saludo,</p>
+    <table style="margin-top:16px;border-top:2px solid #d4a843;padding-top:16px;" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="padding-right:16px;border-right:2px solid #d4a843;">
+          <strong style="font-size:15px;color:#0f1628;">David Fraidiaz</strong><br>
+          <span style="font-size:12px;color:#6b7280;">Green Tropical Coast, S.L.</span>
         </td>
-        <td style="text-align:right;vertical-align:middle;">
-          <div style="display:inline-block;background:rgba(224,174,0,0.15);border:1px solid rgba(224,174,0,0.3);border-radius:6px;padding:6px 14px;">
-            <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:#E8BE4B;line-height:1;">Liquidaci\u00F3n</div>
-            <div style="font-family:Georgia,'Times New Roman',serif;font-size:15px;font-weight:500;color:#FFFFFF;margin-top:2px;">${_escHtml(mes)}</div>
-          </div>
+        <td style="padding-left:16px;">
+          <span style="font-size:12px;color:#6b7280;">\u2709 david.fraidiaz@granadabeachgolf.com</span><br>
+          <span style="font-size:12px;color:#6b7280;">\u260E 608 626 555</span>
         </td>
-      </tr></table>
-    </div>
-    <!-- Body -->
-    <div id="email-body-content" style="background:#FFFFFF;padding:32px 36px;">
-      <p style="margin:0 0 16px;font-size:14px;color:#1D4B56;line-height:1.7;">Estimado/a <strong>${_escHtml(propName)}</strong>,</p>
-      <p style="margin:0 0 16px;font-size:14px;color:#1D4B56;line-height:1.7;">Adjunto encontrar\u00E1 la liquidaci\u00F3n correspondiente a <strong>${_escHtml(mes)}</strong> para el alojamiento <strong>${_escHtml(alojName)}</strong>.</p>
-      <!-- Highlight box -->
-      <div style="background:#FBF4E8;border-left:3px solid #E0AE00;border-radius:0 8px 8px 0;padding:16px 20px;margin:20px 0;">
-        <p style="margin:0;font-size:13px;color:#4D7A97;line-height:1.6;">&#128206; El documento <strong style="color:#1D4B56;">PDF adjunto</strong> contiene el desglose completo de la liquidaci\u00F3n con todas las reservas y conceptos del periodo.</p>
-      </div>
-      <p style="margin:16px 0 0;font-size:14px;color:#4D7A97;line-height:1.7;">Si tiene alguna duda o necesidad de aclaraci\u00F3n sobre alg\u00FAn concepto, no dude en ponerse en contacto con nosotros.</p>
-      <!-- Signature -->
-      <div style="margin-top:28px;padding-top:20px;border-top:1px solid #D1E8E6;">
-        <p style="margin:0;font-size:14px;color:#1D4B56;">Un cordial saludo,</p>
-        <table cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;"><tr>
-          <td style="padding-right:14px;border-right:2px solid #E0AE00;">
-            <div style="font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:600;color:#1D4B56;">Homity Holidays</div>
-            <div style="font-size:12px;color:#7191AC;margin-top:2px;">Green Tropical Coast, S.L.</div>
-          </td>
-          <td style="padding-left:14px;">
-            <div style="font-size:12px;color:#7191AC;line-height:1.6;">608 626 555<br>hola@homityholidays.com</div>
-          </td>
-        </tr></table>
-      </div>
-    </div>
-    <!-- Footer -->
-    <div id="email-footer" style="background:#EFF1F6;padding:14px 36px;border-top:1px solid #D5DAE5;text-align:center;">
-      <div style="font-size:11px;color:#ACB8C0;line-height:1.5;">Este email ha sido generado autom\u00E1ticamente \u00B7 <span style="color:#7191AC;">homityholidays.com</span></div>
-    </div>
-    <!-- Bottom gold accent bar -->
-    <div style="height:4px;background:#E0AE00;border-radius:0 0 8px 8px;"></div>
+      </tr>
+    </table>
+  </div>
+  <div style="text-align:center;padding:16px;font-size:11px;color:#9ca3af;">
+    Este email ha sido generado autom\u00E1ticamente desde el sistema de liquidaciones GTC.
   </div>
 </body>
 </html>`;
@@ -630,14 +603,15 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     let htmlBody = _buildEmailBody(propName, alojName, mes);
     const extra = (extraMsg?.value || '').trim();
     if (extra) {
-      // Insert custom message before the signature divider
-      const sigMarker = '<div style="margin-top:28px;padding-top:20px;border-top:1px solid #D1E8E6;">';
-      const customBlock = `<div style="background:#FBF4E8;border:1px solid #E8BE4B;border-radius:8px;padding:14px 18px;margin-top:20px;">
-          <div style="font-size:11px;text-transform:uppercase;color:#1D4B56;font-weight:700;margin-bottom:4px;letter-spacing:0.05em;">Nota adicional</div>
-          <div style="font-size:13px;color:#4D7A97;line-height:1.6;">${_escHtml(extra).replace(/\n/g, '<br>')}</div>
+      // Insert custom message before footer
+      const footerMarker = '<div style="text-align:center;padding:16px';
+      const customBlock = `<div style="background:#fffbeb;border:1px solid #fbbf24;border-radius:8px;padding:14px 18px;margin-top:16px;">
+          <div style="font-size:11px;text-transform:uppercase;color:#92400e;font-weight:700;margin-bottom:4px;">Nota adicional</div>
+          <div style="color:#78350f;">${_escHtml(extra).replace(/\n/g, '<br>')}</div>
         </div>
-      `;
-      htmlBody = htmlBody.replace(sigMarker, customBlock + sigMarker);
+      </div>\n  `;
+      htmlBody = htmlBody.replace('</div>\n  <div style="text-align:center;padding:16px',
+        customBlock + '<div style="text-align:center;padding:16px');
     }
 
     // Step 3: Send via Gmail
@@ -655,8 +629,7 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     // Success
     _setStatus(statusEl, 'success', `&#10004; Email enviado correctamente a <strong>${_escHtml(to)}</strong>`);
     sendBtn.textContent = '\u00A1Enviado! \u2714';
-    sendBtn.style.background = 'linear-gradient(135deg, #1D4B56, #306472)';
-    sendBtn.style.color = '#E0AE00';
+    sendBtn.style.background = 'linear-gradient(135deg, #16a34a, #22c55e)';
     showToast('Email enviado a ' + to, 'success');
 
     // Auto-close after 2.5 seconds

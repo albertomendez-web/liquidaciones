@@ -41,19 +41,19 @@
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
   /* Homity palette */
-  --hm-gold: #E0AE00;
-  --hm-gold-bright: #E8BE4B;
-  --hm-gold-deep: #C49A00;
+  --hm-gold: #d4a843;
+  --hm-gold-bright: #e0b94f;
+  --hm-gold-deep: #b8912e;
   --hm-gold-muted: #c9a64e;
-  --hm-gold-bg: rgba(224,174,0,0.07);
-  --hm-gold-bg2: rgba(224,174,0,0.12);
-  --hm-gold-border: rgba(224,174,0,0.25);
-  --hm-teal: #1D4B56;
-  --hm-teal-dark: #163E47;
-  --hm-teal-light: #306472;
-  --hm-blue-gray: #7191AC;
-  --hm-cream: #FBF4E8;
-  --hm-cream-warm: #FCF5E9;
+  --hm-gold-bg: rgba(212,168,67,0.07);
+  --hm-gold-bg2: rgba(212,168,67,0.12);
+  --hm-gold-border: rgba(212,168,67,0.25);
+  --hm-slate: #6b8a8f;
+  --hm-slate-dark: #4a6b72;
+  --hm-slate-deep: #2e4a52;
+  --hm-slate-night: #1c3038;
+  --hm-cream: #faf7f2;
+  --hm-cream-warm: #f5f0e8;
   --hm-neg: #c0392b;
   --hm-pos: #27ae60;
   /* Spacing */
@@ -247,11 +247,11 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* CONSOLIDATED LIQUIDACION */
 .consol-container { max-width: 100%; margin: 0 auto; }
-.consol-header { background: var(--hm-teal); color: #fff; border-radius: 14px 14px 0 0; position: relative; overflow: hidden; }
-.consol-header::after { content: none; }
-.consol-header::before { content: none; }
+.consol-header { background: linear-gradient(135deg, #0f1628 0%, #1a2744 60%, #1e3055 100%); color: #fff; border-radius: 14px 14px 0 0; position: relative; overflow: hidden; }
+.consol-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff, var(--c-primary)); }
+.consol-header::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
 .consol-header .header-top { padding: 28px 32px 0; position: relative; z-index: 1; }
-.consol-header .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--hm-gold-bright); margin-bottom: 6px; }
+.consol-header .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--c-primary); margin-bottom: 6px; }
 .consol-header .name { font-size: 28px; font-weight: 800; font-family: var(--font-display); letter-spacing: -0.02em; }
 .cd-progress-wrap { padding: 0 32px; position: relative; z-index: 1; }
 .cd-progress { display: flex; align-items: center; gap: 12px; padding: 10px 0 14px; }
@@ -259,10 +259,10 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .cd-progress-fill { height: 100%; border-radius: 3px; transition: width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
 .cd-progress-text { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.5); white-space: nowrap; }
 .cd-progress-text strong { color: rgba(255,255,255,0.85); }
-.consol-meta-strip { display: flex; gap: 0; background: var(--hm-teal-dark); position: relative; z-index: 1; }
+.consol-meta-strip { display: flex; gap: 0; background: rgba(0,0,0,0.15); position: relative; z-index: 1; }
 .consol-meta-strip .consol-meta-item { flex: 1; padding: 14px 32px; border-right: 1px solid rgba(255,255,255,0.06); }
 .consol-meta-strip .consol-meta-item:last-child { border-right: none; }
-.consol-meta-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hm-blue-gray); margin-bottom: 4px; }
+.consol-meta-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-primary); opacity: 0.8; margin-bottom: 4px; }
 .consol-meta-value { font-weight: 600; font-size: 14px; color: rgba(255,255,255,0.9); }
 .consol-meta-value.alert { color: #ef5350; }
 .consol-body { background: #fff; border-radius: 0 0 14px 14px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
@@ -309,8 +309,8 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .cd-split-mini-header { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #7c3aed; margin-bottom: 6px; }
 .cd-split-mini-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 12px; color: var(--c-text-secondary); }
 /* Total hero */
-.cd-total-hero { text-align: center; padding: 32px 24px; background: var(--hm-cream); border-radius: var(--radius-lg); border: 1.5px solid var(--hm-gold-border); margin: 16px 0; }
-.cd-total-hero-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--hm-teal); margin-bottom: 8px; }
+.cd-total-hero { text-align: center; padding: 32px 24px; background: linear-gradient(135deg,#f8faff,#eef3ff); border-radius: var(--radius-lg); border: 1.5px solid #d6e4ff; margin: 16px 0; }
+.cd-total-hero-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--c-primary-dark); margin-bottom: 8px; }
 .cd-total-hero-amount { font-size: 36px; font-weight: 800; color: var(--c-text); letter-spacing: -0.02em; line-height: 1; }
 .cd-total-hero-amount .eur { font-size: 24px; font-weight: 600; color: var(--c-text-secondary); }
 /* Generate button */
@@ -319,11 +319,11 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .cd-btn-generate.disabled { background: #e0e4ea; color: #9ca3af; box-shadow: none; cursor: not-allowed; }
 .cd-btn-generate.disabled:hover { transform: none; }
 /* Full-width total bar */
-.cd-total-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px 32px; background: var(--hm-teal); color: #fff; position: relative; border-left: 5px solid var(--hm-gold); }
-.cd-total-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--hm-gold); }
-.cd-total-bar-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--hm-blue-gray); }
+.cd-total-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px 32px; background: linear-gradient(135deg, var(--c-sidebar-start), var(--c-sidebar-end)); color: #fff; position: relative; }
+.cd-total-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff); }
+.cd-total-bar-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.4); }
 .cd-total-bar-label strong { display: block; font-size: 14px; color: #fff; letter-spacing: normal; margin-top: 2px; }
-.cd-total-bar-amount { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; font-family: Georgia, 'Times New Roman', serif; color: var(--hm-gold); }
+.cd-total-bar-amount { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; font-family: var(--font-display); }
 /* Legacy compat */
 .consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 15px; font-weight: 700; }
 .consol-total { display: none; }
@@ -335,22 +335,17 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* LIQUIDACI\u00D3N INDIVIDUAL */
 .liq-container { max-width: 720px; margin: 0 auto; background: var(--c-surface); border-radius: var(--radius-lg); box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; }
-.liq-gold-bar-top { height: 5px; background: var(--hm-gold); border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
-.liq-gold-bar-bottom { height: 4px; background: var(--hm-gold); }
-.liq-header { background: var(--hm-teal); color: #fff; position: relative; overflow: hidden; }
-.liq-header::after { content: none; }
-.liq-header::before { content: none; }
-.liq-header .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--hm-gold-bright); margin-bottom: 6px; }
+.liq-header { background: linear-gradient(135deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 60%, #1e3055 100%); color: #fff; position: relative; overflow: hidden; }
+.liq-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff, var(--c-primary)); }
+.liq-header::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; }
+.liq-header .type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--c-primary); margin-bottom: 6px; }
 .liq-header .name { font-size: 24px; font-weight: 800; font-family: var(--font-display); letter-spacing: -0.02em; line-height: 1.15; }
 .liq-header-top { display: flex; justify-content: space-between; align-items: flex-start; padding: 24px 32px 16px; position: relative; z-index: 1; }
-.liq-header-logo { font-family: Georgia, 'Times New Roman', serif; }
-.liq-header-logo .logo-main { font-size: 24px; font-weight: 300; color: var(--hm-gold); letter-spacing: 0.01em; }
-.liq-header-logo .logo-sub { font-size: 11px; font-weight: 300; color: var(--hm-blue-gray); letter-spacing: 0.08em; margin-left: 4px; }
-.liq-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--hm-teal-dark); position: relative; z-index: 1; }
+.liq-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: rgba(0,0,0,0.15); position: relative; z-index: 1; }
 .liq-meta-strip .liq-meta-item { padding: 12px 32px; border-right: 1px solid rgba(255,255,255,0.06); }
 .liq-meta-strip .liq-meta-item:nth-child(3n) { border-right: none; }
 .liq-meta-strip .liq-meta-item:nth-child(n+4) { border-top: 1px solid rgba(255,255,255,0.05); }
-.liq-meta-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hm-blue-gray); margin-bottom: 3px; }
+.liq-meta-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--c-primary); opacity: 0.8; margin-bottom: 3px; }
 .liq-meta-value { font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.9); }
 .liq-meta-value.sm { font-size: 11px; }
 .liq-sec { padding: 20px 32px; }
@@ -358,14 +353,14 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-sec-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--c-text-muted); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--c-border-light); }
 .liq-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; font-size: 13px; color: var(--c-text-secondary); }
 .liq-row + .liq-row { border-top: 1px solid #f5f6f8; }
-.liq-row.bold { font-weight: 700; font-size: 14px; padding: 12px 0; margin: 0 -32px; padding-left: 32px; padding-right: 32px; background: #F5F8FA; border-left: 3px solid var(--hm-teal); color: var(--c-text); }
-.liq-row .neg { color: #D04545; }
-.liq-row .pos { color: #2E7D32; }
+.liq-row.bold { font-weight: 700; font-size: 14px; padding: 12px 0; margin: 0 -32px; padding-left: 32px; padding-right: 32px; background: #f8f9fb; color: var(--c-text); }
+.liq-row .neg { color: var(--c-error); }
+.liq-row .pos { color: var(--c-success); }
 .liq-row .liq-val { font-variant-numeric: tabular-nums; font-size: 13px; font-weight: 600; min-width: 110px; text-align: right; white-space: nowrap; }
-.liq-divider { height: 1px; background: linear-gradient(90deg, var(--hm-gold) 0%, #D1E8E6 30%, transparent 100%); margin: 6px 0; }
+.liq-divider { height: 1px; background: var(--c-border-light); margin: 6px 0; }
 .liq-sel { font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--c-text); background: #f0f2f5; border: 1px solid var(--c-border); border-radius: 4px; padding: 3px 10px; cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; margin-left: 4px; transition: border-color 0.2s; text-align: center; text-align-last: center; }
 .liq-sel:focus { border-color: #4f8cff; box-shadow: 0 0 0 2px rgba(79,140,255,0.08); }
-.liq-subtotal-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 32px; margin: 0 -32px; font-size: 14px; font-weight: 700; background: var(--hm-cream); border-top: 1.5px solid var(--hm-gold); border-bottom: 1.5px solid var(--hm-gold); color: var(--c-text); }
+.liq-subtotal-bar { display: flex; justify-content: space-between; align-items: center; padding: 12px 32px; margin: 0 -32px; font-size: 14px; font-weight: 700; background: linear-gradient(90deg,#eef3ff,#f8f9fb); border-top: 1.5px solid var(--c-primary); border-bottom: 1.5px solid var(--c-primary); color: var(--c-text); }
 /* Pasarela integrated row */
 .liq-pas-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; font-size: 13px; border-top: 1px solid #f5f6f8; }
 .liq-pas-left { display: flex; align-items: center; gap: 10px; flex: 1; }
@@ -383,10 +378,10 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-ce2-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--c-primary); margin-right: 6px; vertical-align: middle; }
 /* Total */
 .liq-total-bar { position: relative; }
-.liq-total-bar::before { content: ''; display: block; height: 5px; background: var(--hm-gold); }
-.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 22px 32px; background: var(--hm-teal); color: #fff; border-left: 5px solid var(--hm-gold); }
-.liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--hm-blue-gray); }
-.liq-total-value { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: var(--hm-gold); letter-spacing: -0.02em; }
+.liq-total-bar::before { content: ''; display: block; height: 3px; background: linear-gradient(90deg, var(--c-primary-dark), var(--c-primary), #8ab4ff, var(--c-primary)); }
+.liq-total { display: flex; justify-content: space-between; align-items: center; padding: 22px 32px; background: linear-gradient(135deg, var(--c-sidebar-start) 0%, var(--c-sidebar-end) 100%); color: #fff; }
+.liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.4); }
+.liq-total-value { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--c-primary); letter-spacing: -0.02em; font-style: italic; }
 .liq-actions { display: flex; gap: 12px; justify-content: center; padding: 20px 32px; background: #f8f9fb; border-top: 1px solid var(--c-border-light); }
 .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
 .badge-liq { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -435,16 +430,16 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .email-modal-field { margin-bottom: 16px; }
 .email-modal-field label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; margin-bottom: 6px; }
 .email-modal-field input, .email-modal-field textarea { width: 100%; padding: 10px 14px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 14px; font-family: var(--font-body); transition: border-color 0.2s; outline: none; box-sizing: border-box; }
-.email-modal-field input:focus, .email-modal-field textarea:focus { border-color: #1D4B56; }
+.email-modal-field input:focus, .email-modal-field textarea:focus { border-color: #3b82f6; }
 .email-modal-field textarea { resize: vertical; min-height: 80px; }
 .email-modal-footer { padding: 0 28px 24px; display: flex; gap: 10px; justify-content: flex-end; }
-.email-modal-footer .btn-send { padding: 10px 24px; border-radius: 10px; background: linear-gradient(135deg, #1D4B56, #306472); color: #fff; font-weight: 700; font-size: 14px; border: none; cursor: pointer; transition: all 0.2s; }
-.email-modal-footer .btn-send:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(29,75,86,0.3); }
-.email-modal-footer .btn-send:disabled { background: #163E47; color: #E8BE4B; cursor: wait; transform: none; box-shadow: none; }
+.email-modal-footer .btn-send { padding: 10px 24px; border-radius: 10px; background: linear-gradient(135deg, #1976d2, #42a5f5); color: #fff; font-weight: 700; font-size: 14px; border: none; cursor: pointer; transition: all 0.2s; }
+.email-modal-footer .btn-send:hover { transform: translateY(-1px); }
+.email-modal-footer .btn-send:disabled { background: #e0e4ea; color: #9ca3af; cursor: wait; transform: none; }
 .email-modal-footer .btn-cancel { padding: 10px 24px; border-radius: 10px; background: #f3f4f6; color: #374151; font-weight: 600; font-size: 14px; border: none; cursor: pointer; }
 .email-status { padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-top: 12px; display: none; }
-.email-status.sending { display: block; background: #FBF4E8; color: #1D4B56; border: 1px solid rgba(224,174,0,0.3); }
-.email-status.success { display: block; background: #E8F5E2; color: #1D4B56; border: 1px solid #9ED48E; }
+.email-status.sending { display: block; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.email-status.success { display: block; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
 .email-status.error { display: block; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 @media print {
   @page { size: A4 landscape; margin: 10mm 12mm; }
@@ -476,9 +471,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   /* â”€â”€ Individual header â”€â”€ */
   .liq-header { overflow: visible !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-header::before { display: none !important; }
-  .liq-header::after { display: none !important; }
-  .liq-gold-bar-top, .liq-gold-bar-bottom { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .liq-header-logo { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-header::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-header-top { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; padding: 12px 20px 6px !important; position: static !important; z-index: auto !important; }
   .liq-header .type { font-size: 9px !important; }
   .liq-header .name { font-size: 17px !important; line-height: 1.2 !important; }
@@ -764,7 +757,7 @@ tr.ce2-highlighted { background:#faf8ff; }
   <div class="logo"><h1>Liquidaciones</h1><p>Gesti&oacute;n de Reservas</p></div>
   <nav style="margin-top:16px; flex:1;">
     <div class="nav-item active" id="nav-upload" onclick="showScreen('upload')">&#128228; Cargar Fichero</div>
-    <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; Preliquidaci&oacute;n</div>
+    <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; Por Reserva</div>
     <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; Detalle Preliquidaci&oacute;n</div>
     <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; Por Alojamiento</div>
     <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; Liquidaci&oacute;n Alojamiento</div>
@@ -920,7 +913,7 @@ tr.ce2-highlighted { background:#faf8ff; }
   <!-- LIST -->
   <div class="screen" id="screen-list">
     <div class="page-header" style="margin-bottom:28px;">
-      <h1>Preliquidaci&oacute;n</h1>
+      <h1>Por Reserva</h1>
       <p>Revisa, ajusta y valida cada reserva antes de generar la liquidaci&oacute;n definitiva</p>
     </div>
     <div class="stats-row" id="stats-row"></div>
@@ -1274,9 +1267,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.11.1';
-const APP_BUILD   = '2026-02-14T20:30:00+01:00';
-const APP_CHANGES = 'Email modal: bot\u00F3n y status bar con colores Homity (teal + dorado)';
+const APP_VERSION = '2.11.2';
+const APP_BUILD   = '2026-02-14T12:00:00+01:00';
+const APP_CHANGES = 'Nav: Preliquidaci\u00F3n renombrado a Por Reserva';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1311,12 +1304,12 @@ function showToast(message, type, duration) {
   duration = duration || 3500;
   var container = document.getElementById('toast-container');
   if (!container) return;
-  var icons = { success: '&#10003;', error: '&#10007;', warning: '&#9888;', info: '&#8505;' };
+  var icons = { success: 'Ã¢Å“â€œ', error: 'Ã¢Å“â€”', warning: 'Ã¢Å¡Â ', info: 'Ã¢â€žÂ¹' };
   var toast = document.createElement('div');
   toast.className = 'toast toast-' + type;
   toast.innerHTML = '<span class="toast-icon">' + (icons[type] || '') + '</span>'
     + '<span>' + message + '</span>'
-    + '<span class="toast-close" onclick="this.parentElement.remove()">&#10005;</span>';
+    + '<span class="toast-close" onclick="this.parentElement.remove()">Ã¢Å“â€¢</span>';
   container.appendChild(toast);
   setTimeout(function() {
     toast.classList.add('leaving');
@@ -1417,35 +1410,10 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
-    version: '2.11.1',
+    version: '2.11.2',
     date: '2026-02-14',
     changes: [
-      'Email modal: boton enviar con gradiente teal Homity (#1D4B56)',
-      'Estado enviando: fondo teal oscuro + texto dorado (mejor contraste)',
-      'Estado enviado: teal + dorado en vez de verde sobre verde',
-      'Status bar sending: fondo crema calido, status success: verde con texto teal',
-      'Input focus: borde teal en vez de azul',
-    ]
-  },
-  {
-    version: '2.11.0',
-    date: '2026-02-14',
-    changes: [
-      'Branding Homity completo: headers teal (#1D4B56), meta-strips teal oscuro (#163E47)',
-      'Barras doradas (#E0AE00) superior e inferior en todas las tarjetas de liquidacion',
-      'Logo homity holidays en headers de detalle, consolidado e impresion',
-      'Total bar: fondo teal con borde dorado, importe en dorado',
-      'Dividers con degradado dorado, filas bold con borde teal, subtotal-bar crema',
-      'Variables CSS Homity actualizadas al manual de identidad oficial',
-      'Print CSS: soporte para gold bars y logo en impresion',
-    ]
-  },
-  {
-    version: '2.10.2',
-    date: '2026-02-14',
-    changes: [
-      'Fix: iconos toast (success/error/warning/info/close) corruptos por triple-encoding UTF-8',
-      'Reemplazados caracteres mojibake por HTML entities ASCII-safe (&#10003; &#10007; etc.)',
+      'Nav: Preliquidacion renombrado a Por Reserva',
     ]
   },
   {
@@ -5278,10 +5246,8 @@ function viewDetail(idx) {
   }
 
   document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
-    <div class="liq-gold-bar-top"></div>
     <div class="liq-header"><div class="liq-header-top"><div><div class="type">${isV?'Liquidaci\u00F3n':'Preliquidaci\u00F3n'}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="${_propClick}">${_prop}</div></div>
-    <div style="display:flex;align-items:center;gap:12px;"><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div>
-    ${isV?'<span class="badge-liq badge-liq-green">&#10003; Validada</span>':'<span class="badge-liq badge-liq-amber">Pendiente</span>'}</div></div>
+    <div>${isV?'<span class="badge-liq badge-liq-green">&#10003; Validada</span>':'<span class="badge-liq badge-liq-amber">Pendiente</span>'}</div></div>
     <div class="liq-meta-strip"><div class="liq-meta-item"><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
@@ -5308,8 +5274,7 @@ function viewDetail(idx) {
       <div class="liq-row" style="margin-top:8px"><span>Retenci\u00F3n IRPF ${_sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true)}</span><span class="liq-val neg">${fv(-c.ret)}</span></div>
       <div class="liq-row"><span>IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)</span><span class="liq-val pos">${fv(c.iva)}</span></div>
     </div>
-    <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} \u20AC</span></div></div>
-    <div class="liq-gold-bar-bottom"></div></div>
+    <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} \u20AC</span></div></div></div>
     <div class="liq-actions no-print">
       ${!isV?`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
       <button class="btn btn-outline" onclick="window.print()">&#128424; Imprimir</button></div>`;
@@ -5959,16 +5924,13 @@ function viewConsolDetail(alojName) {
 
   const content = `
     <div class="consol-container print-target" id="print-zone">
-      <div class="liq-gold-bar-top" style="border-radius:14px 14px 0 0;"></div>
-      <div class="consol-header" style="border-radius:0;">
-        <div class="header-top" style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div class="consol-header">
+        <div class="header-top">
           <div>
             <div class="type">Liquidaci\u00F3n Mensual Consolidada</div>
             <div class="name">${a.name}</div>
           </div>
-          <div style="display:flex;align-items:center;gap:12px;">
-            <div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div>
-            ${allVal?'<span class="badge-liq badge-liq-green">&#10003; Lista</span>':'<span class="badge-liq badge-liq-amber">Pendiente</span>'}</div>
+          <div>${allVal?'<span class="badge-liq badge-liq-green">&#10003; Lista</span>':'<span class="badge-liq badge-liq-amber">Pendiente</span>'}</div>
         </div>
         <div class="cd-progress-wrap">
           <div class="cd-progress">
@@ -6110,7 +6072,6 @@ ${_isSplit ? `<div class="cd-split-mini">
           <div class="cd-total-bar-label">Total a Liquidar${_isSplit ? ' \u2014 Propietario' : ''}<strong>${a.name}</strong></div>
           <div class="cd-total-bar-amount">${fmt(adjLiq)} \u20AC</div>
         </div>
-        <div class="liq-gold-bar-bottom"></div>
       </div>
     </div>
 
@@ -6214,9 +6175,8 @@ function buildPrintCards() {
     }).join('');
 
     return `<div class="liq-container print-card" style="margin-bottom:24px;">
-      <div class="liq-gold-bar-top"></div>
       <div class="liq-header">
-        <div class="liq-header-top"><div><div class="type">Liquidaci\u00F3n ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div>
+        <div class="liq-header-top"><div><div class="type">Liquidaci\u00F3n ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div></div>
         <div class="liq-meta-strip">
           <div class="liq-meta-item"><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
           <div class="liq-meta-item"><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
@@ -6228,7 +6188,6 @@ function buildPrintCards() {
       </div>
       <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">${rowsHtml}</div>
       <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} &#8364;</span></div></div>
-      <div class="liq-gold-bar-bottom"></div>
     </div>`;
   }).join('');
 
@@ -6251,9 +6210,8 @@ function buildPrintCards() {
       <div class="liq-row" style="color:#7c3aed;"><span>GTC retiene (${(GTC_SPLIT_RATE*100).toFixed(0)}%)</span><span>${fmt(_pGtcSplit)} &#8364;</span></div>
       <div class="liq-row bold" style="color:#16a34a;"><span>Propietario recibe (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span>${fmt(_pOwnerBase)} &#8364;</span></div>` : '';
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
-    <div class="liq-gold-bar-top"></div>
     <div class="liq-header">
-      <div class="liq-header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div>
+      <div class="liq-header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div></div>
       <div class="liq-meta-strip">
         <div class="liq-meta-item"><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${a.edificio}</div></div>
         <div class="liq-meta-item"><div class="liq-meta-label">N\u00BA Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
@@ -6270,7 +6228,6 @@ function buildPrintCards() {
       <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>
     <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar${_pIsSplit ? ' \u2014 Propietario' : ''}</span><span class="liq-total-value">${fmt(_pAdjLiq)} &#8364;</span></div></div>
-    <div class="liq-gold-bar-bottom"></div>
   </div>`;
 
   return { cardsHtml, summaryHtml };

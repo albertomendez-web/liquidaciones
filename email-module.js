@@ -360,7 +360,7 @@ async function _sendGmail({ to, subject, htmlBody, pdfBlob, filename }) {
   }
 
   // Get sender email from Gmail profile
-  const profileResp = await fetch('https://www.googleapis.com/gmail/v1/users/me/profile', {
+  const profileResp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
     headers: { 'Authorization': 'Bearer ' + _googleToken.access_token }
   });
   if (!profileResp.ok) {
@@ -370,7 +370,7 @@ async function _sendGmail({ to, subject, htmlBody, pdfBlob, filename }) {
     throw new Error('No se pudo obtener el perfil de Gmail. Verifica los permisos.');
   }
   const profile = await profileResp.json();
-  const from = profile.emailAddress;
+  const from = profile.email;
 
   // Convert PDF blob to base64
   const pdfBase64 = await new Promise((resolve, reject) => {

@@ -212,6 +212,19 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .modal-tab { padding: 10px 18px; font-size: 13px; font-weight: 600; color: #6b7280; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none; font-family: inherit; }
 .modal-tab:hover { color: #4f8cff; }
 .modal-tab.active { color: #4f8cff; border-bottom-color: #4f8cff; }
+.modal-tab.active-purple { color: #7c3aed !important; border-bottom-color: #7c3aed !important; }
+/* 80/20 GTC Split Section — v2.3.1 original style */
+.gtc-split-section { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border: 1.5px solid #d8b4fe; border-radius: 10px; margin: 8px 0 0; padding: 14px 16px; }
+.gtc-split-title { font-size: 12px; font-weight: 700; color: #7c3aed; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.gtc-split-desc { font-size: 11px; color: #6b7280; margin-bottom: 12px; line-height: 1.5; }
+.gtc-split-list { display: flex; flex-direction: column; gap: 2px; }
+.gtc-split-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; border-radius: 6px; transition: background 0.15s; }
+.gtc-split-row:hover { background: rgba(168,85,247,0.06); }
+.gtc-split-row .name { font-size: 12px; font-weight: 500; }
+.gtc-split-row .name.on { color: #7c3aed; font-weight: 600; }
+.gtc-split-divider-row { height: 1px; background: #ede9fe; margin: 0 10px; }
+.gtc-split-counter { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 8px 10px; background: rgba(168,85,247,0.08); border-radius: 8px; font-size: 11px; color: #6b7280; }
+.gtc-split-counter .badge { display: inline-flex; align-items: center; justify-content: center; background: #7c3aed; color: #fff; font-size: 10px; font-weight: 700; min-width: 20px; height: 20px; border-radius: 10px; padding: 0 6px; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
@@ -1046,12 +1059,14 @@ tr.ce2-highlighted { background:#faf8ff; }
       <button class="modal-tab" onclick="switchTab('tab-otros',this)">Servicio GTC / Limpieza / Amenities / Mant.</button>
       <button class="modal-tab" onclick="switchTab('tab-pasarela',this)">Pasarela</button>
       <button class="modal-tab" onclick="switchTab('tab-impuestos',this)">Impuestos</button>
+      <button class="modal-tab" onclick="switchTab('tab-8020',this)" style="color:#7c3aed;">Acuerdo 80/20</button>
     </div>
     <div class="modal-body">
       <div class="tab-panel active" id="tab-plat"></div>
       <div class="tab-panel" id="tab-otros"></div>
       <div class="tab-panel" id="tab-pasarela"></div>
       <div class="tab-panel" id="tab-impuestos"></div>
+      <div class="tab-panel" id="tab-8020"></div>
     </div>
   </div>
 </div>
@@ -1277,9 +1292,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.13.0';
-const APP_BUILD   = '2026-02-15T00:15:00+01:00';
-const APP_CHANGES = 'PDF en ingl\u00E9s: si se elige English, el PDF adjunto tambi\u00E9n se genera en EN';
+const APP_VERSION = '2.14.0';
+const APP_BUILD   = '2026-02-15T01:00:00+01:00';
+const APP_CHANGES = 'Acuerdo 80/20 GTC: pesta\u00F1a propia con dise\u00F1o violeta original v2.3.1';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1419,6 +1434,16 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.14.0',
+    date: '2026-02-15',
+    changes: [
+      'Acuerdo 80/20 GTC: pestana propia al nivel de Pasarela e Impuestos',
+      'Diseno violeta original v2.3.1: caja con degradado purpura, borde d8b4fe, toggles compactos',
+      'Tab activa con borde purpura distintivo (#7c3aed)',
+      'Separado del tab de Servicios GTC / Limpieza / Amenities / Mant.',
+    ]
+  },
   {
     version: '2.13.0',
     date: '2026-02-15',
@@ -6490,8 +6515,9 @@ function printConsolDirect() {
 /** @description Cambia de pestaÃ±a en el modal de configuraciÃ³n */
 function switchTab(tabId, btn) {
   document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".modal-tab").forEach(t => t.classList.remove("active"));
-  document.getElementById(tabId).classList.add("active"); btn.classList.add("active");
+  document.querySelectorAll(".modal-tab").forEach(t => { t.classList.remove("active"); t.classList.remove("active-purple"); });
+  document.getElementById(tabId).classList.add("active");
+  btn.classList.add(tabId === 'tab-8020' ? 'active-purple' : 'active');
 }
 function openConfigModal() { renderConfigModal(); document.getElementById("config-modal").style.display = "flex"; }
 function closeConfigModal() { document.getElementById("config-modal").style.display = "none"; rebuildSelectCache(); invalidateCache(); renderTable(); scheduleGlobalConfigSave(); }
@@ -6528,11 +6554,10 @@ function renderConfigModal() {
     '<hr class="section-divider">' +
     buildOS("Amenities","Coste fijo por reserva en \u20AC",amenitiesOptions," \u20AC","add-am","addAM","delAM") +
     '<hr class="section-divider">' +
-    buildOS("Mantenimiento mensual","Importe base (+ 21% IVA) por liquidaci\u00F3n",maintenanceOptions," \u20AC","add-mt","addMT","delMT") +
-    '<hr class="section-divider">' +
-    buildGtcSplitSection();
+    buildOS("Mantenimiento mensual","Importe base (+ 21% IVA) por liquidaci\u00F3n",maintenanceOptions," \u20AC","add-mt","addMT","delMT");
   document.getElementById("tab-impuestos").innerHTML =
     buildOS("Retenci\u00F3n IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR");
+  document.getElementById("tab-8020").innerHTML = buildGtcSplitSection();
 }
 function addPS(){aL(pasarelaStripeOptions,"add-ps",100);} function delPS(i){dL(pasarelaStripeOptions,i);}
 function addPB(){aL(pasarelaBookingOptions,"add-pb",100);} function delPB(i){dL(pasarelaBookingOptions,i);}
@@ -6548,7 +6573,7 @@ function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal(
 
 function buildGtcSplitSection() {
   const alojs = _gtcOwnedAlojamientos.slice().sort();
-  if (alojs.length === 0) return '';
+  if (alojs.length === 0) return '<div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;">No hay alojamientos GTC configurados.</div>';
   const rows = alojs.map(function(name) {
     const on = isGtcSplit(name);
     return '<div class="gtc-split-row"><span class="name' + (on ? ' on' : '') + '">' + esc(name) + '</span>' +

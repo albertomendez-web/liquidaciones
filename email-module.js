@@ -13,7 +13,7 @@
  *    - html2canvas 1.4.1
  *    - jsPDF 2.5.2
  *
- *  @version 2.0.0
+ *  @version 2.0.1
  *  @date 2026-02-14
  */
 
@@ -55,6 +55,9 @@ function _loadPdfLibs() {
     if (loads.length > 0) {
       await Promise.all(loads);
     }
+    // Verify libs loaded correctly
+    if (typeof html2canvas === 'undefined') throw new Error('html2canvas not available');
+    if (!window.jspdf || !window.jspdf.jsPDF) throw new Error('jsPDF not available');
     _pdfLibsLoaded = true;
     console.log('[Email] PDF libs loaded');
   })().catch(e => {
@@ -361,6 +364,7 @@ async function _sendGmail({ to, subject, htmlBody, pdfBlob, filename }) {
 
   // Gmail sets the From header automatically for the authenticated user
   const from = 'me';
+
   // Convert PDF blob to base64
   const pdfBase64 = await new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -666,4 +670,4 @@ function _getCurrentLiqMonth() {
 // ═══════════════════════════════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════════════════════════════
-console.log('[Email Module] v2.0.0 loaded');
+console.log('[Email Module] v2.0.1 loaded');

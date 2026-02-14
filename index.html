@@ -1277,9 +1277,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.11.6';
-const APP_BUILD   = '2026-02-14T22:30:00+01:00';
-const APP_CHANGES = 'Fix PDF: protecci\u00F3n canvas 0px, min-height barras doradas, delay render';
+const APP_VERSION = '2.11.7';
+const APP_BUILD   = '2026-02-14T22:45:00+01:00';
+const APP_CHANGES = 'Fix PDF: monkey-patch createPattern para canvas 0px (bug html2canvas)';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1419,6 +1419,14 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.11.7',
+    date: '2026-02-14',
+    changes: [
+      'Fix PDF: monkey-patch createPattern para evitar crash con canvas 0px en html2canvas',
+      'PDF render: pseudo-elementos y gradientes eliminados en contexto render',
+    ]
+  },
   {
     version: '2.11.6',
     date: '2026-02-14',

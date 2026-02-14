@@ -167,26 +167,51 @@ async function _generatePdf(onProgress) {
     #_pdf-render-root .liq-header {
       overflow: hidden !important;
     }
+    /* Force gold bars to have explicit dimensions */
     #_pdf-render-root .liq-gold-bar-top {
+      height: 5px !important;
       min-height: 5px !important;
+      width: 100% !important;
       display: block !important;
+      background: #E0AE00 !important;
     }
     #_pdf-render-root .liq-gold-bar-bottom {
+      height: 4px !important;
       min-height: 4px !important;
+      width: 100% !important;
       display: block !important;
+      background: #E0AE00 !important;
     }
     #_pdf-render-root .liq-header-logo {
       min-width: 1px !important;
       min-height: 1px !important;
     }
+    /* Kill ALL pseudo-elements — html2canvas chokes on gradient ::before/::after */
+    #_pdf-render-root .liq-total-bar::before,
+    #_pdf-render-root .liq-header::before,
+    #_pdf-render-root .liq-header::after,
+    #_pdf-render-root .consol-header::before,
+    #_pdf-render-root .consol-header::after,
+    #_pdf-render-root .cd-total-bar::before {
+      display: none !important;
+      content: none !important;
+    }
+    /* Replace gradient dividers with solid color */
+    #_pdf-render-root .liq-divider {
+      background: #D4C49A !important;
+      height: 1px !important;
+      min-height: 1px !important;
+    }
+    /* Subtotal bar — solid background instead of gradient */
+    #_pdf-render-root .liq-subtotal-bar {
+      background: #FBF4E8 !important;
+      margin: 0 -32px !important;
+      padding: 12px 32px !important;
+    }
     #_pdf-render-root .no-print { display: none !important; }
     #_pdf-render-root .liq-sw { display: none !important; }
     #_pdf-render-root .liq-sel { display: none !important; }
     #_pdf-render-root .liq-row.bold {
-      margin: 0 -32px !important;
-      padding: 12px 32px !important;
-    }
-    #_pdf-render-root .liq-subtotal-bar {
       margin: 0 -32px !important;
       padding: 12px 32px !important;
     }
@@ -198,6 +223,18 @@ async function _generatePdf(onProgress) {
 
   // Small delay to let browser render and fonts apply
   await new Promise(r => setTimeout(r, 400));
+
+  // Monkey-patch createPattern to survive 0-dimension canvas (html2canvas bug)
+  const _origCreatePattern = CanvasRenderingContext2D.prototype.createPattern;
+  CanvasRenderingContext2D.prototype.createPattern = function(img, rep) {
+    if (img && (img.width === 0 || img.height === 0)) {
+      console.warn('[Email] createPattern blocked: 0-dim canvas');
+      const c = document.createElement('canvas');
+      c.width = 1; c.height = 1;
+      return _origCreatePattern.call(this, c, rep);
+    }
+    return _origCreatePattern.call(this, img, rep);
+  };
 
   try {
     const { jsPDF } = window.jspdf;
@@ -264,6 +301,8 @@ async function _generatePdf(onProgress) {
     console.log('[Email] PDF generated:', totalCards, 'pages,', Math.round(blob.size / 1024), 'KB');
     return blob;
   } finally {
+    // Restore original createPattern
+    CanvasRenderingContext2D.prototype.createPattern = _origCreatePattern;
     document.body.removeChild(container);
   }
 }

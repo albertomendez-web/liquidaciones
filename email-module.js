@@ -29,7 +29,7 @@
 
 const _EMAIL_CDN = {
   html2canvas: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
-  jsPDF: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
+  jsPDF: 'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js'
 };
 
 let _pdfLibsLoaded = false;

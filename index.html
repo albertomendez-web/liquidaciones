@@ -321,8 +321,8 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 /* Full-width total bar */
 .cd-total-bar { display: flex; justify-content: space-between; align-items: center; padding: 20px 32px; background: var(--hm-teal); color: #fff; position: relative; border-left: 5px solid var(--hm-gold); }
 .cd-total-bar::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: var(--hm-gold); }
-.cd-total-bar-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--hm-blue-gray); }
-.cd-total-bar-label strong { display: block; font-size: 14px; color: #fff; letter-spacing: normal; margin-top: 2px; }
+.cd-total-bar-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #E0AE00; }
+.cd-total-bar-label strong { display: block; font-size: 20px; color: #fff; letter-spacing: normal; margin-top: 2px; text-transform: none; }
 .cd-total-bar-amount { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; font-family: Georgia, 'Times New Roman', serif; color: #FFFFFF; }
 /* Legacy compat */
 .consol-subtotal { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 15px; font-weight: 700; }
@@ -385,8 +385,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-total-bar { position: relative; }
 .liq-total-bar::before { content: ''; display: block; height: 5px; background: var(--hm-gold); }
 .liq-total { display: flex; justify-content: space-between; align-items: center; padding: 22px 32px; background: var(--hm-teal); color: #fff; border-left: 5px solid var(--hm-gold); }
-.liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--hm-blue-gray); }
-.liq-total-value { font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.02em; }
+.liq-total-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #E0AE00; }
+.liq-total-label-sub { font-size: 20px; font-weight: 700; color: #fff; margin-top: 2px; text-transform: none; letter-spacing: normal; }
+.liq-total-value { font-family: Georgia, 'Times New Roman', serif; font-size: 32px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.02em; }
 .liq-actions { display: flex; gap: 12px; justify-content: center; padding: 20px 32px; background: #f8f9fb; border-top: 1px solid var(--c-border-light); }
 .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
 .badge-liq { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
@@ -538,8 +539,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   /* â”€â”€ Total bar (full-width) â”€â”€ */
   .cd-total-bar { padding: 10px 16px !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .cd-total-bar-label { font-size: 10px !important; }
-  .cd-total-bar-amount { font-size: 20px !important; }
+  .cd-total-bar-label { font-size: 8px !important; }
+  .cd-total-bar-label strong { font-size: 14px !important; }
+  .cd-total-bar-amount { font-size: 22px !important; }
 
   /* â”€â”€ Individual liquidacion rows â”€â”€ */
   .liq-sec { padding: 10px 20px !important; }
@@ -550,7 +552,8 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .liq-divider { margin: 2px 0 !important; }
   .liq-total { padding: 10px 20px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-total-label { font-size: 8px !important; }
-  .liq-total-value { font-size: 18px !important; }
+  .liq-total-label-sub { font-size: 14px !important; }
+  .liq-total-value { font-size: 22px !important; }
   .liq-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-ce2 { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 0 20px !important; }
   .liq-sec-label { font-size: 8px !important; margin-bottom: 6px !important; }
@@ -1274,9 +1277,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.11.2';
-const APP_BUILD   = '2026-02-14T21:00:00+01:00';
-const APP_CHANGES = 'Total a liquidar en blanco, firma email: David Fraidiaz / granadabeachgolf.com';
+const APP_VERSION = '2.11.3';
+const APP_BUILD   = '2026-02-14T21:15:00+01:00';
+const APP_CHANGES = 'Total bar estilo D: label dorado + subtitulo blanco grande';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1416,6 +1419,15 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.11.3',
+    date: '2026-02-14',
+    changes: [
+      'Total bar estilo D: "TOTAL A LIQUIDAR" dorado 10px + subtitulo blanco 20px',
+      'Valor total ampliado a 32px',
+      'Aplicado en detalle, consolidado, print cards individual y resumen',
+    ]
+  },
   {
     version: '2.11.2',
     date: '2026-02-14',
@@ -5317,7 +5329,7 @@ function viewDetail(idx) {
       <div class="liq-row" style="margin-top:8px"><span>Retenci\u00F3n IRPF ${_sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true)}</span><span class="liq-val neg">${fv(-c.ret)}</span></div>
       <div class="liq-row"><span>IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)</span><span class="liq-val pos">${fv(c.iva)}</span></div>
     </div>
-    <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} \u20AC</span></div></div>
+    <div class="liq-total-bar"><div class="liq-total"><div><span class="liq-total-label">Total a liquidar</span><div class="liq-total-label-sub">Liquidaci\u00F3n mensual</div></div><span class="liq-total-value">${fmt(c.totalLiq)} \u20AC</span></div></div>
     <div class="liq-gold-bar-bottom"></div></div>
     <div class="liq-actions no-print">
       ${!isV?`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#10003; Validar</button>`:`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#8617; Desvalidar</button>`}
@@ -6236,7 +6248,7 @@ function buildPrintCards() {
         </div>
       </div>
       <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">${rowsHtml}</div>
-      <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar</span><span class="liq-total-value">${fmt(c.totalLiq)} &#8364;</span></div></div>
+      <div class="liq-total-bar"><div class="liq-total"><div><span class="liq-total-label">Total a liquidar</span><div class="liq-total-label-sub">Liquidaci\u00F3n mensual</div></div><span class="liq-total-value">${fmt(c.totalLiq)} &#8364;</span></div></div>
       <div class="liq-gold-bar-bottom"></div>
     </div>`;
   }).join('');
@@ -6278,7 +6290,7 @@ function buildPrintCards() {
       <div class="liq-row"><span>Retenci\u00F3n IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
       <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>
-    <div class="liq-total-bar"><div class="liq-total"><span class="liq-total-label">Total a liquidar${_pIsSplit ? ' \u2014 Propietario' : ''}</span><span class="liq-total-value">${fmt(_pAdjLiq)} &#8364;</span></div></div>
+    <div class="liq-total-bar"><div class="liq-total"><div><span class="liq-total-label">Total a liquidar${_pIsSplit ? ' \u2014 Propietario' : ''}</span><div class="liq-total-label-sub">Resumen consolidado</div></div><span class="liq-total-value">${fmt(_pAdjLiq)} &#8364;</span></div></div>
     <div class="liq-gold-bar-bottom"></div>
   </div>`;
 

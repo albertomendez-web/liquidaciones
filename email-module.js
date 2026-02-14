@@ -462,7 +462,7 @@ function _buildEmailBody(propName, alojName, mes) {
             <div style="font-size:12px;color:#7191AC;margin-top:2px;">Green Tropical Coast, S.L.</div>
           </td>
           <td style="padding-left:14px;">
-            <div style="font-size:12px;color:#7191AC;line-height:1.6;">&#9993; david.fraidiaz@granadabeachgolf.com<br>&#9742; 608 626 555</div>
+            <div style="font-size:12px;color:#7191AC;line-height:1.6;">&#9993;&#65038; david.fraidiaz@granadabeachgolf.com<br>&#9742;&#65038; 608 626 555</div>
           </td>
         </tr></table>
       </div>

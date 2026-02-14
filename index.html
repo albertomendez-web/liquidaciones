@@ -1277,9 +1277,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.12.1';
-const APP_BUILD   = '2026-02-14T23:45:00+01:00';
-const APP_CHANGES = 'Migraci\u00F3n Booking: fuerza % m\u00E1ximo en reservas no validadas al cargar';
+const APP_VERSION = '2.13.0';
+const APP_BUILD   = '2026-02-15T00:15:00+01:00';
+const APP_CHANGES = 'PDF en ingl\u00E9s: si se elige English, el PDF adjunto tambi\u00E9n se genera en EN';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1419,6 +1419,15 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.13.0',
+    date: '2026-02-15',
+    changes: [
+      'PDF en ingles: si se elige English, el PDF adjunto se genera completamente en EN',
+      'Todas las etiquetas del PDF traducidas: cabeceras, conceptos, totales, resumen',
+      'Impresion y descarga directa de PDF siguen en espanol',
+    ]
+  },
   {
     version: '2.12.1',
     date: '2026-02-14',
@@ -5709,12 +5718,13 @@ function buildLimpRows(calcs) {
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 // === Consolidated monthly deductions management ===
-function buildPrintDeductionsHtml(alojName) {
+function buildPrintDeductionsHtml(alojName, lang) {
+  const _en = lang === 'en';
   let maint = getConsolMaint(alojName);
   let extras = getConsolExtras(alojName);
   let h = '';
   if (maint.enabled) {
-    h += '<div class="liq-row"><span>Mantenimiento</span><span class="neg">- ' + fmt(maint.amount) + ' \u20AC</span></div>';
+    h += '<div class="liq-row"><span>' + (_en?'Maintenance':'Mantenimiento') + '</span><span class="neg">- ' + fmt(maint.amount) + ' \u20AC</span></div>';
   }
   extras.forEach(function(ex) {
     h += '<div class="liq-row"><span>' + ex.label + '</span><span class="neg">- ' + fmt(ex.amount) + ' \u20AC</span></div>';
@@ -6281,7 +6291,8 @@ function resetPreviewPref() {
   if (currentConsolAloj) viewConsolDetail(currentConsolAloj);
 }
 
-function buildPrintCards() {
+function buildPrintCards(lang) {
+  const _en = lang === 'en';
   const alojName = currentConsolAloj;
   if (!alojName) return null;
   const alojamientos = getAlojamientos();
@@ -6298,27 +6309,27 @@ function buildPrintCards() {
     const pasR = s.pasarelaRate !== undefined ? s.pasarelaRate : (isB ? pasarelaBookingOptions[pasarelaBookingOptions.length-1]/100 : pasarelaStripeOptions[pasarelaStripeOptions.length-1]/100);
 
     let rows = [
-      {l:"Total Reserva (IVA incluido)",v:c.total,bold:true},
-      {l:`IVA Reserva (${(IVA_RESERVA*100).toFixed(0)}%)`,v:-(c.total-c.baseSinIVA),neg:true},
-      {l:"Base sin IVA",v:c.baseSinIVA,bold:true},{div:true},
-      {l:`Canal de Venta ${r.plataforma} (${(c.comRate*100).toFixed(1)}%)`,v:-c.comPlat,neg:true},{div:true},
-      {l:`Gesti\u00F3n GTC (${(c.gtcRate*100).toFixed(0)}%)`,v:-c.comGTC,neg:true},
-      {l:`Limpieza (${fmt(c.limp)} \u20AC)`,v:-c.limp,neg:true},
+      {l:_en?"Total Reservation (VAT included)":"Total Reserva (IVA incluido)",v:c.total,bold:true},
+      {l:(_en?"Reservation VAT":"IVA Reserva")+` (${(IVA_RESERVA*100).toFixed(0)}%)`,v:-(c.total-c.baseSinIVA),neg:true},
+      {l:_en?"Base excl. VAT":"Base sin IVA",v:c.baseSinIVA,bold:true},{div:true},
+      {l:(_en?"Sales Channel":"Canal de Venta")+` ${r.plataforma} (${(c.comRate*100).toFixed(1)}%)`,v:-c.comPlat,neg:true},{div:true},
+      {l:(_en?"GTC Management":"Gesti\u00F3n GTC")+` (${(c.gtcRate*100).toFixed(0)}%)`,v:-c.comGTC,neg:true},
+      {l:(_en?"Cleaning":"Limpieza")+` (${fmt(c.limp)} \u20AC)`,v:-c.limp,neg:true},
       {l:`Amenities (${fmt(c.amen)} \u20AC)`,v:-c.amen,neg:true},{div:true},
     ];
-    if(s.pasarela) rows.push({l:`Pasarela de pago ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true},{div:true});
+    if(s.pasarela) rows.push({l:(_en?"Payment Gateway":"Pasarela de pago")+` ${pasL} (${(pasR*100).toFixed(1)}%)`,v:-c.comPas,neg:true},{div:true});
     // CE Sin IVA items
     if (c.ceSinIvaTotal > 0) {
       const ce2Items = s.conceptosSinIVA || [];
       ce2Items.forEach(function(item) {
-        if (item.amount > 0) rows.push({l:`C.E. Sin IVA: ${item.label || 'Sin nombre'}`,v:-item.amount,neg:true});
+        if (item.amount > 0) rows.push({l:(_en?"Special Item excl. VAT: ":"C.E. Sin IVA: ")+(item.label || (_en?'Unnamed':'Sin nombre')),v:-item.amount,neg:true});
       });
       rows.push({div:true});
     }
     rows.push(
-      {l:"Subtotal",v:c.sub,bold:true},
-      {l:`Retenci\u00F3n IRPF (${(c.irpfRate*100).toFixed(0)}%)`,v:-c.ret,neg:true},
-      {l:`IVA del Subtotal (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
+      {l:_en?"Subtotal":"Subtotal",v:c.sub,bold:true},
+      {l:(_en?"IRPF Withholding":"Retenci\u00F3n IRPF")+` (${(c.irpfRate*100).toFixed(0)}%)`,v:-c.ret,neg:true},
+      {l:(_en?"VAT on Subtotal":"IVA del Subtotal")+` (${(IVA_SUBTOTAL*100).toFixed(0)}%)`,v:c.iva,pos:true});
 
     const rowsHtml = rows.map(row => {
       if (row.div) return '<div class="liq-divider"></div>';
@@ -6331,18 +6342,18 @@ function buildPrintCards() {
     return `<div class="liq-container print-card" style="margin-bottom:24px;">
       <div class="liq-gold-bar-top"></div>
       <div class="liq-header">
-        <div class="liq-header-top"><div><div class="type">Liquidaci\u00F3n ${i+1} de ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div>
+        <div class="liq-header-top"><div><div class="type">${_en?'Settlement':'Liquidaci\u00F3n'} ${i+1} ${_en?'of':'de'} ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div>
         <div class="liq-meta-strip">
-          <div class="liq-meta-item"><div class="liq-meta-label">Alojamiento</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
-          <div class="liq-meta-item"><div class="liq-meta-label">Fechas</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
-          <div class="liq-meta-item"><div class="liq-meta-label">Canal de Venta</div><div class="liq-meta-value">${r.plataforma}</div></div>
-          <div class="liq-meta-item"><div class="liq-meta-label">ID Reserva</div><div class="liq-meta-value">${r.id}</div></div>
-          <div class="liq-meta-item"><div class="liq-meta-label">Localizador</div><div class="liq-meta-value sm">${r.localizador}</div></div>
-          <div class="liq-meta-item"><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${esc(r.edificio)}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">${_en?'Property':'Alojamiento'}</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">${_en?'Dates':'Fechas'}</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">${_en?'Sales Channel':'Canal de Venta'}</div><div class="liq-meta-value">${r.plataforma}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">${_en?'Booking ID':'ID Reserva'}</div><div class="liq-meta-value">${r.id}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">${_en?'Reference':'Localizador'}</div><div class="liq-meta-value sm">${r.localizador}</div></div>
+          <div class="liq-meta-item"><div class="liq-meta-label">${_en?'Building':'Edificio'}</div><div class="liq-meta-value">${esc(r.edificio)}</div></div>
         </div>
       </div>
       <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">${rowsHtml}</div>
-      <div class="liq-total-bar"><div class="liq-total"><div><span class="liq-total-label">Total a liquidar</span><div class="liq-total-label-sub">Liquidaci\u00F3n mensual</div></div><span class="liq-total-value">${fmt(c.totalLiq)} &#8364;</span></div></div>
+      <div class="liq-total-bar"><div class="liq-total"><div><span class="liq-total-label">${_en?'Total Settlement':'Total a liquidar'}</span><div class="liq-total-label-sub">${_en?'Monthly settlement':'Liquidaci\u00F3n mensual'}</div></div><span class="liq-total-value">${fmt(c.totalLiq)} &#8364;</span></div></div>
       <div class="liq-gold-bar-bottom"></div>
     </div>`;
   }).join('');
@@ -6353,7 +6364,7 @@ function buildPrintCards() {
   const sumLiq = calcs.reduce((s, x) => s + x.c.totalLiq, 0);
 
   const _printDed = getConsolDeductions(a.name);
-  const _printDedHtml = buildPrintDeductionsHtml(a.name);
+  const _printDedHtml = buildPrintDeductionsHtml(a.name, lang);
   const _pIsSplit = isGtcSplit(a.name);
   const _pGtcSplit = _pIsSplit ? sumSub * GTC_SPLIT_RATE : 0;
   const _pOwnerBase = _pIsSplit ? sumSub - _pGtcSplit : sumSub;
@@ -6363,28 +6374,28 @@ function buildPrintCards() {
   const _pAdjIva = _pAdjSub * IVA_SUBTOTAL;
   const _pAdjLiq = _pAdjSub - _pAdjRet + _pAdjIva;
   const _pSplitHtml = _pIsSplit ? `<div class="liq-divider"></div>
-      <div class="liq-row" style="color:#7c3aed;"><span>GTC retiene (${(GTC_SPLIT_RATE*100).toFixed(0)}%)</span><span>${fmt(_pGtcSplit)} &#8364;</span></div>
-      <div class="liq-row bold" style="color:#16a34a;"><span>Propietario recibe (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span>${fmt(_pOwnerBase)} &#8364;</span></div>` : '';
+      <div class="liq-row" style="color:#7c3aed;"><span>${_en?'GTC retains':'GTC retiene'} (${(GTC_SPLIT_RATE*100).toFixed(0)}%)</span><span>${fmt(_pGtcSplit)} &#8364;</span></div>
+      <div class="liq-row bold" style="color:#16a34a;"><span>${_en?'Owner receives':'Propietario recibe'} (${((1-GTC_SPLIT_RATE)*100).toFixed(0)}%)</span><span>${fmt(_pOwnerBase)} &#8364;</span></div>` : '';
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-gold-bar-top"></div>
     <div class="liq-header">
-      <div class="liq-header-top"><div><div class="type">Resumen Consolidado \u2014 ${calcs.length} reservas</div><div class="name">${a.name}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div>
+      <div class="liq-header-top"><div><div class="type">${_en?'Consolidated Summary':'Resumen Consolidado'} \u2014 ${calcs.length} ${_en?'reservations':'reservas'}</div><div class="name">${a.name}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div>
       <div class="liq-meta-strip">
-        <div class="liq-meta-item"><div class="liq-meta-label">Edificio</div><div class="liq-meta-value">${a.edificio}</div></div>
-        <div class="liq-meta-item"><div class="liq-meta-label">N\u00BA Reservas</div><div class="liq-meta-value">${calcs.length}</div></div>
-        <div class="liq-meta-item"><div class="liq-meta-label">Propietario</div><div class="liq-meta-value">${getPropietario(a.name)}</div></div>
+        <div class="liq-meta-item"><div class="liq-meta-label">${_en?'Building':'Edificio'}</div><div class="liq-meta-value">${a.edificio}</div></div>
+        <div class="liq-meta-item"><div class="liq-meta-label">${_en?'Reservations':'N\u00BA Reservas'}</div><div class="liq-meta-value">${calcs.length}</div></div>
+        <div class="liq-meta-item"><div class="liq-meta-label">${_en?'Owner':'Propietario'}</div><div class="liq-meta-value">${getPropietario(a.name)}</div></div>
       </div>
     </div>
     <div class="liq-sec" style="padding-top:8px;padding-bottom:8px;">
-      <div class="liq-row bold"><span>Subtotal Reservas</span><span>${fmt(sumSub)} &#8364;</span></div>
+      <div class="liq-row bold"><span>${_en?'Reservations Subtotal':'Subtotal Reservas'}</span><span>${fmt(sumSub)} &#8364;</span></div>
       ${_pSplitHtml}
       ${_printDedHtml}
       <div class="liq-divider"></div>
-      <div class="liq-row bold"><span>Subtotal Final Mes</span><span>${fmt(_pAdjSub)} &#8364;</span></div>
-      <div class="liq-row"><span>Retenci\u00F3n IRPF (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
-      <div class="liq-row"><span>IVA 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
+      <div class="liq-row bold"><span>${_en?'Monthly Final Subtotal':'Subtotal Final Mes'}</span><span>${fmt(_pAdjSub)} &#8364;</span></div>
+      <div class="liq-row"><span>${_en?'IRPF Withholding':'Retenci\u00F3n IRPF'} (${(_pAvgIrpf*100).toFixed(0)}%)</span><span class="neg">- ${fmt(_pAdjRet)} &#8364;</span></div>
+      <div class="liq-row"><span>${_en?'VAT':'IVA'} 21%</span><span class="pos">+ ${fmt(_pAdjIva)} &#8364;</span></div>
     </div>
-    <div class="liq-total-bar"><div class="liq-total"><div><span class="liq-total-label">Total a liquidar${_pIsSplit ? ' \u2014 Propietario' : ''}</span><div class="liq-total-label-sub">Resumen consolidado</div></div><span class="liq-total-value">${fmt(_pAdjLiq)} &#8364;</span></div></div>
+    <div class="liq-total-bar"><div class="liq-total"><div><span class="liq-total-label">${_en?'Total Settlement':'Total a liquidar'}${_pIsSplit ? (_en?' \u2014 Owner':' \u2014 Propietario') : ''}</span><div class="liq-total-label-sub">${_en?'Consolidated summary':'Resumen consolidado'}</div></div><span class="liq-total-value">${fmt(_pAdjLiq)} &#8364;</span></div></div>
     <div class="liq-gold-bar-bottom"></div>
   </div>`;
 

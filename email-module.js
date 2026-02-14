@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════════
- *  EMAIL MODULE v2.3.0 — PDF generation + Gmail sending for liquidaciones
+ *  EMAIL MODULE v2.4.0 — PDF generation + Gmail sending for liquidaciones
  * ═══════════════════════════════════════════════════════════════════════════════
  *
  *  Satellite file for index.html (Liquidaciones GTC).
@@ -149,14 +149,14 @@ async function _waitForFonts() {
  * @param {Function} [onProgress] - Optional callback(step, totalSteps, message)
  * @returns {Promise<Blob>} PDF as Blob
  */
-async function _generatePdf(onProgress) {
+async function _generatePdf(onProgress, lang) {
   const _p = onProgress || (() => {});
 
   _p(0, 5, 'Cargando librer\u00EDas...');
   await _loadPdfLibs();
 
   _p(1, 5, 'Preparando datos...');
-  const result = buildPrintCards();
+  const result = buildPrintCards(lang);
   if (!result) throw new Error('No se pudo generar la liquidaci\u00F3n. Verifica los datos.');
 
   // Wait for fonts
@@ -744,15 +744,16 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     _setStatus(statusEl, 'sending', '&#9203; Generando PDF de la liquidaci\u00F3n...');
     sendBtn.textContent = 'Generando PDF...';
 
+    const lang = document.querySelector('input[name="email-lang"]:checked')?.value || 'es';
+
     const pdfBlob = await _generatePdf((step, total, msg) => {
       _setStatus(statusEl, 'sending', '&#9203; ' + msg);
-    });
+    }, lang);
 
     // Step 2: Build HTML body
     _setStatus(statusEl, 'sending', '&#9203; Enviando email a ' + _escHtml(toFinal) + (cc ? ' (CC: ' + _escHtml(cc) + ')' : '') + '...');
     sendBtn.textContent = 'Enviando...';
 
-    const lang = document.querySelector('input[name="email-lang"]:checked')?.value || 'es';
     let htmlBody = _buildEmailBody(propName, alojName, mes, lang);
     const extra = (extraMsg?.value || '').trim();
     if (extra) {
@@ -854,4 +855,4 @@ if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D
     }
   };
 }
-console.log('[Email Module] v2.3.0 loaded');
+console.log('[Email Module] v2.4.0 loaded');

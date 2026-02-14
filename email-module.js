@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════════
- *  EMAIL MODULE v2.1.1 — PDF generation + Gmail sending for liquidaciones
+ *  EMAIL MODULE v2.2.0 — PDF generation + Gmail sending for liquidaciones
  * ═══════════════════════════════════════════════════════════════════════════════
  *
  *  Satellite file for index.html (Liquidaciones GTC).
@@ -305,12 +305,15 @@ async function handleDownloadPdf() {
  * @param {Object} opts - { to, from, subject, body, pdfBase64, filename }
  * @returns {string} Raw MIME message in base64url encoding
  */
-function _buildMimeMessage({ to, from, subject, body, pdfBase64, filename }) {
+function _buildMimeMessage({ to, cc, from, subject, body, pdfBase64, filename }) {
   const boundary = 'boundary_' + Date.now() + '_' + Math.random().toString(36).slice(2);
 
   const mimeLines = [
     `From: ${from}`,
     `To: ${to}`,
+  ];
+  if (cc) mimeLines.push(`Cc: ${cc}`);
+  mimeLines.push(
     `Subject: =?UTF-8?B?${btoa(unescape(encodeURIComponent(subject)))}?=`,
     'MIME-Version: 1.0',
     `Content-Type: multipart/mixed; boundary="${boundary}"`,
@@ -329,7 +332,7 @@ function _buildMimeMessage({ to, from, subject, body, pdfBase64, filename }) {
     pdfBase64,
     '',
     `--${boundary}--`
-  ];
+  );
 
   const mimeStr = mimeLines.join('\r\n');
   return _base64url(mimeStr);
@@ -357,7 +360,7 @@ function _base64url(str) {
  * @param {Object} opts - { to, subject, htmlBody, pdfBlob, filename }
  * @returns {Promise<Object>} Gmail API response
  */
-async function _sendGmail({ to, subject, htmlBody, pdfBlob, filename }) {
+async function _sendGmail({ to, cc, subject, htmlBody, pdfBlob, filename }) {
   if (!_googleToken) {
     throw new Error('No hay sesi\u00F3n de Google activa. Inicia sesi\u00F3n primero.');
   }
@@ -373,7 +376,7 @@ async function _sendGmail({ to, subject, htmlBody, pdfBlob, filename }) {
     reader.readAsDataURL(pdfBlob);
   });
 
-  const raw = _buildMimeMessage({ to, from, subject, body: htmlBody, pdfBase64, filename });
+  const raw = _buildMimeMessage({ to, cc, from, subject, body: htmlBody, pdfBase64, filename });
 
   // Send via Gmail API
   const sendResp = await fetch('https://www.googleapis.com/gmail/v1/users/me/messages/send', {
@@ -398,7 +401,7 @@ async function _sendGmail({ to, subject, htmlBody, pdfBlob, filename }) {
   }
 
   const result = await sendResp.json();
-  console.log('[Email] Sent! Message ID:', result.id, 'to:', to);
+  console.log('[Email] Sent! Message ID:', result.id, 'to:', to, cc ? 'cc:' + cc : '');
   return result;
 }
 
@@ -462,7 +465,7 @@ function _buildEmailBody(propName, alojName, mes) {
             <div style="font-size:12px;color:#7191AC;margin-top:2px;">Green Tropical Coast, S.L.</div>
           </td>
           <td style="padding-left:14px;">
-            <div style="font-size:12px;color:#7191AC;line-height:1.6;">&#9993;&#65038; david.fraidiaz@granadabeachgolf.com<br>&#9742;&#65038; 608 626 555</div>
+            <div style="font-size:12px;color:#7191AC;line-height:1.6;">david.fraidiaz@granadabeachgolf.com<br>Tel. 608 626 555</div>
           </td>
         </tr></table>
       </div>
@@ -529,6 +532,10 @@ function handleEmailLiquidacion() {
           <input type="email" id="email-to" value="${_escHtml(propEmail)}" placeholder="email@ejemplo.com" autocomplete="email">
         </div>
         <div class="email-modal-field">
+          <label>CC <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:#9ca3af;">\u2014 copia (opcional, separar con comas)</span></label>
+          <input type="text" id="email-cc" placeholder="copia1@ejemplo.com, copia2@ejemplo.com" autocomplete="email">
+        </div>
+        <div class="email-modal-field">
           <label>Asunto</label>
           <input type="text" id="email-subject" value="${_escHtml(subject)}">
         </div>
@@ -582,6 +589,7 @@ function closeEmailModal() {
  */
 async function _doSendEmail(alojName, propName, mes, filename) {
   const toInput = document.getElementById('email-to');
+  const ccInput = document.getElementById('email-cc');
   const subjectInput = document.getElementById('email-subject');
   const extraMsg = document.getElementById('email-extra-msg');
   const saveCheck = document.getElementById('email-save-addr');
@@ -591,18 +599,36 @@ async function _doSendEmail(alojName, propName, mes, filename) {
   const to = (toInput?.value || '').trim();
   const subject = (subjectInput?.value || '').trim();
 
-  // Validate email
+  // Parse CC: split by comma, trim, filter empties
+  const ccRaw = (ccInput?.value || '').trim();
+  const ccList = ccRaw ? ccRaw.split(',').map(e => e.trim()).filter(e => e) : [];
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Validate TO email
   if (!to) {
     toInput.style.borderColor = '#ef4444';
     toInput.focus();
     return;
   }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
+  if (!emailRegex.test(to)) {
     toInput.style.borderColor = '#ef4444';
     _setStatus(statusEl, 'error', 'Email no v\u00E1lido. Revisa la direcci\u00F3n.');
     toInput.focus();
     return;
   }
+
+  // Validate CC emails
+  if (ccList.length > 0) {
+    const badCc = ccList.find(e => !emailRegex.test(e));
+    if (badCc) {
+      ccInput.style.borderColor = '#ef4444';
+      _setStatus(statusEl, 'error', 'CC no v\u00E1lido: ' + _escHtml(badCc));
+      ccInput.focus();
+      return;
+    }
+  }
+  const cc = ccList.join(', ');
+
   if (!subject) {
     subjectInput.style.borderColor = '#ef4444';
     subjectInput.focus();
@@ -624,7 +650,7 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     });
 
     // Step 2: Build HTML body
-    _setStatus(statusEl, 'sending', '&#9203; Enviando email a ' + _escHtml(to) + '...');
+    _setStatus(statusEl, 'sending', '&#9203; Enviando email a ' + _escHtml(to) + (cc ? ' (CC: ' + _escHtml(cc) + ')' : '') + '...');
     sendBtn.textContent = 'Enviando...';
 
     let htmlBody = _buildEmailBody(propName, alojName, mes);
@@ -641,7 +667,7 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     }
 
     // Step 3: Send via Gmail
-    await _sendGmail({ to, subject, htmlBody, pdfBlob, filename });
+    await _sendGmail({ to, cc, subject, htmlBody, pdfBlob, filename });
 
     // Step 4: Save email if checkbox checked
     if (saveCheck?.checked && to) {

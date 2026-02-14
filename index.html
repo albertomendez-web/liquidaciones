@@ -1277,9 +1277,9 @@ function toggleConsolVal(mode) {
  *  Ã¢Å“â€œ 7. NUNCA reutilizar un nÃƒÂºmero de versiÃƒÂ³n ya existente
  * Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
  */
-const APP_VERSION = '2.12.0';
-const APP_BUILD   = '2026-02-14T23:30:00+01:00';
-const APP_CHANGES = 'Defaults: Booking % m\u00E1ximo, ID Reserva visible, mes anterior, email EN/ES';
+const APP_VERSION = '2.12.1';
+const APP_BUILD   = '2026-02-14T23:45:00+01:00';
+const APP_CHANGES = 'Migraci\u00F3n Booking: fuerza % m\u00E1ximo en reservas no validadas al cargar';
 
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 //  [M02] UTILITIES â€” Funciones auxiliares reutilizables
@@ -1419,6 +1419,14 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.12.1',
+    date: '2026-02-14',
+    changes: [
+      'Migracion Booking: al cargar datos, fuerza comision maxima en todas las reservas no validadas',
+      'Cambios se persisten automaticamente en la hoja de configuracion',
+    ]
+  },
   {
     version: '2.12.0',
     date: '2026-02-14',
@@ -2460,6 +2468,9 @@ async function loadSheetData(sheetId, sheetTab, displayName) {
     document.getElementById("file-indicator").style.display = "block";
     document.getElementById("nav-consol").style.display = "block";
     updateSyncIndicator('idle');
+    // One-time migration: force highest commission for non-validated Booking reservations
+    _migrateBookingCommission();
+
     hideGSheetLoading(); showScreen("list"); renderTable();
   } catch(e) {
     hideGSheetLoading();
@@ -3470,6 +3481,36 @@ function parseRate(v, min, max) {
   return n;
 }
 function getDefaultForPlatform(plat) { const o = platformOptions[plat]; return o && o.length ? o[o.length-1] / 100 : 0.10; }
+
+/**
+ * @description One-time migration: sets all non-validated Booking.com reservations
+ * to the highest available commission percentage.
+ * Only modifies reservations that haven't been validated yet.
+ */
+function _migrateBookingCommission() {
+  const bookingOpts = platformOptions['Booking.com'];
+  if (!bookingOpts || bookingOpts.length === 0) return;
+  const maxRate = bookingOpts[bookingOpts.length - 1] / 100;
+  let count = 0;
+  allReservas.forEach(function(r) {
+    if (r.plataforma !== 'Booking.com') return;
+    if (validated[r.idx]) return;
+    const s = settings[r.idx] || {};
+    if (s.comPlataforma === maxRate) return;
+    if (!settings[r.idx]) settings[r.idx] = {};
+    settings[r.idx].comPlataforma = maxRate;
+    invalidateCache(r.idx);
+    _pendingReservaConfigSaves.add(r.idx);
+    count++;
+  });
+  if (count > 0) {
+    console.log('[Migration] Booking commission set to ' + (maxRate*100) + '% for ' + count + ' non-validated reservations');
+    showToast('Booking: ' + count + ' reservas actualizadas a ' + (maxRate*100) + '%', 'info', 4000);
+    // Schedule save of all modified reservations
+    if (_reservaConfigSaveTimer) clearTimeout(_reservaConfigSaveTimer);
+    _reservaConfigSaveTimer = setTimeout(flushReservaConfigSaves, 2000);
+  }
+}
 
 /**
  * @description Calcula la liquidaciÃ³n completa de una reserva.

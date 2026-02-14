@@ -359,19 +359,8 @@ async function _sendGmail({ to, subject, htmlBody, pdfBlob, filename }) {
     throw new Error('No hay sesi\u00F3n de Google activa. Inicia sesi\u00F3n primero.');
   }
 
-  // Get sender email from Gmail profile
-  const profileResp = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-    headers: { 'Authorization': 'Bearer ' + _googleToken.access_token }
-  });
-  if (!profileResp.ok) {
-    if (profileResp.status === 403 || profileResp.status === 401) {
-      throw new Error('Sin permiso de Gmail. Desconecta y vuelve a conectar tu cuenta de Google para aceptar el permiso.');
-    }
-    throw new Error('No se pudo obtener el perfil de Gmail. Verifica los permisos.');
-  }
-  const profile = await profileResp.json();
-  const from = profile.email;
-
+  // Gmail sets the From header automatically for the authenticated user
+  const from = 'me';
   // Convert PDF blob to base64
   const pdfBase64 = await new Promise((resolve, reject) => {
     const reader = new FileReader();

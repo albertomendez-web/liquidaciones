@@ -759,6 +759,10 @@ tr.ce2-highlighted { background:#faf8ff; }
 .ai-chip:hover { background:#dce6ff; border-color:#92b0f0; }
 .ai-chip:active { transform:scale(0.97); }
 .ai-chips-hidden { display:none !important; }
+.ai-alert { align-self:stretch !important; max-width:100% !important; background:linear-gradient(135deg,#fffbeb,#fef3c7); color:#92400e; border:1px solid #fcd34d; border-radius:10px; font-size:12px; line-height:1.6; padding:12px 14px !important; }
+.ai-alert strong { color:#78350f; }
+.ai-export-link { display:inline-block; margin-top:6px; padding:4px 10px; background:#4f8cff; color:#fff !important; border-radius:6px; text-decoration:none; font-size:11px; font-weight:600; cursor:pointer; }
+.ai-export-link:hover { background:#3b6de0; }
 
 /* === TOAST NOTIFICATIONS === */
 .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
@@ -830,12 +834,12 @@ tr.ce2-highlighted { background:#faf8ff; }
   <div class="ai-messages" id="ai-messages">
     <div class="ai-msg system">Preg&uacute;ntame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.</div>
     <div class="ai-chips" id="ai-chips">
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Dame un resumen ejecutivo con KPIs principales: ADR, estancia media, comisi&oacute;n efectiva, margen propietario, top y bottom 5 pisos">&#x1F4CA; KPIs y resumen</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Comparativa interanual completa: reservas, noches, importe, liquidaci&oacute;n, ADR. Incluye top 5 pisos que m&aacute;s crecen y top 5 que m&aacute;s bajan">&#x1F4C8; Comparar a&ntilde;os</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="An&aacute;lisis de estacionalidad por trimestre y plataforma: &iquest;cu&aacute;l es el trimestre pico? &iquest;Qu&eacute; plataforma rinde mejor en cada temporada?">&#x2600;&#xFE0F; Estacionalidad</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Desglose de comisiones pagadas por plataforma: comisi&oacute;n canal, pasarela de pago, y total. &iquest;Cu&aacute;l es la m&aacute;s cara?">&#x1F4B0; Comisiones</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Resumen por propietario: lista cada propietario con sus pisos, n&uacute;mero de reservas, importe total y liquidaci&oacute;n">&#x1F464; Propietarios</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="&iquest;Cu&aacute;les son los 10 alojamientos con mayor ADR (tarifa media por noche)? &iquest;Y los 10 con menor ADR?">&#x1F3E0; Ranking ADR</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Dame un resumen ejecutivo con KPIs principales: ADR, estancia media, comisi&oacute;n efectiva, margen propietario, top y bottom 5 pisos">&#x1F4CA; KPIs</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Comparativa interanual completa: reservas, noches, importe, liquidaci&oacute;n, ADR, con top 5 que m&aacute;s crecen y top 5 que m&aacute;s bajan">&#x1F4C8; Comparar a&ntilde;os</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="An&aacute;lisis de estacionalidad por trimestre y plataforma: pico, valle, y qu&eacute; plataforma rinde mejor en cada temporada">&#x2600;&#xFE0F; Estacionalidad</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Compara todos los propietarios con m&eacute;tricas detalladas por piso: ADR, margen, reservas, noches">&#x1F465; Comparar propietarios</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Predicci&oacute;n de ocupaci&oacute;n: proyecci&oacute;n mensual basada en el hist&oacute;rico, con tendencia interanual">&#x1F52E; Predicci&oacute;n</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Quiero exportar datos a Excel. &iquest;Qu&eacute; opciones de descarga tengo disponibles?">&#x1F4E5; Exportar Excel</button>
     </div>
   </div>
   <div class="ai-input-wrap">
@@ -1310,9 +1314,9 @@ function toggleConsolVal(mode) {
  *  ÃƒÂ¢Ã…â€œÃ¢â‚¬Å“ 7. NUNCA reutilizar un nÃƒÆ’Ã‚Âºmero de versiÃƒÆ’Ã‚Â³n ya existente
  * ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
  */
-const APP_VERSION = '2.17.0';
-const APP_BUILD   = '2026-02-15T17:00:00+01:00';
-const APP_CHANGES = 'Asistente IA Fase 3: KPIs + comparativa interanual + estacionalidad cruzada';
+const APP_VERSION = '2.18.0';
+const APP_BUILD   = '2026-02-15T18:00:00+01:00';
+const APP_CHANGES = 'Asistente IA Fase 4: alertas + comparar propietarios + predicci\u00F3n + export Excel + cach\u00E9';
 
 // Ã¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢ÂÃ¢â€¢Â
 //  [M02] UTILITIES Ã¢â‚¬â€ Funciones auxiliares reutilizables
@@ -1455,6 +1459,21 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.18.0',
+    date: '2026-02-15',
+    changes: [
+      'Alertas proactivas: detecta autom\u00E1ticamente pisos con ADR bajo, sin reservas, con margen < 30% y pendientes altas',
+      'Comparaci\u00F3n de propietarios: m\u00E9tricas por piso con ADR, margen, reservas y noches por propietario',
+      'Predicci\u00F3n de ocupaci\u00F3n: proyecci\u00F3n mensual basada en medias hist\u00F3ricas con tendencia interanual',
+      'Export a Excel: 5 tipos de descarga CSV (ranking ADR, propietarios, mensual, plataformas, todo)',
+      'Cach\u00E9 de contexto: reutiliza contexto 30s si mismas categor\u00EDas y datos, evita rec\u00E1lculos',
+      'Cach\u00E9/alertas se resetean autom\u00E1ticamente al recargar datos',
+      'Clasificador ampliado: 18 categor\u00EDas (CMP_OWNER, PREDICT, EXPORT)',
+      'Chips actualizados: Comparar propietarios, Predicci\u00F3n, Exportar Excel',
+      'Botones de descarga inline tras queries de exportaci\u00F3n',
+    ]
+  },
   {
     version: '2.17.0',
     date: '2026-02-15',
@@ -4081,6 +4100,9 @@ function processRows(json) {
   invalidateCache();
   invalidateAlojCache();
   rebuildSelectCache();
+  // Phase 4: Reset AI context cache and alerts when data reloads
+  if (typeof _aiContextCache !== 'undefined') _aiContextCache = { key: '', ctx: '', ts: 0 };
+  if (typeof _aiAlertsShown !== 'undefined') _aiAlertsShown = false;
   _currentPage = 1;
   return true;
 }
@@ -7413,6 +7435,8 @@ document.querySelectorAll('.combo-input').forEach(input => {
 let _aiPanelOpen = false;
 let _aiHistory = [];
 let _aiProcessing = false;
+let _aiContextCache = { key: '', ctx: '', ts: 0 }; // Phase 4: context cache
+let _aiAlertsShown = false; // Phase 4: anomaly alerts shown flag
 
 function sendAIChip(btn) {
   var q = btn.getAttribute('data-q');
@@ -7434,6 +7458,89 @@ function toggleAIPanel() {
   if (_aiPanelOpen) {
     document.getElementById('ai-badge').style.display = 'none';
     setTimeout(function(){ document.getElementById('ai-input').focus(); }, 300);
+    // Phase 4: Show anomaly alerts on first open after data load
+    if (!_aiAlertsShown && allReservas && allReservas.length > 0) {
+      _aiAlertsShown = true;
+      setTimeout(_showAnomalyAlerts, 400);
+    }
+  }
+}
+
+/**
+ * @description Detecta anomal\u00EDas en los datos y muestra alertas proactivas.
+ * Se ejecuta una vez al abrir el panel tras cargar datos.
+ */
+function _showAnomalyAlerts() {
+  if (!allReservas || allReservas.length === 0) return;
+  var alerts = [];
+  var f = function(v) { return v.toFixed(2); };
+
+  // 1. Pisos con ADR bajo (<50 EUR/noche)
+  var lowAdr = [];
+  var byAloj = {};
+  allReservas.forEach(function(r) {
+    var a = r.alojamiento || 'Sin'; var c = getLiq(r); var n = r._nights || 0;
+    if (!byAloj[a]) byAloj[a] = {n:0, noch:0, imp:0, liq:0};
+    byAloj[a].n++; byAloj[a].noch += n; byAloj[a].imp += c.total; byAloj[a].liq += c.totalLiq;
+  });
+  Object.keys(byAloj).forEach(function(a) {
+    var d = byAloj[a];
+    if (d.noch >= 5) { // solo si tiene al menos 5 noches
+      var adr = d.imp / d.noch;
+      if (adr < 50) lowAdr.push({ name: a, adr: adr, noch: d.noch });
+    }
+  });
+  if (lowAdr.length > 0) {
+    alerts.push('\u26A0\uFE0F **' + lowAdr.length + ' piso' + (lowAdr.length>1?'s':'') + ' con ADR < 50\u20AC/noche**: ' +
+      lowAdr.slice(0,5).map(function(x){ return x.name + ' (' + f(x.adr) + '\u20AC)'; }).join(', ') +
+      (lowAdr.length > 5 ? '... y ' + (lowAdr.length-5) + ' m\u00E1s' : ''));
+  }
+
+  // 2. Pisos sin reservas (en propietarios pero 0 reservas)
+  if (_propietariosMap) {
+    var sinReservas = [];
+    Object.keys(_propietariosMap).forEach(function(k) {
+      if (!_propietariosMap[k]) return;
+      var found = false;
+      for (var i = 0; i < allReservas.length; i++) {
+        if (allReservas[i]._alojLc === k) { found = true; break; }
+      }
+      if (!found) sinReservas.push(k.toUpperCase());
+    });
+    if (sinReservas.length > 0) {
+      alerts.push('\uD83D\uDEAB **' + sinReservas.length + ' piso' + (sinReservas.length>1?'s':'') + ' sin reservas** en el periodo: ' +
+        sinReservas.slice(0,5).join(', ') + (sinReservas.length > 5 ? '...' : ''));
+    }
+  }
+
+  // 3. Alto % de pendientes de validar
+  var pctPend = allReservas.length > 0 ? ((allReservas.length - validated.size) / allReservas.length * 100) : 0;
+  if (pctPend > 50 && allReservas.length > 20) {
+    alerts.push('\u2705 **' + (allReservas.length - validated.size) + ' reservas pendientes** de validar (' + pctPend.toFixed(0) + '% del total)');
+  }
+
+  // 4. Pisos con margen propietario muy bajo (<30%)
+  var lowMargin = [];
+  Object.keys(byAloj).forEach(function(a) {
+    var d = byAloj[a];
+    if (d.imp > 500) { // solo pisos con ingresos significativos
+      var margin = d.liq / d.imp * 100;
+      if (margin < 30) lowMargin.push({ name: a, margin: margin });
+    }
+  });
+  if (lowMargin.length > 0) {
+    alerts.push('\uD83D\uDCC9 **' + lowMargin.length + ' piso' + (lowMargin.length>1?'s':'') + ' con margen < 30%**: ' +
+      lowMargin.slice(0,4).map(function(x){ return x.name + ' (' + x.margin.toFixed(0) + '%)'; }).join(', '));
+  }
+
+  if (alerts.length > 0) {
+    var alertDiv = document.createElement('div');
+    alertDiv.className = 'ai-msg ai-alert';
+    alertDiv.innerHTML = '<strong>\uD83D\uDD0D Alertas detectadas:</strong><br>' +
+      alerts.join('<br>').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') +
+      '<br><em style="font-size:11px;color:#6b7280;">Preg\u00FAntame sobre cualquiera de estas alertas para m\u00E1s detalle.</em>';
+    document.getElementById('ai-messages').appendChild(alertDiv);
+    document.getElementById('ai-messages').scrollTop = document.getElementById('ai-messages').scrollHeight;
   }
 }
 
@@ -7478,6 +7585,9 @@ function _classifyQuery(text) {
     KPI:       /kpi|indicador|adr|revpar|ocupaci|media|promedio|ratio|eficiencia|rendimiento|m[eé]trica|estad[ií]stic/i,
     YOY:       /interanual|yoy|year.over|a[ñn]o.a.a[ñn]o|compar.*(a[ñn]o|anual|201|202)|creci.*anual|vs\s*20[12]/i,
     SEASON:    /estacion|temporada|verano|invierno|alta|baja|trimestre|q[1234]|t[1234]|pico|valle/i,
+    CMP_OWNER: /compar.*propietario|propietario.*vs|versus.*propietario|pisos\s+de\s+\w+\s+(vs|contra|frente|compar)/i,
+    PREDICT:   /predicci[oó]n|proyecci[oó]n|previsi[oó]n|estimar?|pronostic|futuro|pr[oó]ximo|siguiente|forecast/i,
+    EXPORT:    /export|excel|csv|descargar?|generar?.*(tabla|archivo|fichero)|guardar.*(tabla|datos)/i,
   };
 
   Object.keys(patterns).forEach(function(cat) {
@@ -7492,7 +7602,7 @@ function _classifyQuery(text) {
 
 /**
  * @description Construye el contexto de datos seg\u00FAn las categor\u00EDas detectadas.
- * Fase 2: Solo incluye secciones relevantes para la pregunta.
+ * Fase 4: Cache + predicci\u00F3n + comparaci\u00F3n propietarios.
  * @param {Set<string>} cats - Categor\u00EDas de la query
  * @returns {string} Contexto optimizado
  */
@@ -7500,14 +7610,21 @@ function buildAIContext(cats) {
   if (!allReservas || allReservas.length === 0) return 'No hay datos cargados.';
   if (!cats) cats = new Set(['GLOBAL', 'SUMMARY']);
 
+  // Phase 4: Context cache - reuse if same categories and data hasn't changed
+  var cacheKey = Array.from(cats).sort().join(',') + '|' + allReservas.length + '|' + validated.size;
+  if (_aiContextCache.key === cacheKey && (Date.now() - _aiContextCache.ts) < 30000) {
+    console.log('[AI] Context cache HIT');
+    return _aiContextCache.ctx;
+  }
+
   var total = allReservas.length;
-  var needAloj = cats.has('PROPERTY') || cats.has('SUMMARY') || cats.has('FINANCIAL') || cats.has('OWNER') || cats.has('MAINT') || cats.has('KPI') || cats.has('YOY');
+  var needAloj = cats.has('PROPERTY') || cats.has('SUMMARY') || cats.has('FINANCIAL') || cats.has('OWNER') || cats.has('MAINT') || cats.has('KPI') || cats.has('YOY') || cats.has('CMP_OWNER');
   var needPlat = cats.has('PLATFORM') || cats.has('SUMMARY') || cats.has('FINANCIAL') || cats.has('SEASON');
-  var needMes = cats.has('TIME') || cats.has('SUMMARY') || cats.has('SEASON');
-  var needYear = cats.has('TIME') || cats.has('SUMMARY') || cats.has('YOY');
+  var needMes = cats.has('TIME') || cats.has('SUMMARY') || cats.has('SEASON') || cats.has('PREDICT');
+  var needYear = cats.has('TIME') || cats.has('SUMMARY') || cats.has('YOY') || cats.has('PREDICT');
   var needAgent = cats.has('AGENT') || cats.has('SUMMARY');
   var needMkt = cats.has('MARKETING') || cats.has('SUMMARY');
-  var needOwner = cats.has('OWNER') || cats.has('SUMMARY');
+  var needOwner = cats.has('OWNER') || cats.has('SUMMARY') || cats.has('CMP_OWNER');
   var needGtc = cats.has('GTC_SPLIT') || cats.has('OWNER') || cats.has('SUMMARY');
   var needMaint = cats.has('MAINT') || cats.has('OWNER') || cats.has('SUMMARY');
   var needDetail = cats.has('DETAIL');
@@ -7515,6 +7632,8 @@ function buildAIContext(cats) {
   var needKpi = cats.has('KPI') || cats.has('SUMMARY');
   var needYoy = cats.has('YOY') || cats.has('TIME');
   var needSeason = cats.has('SEASON') || cats.has('TIME');
+  var needPredict = cats.has('PREDICT');
+  var needCmpOwner = cats.has('CMP_OWNER');
 
   // Always compute global
   var byAloj = {}, byPlat = {}, byMes = {}, byYear = {}, byAgent = {}, byMarketing = {};
@@ -7824,6 +7943,77 @@ function buildAIContext(cats) {
     }
   }
 
+  // COMPARACIÓN DE PROPIETARIOS (detalle por owner con métricas por piso)
+  if (needCmpOwner && _propietariosMap && Object.keys(_propietariosMap).length > 0) {
+    var cmpOwners = {};
+    allReservas.forEach(function(r) {
+      var ownerName = getPropietario(r.alojamiento);
+      if (!ownerName || ownerName === 'Falta propietario') return;
+      if (!cmpOwners[ownerName]) cmpOwners[ownerName] = { pisos: {} };
+      var a = r.alojamiento;
+      if (!cmpOwners[ownerName].pisos[a]) cmpOwners[ownerName].pisos[a] = {n:0, noch:0, imp:0, liq:0};
+      var c = getLiq(r), n = r._nights || 0;
+      var dp = cmpOwners[ownerName].pisos[a];
+      dp.n++; dp.noch += n; dp.imp += c.total; dp.liq += c.totalLiq;
+    });
+    ctx += '\n=== COMPARACI\u00D3N PROPIETARIOS (detalle por piso) ===\n';
+    Object.keys(cmpOwners).sort().forEach(function(ow) {
+      var pisos = cmpOwners[ow].pisos;
+      var owTot = {n:0, noch:0, imp:0, liq:0};
+      ctx += '\n' + ow + ':\n';
+      ctx += 'Piso|Res|Noch|ADR|Imp|Liq|Margen%\n';
+      Object.keys(pisos).sort().forEach(function(p) {
+        var d = pisos[p];
+        owTot.n += d.n; owTot.noch += d.noch; owTot.imp += d.imp; owTot.liq += d.liq;
+        var adr = d.noch > 0 ? d.imp / d.noch : 0;
+        var margin = d.imp > 0 ? d.liq / d.imp * 100 : 0;
+        ctx += p + '|' + d.n + '|' + d.noch + '|' + f(adr) + '|' + f(d.imp) + '|' + f(d.liq) + '|' + margin.toFixed(1) + '%\n';
+      });
+      var owAdr = owTot.noch > 0 ? owTot.imp / owTot.noch : 0;
+      var owMargin = owTot.imp > 0 ? owTot.liq / owTot.imp * 100 : 0;
+      ctx += 'TOTAL|' + owTot.n + '|' + owTot.noch + '|' + f(owAdr) + '|' + f(owTot.imp) + '|' + f(owTot.liq) + '|' + owMargin.toFixed(1) + '%\n';
+    });
+  }
+
+  // PREDICCI\u00D3N DE OCUPACI\u00D3N (proyecci\u00F3n simple basada en hist\u00F3rico)
+  if (needPredict && Object.keys(byMes).length >= 12) {
+    ctx += '\n=== PREDICCI\u00D3N / PROYECCI\u00D3N ===\n';
+    // Agregar datos por mes (1-12) promediando todos los a\u00F1os
+    var monthAvg = {};
+    var monthYears = {};
+    Object.keys(byMes).forEach(function(m) {
+      var parts = m.split('/');
+      var mm = parseInt(parts[0]);
+      var yr = parts[1];
+      if (!monthAvg[mm]) { monthAvg[mm] = {n:0, noch:0, imp:0, liq:0, count:0}; monthYears[mm] = []; }
+      monthAvg[mm].n += byMes[m].n;
+      monthAvg[mm].noch += byMes[m].noch;
+      monthAvg[mm].imp += byMes[m].imp;
+      monthAvg[mm].liq += byMes[m].liq;
+      monthAvg[mm].count++;
+      monthYears[mm].push(yr);
+    });
+    var mNames = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    ctx += 'Mes|Prom.Reservas|Prom.Noches|Prom.Importe|Prom.Liquidaci\u00F3n|A\u00F1os\n';
+    for (var mm = 1; mm <= 12; mm++) {
+      if (monthAvg[mm] && monthAvg[mm].count > 0) {
+        var d = monthAvg[mm], c2 = d.count;
+        ctx += mNames[mm] + '|' + (d.n/c2).toFixed(0) + '|' + (d.noch/c2).toFixed(0) + '|' + f(d.imp/c2) + '|' + f(d.liq/c2) + '|' + c2 + ' a\u00F1os\n';
+      } else {
+        ctx += mNames[mm] + '|sin datos\n';
+      }
+    }
+    // Tendencia anual
+    var yrKeys = Object.keys(byYear).sort();
+    if (yrKeys.length >= 2) {
+      var lastY = byYear[yrKeys[yrKeys.length-1]], prevY = byYear[yrKeys[yrKeys.length-2]];
+      var growthRes = prevY.n > 0 ? ((lastY.n - prevY.n) / prevY.n * 100) : 0;
+      var growthImp = prevY.imp > 0 ? ((lastY.imp - prevY.imp) / prevY.imp * 100) : 0;
+      ctx += 'Tendencia ' + yrKeys[yrKeys.length-2] + '\u2192' + yrKeys[yrKeys.length-1] + ': reservas ' + (growthRes>0?'+':'') + growthRes.toFixed(1) + '%, importe ' + (growthImp>0?'+':'') + growthImp.toFixed(1) + '%\n';
+      ctx += 'NOTA: La proyecci\u00F3n es una media hist\u00F3rica. Usa la tendencia para ajustar al alza/baja.\n';
+    }
+  }
+
   // DETALLE (solo si se piden datos espec\u00EDficos o hay pocas filtradas)
   if (needDetail || needVal) {
     var filtered = (typeof getFilteredSorted === 'function') ? getFilteredSorted() : allReservas;
@@ -7844,6 +8034,9 @@ function buildAIContext(cats) {
 
   // Info de contexto selectivo (para debug)
   ctx += '\n[Secciones incluidas: ' + Array.from(cats).join(', ') + ']\n';
+
+  // Phase 4: Save to cache
+  _aiContextCache = { key: cacheKey, ctx: ctx, ts: Date.now() };
   return ctx;
 }
 
@@ -7876,6 +8069,107 @@ function _compactHistory() {
   ].concat(recent);
 
   console.log('[AI] Compacted history: ' + old.length + ' msgs \u2192 summary + ' + recent.length + ' recent');
+}
+
+/**
+ * @description Genera y descarga un archivo Excel CSV desde el chat.
+ * Soporta varios tipos de export predefinidos.
+ * @param {string} type - Tipo de export solicitado
+ */
+function _aiExportExcel(type) {
+  if (!allReservas || allReservas.length === 0) return;
+  var f = function(v) { return v.toFixed(2); };
+  var rows = [];
+  var filename = 'export';
+
+  if (type === 'adr') {
+    filename = 'ranking-adr';
+    rows.push(['Alojamiento','Reservas','Noches','ADR (EUR/noche)','Importe Total','Liquidaci\u00F3n','Margen %']);
+    var byA = {};
+    allReservas.forEach(function(r) {
+      var a = r.alojamiento||'Sin'; var c = getLiq(r); var n = r._nights||0;
+      if (!byA[a]) byA[a] = {n:0, noch:0, imp:0, liq:0};
+      byA[a].n++; byA[a].noch += n; byA[a].imp += c.total; byA[a].liq += c.totalLiq;
+    });
+    Object.keys(byA).filter(function(a){ return byA[a].noch > 0; })
+      .sort(function(a,b){ return (byA[b].imp/byA[b].noch)-(byA[a].imp/byA[a].noch); })
+      .forEach(function(a) {
+        var d = byA[a]; var adr = d.imp/d.noch; var mg = d.imp>0 ? d.liq/d.imp*100 : 0;
+        rows.push([a, d.n, d.noch, f(adr), f(d.imp), f(d.liq), mg.toFixed(1)+'%']);
+      });
+  } else if (type === 'owners') {
+    filename = 'propietarios';
+    rows.push(['Propietario','Pisos','Reservas','Noches','Importe','Liquidaci\u00F3n','ADR','Margen %']);
+    var byO = {};
+    allReservas.forEach(function(r) {
+      var ow = getPropietario(r.alojamiento); if (!ow || ow === 'Falta propietario') return;
+      if (!byO[ow]) byO[ow] = {pisos:{}, n:0, noch:0, imp:0, liq:0};
+      byO[ow].pisos[r.alojamiento] = true; byO[ow].n++; byO[ow].noch += r._nights||0;
+      var c = getLiq(r); byO[ow].imp += c.total; byO[ow].liq += c.totalLiq;
+    });
+    Object.keys(byO).sort().forEach(function(ow) {
+      var d = byO[ow]; var adr = d.noch>0 ? d.imp/d.noch : 0; var mg = d.imp>0 ? d.liq/d.imp*100 : 0;
+      rows.push([ow, Object.keys(d.pisos).sort().join('; '), d.n, d.noch, f(d.imp), f(d.liq), f(adr), mg.toFixed(1)+'%']);
+    });
+  } else if (type === 'monthly') {
+    filename = 'mensual';
+    rows.push(['Mes','Reservas','Noches','Importe','Liquidaci\u00F3n','ADR']);
+    var byM = {};
+    allReservas.forEach(function(r) {
+      var fE = r._dEntrada; if (!fE) return;
+      var m = (fE.getMonth()+1).toString().padStart(2,'0') + '/' + fE.getFullYear();
+      if (!byM[m]) byM[m] = {n:0, noch:0, imp:0, liq:0};
+      byM[m].n++; byM[m].noch += r._nights||0; var c = getLiq(r); byM[m].imp += c.total; byM[m].liq += c.totalLiq;
+    });
+    Object.keys(byM).sort().forEach(function(m) {
+      var d = byM[m]; var adr = d.noch>0 ? d.imp/d.noch : 0;
+      rows.push([m, d.n, d.noch, f(d.imp), f(d.liq), f(adr)]);
+    });
+  } else if (type === 'platforms') {
+    filename = 'plataformas';
+    rows.push(['Plataforma','Reservas','Importe','Com. Canal','Com. Pasarela','Liquidaci\u00F3n','Com. Efectiva %']);
+    var byP = {};
+    allReservas.forEach(function(r) {
+      var p = r.plataforma||'Desconocida'; var c = getLiq(r);
+      if (!byP[p]) byP[p] = {n:0, imp:0, cPlat:0, cPas:0, liq:0};
+      byP[p].n++; byP[p].imp += c.total; byP[p].cPlat += c.comPlat; byP[p].cPas += c.comPas; byP[p].liq += c.totalLiq;
+    });
+    Object.keys(byP).sort().forEach(function(p) {
+      var d = byP[p]; var ce = d.imp>0 ? (d.cPlat+d.cPas)/d.imp*100 : 0;
+      rows.push([p, d.n, f(d.imp), f(d.cPlat), f(d.cPas), f(d.liq), ce.toFixed(1)+'%']);
+    });
+  } else if (type === 'all') {
+    filename = 'reservas-completo';
+    rows.push(['ID','Localizador','Cliente','Alojamiento','Plataforma','Entrada','Salida','Noches','Importe','ComCanal','ComGTC','Limpieza','Liquidaci\u00F3n','Estado']);
+    allReservas.forEach(function(r) {
+      var c = getLiq(r);
+      rows.push([r.id||'', r.localizador||'', r.cliente||'', r.alojamiento||'', r.plataforma||'',
+        r._fmtEntrada||'', r._fmtSalida||'', r._nights||0,
+        f(c.total), f(c.comPlat), f(c.comGTC), f(c.limp), f(c.totalLiq),
+        validated.has(r.idx)?'Validada':'Pendiente']);
+    });
+  } else {
+    return; // unknown type
+  }
+
+  // Generate CSV with BOM for Excel UTF-8 compatibility
+  var csv = '\uFEFF' + rows.map(function(row) {
+    return row.map(function(cell) {
+      var s = String(cell);
+      if (s.indexOf(',') >= 0 || s.indexOf('"') >= 0 || s.indexOf(';') >= 0 || s.indexOf('\n') >= 0) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    }).join(';'); // semicolon for Spanish Excel
+  }).join('\r\n');
+
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = filename + '-' + new Date().toISOString().slice(0,10) + '.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  console.log('[AI] Export CSV:', filename, rows.length, 'rows');
 }
 
 function _addAIMsg(role, text) {
@@ -7947,14 +8241,14 @@ async function sendAIMessage() {
       '6. Res\u00FAmenes = TODAS las reservas. Detalle = filtradas (max 50).\n' +
       '7. Si falta info, sugiere filtrar la tabla o reformular.\n' +
       '8. Los datos se seleccionan seg\u00FAn tu pregunta. Si necesitas una secci\u00F3n que no ves, p\u00EDdela.\n\n' +
-      'KPIs DISPONIBLES:\n' +
-      '- ADR (Average Daily Rate): tarifa media por noche = importe/noches\n' +
-      '- Estancia media: noches/reserva\n' +
-      '- Comisi\u00F3n efectiva: (canal+GTC+pasarela)/importe en %\n' +
-      '- Margen propietario: liquidaci\u00F3n/importe en %\n' +
-      '- Rankings top/bottom por liquidaci\u00F3n y ADR\n' +
+      'CAPACIDADES:\n' +
+      '- KPIs: ADR, estancia media, comisi\u00F3n efectiva %, margen propietario %, rankings top/bottom\n' +
       '- Comparativa interanual con \u0394% y top movers\n' +
-      '- Estacionalidad cruzada: plataforma x trimestre\n\n' +
+      '- Estacionalidad cruzada: plataforma x trimestre\n' +
+      '- Comparaci\u00F3n entre propietarios: m\u00E9tricas por piso de cada uno\n' +
+      '- Predicci\u00F3n: media hist\u00F3rica mensual con tendencia interanual para proyectar\n' +
+      '- Export: el usuario puede descargar datos en CSV/Excel con los botones que aparecen\n' +
+      '  Si piden exportar, describe qu\u00E9 contiene cada opci\u00F3n disponible.\n\n' +
       'DATOS:\n' + context;
 
     let messages = _aiHistory.slice(-CONFIG.MAX_AI_HISTORY);
@@ -8009,7 +8303,28 @@ async function sendAIMessage() {
       let data = await resp.json();
       let reply = data.content.map(function(b){ return b.text||''; }).join('');
       _aiHistory.push({role:'assistant', content:reply});
-      _addAIMsg('assistant', reply);
+      let msgDiv = _addAIMsg('assistant', reply);
+
+      // Phase 4: Auto-add export buttons for EXPORT queries
+      if (cats.has('EXPORT') && msgDiv) {
+        var exportBar = document.createElement('div');
+        exportBar.style.cssText = 'margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;';
+        var exports = [
+          {type:'adr', label:'\uD83D\uDCC9 Ranking ADR'},
+          {type:'owners', label:'\uD83D\uDC64 Propietarios'},
+          {type:'monthly', label:'\uD83D\uDCC5 Mensual'},
+          {type:'platforms', label:'\uD83C\uDFE2 Plataformas'},
+          {type:'all', label:'\uD83D\uDCCB Todo (detalle)'},
+        ];
+        exports.forEach(function(ex) {
+          var btn = document.createElement('a');
+          btn.className = 'ai-export-link';
+          btn.textContent = ex.label;
+          btn.onclick = function(e) { e.preventDefault(); _aiExportExcel(ex.type); };
+          exportBar.appendChild(btn);
+        });
+        msgDiv.appendChild(exportBar);
+      }
     }
   } catch(e) {
     _removeTyping();

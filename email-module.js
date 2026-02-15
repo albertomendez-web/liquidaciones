@@ -23,6 +23,10 @@
           validated, settings, getLiq, IVA_RESERVA, IVA_SUBTOTAL, GTC_SPLIT_RATE,
           isGtcSplit, getConsolDeductions, buildPrintDeductionsHtml, formatDate */
 
+
+// i18n helper - uses main app's t() if available, otherwise falls back to Spanish
+function _et(key) { return (typeof t === 'function') ? t(key) : key; }
+
 // ═══════════════════════════════════════════════════════════════════════════════
 //  [E01] LAZY LOADING — Dynamic CDN loading of PDF libraries
 // ═══════════════════════════════════════════════════════════════════════════════

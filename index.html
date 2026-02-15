@@ -1624,7 +1624,7 @@ const I18N = {
   'consol.ceNoVatDisc': { es:'C.E. sin IVA descontados', en:'S.C. excl. VAT discounted', de:'S.K. ohne MwSt. abgezogen' },
   'consol.splitTitle':  { es:'Acuerdo GTC / Propietario \u2014 Condici\u00f3n Especial', en:'GTC / Owner Agreement \u2014 Special Condition', de:'GTC / Eigent\u00fcmer Vereinbarung \u2014 Sonderbedingung' },
   'consol.gtcRetains':  { es:'GTC retiene', en:'GTC retains', de:'GTC beh\u00e4lt' },
-  'consol.ownerReceives': { es:t('liq.ownerReceives'), en:'Owner receives', de:'Eigent\u00fcmer erh\u00e4lt' },
+  'consol.ownerReceives': { es:'Propietario recibe', en:'Owner receives', de:'Eigent\u00fcmer erh\u00e4lt' },
   'consol.toSettleOwner': { es:'Total a Liquidar \u2014 Propietario', en:'Total to Settle \u2014 Owner', de:'Gesamt zur Abrechnung \u2014 Eigent\u00fcmer' },
 
   // ——— Config Modal ———
@@ -1892,7 +1892,7 @@ const I18N = {
   'liq.cleaning':         { es:'Limpieza', en:'Cleaning', de:'Reinigung' },
   'liq.paymentGateway':   { es:'Pasarela de pago', en:'Payment gateway', de:'Zahlungsgateway' },
   'liq.irpfWithholding':  { es:'Retenci\u00f3n IRPF', en:'IRPF Withholding', de:'IRPF-Einbehalt' },
-  'liq.ownerReceives':    { es:t('liq.ownerReceives'), en:'Owner receives', de:'Eigent\u00fcmer erh\u00e4lt' },
+  'liq.ownerReceives':    { es:'Propietario recibe', en:'Owner receives', de:'Eigent\u00fcmer erh\u00e4lt' },
   'liq.propietario':      { es:'Propietario', en:'Owner', de:'Eigent\u00fcmer' },
   'consol.summary2':      { es:'Resumen Consolidado', en:'Consolidated Summary', de:'Konsolidierte \u00dcbersicht' },
   'consol.numReservationsLabel': { es:'N\u00ba Reservas', en:'Reservations', de:'Buchungen' },
@@ -2519,7 +2519,7 @@ de: {
  */
 function _renderAIGuide() {
   var el = document.getElementById('ai-guide-body');
-  if (!el) return;
+  if (!el || typeof _GUIDE_I18N === 'undefined') return;
   var L = _currentLang || 'es';
   var g = _GUIDE_I18N[L] || _GUIDE_I18N.es;
   el.innerHTML =

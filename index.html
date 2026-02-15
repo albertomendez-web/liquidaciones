@@ -2895,11 +2895,11 @@ function updateGoogleStatus(connected) {
   const defaultArea = document.getElementById('gsheet-default-area');
   const noDefaultArea = document.getElementById('gsheet-no-default');
   if (connected) {
-    statusEl.className = 'gsheet-status connected'; labelEl.textContent = t('upload.connectedGoogle');
+    statusEl.className = 'gsheet-status connected'; labelEl.textContent = typeof t==='function'?t('upload.connectedGoogle'):'Conectado con Google'; labelEl.setAttribute('data-i18n','upload.connectedGoogle');
     btnC.style.display = 'none'; btnD.style.display = ''; picker.style.display = '';
     sidebar.style.display = 'block';
     document.getElementById('google-dot').className = 'status-dot on';
-    document.getElementById('google-status-text').textContent = t('upload.googleConnected');
+    var gst = document.getElementById('google-status-text'); gst.textContent = typeof t==='function'?t('upload.googleConnected'):'Google conectado'; gst.setAttribute('data-i18n','upload.googleConnected');
     if (_defaultSheetUrl) {
       defaultArea.style.display = '';
       noDefaultArea.style.display = 'none';
@@ -2913,7 +2913,7 @@ function updateGoogleStatus(connected) {
       noDefaultArea.style.display = '';
     }
   } else {
-    statusEl.className = 'gsheet-status disconnected'; labelEl.textContent = t('upload.notConnected');
+    statusEl.className = 'gsheet-status disconnected'; labelEl.textContent = typeof t==='function'?t('upload.notConnected'):'No conectado'; labelEl.setAttribute('data-i18n','upload.notConnected');
     btnC.style.display = ''; btnD.style.display = 'none'; picker.style.display = 'none';
     sidebar.style.display = 'none';
     defaultArea.style.display = 'none';
@@ -2942,7 +2942,7 @@ function autoLoadDefaultSheet() {
   if (!id) return;
   const statusEl = document.getElementById('gsheet-autoload-status');
   statusEl.style.display = '';
-  document.getElementById('autoload-status-text').textContent = t('upload.loadingDefault');
+  document.getElementById('autoload-status-text').textContent = typeof t==='function'?t('upload.loadingDefault'):'Cargando hoja por defecto...';
   loadSheetById(id, 'Hoja por defecto');
 }
 function editDefaultUrl() {

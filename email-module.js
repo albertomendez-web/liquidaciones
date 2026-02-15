@@ -635,7 +635,7 @@ function handleEmailLiquidacion() {
   overlay.innerHTML = `
     <div class="email-modal">
       <div class="email-modal-header">
-        <button onclick="closeEmailModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:rgba(255,255,255,0.6);font-size:22px;cursor:pointer;padding:4px 8px;line-height:1;border-radius:4px;transition:all 0.15s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.color='rgba(255,255,255,0.6)';this.style.background='none'">&times;</button>
+        <button onclick="closeEmailModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:#9ca3af;font-size:22px;cursor:pointer;padding:4px 8px;line-height:1;border-radius:4px;transition:all 0.15s;" onmouseover="this.style.color='#1D4B56';this.style.background='#f3f4f6'" onmouseout="this.style.color='#9ca3af';this.style.background='none'">&times;</button>
         <h3>${(window.t||String)('email.title')}</h3>
         <p>${_escHtml(alojName)} \u2014 ${_escHtml(mes)}</p>
       </div>

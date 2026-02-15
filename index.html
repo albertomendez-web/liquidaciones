@@ -1771,8 +1771,6 @@ const I18N = {
   'btn.addValue':         { es:'+ A\u00f1adir', en:'+ Add', de:'+ Hinzuf\u00fcgen' },
 
 
-  'btn.generate':        { es:'\ud83d\udda8 Generar Liquidaci\u00f3n', en:'\ud83d\udda8 Generate Settlement', de:'\ud83d\udda8 Abrechnung erstellen' },
-  'btn.downloadPdf':     { es:'\u2b73 Descargar PDF', en:'\u2b73 Download PDF', de:'\u2b73 PDF herunterladen' },
   'btn.sendEmail2':      { es:'&#9993; Enviar por Email', en:'&#9993; Send by Email', de:'&#9993; Per E-Mail senden' },
   'btn.validateFirst':   { es:'\u26a0 Valida todas las reservas primero', en:'\u26a0 Validate all reservations first', de:'\u26a0 Zuerst alle Buchungen validieren' },
   'sync.activateBtn':    { es:'Activar sincronizaci\u00f3n multi-usuario', en:'Activate multi-user sync', de:'Multi-User-Sync aktivieren' },
@@ -1882,8 +1880,8 @@ const I18N = {
   'ce2.final':         { es:'final', en:'final', de:'Endg\u00fcltig' },
   'ce.placeholderPet': { es:'E.g.: Pet...', en:'E.g.: Pet...', de:'Z.B.: Haustier...' },
   'ce.placeholderRep': { es:'E.g.: Repair...', en:'E.g.: Repair...', de:'Z.B.: Reparatur...' },
-  'btn.downloadPdfLiq': { es:'\u2b73 Descargar PDF', en:'\u2b73 Download PDF', de:'\u2b73 PDF herunterladen' },
-  'btn.sendEmailLiq':  { es:'\u2709 Enviar por Email', en:'\u2709 Send by Email', de:'\u2709 Per E-Mail senden' },
+  'btn.downloadPdfLiq': { es:'Descargar PDF', en:'Download PDF', de:'PDF herunterladen' },
+  'btn.sendEmailLiq':  { es:'Enviar por Email', en:'Send by Email', de:'Per E-Mail senden' },
   'liq.maintenance':   { es:'Mantenimiento', en:'Maintenance', de:'Wartung' },
   'liq.maintenanceMonthly': { es:'Mantenimiento mensual', en:'Monthly maintenance', de:'Monatliche Wartung' },
   'liq.maintenanceDesc': { es:'Importe base (+ 21% IVA) por liquidaci\u00f3n', en:'Base amount (+ 21% VAT) per settlement', de:'Grundbetrag (+ 21% MwSt.) pro Abrechnung' },
@@ -6005,7 +6003,7 @@ function _buildConsolSummaryInner(calcs, sums, alojName) {
   h += '<div style="flex:1;"></div>';
   h += '<div class="cd-total-hero" id="csf-total"><div class="cd-total-hero-label">' + t('liq.totalToSettleFull') + (_isSplit ? ' \u2014 ' + t('liq.propietario') : '') + '</div><div class="cd-total-hero-amount">' + fmt(adjLiq) + ' <span class="eur">\u20AC</span></div></div>';
   h += '<div class="no-print" style="margin-top:12px;">';
-  h += allVal ? '<button class="cd-btn-generate" onclick="handleGenerar()">\uD83D\uDDA8 ' + t('btn.generate') + '</button><button class="pdf-download-btn" onclick="handleDownloadPdf()">' + t('btn.downloadPdfLiq') + '</button><button class="email-btn" onclick="handleEmailLiquidacion()">' + t('btn.sendEmailLiq') + '</button>' : '<button class="cd-btn-generate disabled">\u26A0 ' + t('btn.validateFirst') + '</button><button class="pdf-download-btn disabled">' + t('btn.downloadPdfLiq') + '</button><button class="email-btn disabled">' + t('btn.sendEmailLiq') + '</button>';
+  h += allVal ? '<button class="cd-btn-generate" onclick="handleGenerar()">\uD83D\uDDA8 ' + t('btn.generate') + '</button><button class="pdf-download-btn" onclick="handleDownloadPdf()">\u2B73 ' + t('btn.downloadPdfLiq') + '</button><button class="email-btn" onclick="handleEmailLiquidacion()">\u2709 ' + t('btn.sendEmailLiq') + '</button>' : '<button class="cd-btn-generate disabled">\u26A0 ' + t('btn.validateFirst') + '</button><button class="pdf-download-btn disabled">\u2B73 ' + t('btn.downloadPdfLiq') + '</button><button class="email-btn disabled">\u2709 ' + t('btn.sendEmailLiq') + '</button>';
   h += '</div>';
   h += '</div>';
   return h;

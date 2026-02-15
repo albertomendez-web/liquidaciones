@@ -3244,7 +3244,7 @@ const I18N = {
   'liq.totalToSettle': { es:'Total a liquidar', en:'Total to settle', de:'Gesamt zur Abrechnung' },
   'liq.monthlySettlement': { es:'Liquidaci\u00f3n mensual', en:'Monthly settlement', de:'Monatliche Abrechnung' },
   'liq.specialConcepts': { es:'Conceptos especiales (sin IVA)', en:'Special Concepts (excl. VAT)', de:'Sonderposten (ohne MwSt.)' },
-  'liq.noName':        { es:t('liq.noName'), en:'No name', de:'Ohne Namen' },
+  'liq.noName':        { es:'Sin nombre', en:'No name', de:'Ohne Namen' },
 
   // ——— Consolidated Labels ———
   'consol.summary':    { es:'Resumen consolidado', en:'Consolidated Summary', de:'Konsolidierte Zusammenfassung' },
@@ -3262,7 +3262,7 @@ const I18N = {
   'consol.reservations': { es:'reservas', en:'reservations', de:'Buchungen' },
   'consol.reservation': { es:'reserva', en:'reservation', de:'Buchung' },
   'consol.validated_pl': { es:'validadas', en:'validated', de:'validiert' },
-  'consol.missingOwner': { es:t('consol.missingOwner'), en:'Missing owner', de:'Eigent\u00fcmer fehlt' },
+  'consol.missingOwner': { es:'Falta propietario', en:'Missing owner', de:'Eigent\u00fcmer fehlt' },
   'consol.salesOps':   { es:'Venta, gesti\u00f3n y operaciones', en:'Sales, management & operations', de:'Vertrieb, Verwaltung & Betrieb' },
   'consol.subtotalReservas2': { es:'Subtotal reservas', en:'Reservations subtotal', de:'Buchungs-Zwischensumme' },
   'consol.otherConceptsShort': { es:'Otros conceptos', en:'Other concepts', de:'Sonstige Posten' },
@@ -9672,7 +9672,8 @@ async function sendAIMessage() {
 })();
 // === END AI ASSISTANT ===
 </script>
-<script src="email-module.js">
+<script src="email-module.js"></script>
+<script>
 // Initialize i18n on page load
 (function() {
   const saved = SafeStorage.get('liq-lang');

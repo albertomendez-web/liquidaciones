@@ -359,7 +359,7 @@ async function handleDownloadPdf() {
     showToast(`PDF descargado: ${filename}`, 'success');
   } catch (err) {
     console.error('[Email] PDF download error:', err);
-    showToast((window.t||String)('pdf.errorGenerate') + err.message, 'error', 5000);
+    showToast('Error al generar PDF: ' + err.message, 'error', 5000);
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '\u2B73 Descargar PDF'; }
   }
@@ -442,7 +442,7 @@ async function _sendGmail({ to, cc, subject, htmlBody, pdfBlob, filename }) {
   const pdfBase64 = await new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = () => reject(new Error((window.t||String)('pdf.errorRead')));
+    reader.onerror = () => reject(new Error('Error al leer el archivo PDF'));
     reader.readAsDataURL(pdfBlob);
   });
 

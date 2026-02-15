@@ -609,6 +609,7 @@ function handleEmailLiquidacion() {
   }
 
   const mes = _getCurrentLiqMonth();
+  const _emailLangDefault = (typeof _docLang !== 'undefined') ? _docLang : 'es';
   const safeName = alojName.replace(/[^a-zA-Z0-9\-_]/g, '_');
   const safeMonth = mes.replace(/[^a-zA-Z0-9\-_]/g, '_');
   const _emailLangPfx = { es: 'Liquidacion', en: 'Settlement', de: 'Abrechnung' };
@@ -619,7 +620,6 @@ function handleEmailLiquidacion() {
     de: `Abrechnung ${mes} \u2014 ${alojName}`
   };
   const subject = _emailSubjects[_emailLangDefault] || _emailSubjects.es;
-  const _emailLangDefault = (typeof _docLang !== 'undefined') ? _docLang : 'es';
 
   const overlay = document.createElement('div');
   overlay.className = 'email-modal-overlay';

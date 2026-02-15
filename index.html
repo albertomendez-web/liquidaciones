@@ -7104,7 +7104,7 @@ function viewDetail(idx) {
       <div class="liq-row bold"><span>${t('liq.baseNoVAT')}</span><span class="liq-val">${fv(c.baseSinIVA)}</span></div>
     </div>
     <div class="liq-sec">
-      <div class="liq-sec-label">Venta, gestión y operaciones</div>
+      <div class="liq-sec-label">${t('liq.salesOps')}</div>
       <div class="liq-row"><span>${t('liq.salesChannel')} ${esc(r.plataforma)} ${_sel(platOpts, c.comRate, r.idx, 'comPlataforma', true)}</span><span class="liq-val neg">${fv(-c.comPlat)}</span></div>
       <div class="liq-row"><span>${t('liq.gtcMgmt')} ${_sel(gtcOptions, c.gtcRate, r.idx, 'comGTC', true)}</span><span class="liq-val neg">${fv(-c.comGTC)}</span></div>
       <div class="liq-row"><span>${t('liq.cleaning')} ${_sel(cleaningOptions, c.limp, r.idx, 'limpieza', false)}</span><span class="liq-val neg">${fv(-c.limp)}</span></div>
@@ -7873,7 +7873,7 @@ ${_isSplit ? `<div class="consol-split-box">
             </div>
             <div style="margin-bottom:16px;">
               <div class="cd-tb-row"><span>${t('liq.baseNoVAT')}</span><span class="cd-tb-val">${fmt(sumBase)} \u20AC</span></div>
-              <div class="cd-tb-row"><span>Venta, gestión y operaciones</span><span class="cd-tb-val neg">\u2212 ${fmt(sumVGO)} \u20AC</span></div>
+              <div class="cd-tb-row"><span>${t('consol.salesOps')}</span><span class="cd-tb-val neg">\u2212 ${fmt(sumVGO)} \u20AC</span></div>
               <div class="cd-tb-row" style="font-weight:700;"><span>${t('consol.subtotalReservas2')}</span><span class="cd-tb-val">${fmt(sumSub)} \u20AC</span></div>
 ${_isSplit ? `<div class="cd-split-mini">
                 <div class="cd-split-mini-header">&#8621; ${t('consol.specialAgreement')}</div>

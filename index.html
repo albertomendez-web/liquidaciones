@@ -1901,6 +1901,9 @@ const I18N = {
   'email.saveAddr':    { es:'Guardar email del propietario', en:'Save owner email', de:'Eigent\u00fcmer-E-Mail speichern' },
   'email.cancel':      { es:'Cancelar', en:'Cancel', de:'Abbrechen' },
   'email.send':        { es:'Enviar \u25b6', en:'Send \u25b6', de:'Senden \u25b6' },
+  'email.langEs':      { es:'Espa\u00f1ol', en:'Spanish', de:'Spanisch' },
+  'email.langEn':      { es:'English', en:'English', de:'Englisch' },
+  'cex.placeholder':   { es:'Concepto...', en:'Concept...', de:'Konzept...' },
   'email.toPlaceholder': { es:'email@ejemplo.com, otro@ejemplo.com', en:'email@example.com, other@example.com', de:'email@beispiel.com, andere@beispiel.com' },
 
 
@@ -7439,7 +7442,7 @@ function buildConsolDeductionsHtml(alojName) {
   // Extra concepts ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â CE-style editable rows
   extras.forEach(function(ex, ei) {
     html += '<div class="cex-item-row" style="display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;">';
-    html += '<input class="cex-inp-label" type="text" value="'+(ex.label||'').replace(/"/g,'&quot;')+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="Concepto..." style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />';
+    html += '<input class="cex-inp-label" type="text" value="'+(ex.label||'').replace(/"/g,'&quot;')+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="'+t('cex.placeholder')+'" style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />';
     html += '<input class="cex-inp-amt" type="text" value="'+fmt(ex.amount||0)+'" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:80px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />';
     html += '<span style="font-size:12px;color:#6b7280;flex-shrink:0;">\u20AC</span>';
     html += '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">\u00D7</button>';
@@ -7500,7 +7503,7 @@ function addConsolExtra(alojName) {
   var row = document.createElement('div');
   row.className = 'cex-item-row';
   row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:4px 8px;animation:ceRowIn .2s ease;';
-  row.innerHTML = '<input class="cex-inp-label" type="text" value="" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="Concepto..." style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />'
+  row.innerHTML = '<input class="cex-inp-label" type="text" value="" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'label\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',false)" placeholder="'+t('cex.placeholder')+'" style="flex:0 0 50%;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;" />'
     + '<input class="cex-inp-amt" type="text" value="0,00" onchange="updateConsolExtra(\''+esc2+'\','+ei+',\'amount\',this.value)" onkeydown="_cexKey(event,\''+esc2+'\',true)" placeholder="0,00" style="width:80px;border:1.5px solid #e5e7eb;border-radius:5px;padding:5px 8px;font-size:12px;font-family:inherit;outline:none;text-align:right;font-weight:600;" />'
     + '<span style="font-size:12px;color:#6b7280;flex-shrink:0;">\u20AC</span>'
     + '<button class="ce-del" onclick="removeConsolExtra(\''+esc2+'\','+ei+')" style="width:22px;height:22px;border-radius:5px;border:none;background:#fef2f2;color:#ef4444;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">\u00D7</button>'
@@ -7778,7 +7781,7 @@ function viewConsolDetail(alojName) {
           </div>
           <div style="display:flex;align-items:center;gap:12px;">
             <div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div>
-            ${allVal?'<span class="badge-liq badge-liq-green">&#10003; Lista</span>':'<span class="badge-liq badge-liq-amber">' + t('status.pending') + '</span>'}</div>
+            ${allVal?'<span class="badge-liq badge-liq-green">&#10003; ' + t('status.ready') + '</span>':'<span class="badge-liq badge-liq-amber">' + t('status.pending') + '</span>'}</div>
         </div>
         <div class="cd-progress-wrap">
           <div class="cd-progress">

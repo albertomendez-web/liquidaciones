@@ -636,10 +636,10 @@ function handleEmailLiquidacion() {
           <label>${(window.t||String)('email.langLabel')}</label>
           <div style="display:flex;gap:8px;margin-top:4px;">
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400;text-transform:none;letter-spacing:normal;font-size:13px;">
-              <input type="radio" name="email-lang" value="es" checked style="width:14px;height:14px;"> Espa\u00F1ol
+              <input type="radio" name="email-lang" value="es" checked style="width:14px;height:14px;"> ${(window.t||String)("email.langEs")}
             </label>
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400;text-transform:none;letter-spacing:normal;font-size:13px;">
-              <input type="radio" name="email-lang" value="en" style="width:14px;height:14px;"> English
+              <input type="radio" name="email-lang" value="en" style="width:14px;height:14px;"> ${(window.t||String)("email.langEn")}
             </label>
           </div>
         </div>

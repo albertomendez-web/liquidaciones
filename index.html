@@ -868,448 +868,26 @@ tr.ce2-highlighted { background:#faf8ff; }
   <div class="ai-header">
     <span style="font-size:20px;">&#x1F916;</span>
     <h3 data-i18n="ai.title">Asistente Hist&oacute;rico Reservas</h3>
-    <button class="ai-help-btn" onclick="_toggleAIHelp()" title="L&eacute;eme / Ayuda">&#x2753;</button>
+    <button class="ai-help-btn" onclick="_toggleAIHelp()" data-i18n-title="ai.helpBtn" title="L&eacute;eme / Ayuda">&#x2753;</button>
     <button class="ai-close" onclick="toggleAIPanel()">&times;</button>
   </div>
   <div class="ai-help-overlay" id="ai-help-overlay">
     <div class="ai-help-scroll">
-      <div class="ai-help-header">
-        <h2>&#x1F4D6; Gu&iacute;a completa del Asistente IA</h2>
-        <p>Todo lo que puedes hacer con el asistente, explicado con ejemplos reales.</p>
-        <button class="ai-help-close" onclick="_toggleAIHelp()">Cerrar gu&iacute;a &times;</button>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F680; Primeros pasos</h3>
-        <p>El asistente analiza <strong>todas las reservas cargadas</strong> en la aplicaci&oacute;n. Antes de usarlo, aseg&uacute;rate de:</p>
-        <ol>
-          <li>Cargar tus reservas desde <strong>Google Sheets</strong> o un <strong>archivo Excel</strong></li>
-          <li>Haz clic en el bot&oacute;n <strong>&#x1F916;</strong> flotante abajo a la derecha</li>
-          <li>Escribe tu pregunta o usa los <strong>chips r&aacute;pidos</strong> (botones de colores)</li>
-        </ol>
-        <div class="ai-help-tip">&#x1F4A1; <strong>Consejo:</strong> La primera vez se te pedir&aacute; una API Key de Anthropic. Se guarda localmente en tu navegador.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F4CA; KPIs y M&eacute;tricas</h3>
-        <p>El asistente calcula autom&aacute;ticamente estos indicadores clave de rendimiento:</p>
-        <table class="ai-help-table">
-          <tr><th>KPI</th><th>Qu&eacute; mide</th><th>C&oacute;mo preguntar</th></tr>
-          <tr><td><strong>ADR</strong></td><td>Tarifa media diaria (importe / noches)</td><td>&laquo;&#191;Cu&aacute;l es el ADR global?&raquo;</td></tr>
-          <tr><td><strong>Estancia media</strong></td><td>Noches por reserva promedio</td><td>&laquo;&#191;Cu&aacute;ntas noches de media se quedan?&raquo;</td></tr>
-          <tr><td><strong>Comisi&oacute;n efectiva</strong></td><td>% que se llevan canal+GTC+pasarela</td><td>&laquo;&#191;Cu&aacute;nto pagamos en comisiones en total?&raquo;</td></tr>
-          <tr><td><strong>Margen propietario</strong></td><td>% que llega al propietario</td><td>&laquo;&#191;Qu&eacute; margen tienen los propietarios?&raquo;</td></tr>
-          <tr><td><strong>Ingreso/piso</strong></td><td>Facturaci&oacute;n media por alojamiento</td><td>&laquo;&#191;Cu&aacute;nto factura cada piso de media?&raquo;</td></tr>
-          <tr><td><strong>Rankings</strong></td><td>Top 5 y Bottom 5 por liquidaci&oacute;n y ADR</td><td>&laquo;&#191;Cu&aacute;les son los mejores y peores pisos?&raquo;</td></tr>
-        </table>
-        <div class="ai-help-example">
-          <strong>Ejemplos de preguntas:</strong>
-          <ul>
-            <li>&laquo;Dame un resumen ejecutivo con todos los KPIs&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; piso tiene el ADR m&aacute;s alto?&raquo;</li>
-            <li>&laquo;Top 10 alojamientos por facturaci&oacute;n&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;l es la comisi&oacute;n efectiva que pagamos?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;nto ingresa de media cada piso al mes?&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F3E0; An&aacute;lisis por Alojamiento</h3>
-        <p>Consulta m&eacute;tricas de cualquier piso individual o compara entre ellos.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;&#191;C&oacute;mo va el piso MA-2-P3-1C?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;ntas noches tiene el apartamento Sunset Beach?&raquo;</li>
-            <li>&laquo;Compara los 5 pisos con m&aacute;s reservas vs los 5 con menos&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; pisos tienen menos de 10 reservas?&raquo;</li>
-            <li>&laquo;Ranking de alojamientos por n&uacute;mero de noches&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F4B0; Comisiones y Costes</h3>
-        <p>El sistema desglosa 3 tipos de comisi&oacute;n: <strong>canal</strong> (Booking, Airbnb...), <strong>GTC</strong> (gesti&oacute;n) y <strong>pasarela</strong> (Stripe). Tambi&eacute;n incluye limpieza, amenities e IRPF.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;Desglose de comisiones por plataforma&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;nto pagamos a Booking en comisiones?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;l es la plataforma m&aacute;s cara en comisiones?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;nto se ha retenido de IRPF en total?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;nto se gasta en limpieza al mes?&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; pisos tienen los mayores costes de amenities?&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F464; Propietarios</h3>
-        <p>El asistente conoce qu&eacute; pisos pertenecen a cada propietario y puede calcular sus m&eacute;tricas.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;Resumen por propietario&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;l es la liquidaci&oacute;n de [nombre del propietario]?&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; propietario tiene m&aacute;s reservas?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;ntos pisos gestiona cada propietario?&raquo;</li>
-            <li>&laquo;&#191;Qui&eacute;n tiene el ADR m&aacute;s alto entre todos los propietarios?&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F465; Comparar Propietarios</h3>
-        <p>Compara el rendimiento de distintos propietarios con m&eacute;tricas detalladas <strong>piso a piso</strong>: ADR, margen, reservas, noches e importes.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;Compara todos los propietarios entre s&iacute;&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; propietario tiene mejor margen? Compara pisos&raquo;</li>
-            <li>&laquo;Muestra los pisos de Carlos vs los de Ana con ADR y margen&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; propietario recibe m&aacute;s liquidaci&oacute;n por noche?&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F4C8; Comparativa Interanual (YoY)</h3>
-        <p>Si tienes datos de <strong>2 o m&aacute;s a&ntilde;os</strong>, el asistente genera comparativas autom&aacute;ticas con porcentajes de variaci&oacute;n e identifica los pisos que m&aacute;s crecen o bajan.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;Compara 2023 con 2024&raquo;</li>
-            <li>&laquo;&#191;C&oacute;mo ha evolucionado el ADR a&ntilde;o a a&ntilde;o?&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; pisos han crecido m&aacute;s en facturaci&oacute;n?&raquo;</li>
-            <li>&laquo;&#191;Han subido o bajado las reservas respecto al a&ntilde;o pasado?&raquo;</li>
-            <li>&laquo;Tendencia interanual de noches y liquidaciones&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-tip">&#x2139;&#xFE0F; Necesitas tener cargados datos de al menos 2 a&ntilde;os para las comparativas.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x2600;&#xFE0F; Estacionalidad</h3>
-        <p>Analiza el rendimiento por <strong>trimestre</strong> y <strong>plataforma</strong>. Identifica temporadas pico y valle.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;An&aacute;lisis de estacionalidad&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;l es el trimestre m&aacute;s fuerte en ingresos?&raquo;</li>
-            <li>&laquo;&#191;En qu&eacute; temporada rinde mejor Airbnb vs Booking?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;les son los meses m&aacute;s d&eacute;biles?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;nto se factura en verano vs invierno?&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F52E; Predicci&oacute;n y Proyecci&oacute;n</h3>
-        <p>Con <strong>12+ meses</strong> de datos, genera una proyecci&oacute;n mes a mes basada en la media hist&oacute;rica, ajustada por la tendencia interanual.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;Predicci&oacute;n de ocupaci&oacute;n para pr&oacute;ximos meses&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;ntas reservas puedo esperar en agosto seg&uacute;n el hist&oacute;rico?&raquo;</li>
-            <li>&laquo;Proyecci&oacute;n de ingresos para el pr&oacute;ximo a&ntilde;o&raquo;</li>
-            <li>&laquo;Estimar facturaci&oacute;n futura basada en datos anteriores&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-tip">&#x26A0;&#xFE0F; Las predicciones son estimaciones basadas en promedios hist&oacute;ricos. No son garant&iacute;as de rendimiento futuro.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F4E5; Exportar a Excel</h3>
-        <p>Descarga los datos en formato <strong>CSV compatible con Excel</strong>. Al preguntar por exportar, aparecer&aacute;n botones de descarga.</p>
-        <table class="ai-help-table">
-          <tr><th>Bot&oacute;n</th><th>Contenido del archivo</th></tr>
-          <tr><td>&#x1F4C9; Ranking ADR</td><td>Todos los pisos ordenados por tarifa media, con margen</td></tr>
-          <tr><td>&#x1F464; Propietarios</td><td>Resumen por propietario con pisos y m&eacute;tricas financieras</td></tr>
-          <tr><td>&#x1F4C5; Mensual</td><td>Datos mes a mes: reservas, noches, importe, liquidaci&oacute;n, ADR</td></tr>
-          <tr><td>&#x1F3E2; Plataformas</td><td>Comisiones y eficiencia por canal de venta</td></tr>
-          <tr><td>&#x1F4CB; Todo</td><td>Todas las reservas con desglose financiero completo</td></tr>
-        </table>
-        <div class="ai-help-example">
-          <strong>C&oacute;mo usarlo:</strong>
-          <ul>
-            <li>&laquo;Quiero exportar datos a Excel&raquo;</li>
-            <li>&laquo;Genera un archivo con el ranking de ADR&raquo;</li>
-            <li>&laquo;Descargar resumen mensual en Excel&raquo;</li>
-            <li>&laquo;Exportar listado completo de reservas&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-tip">&#x1F4A1; Los archivos CSV se abren directamente en Excel. Usan separador <code>;</code> y codificaci&oacute;n UTF-8 para compatibilidad con Excel en espa&ntilde;ol.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F468;&#x200D;&#x1F4BC; Agentes y Marketing</h3>
-        <p>Analiza el rendimiento de los agentes que gestionan reservas y los or&iacute;genes de captaci&oacute;n.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;&#191;Qu&eacute; agente gestiona m&aacute;s reservas?&raquo;</li>
-            <li>&laquo;Ranking de agentes por importe gestionado&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; canal de marketing trae m&aacute;s reservas?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;l es el origen de captaci&oacute;n m&aacute;s efectivo?&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F4CB; Reservas Individuales</h3>
-        <p>Puedes buscar reservas espec&iacute;ficas. El asistente muestra las reservas actualmente <strong>filtradas en la tabla principal</strong> (m&aacute;x. 50).</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;Lista las &uacute;ltimas 20 reservas&raquo;</li>
-            <li>&laquo;&#191;Hay alguna reserva del cliente Juan P&eacute;rez?&raquo;</li>
-            <li>&laquo;Detalle de las reservas pendientes de validar&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;ntas reservas tiene el localizador BK-12345?&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-tip">&#x1F4A1; <strong>Truco:</strong> Filtra primero en la tabla principal (por piso, plataforma, fecha...) y luego pregunta al asistente. &iexcl;Usar&aacute; los datos filtrados!</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x2699;&#xFE0F; Acuerdos Especiales</h3>
-        <p>El asistente conoce los pisos con <strong>m&iacute;nimo garantizado 80/20</strong> y las <strong>propiedades GTC</strong>.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;&#191;Qu&eacute; pisos tienen m&iacute;nimo garantizado?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;les son las propiedades de GTC?&raquo;</li>
-            <li>&laquo;&#191;C&oacute;mo funciona el acuerdo 80/20?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;nto generan los pisos con acuerdo especial?&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F6E0;&#xFE0F; Mantenimiento</h3>
-        <p>Consulta las cuotas de mantenimiento mensual configuradas por alojamiento.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;&#191;Qu&eacute; pisos tienen cuota de mantenimiento?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;nto se paga en total de mantenimiento al mes?&raquo;</li>
-            <li>&laquo;Lista de gastos fijos por alojamiento&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x2705; Estado de Validaci&oacute;n</h3>
-        <p>Consulta cu&aacute;ntas reservas est&aacute;n validadas o pendientes.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;&#191;Cu&aacute;ntas reservas est&aacute;n pendientes de validar?&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; porcentaje de reservas est&aacute; validado?&raquo;</li>
-            <li>&laquo;Estado de validaci&oacute;n general&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F50D; Alertas Autom&aacute;ticas</h3>
-        <p>Al abrir el asistente por primera vez tras cargar datos, <strong>detecta autom&aacute;ticamente anomal&iacute;as</strong> y te las muestra:</p>
-        <ul>
-          <li>&#x26A0;&#xFE0F; Pisos con <strong>ADR muy bajo</strong> (&lt;50&euro;/noche)</li>
-          <li>&#x1F6AB; Pisos <strong>sin ninguna reserva</strong> en el periodo</li>
-          <li>&#x2705; Alto porcentaje de reservas <strong>pendientes de validar</strong></li>
-          <li>&#x1F4C9; Pisos con <strong>margen muy bajo</strong> (&lt;30%)</li>
-          <li>&#x1F504; Posibles <strong>reservas duplicadas</strong> (mismo cliente+piso+fechas)</li>
-        </ul>
-        <div class="ai-help-tip">&#x1F4A1; Puedes preguntar sobre cualquier alerta para obtener m&aacute;s detalle: &laquo;Cu&eacute;ntame m&aacute;s sobre los pisos con ADR bajo&raquo;</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F504; Duplicados y Anomal&iacute;as</h3>
-        <p>Detecta <strong>reservas duplicadas</strong> (mismo cliente + alojamiento + fechas) y <strong>anomal&iacute;as de importe</strong> (reservas cuyo ADR es 3x superior o 4x inferior al promedio del piso).</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;&#191;Hay reservas duplicadas?&raquo;</li>
-            <li>&laquo;Busca anomal&iacute;as en los importes&raquo;</li>
-            <li>&laquo;&#191;Hay alguna reserva sospechosa o con importe raro?&raquo;</li>
-            <li>&laquo;&#191;Se ha repetido alguna reserva por error?&raquo;</li>
-            <li>&laquo;Muestra inconsistencias en los datos&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-tip">&#x26A0;&#xFE0F; Revisa siempre los duplicados antes de generar liquidaciones. Un duplicado puede significar un cobro doble al propietario.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F4CA; Segmentaci&oacute;n de Clientes</h3>
-        <p>Clasifica las reservas en 3 tipos de estancia:</p>
-        <table class="ai-help-table">
-          <tr><th>Tipo</th><th>Duraci&oacute;n</th><th>Perfil t&iacute;pico</th></tr>
-          <tr><td><strong>Escapada</strong></td><td>1-2 noches</td><td>Fin de semana, negocio</td></tr>
-          <tr><td><strong>Vacaciones</strong></td><td>3-7 noches</td><td>Turismo cl&aacute;sico</td></tr>
-          <tr><td><strong>Larga estancia</strong></td><td>&gt;7 noches</td><td>Teletrabajo, mensual</td></tr>
-        </table>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;&#191;Qu&eacute; tipo de estancia predomina en Booking?&raquo;</li>
-            <li>&laquo;Segmentaci&oacute;n por plataforma&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; pisos atraen m&aacute;s estancias largas?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;nto facturan las escapadas vs las vacaciones?&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; ADR tiene cada tipo de estancia?&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F5FA;&#xFE0F; Heatmap de Ocupaci&oacute;n</h3>
-        <p>Genera un <strong>mapa de calor visual</strong> con bloques Unicode (&#x2581;&#x2582;&#x2583;&#x2584;&#x2585;&#x2586;&#x2587;&#x2588;) mostrando la ocupaci&oacute;n por alojamiento y mes. Permite identificar de un vistazo qu&eacute; pisos tienen meses vac&iacute;os y cu&aacute;les est&aacute;n siempre llenos.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;Mapa de calor de ocupaci&oacute;n&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; pisos tienen meses sin reservas?&raquo;</li>
-            <li>&laquo;Vista calendario de todos los alojamientos&raquo;</li>
-            <li>&laquo;Heatmap visual de noches por piso y mes&raquo;</li>
-            <li>&laquo;Parrilla de ocupaci&oacute;n anual&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-tip">&#x1F4A1; La altura de los bloques es proporcional al piso con m&aacute;s noches. Permite comparar todos los pisos en una sola vista.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x23F1;&#xFE0F; Lead Time (Antelaci&oacute;n)</h3>
-        <p>Analiza <strong>cu&aacute;ntos d&iacute;as antes del check-in</strong> se hacen las reservas. Compara por plataforma y muestra distribuci&oacute;n en rangos (0-1d, 2-7d, 8-30d, 31-90d, &gt;90d).</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;&#191;Con cu&aacute;nta antelaci&oacute;n se reserva?&raquo;</li>
-            <li>&laquo;Lead time por plataforma&raquo;</li>
-            <li>&laquo;&#191;En Booking reservan con m&aacute;s anticipaci&oacute;n que en Airbnb?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;ntas reservas son de &uacute;ltima hora (menos de 2 d&iacute;as)?&raquo;</li>
-            <li>&laquo;Distribuci&oacute;n de la antelaci&oacute;n de reservas&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-tip">&#x1F4A1; Conocer el lead time es clave para <strong>pricing din&aacute;mico</strong>: si un piso se reserva siempre con 60+ d&iacute;as, tienes margen para subir precio conforme se acerca la fecha.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F52E; Simulador What-If</h3>
-        <p>Simula escenarios hipot&eacute;ticos para ver el impacto financiero <strong>antes de tomar decisiones</strong>. El asistente recalcula comisiones, liquidaciones y m&aacute;rgenes con tus par&aacute;metros.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos de simulaciones:</strong>
-          <ul>
-            <li>&laquo;&#191;Qu&eacute; pasar&iacute;a si subimos el ADR un 10%?&raquo;</li>
-            <li>&laquo;&#191;Cu&aacute;nto ahorrar&iacute;amos si pasamos todo de Booking a web directa?&raquo;</li>
-            <li>&laquo;Si reducimos la comisi&oacute;n GTC al 15%, &#191;cu&aacute;nto m&aacute;s cobran los propietarios?&raquo;</li>
-            <li>&laquo;Simula eliminar el coste de amenities&raquo;</li>
-            <li>&laquo;&#191;Qu&eacute; pasa si duplicamos las reservas de temporada baja?&raquo;</li>
-            <li>&laquo;Si bajamos el ADR un 5% pero aumentamos reservas un 15%, &#191;salimos ganando?&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-tip">&#x26A0;&#xFE0F; Las simulaciones son estimaciones sobre datos actuales. No constituyen asesoramiento financiero.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x26A1; Briefing R&aacute;pido</h3>
-        <p>Un <strong>resumen ejecutivo ultracondensado</strong> en 3-5 frases con lo m&aacute;s importante: cifras clave, mejor y peor mes, tendencia con sparklines, y cualquier anomal&iacute;a relevante.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplos:</strong>
-          <ul>
-            <li>&laquo;Briefing r&aacute;pido&raquo;</li>
-            <li>&laquo;Lo m&aacute;s importante en 3 frases&raquo;</li>
-            <li>&laquo;Estado actual flash&raquo;</li>
-            <li>&laquo;Titulares de las reservas&raquo;</li>
-            <li>&laquo;Resumen quick&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F9E0; Memoria de Conversaci&oacute;n</h3>
-        <p>El asistente <strong>recuerda las entidades</strong> (pisos, propietarios, plataformas) que mencionas en cada turno. Si dices &laquo;&#191;C&oacute;mo va el piso MA-2-P3?&raquo; y luego &laquo;&#191;Y sus comisiones?&raquo;, entiende que sigues hablando del mismo piso.</p>
-        <div class="ai-help-example">
-          <strong>Ejemplo de conversaci&oacute;n multi-turno:</strong>
-          <ul>
-            <li>T&uacute;: &laquo;&#191;C&oacute;mo va el piso MA-2-P3-1C?&raquo;</li>
-            <li>IA: [responde con m&eacute;tricas del piso]</li>
-            <li>T&uacute;: &laquo;&#191;Y sus comisiones?&raquo; &larr; sabe que hablas de MA-2-P3-1C</li>
-            <li>T&uacute;: &laquo;Compara con los pisos de Booking&raquo; &larr; recuerda el piso y a&ntilde;ade Booking</li>
-          </ul>
-        </div>
-        <div class="ai-help-tip">&#x1F4A1; La memoria se mantiene durante toda la sesi&oacute;n del chat. Si mencionas un nuevo piso, se actualiza el contexto.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x1F4AC; Sugerencias Contextuales</h3>
-        <p>Despu&eacute;s de cada respuesta, el asistente muestra <strong>2-3 botones de seguimiento</strong> con preguntas relevantes. Son clicables y lanzan la pregunta autom&aacute;ticamente.</p>
-        <div class="ai-help-tip">&#x1F4A1; Las sugerencias cambian seg&uacute;n lo que hayas preguntado. Si preguntaste sobre comisiones, te sugerir&aacute; &laquo;Simular -2%&raquo; o &laquo;Ranking margen&raquo;.</div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x26A1; Trucos Avanzados</h3>
-        <div class="ai-help-example">
-          <strong>Combinar preguntas:</strong>
-          <ul>
-            <li>&laquo;Dame el ADR por plataforma y trimestre&raquo; &mdash; Estacionalidad + plataformas</li>
-            <li>&laquo;&#191;Qu&eacute; propietario tiene mejor margen y cu&aacute;l es su ADR?&raquo; &mdash; Propietarios + KPIs</li>
-            <li>&laquo;Compara 2023 vs 2024 para los pisos de m&iacute;nimo garantizado&raquo; &mdash; YoY + acuerdos</li>
-            <li>&laquo;Heatmap de ocupaci&oacute;n solo para los pisos con margen bajo&raquo; &mdash; Heatmap + filtro</li>
-            <li>&laquo;Lead time por tipo de estancia (escapada vs larga)&raquo; &mdash; Lead time + segmentaci&oacute;n</li>
-          </ul>
-        </div>
-        <div class="ai-help-example">
-          <strong>Cadena de an&aacute;lisis (multi-turno):</strong>
-          <ul>
-            <li>1. &laquo;Briefing r&aacute;pido&raquo; &rarr; 2. &laquo;Profundiza en los pisos con peor ADR&raquo; &rarr; 3. &laquo;Simula subir su ADR un 15%&raquo; &rarr; 4. &laquo;Exporta el ranking ADR&raquo;</li>
-            <li>1. &laquo;&#191;Hay duplicados?&raquo; &rarr; 2. &laquo;&#191;Qu&eacute; pisos les afecta?&raquo; &rarr; 3. &laquo;Detalle de esas reservas&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-example">
-          <strong>Simulaciones encadenadas:</strong>
-          <ul>
-            <li>&laquo;&#191;Qu&eacute; pasa si subimos ADR 10%?&raquo; &rarr; &laquo;&#191;Y si adem&aacute;s reducimos comisi&oacute;n canal 2%?&raquo;</li>
-            <li>&laquo;Simula mover todo Booking a web directa&raquo; &rarr; &laquo;&#191;Cu&aacute;nto gana cada propietario?&raquo;</li>
-          </ul>
-        </div>
-        <div class="ai-help-example">
-          <strong>Usar filtros de la tabla:</strong>
-          <ul>
-            <li>Filtra por plataforma &ldquo;Booking.com&rdquo;, luego &laquo;detalle de estas reservas&raquo;</li>
-            <li>Filtra un mes, luego &laquo;resumen de las reservas filtradas&raquo;</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="ai-help-section">
-        <h3>&#x2139;&#xFE0F; Informaci&oacute;n T&eacute;cnica</h3>
-        <ul>
-          <li>El asistente usa <strong>Claude (Anthropic)</strong> como modelo de IA</li>
-          <li>Tu <strong>API Key</strong> se guarda localmente en tu navegador (nunca se comparte con terceros)</li>
-          <li>Los datos se env&iacute;an directamente a la API de Anthropic con cada pregunta</li>
-          <li><strong>24 categor&iacute;as</strong> de clasificaci&oacute;n inteligente para optimizar contexto</li>
-          <li><strong>Memoria de entidades</strong>: recuerda pisos, propietarios y plataformas mencionados</li>
-          <li><strong>Sugerencias contextuales</strong>: 2-3 follow-ups tras cada respuesta</li>
-          <li>El historial se <strong>compacta autom&aacute;ticamente</strong> tras 10+ mensajes</li>
-          <li>Los contextos se <strong>cachean 30 segundos</strong> para queries similares</li>
-          <li>Versi&oacute;n actual: <strong>v2.20.0</strong></li>
-        </ul>
-      </div>
+      <div id="ai-guide-body"></div>
     </div>
   </div>
   <div class="ai-messages" id="ai-messages">
-    <div class="ai-msg system">Preg&uacute;ntame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.</div>
+    <div class="ai-msg system" data-i18n="ai.subtitle">Preg&uacute;ntame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.</div>
     <div class="ai-chips" id="ai-chips">
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Briefing r&aacute;pido: dame lo m&aacute;s importante en 5 frases">&#x26A1; Briefing</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Dame un resumen ejecutivo con KPIs principales: ADR, estancia media, comisi&oacute;n efectiva, margen propietario, top y bottom 5 pisos">&#x1F4CA; KPIs</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Compara todos los propietarios con m&eacute;tricas detalladas por piso: ADR, margen, reservas, noches">&#x1F465; Propietarios</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Mapa de calor de ocupaci&oacute;n por alojamiento y mes con sparklines">&#x1F5FA;&#xFE0F; Heatmap</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="&iquest;Hay reservas duplicadas o con importes sospechosos? Busca anomal&iacute;as">&#x1F50D; Duplicados</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Segmentaci&oacute;n por tipo de estancia: escapadas, vacaciones y larga estancia, por plataforma">&#x1F4CA; Segmentos</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="An&aacute;lisis de lead time: &iquest;con cu&aacute;nta antelaci&oacute;n reservan por plataforma?">&#x23F1;&#xFE0F; Lead time</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="&iquest;Qu&eacute; pasar&iacute;a si subimos el ADR un 10% en todos los pisos?">&#x1F52E; What-if</button>
-      <button class="ai-chip" onclick="sendAIChip(this)" data-q="Quiero exportar datos a Excel. &iquest;Qu&eacute; opciones de descarga tengo disponibles?">&#x1F4E5; Exportar</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.briefingQ" data-i18n="ai.chip.briefing">&#x26A1; Briefing</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.kpisQ" data-i18n="ai.chip.kpis">&#x1F4CA; KPIs</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.ownersQ" data-i18n="ai.chip.owners">&#x1F465; Propietarios</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.heatmapQ" data-i18n="ai.chip.heatmap">&#x1F5FA;&#xFE0F; Heatmap</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.duplicatesQ" data-i18n="ai.chip.duplicates">&#x1F50D; Duplicados</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.segmentsQ" data-i18n="ai.chip.segments">&#x1F4CA; Segmentos</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.leadtimeQ" data-i18n="ai.chip.leadtime">&#x23F1;&#xFE0F; Lead time</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.whatifQ" data-i18n="ai.chip.whatif">&#x1F52E; What-if</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.exportQ" data-i18n="ai.chip.export">&#x1F4E5; Exportar</button>
     </div>
   </div>
   <div class="ai-input-wrap">
@@ -1784,8 +1362,8 @@ function toggleConsolVal(mode) {
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 7. NUNCA reutilizar un nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºmero de versiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n ya existente
  * ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚Â
  */
-const APP_VERSION = '2.22.0';
-const APP_BUILD   = '2026-02-16T01:00:00+01:00';
+const APP_VERSION = '2.23.0';
+const APP_BUILD   = '2026-02-16T02:30:00+01:00';
 const APP_CHANGES = 'Sistema i18n: soporte multidioma ES/EN/DE con selector en sidebar, 241+ traducciones, persistencia localStorage';
 
 // ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
@@ -2199,6 +1777,92 @@ const I18N = {
   'btn.validateFirst':   { es:'\u26a0 Valida todas las reservas primero', en:'\u26a0 Validate all reservations first', de:'\u26a0 Zuerst alle Buchungen validieren' },
   'sync.activateBtn':    { es:'Activar sincronizaci\u00f3n multi-usuario', en:'Activate multi-user sync', de:'Multi-User-Sync aktivieren' },
 
+
+  // ——— Phase 2A: AI Assistant visible elements ———
+  'ai.subtitle':       { es:'Preg\u00fantame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.', en:'Ask me about your reservations, settlements, amounts... I only answer with your real data.', de:'Fragen Sie mich zu Ihren Buchungen, Abrechnungen, Betr\u00e4gen... Ich antworte nur mit Ihren echten Daten.' },
+  'ai.closeGuideBtn':  { es:'Cerrar gu\u00eda \u00d7', en:'Close guide \u00d7', de:'Anleitung schlie\u00dfen \u00d7' },
+  'ai.chip.briefing':  { es:'\u26a1 Briefing', en:'\u26a1 Briefing', de:'\u26a1 Briefing' },
+  'ai.chip.kpis':      { es:'\ud83d\udcca KPIs', en:'\ud83d\udcca KPIs', de:'\ud83d\udcca KPIs' },
+  'ai.chip.owners':    { es:'\ud83d\udc65 Propietarios', en:'\ud83d\udc65 Owners', de:'\ud83d\udc65 Eigent\u00fcmer' },
+  'ai.chip.heatmap':   { es:'\ud83d\uddfa\ufe0f Heatmap', en:'\ud83d\uddfa\ufe0f Heatmap', de:'\ud83d\uddfa\ufe0f Heatmap' },
+  'ai.chip.duplicates': { es:'\ud83d\udd0d Duplicados', en:'\ud83d\udd0d Duplicates', de:'\ud83d\udd0d Duplikate' },
+  'ai.chip.segments':  { es:'\ud83d\udcca Segmentos', en:'\ud83d\udcca Segments', de:'\ud83d\udcca Segmente' },
+  'ai.chip.leadtime':  { es:'\u23f1\ufe0f Lead time', en:'\u23f1\ufe0f Lead time', de:'\u23f1\ufe0f Vorlaufzeit' },
+  'ai.chip.whatif':    { es:'\ud83d\udd2e What-if', en:'\ud83d\udd2e What-if', de:'\ud83d\udd2e Was-w\u00e4re-wenn' },
+  'ai.chip.export':    { es:'\ud83d\udce5 Exportar', en:'\ud83d\udce5 Export', de:'\ud83d\udce5 Exportieren' },
+  'ai.chip.briefingQ': { es:'Briefing r\u00e1pido: dame lo m\u00e1s importante en 5 frases', en:'Quick briefing: give me the most important facts in 5 sentences', de:'Schnelles Briefing: gib mir das Wichtigste in 5 S\u00e4tzen' },
+  'ai.chip.kpisQ':     { es:'Dame un resumen ejecutivo con KPIs principales: ADR, estancia media, comisi\u00f3n efectiva, margen propietario, top y bottom 5 pisos', en:'Give me an executive summary with main KPIs: ADR, average stay, effective commission, owner margin, top and bottom 5 properties', de:'Gib mir eine Zusammenfassung mit KPIs: ADR, durchschnittliche Aufenthaltsdauer, effektive Provision, Eigent\u00fcmermarge, Top und Bottom 5 Unterk\u00fcnfte' },
+  'ai.chip.ownersQ':   { es:'Compara todos los propietarios con m\u00e9tricas detalladas por piso: ADR, margen, reservas, noches', en:'Compare all owners with detailed per-property metrics: ADR, margin, reservations, nights', de:'Vergleiche alle Eigent\u00fcmer mit detaillierten Kennzahlen pro Unterkunft: ADR, Marge, Buchungen, N\u00e4chte' },
+  'ai.chip.heatmapQ':  { es:'Mapa de calor de ocupaci\u00f3n por alojamiento y mes con sparklines', en:'Occupancy heatmap by property and month with sparklines', de:'Belegungs-Heatmap nach Unterkunft und Monat mit Sparklines' },
+  'ai.chip.duplicatesQ': { es:'\u00bfHay reservas duplicadas o con importes sospechosos? Busca anomal\u00edas', en:'Are there duplicate reservations or suspicious amounts? Look for anomalies', de:'Gibt es doppelte Buchungen oder verd\u00e4chtige Betr\u00e4ge? Suche nach Anomalien' },
+  'ai.chip.segmentsQ': { es:'Segmentaci\u00f3n por tipo de estancia: escapadas, vacaciones y larga estancia, por plataforma', en:'Segmentation by stay type: getaways, vacations and long stays, by platform', de:'Segmentierung nach Aufenthaltsart: Kurzurlaub, Urlaub und Langzeitaufenthalt, nach Plattform' },
+  'ai.chip.leadtimeQ': { es:'An\u00e1lisis de lead time: \u00bfcon cu\u00e1nta antelaci\u00f3n reservan por plataforma?', en:'Lead time analysis: how far in advance do they book by platform?', de:'Vorlaufzeit-Analyse: wie weit im Voraus wird pro Plattform gebucht?' },
+  'ai.chip.whatifQ':   { es:'\u00bfQu\u00e9 pasar\u00eda si subimos el ADR un 10% en todos los pisos?', en:'What if we raise the ADR by 10% on all properties?', de:'Was w\u00e4re, wenn wir den ADR um 10% bei allen Unterk\u00fcnften erh\u00f6hen?' },
+  'ai.chip.exportQ':   { es:'Quiero exportar datos a Excel. \u00bfQu\u00e9 opciones de descarga tengo disponibles?', en:'I want to export data to Excel. What download options are available?', de:'Ich m\u00f6chte Daten nach Excel exportieren. Welche Download-Optionen sind verf\u00fcgbar?' },
+  'alert.lowAdr':      { es:'piso(s) con ADR < 50\u20ac/noche', en:'property(ies) with ADR < 50\u20ac/night', de:'Unterkunft(en) mit ADR < 50\u20ac/Nacht' },
+  'alert.noReserv':    { es:'piso(s) sin reservas en el periodo', en:'property(ies) with no reservations in the period', de:'Unterkunft(en) ohne Buchungen im Zeitraum' },
+  'alert.pendingVal':  { es:'reservas pendientes de validar', en:'reservations pending validation', de:'Buchungen ausstehend zur Validierung' },
+  'alert.ofTotal':     { es:'del total', en:'of total', de:'der Gesamtzahl' },
+  'alert.lowMargin':   { es:'piso(s) con margen < 30%', en:'property(ies) with margin < 30%', de:'Unterkunft(en) mit Marge < 30%' },
+  'alert.duplicates':  { es:'posible(s) duplicado(s) detectados. Pregunta:', en:'possible duplicate(s) detected. Ask:', de:'m\u00f6gliche Duplikate erkannt. Fragen Sie:' },
+  'alert.showDups':    { es:'\u00abmu\u00e9strame los duplicados\u00bb', en:'\u00abshow me the duplicates\u00bb', de:'\u00abzeig mir die Duplikate\u00bb' },
+  'alert.andMore':     { es:'y %s m\u00e1s', en:'and %s more', de:'und %s mehr' },
+  'alert.askMore':     { es:'Preg\u00fantame sobre cualquiera de estas alertas para m\u00e1s detalle.', en:'Ask me about any of these alerts for more detail.', de:'Fragen Sie mich zu diesen Warnungen f\u00fcr mehr Details.' },
+
+
+  // ——— Follow-up suggestion labels & queries ———
+  'fu.worstAdr':      { es:'\ud83d\udcc9 Pisos peor ADR', en:'\ud83d\udcc9 Lowest ADR', de:'\ud83d\udcc9 Niedrigster ADR' },
+  'fu.worstAdrQ':     { es:'\u00bfQu\u00e9 pisos tienen el ADR m\u00e1s bajo?', en:'Which properties have the lowest ADR?', de:'Welche Unterk\u00fcnfte haben den niedrigsten ADR?' },
+  'fu.export':        { es:'\ud83d\udce5 Exportar', en:'\ud83d\udce5 Export', de:'\ud83d\udce5 Exportieren' },
+  'fu.exportQ':       { es:'Exportar estos datos a Excel', en:'Export this data to Excel', de:'Diese Daten nach Excel exportieren' },
+  'fu.owners':        { es:'\ud83d\udc65 Propietarios', en:'\ud83d\udc65 Owners', de:'\ud83d\udc65 Eigent\u00fcmer' },
+  'fu.ownersQ':       { es:'Compara propietarios con m\u00e9tricas detalladas', en:'Compare owners with detailed metrics', de:'Eigent\u00fcmer mit Kennzahlen vergleichen' },
+  'fu.simMinus':      { es:'\ud83d\udd2e Simular -2%', en:'\ud83d\udd2e Simulate -2%', de:'\ud83d\udd2e Simulieren -2%' },
+  'fu.simMinusQ':     { es:'\u00bfQu\u00e9 pasar\u00eda si reducimos la comisi\u00f3n un 2%?', en:'What if we reduce commission by 2%?', de:'Was wenn wir die Provision um 2% senken?' },
+  'fu.rankMargin':    { es:'\ud83d\udcc8 Ranking margen', en:'\ud83d\udcc8 Margin ranking', de:'\ud83d\udcc8 Marge-Ranking' },
+  'fu.rankMarginQ':   { es:'Ranking de pisos por margen propietario', en:'Property ranking by owner margin', de:'Unterkunft-Ranking nach Eigent\u00fcmermarge' },
+  'fu.leadtime':      { es:'\u23f1\ufe0f Lead time', en:'\u23f1\ufe0f Lead time', de:'\u23f1\ufe0f Vorlaufzeit' },
+  'fu.leadtimeQ':     { es:'\u00bfQu\u00e9 plataforma tiene mejor lead time?', en:'Which platform has the best lead time?', de:'Welche Plattform hat die beste Vorlaufzeit?' },
+  'fu.segments':      { es:'\ud83d\udcca Segmentos', en:'\ud83d\udcca Segments', de:'\ud83d\udcca Segmente' },
+  'fu.segmentsQ':     { es:'Segmentaci\u00f3n de estancias por plataforma', en:'Stay segmentation by platform', de:'Aufenthaltssegmentierung nach Plattform' },
+  'fu.heatmap':       { es:'\ud83d\uddfa\ufe0f Heatmap', en:'\ud83d\uddfa\ufe0f Heatmap', de:'\ud83d\uddfa\ufe0f Heatmap' },
+  'fu.heatmapQ':      { es:'Mapa de calor de ocupaci\u00f3n por mes', en:'Occupancy heatmap by month', de:'Belegungs-Heatmap nach Monat' },
+  'fu.duplicates':    { es:'\ud83d\udd0d Duplicados', en:'\ud83d\udd0d Duplicates', de:'\ud83d\udd0d Duplikate' },
+  'fu.duplicatesQ':   { es:'\u00bfHay reservas duplicadas o sospechosas?', en:'Are there duplicate or suspicious reservations?', de:'Gibt es doppelte oder verd\u00e4chtige Buchungen?' },
+  'fu.season':        { es:'\u2600\ufe0f Estacionalidad', en:'\u2600\ufe0f Seasonality', de:'\u2600\ufe0f Saisonalit\u00e4t' },
+  'fu.seasonQ':       { es:'Estacionalidad por trimestre y plataforma', en:'Seasonality by quarter and platform', de:'Saisonalit\u00e4t nach Quartal und Plattform' },
+  'fu.simPlus':       { es:'\ud83d\udd2e Simular +10%', en:'\ud83d\udd2e Simulate +10%', de:'\ud83d\udd2e Simulieren +10%' },
+  'fu.simPlusQ':      { es:'\u00bfQu\u00e9 pasar\u00eda si subimos ADR un 10%?', en:'What if we raise ADR by 10%?', de:'Was wenn wir den ADR um 10% erh\u00f6hen?' },
+  'fu.predict':       { es:'\ud83d\udd2e Predecir', en:'\ud83d\udd2e Predict', de:'\ud83d\udd2e Vorhersage' },
+  'fu.predictQ':      { es:'Predicci\u00f3n de ocupaci\u00f3n futura', en:'Future occupancy prediction', de:'Zuk\u00fcnftige Belegungsprognose' },
+  'fu.topGrowth':     { es:'\ud83d\udcc8 Top crecimiento', en:'\ud83d\udcc8 Top growth', de:'\ud83d\udcc8 Top Wachstum' },
+  'fu.topGrowthQ':    { es:'Ranking de pisos con mayor crecimiento', en:'Property ranking by highest growth', de:'Unterkunft-Ranking nach h\u00f6chstem Wachstum' },
+  'fu.segHigh':       { es:'\ud83c\udfd6\ufe0f Segmentar alta', en:'\ud83c\udfd6\ufe0f Segment high', de:'\ud83c\udfd6\ufe0f Hochsaison seg.' },
+  'fu.segHighQ':      { es:'\u00bfQu\u00e9 tipo de estancia predomina en temporada alta?', en:'What stay type dominates in high season?', de:'Welcher Aufenthaltstyp dominiert in der Hochsaison?' },
+  'fu.ltByStay':      { es:'\u23f1\ufe0f Lead time', en:'\u23f1\ufe0f Lead time', de:'\u23f1\ufe0f Vorlaufzeit' },
+  'fu.ltByStayQ':     { es:'Lead time por tipo de estancia', en:'Lead time by stay type', de:'Vorlaufzeit nach Aufenthaltsart' },
+  'fu.byProp':        { es:'\ud83c\udfe0 Por piso', en:'\ud83c\udfe0 By property', de:'\ud83c\udfe0 Nach Unterkunft' },
+  'fu.byPropQ':       { es:'\u00bfQu\u00e9 pisos se reservan con m\u00e1s antelaci\u00f3n?', en:'Which properties are booked furthest in advance?', de:'Welche Unterk\u00fcnfte werden am weitesten im Voraus gebucht?' },
+  'fu.kpis':          { es:'\ud83d\udcca KPIs', en:'\ud83d\udcca KPIs', de:'\ud83d\udcca KPIs' },
+  'fu.kpisQ':         { es:'Resumen ejecutivo con KPIs', en:'Executive summary with KPIs', de:'Zusammenfassung mit KPIs' },
+  'fu.realComm':      { es:'\ud83d\udcb0 Comisiones reales', en:'\ud83d\udcb0 Real commissions', de:'\ud83d\udcb0 Echte Provisionen' },
+  'fu.realCommQ':     { es:'Desglose real de comisiones por plataforma', en:'Real commission breakdown by platform', de:'Echte Provisionsaufschl\u00fcsselung nach Plattform' },
+  'fu.kpiDetail':     { es:'\ud83d\udcca KPIs detallados', en:'\ud83d\udcca Detailed KPIs', de:'\ud83d\udcca Detaillierte KPIs' },
+  'fu.kpiDetailQ':    { es:'Dame m\u00e1s detalle con KPIs completos', en:'Give me more detail with complete KPIs', de:'Gib mir mehr Details mit vollst\u00e4ndigen KPIs' },
+  'fu.anomalies':     { es:'\u26a0\ufe0f Anomal\u00edas', en:'\u26a0\ufe0f Anomalies', de:'\u26a0\ufe0f Anomalien' },
+  'fu.anomaliesQ':    { es:'\u00bfHay algo an\u00f3malo que deba revisar?', en:'Is there anything anomalous I should review?', de:'Gibt es Anomalien, die ich pr\u00fcfen sollte?' },
+
+
+  'ai.apiKeyPrompt':  { es:'Introduce tu API Key de Anthropic para activar el asistente IA.\n\nLa clave se guarda localmente en tu navegador y nunca se comparte.\n\nPuedes obtenerla en: console.anthropic.com', en:'Enter your Anthropic API Key to activate the AI assistant.\n\nThe key is stored locally in your browser and never shared.\n\nGet it at: console.anthropic.com', de:'Geben Sie Ihren Anthropic API-Schl\u00fcssel ein, um den KI-Assistenten zu aktivieren.\n\nDer Schl\u00fcssel wird lokal in Ihrem Browser gespeichert und nie weitergegeben.\n\nErhalten Sie ihn unter: console.anthropic.com' },
+  'ai.rateLimit':     { es:'\u23f3 L\u00edmite de API alcanzado. Reintentando en %ss...', en:'\u23f3 API rate limit reached. Retrying in %ss...', de:'\u23f3 API-Limit erreicht. Erneuter Versuch in %ss...' },
+  'ai.errorPrefix':   { es:'Error: ', en:'Error: ', de:'Fehler: ' },
+  'ai.errorGeneric':  { es:'Error al comunicarse con la IA', en:'Error communicating with AI', de:'Fehler bei der KI-Kommunikation' },
+
+
+  'ai.loadFirst':     { es:'Primero carga las reservas desde Google Sheets o Excel para poder responder preguntas.', en:'First load the reservations from Google Sheets or Excel to be able to answer questions.', de:'Laden Sie zuerst die Buchungen von Google Sheets oder Excel, um Fragen beantworten zu k\u00f6nnen.' },
+  'ai.helpBtn':       { es:'L\u00e9eme / Ayuda', en:'Read me / Help', de:'Lies mich / Hilfe' },
+  'ai.invalidKey':    { es:'API Key inv\u00e1lida. Se ha borrado. Vuelve a intentarlo.', en:'Invalid API Key. It has been deleted. Please try again.', de:'Ung\u00fcltiger API-Schl\u00fcssel. Er wurde gel\u00f6scht. Bitte versuchen Sie es erneut.' },
+
   // ——— Phase 1: Missing visible translations ———
   'stats.filtered':       { es:'filtradas', en:'filtered', de:'gefiltert' },
   'stats.filteredOf':     { es:'filtradas', en:'filtered', de:'gefiltert' },
@@ -2255,7 +1919,7 @@ function t(key, ...args) {
   return text;
 }
 window.t = t; // Explicit global binding
-console.log('[i18n] v2.22.0 loaded:', Object.keys(I18N).length, 'keys, lang=' + _currentLang);
+console.log('[i18n] v2.23.0 loaded:', Object.keys(I18N).length, 'keys, lang=' + _currentLang);
 function setLanguage(lang) {
   if (!['es','en','de'].includes(lang)) return;
   _currentLang = lang;
@@ -2278,6 +1942,8 @@ function setLanguage(lang) {
   _updateI18nArrays();
   // Re-render active screens
   _i18nRefreshUI();
+  // Re-render AI guide in new language
+  if (typeof _renderAIGuide === 'function') _renderAIGuide();
   // Update language selector highlight
   document.querySelectorAll('.lang-option').forEach(el => {
     el.classList.toggle('active', el.dataset.lang === lang);
@@ -2370,6 +2036,525 @@ function _i18nRefreshUI() {
 }
 
 
+
+// ——— AI Guide i18n data (v2.22.0) ———
+var _GUIDE_I18N = {
+es: {
+  title: 'Gu\u00eda completa del Asistente IA',
+  subtitle: 'Todo lo que puedes hacer con el asistente, explicado con ejemplos reales.',
+  closeBtn: 'Cerrar gu\u00eda \u00d7',
+  tipLabel: 'Consejo',
+  examplesLabel: 'Ejemplos de preguntas',
+  sections: [
+    { icon:'\ud83d\ude80', title:'Primeros pasos',
+      text:'El asistente analiza <strong>todas las reservas cargadas</strong> en la aplicaci\u00f3n. Antes de usarlo, aseg\u00farate de:',
+      list:['Cargar tus reservas desde <strong>Google Sheets</strong> o un <strong>archivo Excel</strong>',
+            'Haz clic en el bot\u00f3n <strong>\ud83e\udd16</strong> flotante abajo a la derecha',
+            'Escribe tu pregunta o usa los <strong>chips r\u00e1pidos</strong> (botones de colores)'],
+      tip:'La primera vez se te pedir\u00e1 una API Key de Anthropic. Se guarda localmente en tu navegador.' },
+    { icon:'\ud83d\udcca', title:'KPIs y M\u00e9tricas',
+      text:'El asistente calcula autom\u00e1ticamente estos indicadores clave de rendimiento:',
+      table:{headers:['KPI','Qu\u00e9 mide'],
+        rows:[['<strong>ADR</strong>','Tarifa media diaria (importe / noches)'],
+              ['<strong>Estancia media</strong>','Noches por reserva promedio'],
+              ['<strong>Comisi\u00f3n efectiva</strong>','% que se llevan canal+GTC+pasarela'],
+              ['<strong>Margen propietario</strong>','% que llega al propietario'],
+              ['<strong>Ingreso/piso</strong>','Facturaci\u00f3n media por alojamiento'],
+              ['<strong>Rankings</strong>','Top 5 y Bottom 5 por liquidaci\u00f3n y ADR']]},
+      examples:['Dame un resumen ejecutivo con todos los KPIs',
+                '\u00bfQu\u00e9 piso tiene el ADR m\u00e1s alto?',
+                'Top 10 alojamientos por facturaci\u00f3n',
+                '\u00bfCu\u00e1l es la comisi\u00f3n efectiva que pagamos?',
+                '\u00bfCu\u00e1nto ingresa de media cada piso al mes?'] },
+    { icon:'\ud83c\udfe0', title:'An\u00e1lisis por Alojamiento',
+      text:'Consulta m\u00e9tricas de cualquier piso individual o compara entre ellos.',
+      examples:['\u00bfC\u00f3mo va el piso MA-2-P3-1C?',
+                '\u00bfCu\u00e1ntas noches tiene el apartamento Sunset Beach?',
+                'Compara los 5 pisos con m\u00e1s reservas vs los 5 con menos',
+                '\u00bfQu\u00e9 pisos tienen menos de 10 reservas?',
+                'Ranking de alojamientos por n\u00famero de noches'] },
+    { icon:'\ud83d\udcb0', title:'Comisiones y Costes',
+      text:'El sistema desglosa 3 tipos de comisi\u00f3n: <strong>canal</strong> (Booking, Airbnb...), <strong>GTC</strong> (gesti\u00f3n) y <strong>pasarela</strong> (Stripe). Tambi\u00e9n incluye limpieza, amenities e IRPF.',
+      examples:['Desglose de comisiones por plataforma',
+                '\u00bfCu\u00e1nto pagamos a Booking en comisiones?',
+                '\u00bfCu\u00e1l es la plataforma m\u00e1s cara en comisiones?',
+                '\u00bfCu\u00e1nto se ha retenido de IRPF en total?',
+                '\u00bfCu\u00e1nto se gasta en limpieza al mes?',
+                '\u00bfQu\u00e9 pisos tienen los mayores costes de amenities?'] },
+    { icon:'\ud83d\udc64', title:'Propietarios',
+      text:'El asistente conoce qu\u00e9 pisos pertenecen a cada propietario y puede calcular sus m\u00e9tricas.',
+      examples:['Resumen por propietario',
+                '\u00bfCu\u00e1l es la liquidaci\u00f3n de [nombre]?',
+                '\u00bfQu\u00e9 propietario tiene m\u00e1s reservas?',
+                '\u00bfCu\u00e1nto se liquida a [nombre] este mes?',
+                'Tabla con todos los propietarios y sus pisos'] },
+    { icon:'\ud83d\udc65', title:'Comparar Propietarios',
+      text:'Compara el rendimiento de distintos propietarios con m\u00e9tricas detalladas por piso.',
+      examples:['Compara propietarios con ADR y margen',
+                '\u00bfQu\u00e9 propietario tiene mejor margen?',
+                'Top 3 propietarios por facturaci\u00f3n',
+                'Tabla comparativa de todos los propietarios'] },
+    { icon:'\ud83d\udcc8', title:'Comparativa Interanual (YoY)',
+      text:'Si tienes datos de <strong>2 o m\u00e1s a\u00f1os</strong>, el asistente genera comparativas autom\u00e1ticas con variaciones porcentuales.',
+      examples:['Comparativa 2024 vs 2025','\u00bfHan subido las reservas respecto al a\u00f1o pasado?',
+                'Evoluci\u00f3n del ADR por a\u00f1o','\u00bfQu\u00e9 plataforma ha crecido m\u00e1s?',
+                '\u00bfQu\u00e9 pisos han mejorado su facturaci\u00f3n este a\u00f1o?'] },
+    { icon:'\u2600\ufe0f', title:'Estacionalidad',
+      text:'Analiza el rendimiento por <strong>trimestre</strong> y <strong>plataforma</strong>. Identifica temporadas alta y baja.',
+      examples:['\u00bfCu\u00e1l es el trimestre m\u00e1s rentable?','Estacionalidad por plataforma',
+                '\u00bfQu\u00e9 meses tienen m\u00e1s reservas?','Comparar temporada alta vs baja',
+                'Tabla de ingresos por trimestre y plataforma'] },
+    { icon:'\ud83d\udd2e', title:'Predicci\u00f3n y Proyecci\u00f3n',
+      text:'Con <strong>12+ meses</strong> de datos, genera una proyecci\u00f3n mes a mes para los pr\u00f3ximos 12 meses.',
+      examples:['Predicci\u00f3n de ocupaci\u00f3n futura','\u00bfCu\u00e1nto facturaremos el pr\u00f3ximo trimestre?',
+                'Proyecci\u00f3n de ingresos a 6 meses','\u00bfQu\u00e9 pisos tendr\u00e1n m\u00e1s demanda?'] },
+    { icon:'\ud83d\udce5', title:'Exportar a Excel',
+      text:'Descarga los datos en formato <strong>CSV compatible con Excel</strong>. Al preguntar sobre exportaci\u00f3n aparece un bot\u00f3n de descarga.',
+      examples:['Exportar datos a Excel','Descargar CSV con todas las reservas',
+                'Quiero un Excel con el desglose por propietario','Exportar heatmap a CSV'] },
+    { icon:'\ud83d\udc68\u200d\ud83d\udcbc', title:'Agentes y Marketing',
+      text:'Analiza el rendimiento de los agentes que gestionan reservas y los or\u00edgenes de marketing.',
+      examples:['\u00bfQu\u00e9 agente gestiona m\u00e1s reservas?','Rendimiento por origen de marketing',
+                'Comparar agentes por facturaci\u00f3n','\u00bfQu\u00e9 canal de marketing genera m\u00e1s ingresos?'] },
+    { icon:'\ud83d\udccb', title:'Reservas Individuales',
+      text:'Puedes buscar reservas espec\u00edficas. El asistente muestra las reservas actualmente filtradas.',
+      examples:['\u00bfCu\u00e1l es la reserva m\u00e1s cara?','Busca reservas de [cliente]',
+                '\u00bfHay reservas de m\u00e1s de 14 noches?','\u00bfCu\u00e1l fue la \u00faltima reserva?'] },
+    { icon:'\u2699\ufe0f', title:'Acuerdos Especiales',
+      text:'El asistente conoce los pisos con <strong>m\u00ednimo garantizado 80/20</strong> y puede analizar su rendimiento espec\u00edfico.',
+      examples:['\u00bfQu\u00e9 pisos tienen acuerdo 80/20?','Rendimiento de pisos con m\u00ednimo garantizado',
+                '\u00bfEs rentable el acuerdo 80/20?','Comparar pisos 80/20 vs pisos est\u00e1ndar'] },
+    { icon:'\ud83d\udee0\ufe0f', title:'Mantenimiento',
+      text:'Consulta las cuotas de mantenimiento mensual configuradas por alojamiento.',
+      examples:['\u00bfQu\u00e9 pisos tienen cuota de mantenimiento?','Total de mantenimiento mensual',
+                '\u00bfCu\u00e1nto se deduce por mantenimiento?'] },
+    { icon:'\u2705', title:'Estado de Validaci\u00f3n',
+      text:'Consulta cu\u00e1ntas reservas est\u00e1n validadas o pendientes.',
+      examples:['\u00bfCu\u00e1ntas reservas faltan por validar?','Estado de validaci\u00f3n por alojamiento',
+                '\u00bfQu\u00e9 pisos tienen todas las reservas validadas?'] },
+    { icon:'\ud83d\udd0d', title:'Alertas Autom\u00e1ticas',
+      text:'Al abrir el asistente por primera vez tras cargar datos, <strong>detecta autom\u00e1ticamente</strong> anomal\u00edas.',
+      bullets:['Pisos con ADR bajo (< 50\u20ac/noche)','Pisos sin reservas en el periodo',
+               'Alto porcentaje de reservas pendientes de validar','Pisos con margen muy bajo (< 30%)',
+               'Posibles reservas duplicadas'] },
+    { icon:'\ud83d\udd04', title:'Duplicados y Anomal\u00edas',
+      text:'Detecta <strong>reservas duplicadas</strong> (mismo cliente + alojamiento + fechas) y anomal\u00edas de importe.',
+      examples:['\u00bfHay reservas duplicadas?','Muestra anomal\u00edas de importe',
+                'Busca reservas sospechosas','\u00bfHay reservas con importe 0?',
+                '\u00bfAlg\u00fan cliente ha reservado dos veces las mismas fechas?'] },
+    { icon:'\ud83d\udcca', title:'Segmentaci\u00f3n de Clientes',
+      text:'Clasifica las reservas en 3 tipos de estancia:',
+      bullets:['<strong>Escapada</strong>: 1-3 noches','<strong>Vacaciones</strong>: 4-13 noches',
+               '<strong>Larga estancia</strong>: 14+ noches'],
+      examples:['Segmentaci\u00f3n por tipo de estancia','\u00bfQu\u00e9 tipo de estancia genera m\u00e1s ingresos?'] },
+    { icon:'\ud83d\uddfa\ufe0f', title:'Heatmap de Ocupaci\u00f3n',
+      text:'Genera un <strong>mapa de calor visual</strong> con bloques Unicode mostrando la ocupaci\u00f3n por alojamiento y mes.',
+      examples:['Mapa de calor de ocupaci\u00f3n','Heatmap por alojamiento y mes',
+                '\u00bfQu\u00e9 meses est\u00e1n m\u00e1s llenos?','Sparklines de ocupaci\u00f3n por piso',
+                '\u00bfQu\u00e9 pisos tienen la mayor estacionalidad?'] },
+    { icon:'\u23f1\ufe0f', title:'Lead Time (Antelaci\u00f3n)',
+      text:'Analiza <strong>cu\u00e1ntos d\u00edas antes del check-in</strong> se hacen las reservas, por plataforma.',
+      examples:['Lead time por plataforma','\u00bfCon cu\u00e1nta antelaci\u00f3n reservan en Booking?',
+                '\u00bfQu\u00e9 plataforma tiene reservas m\u00e1s de \u00faltima hora?',
+                'Distribuci\u00f3n de antelaci\u00f3n de reservas',
+                'Lead time por tipo de estancia'] },
+    { icon:'\ud83d\udd2e', title:'Simulador What-If',
+      text:'Simula escenarios hipot\u00e9ticos para ver el impacto financiero <strong>antes de tomar decisiones</strong>.',
+      examples:['\u00bfQu\u00e9 pasa si subimos el ADR un 10%?','Simular reducci\u00f3n de comisi\u00f3n al 12%',
+                '\u00bfQu\u00e9 pasa si a\u00f1adimos 5 pisos nuevos?','Impacto de subir limpieza 10\u20ac',
+                'Simular quitar la pasarela de pago','\u00bfQu\u00e9 pasa si perdemos Booking?'] },
+    { icon:'\u26a1', title:'Briefing R\u00e1pido',
+      text:'Un <strong>resumen ejecutivo ultracondensado</strong> en 3-5 frases con lo m\u00e1s importante.',
+      examples:['Briefing r\u00e1pido','Dame lo m\u00e1s importante en 5 frases',
+                'Resumen ejecutivo flash','\u00bfQu\u00e9 debo saber hoy?',
+                'Estado general del negocio'] },
+    { icon:'\ud83e\udde0', title:'Memoria de Conversaci\u00f3n',
+      text:'El asistente <strong>recuerda las entidades</strong> (pisos, propietarios, plataformas) mencionadas en la conversaci\u00f3n para dar respuestas m\u00e1s contextuales.',
+      bullets:['Menciona un piso y las siguientes preguntas lo tendr\u00e1n en cuenta',
+               'Puedes encadenar preguntas: \u00abCompara piso A vs B\u00bb \u2192 \u00ab\u00bfY en noches?\u00bb',
+               'El historial se compacta autom\u00e1ticamente para optimizar tokens',
+               'Cada 10+ mensajes se resume la conversaci\u00f3n anterior'] },
+    { icon:'\ud83d\udcac', title:'Sugerencias Contextuales',
+      text:'Despu\u00e9s de cada respuesta, el asistente muestra <strong>2-3 botones de seguimiento</strong> con preguntas relacionadas para profundizar en el an\u00e1lisis.' },
+    { icon:'\u26a1', title:'Trucos Avanzados',
+      bullets:['Usa <strong>filtros de fecha</strong> antes de preguntar para limitar el periodo',
+               'Puedes <strong>combinar peticiones</strong>: \u00abADR por piso y plataforma\u00bb',
+               'Pide <strong>tablas comparativas</strong>: \u00abTabla de propietarios con ADR y margen\u00bb',
+               'Usa <strong>superlativos</strong>: \u00abEl mejor\u00bb, \u00abEl peor\u00bb, \u00abTop 5\u00bb',
+               'Pide <strong>exportar</strong> cualquier an\u00e1lisis a CSV/Excel',
+               'El asistente <strong>responde en el idioma</strong> en que le preguntes',
+               'Puedes pedir <strong>gr\u00e1ficos ASCII</strong> y tablas formateadas',
+               'Pregunta \u00ab\u00bfQu\u00e9 m\u00e1s puedes hacer?\u00bb si necesitas ideas',
+               'Los datos del asistente se basan <strong>solo en tus reservas reales</strong>',
+               'Puedes cambiar la API Key en cualquier momento desde el panel',
+               'Los chips de colores <strong>desaparecen tras el primer uso</strong> para no molestar'] },
+    { icon:'\u2139\ufe0f', title:'Informaci\u00f3n T\u00e9cnica',
+      bullets:['Modelo: <strong>Claude 3.5 Sonnet</strong> (Anthropic)','La API Key se guarda en <strong>localStorage</strong> (nunca se env\u00eda a nuestros servidores)',
+               'Los datos se env\u00edan directamente a la API de Anthropic con cada pregunta',
+               '<strong>24 categor\u00edas</strong> de clasificaci\u00f3n inteligente para optimizar contexto',
+               '<strong>Memoria de entidades</strong>: recuerda pisos, propietarios y plataformas mencionados',
+               '<strong>Sugerencias contextuales</strong>: 2-3 follow-ups tras cada respuesta',
+               'El historial se <strong>compacta autom\u00e1ticamente</strong> tras 10+ mensajes',
+               'Los contextos se <strong>cachean 30 segundos</strong> para queries similares',
+               'Versi\u00f3n actual: <strong>' + APP_VERSION + '</strong>'] }
+  ]
+},
+en: {
+  title: 'Complete AI Assistant Guide',
+  subtitle: 'Everything you can do with the assistant, explained with real examples.',
+  closeBtn: 'Close guide \u00d7',
+  tipLabel: 'Tip',
+  examplesLabel: 'Example questions',
+  sections: [
+    { icon:'\ud83d\ude80', title:'Getting Started',
+      text:'The assistant analyzes <strong>all loaded reservations</strong> in the application. Before using it, make sure to:',
+      list:['Load your reservations from <strong>Google Sheets</strong> or an <strong>Excel file</strong>',
+            'Click the <strong>\ud83e\udd16</strong> floating button at the bottom right',
+            'Type your question or use the <strong>quick chips</strong> (colored buttons)'],
+      tip:'The first time you will be asked for an Anthropic API Key. It is stored locally in your browser.' },
+    { icon:'\ud83d\udcca', title:'KPIs & Metrics',
+      text:'The assistant automatically calculates these key performance indicators:',
+      table:{headers:['KPI','What it measures'],
+        rows:[['<strong>ADR</strong>','Average daily rate (revenue / nights)'],
+              ['<strong>Average stay</strong>','Nights per reservation average'],
+              ['<strong>Effective commission</strong>','% taken by channel+GTC+gateway'],
+              ['<strong>Owner margin</strong>','% that reaches the owner'],
+              ['<strong>Revenue/property</strong>','Average billing per property'],
+              ['<strong>Rankings</strong>','Top 5 and Bottom 5 by settlement and ADR']]},
+      examples:['Give me an executive summary with all KPIs',
+                'Which property has the highest ADR?',
+                'Top 10 properties by billing',
+                'What is the effective commission we pay?',
+                'How much does each property earn on average per month?'] },
+    { icon:'\ud83c\udfe0', title:'Property Analysis',
+      text:'Check metrics for any individual property or compare between them.',
+      examples:['How is property MA-2-P3-1C doing?',
+                'How many nights does the Sunset Beach apartment have?',
+                'Compare the 5 properties with most reservations vs the 5 with fewest',
+                'Which properties have fewer than 10 reservations?',
+                'Property ranking by number of nights'] },
+    { icon:'\ud83d\udcb0', title:'Commissions & Costs',
+      text:'The system breaks down 3 types of commission: <strong>channel</strong> (Booking, Airbnb...), <strong>GTC</strong> (management) and <strong>gateway</strong> (Stripe). Also includes cleaning, amenities and IRPF tax.',
+      examples:['Commission breakdown by platform',
+                'How much do we pay Booking in commissions?',
+                'Which platform is the most expensive in commissions?',
+                'How much IRPF has been withheld in total?',
+                'How much is spent on cleaning per month?',
+                'Which properties have the highest amenities costs?'] },
+    { icon:'\ud83d\udc64', title:'Owners',
+      text:'The assistant knows which properties belong to each owner and can calculate their metrics.',
+      examples:['Summary by owner','What is the settlement for [name]?',
+                'Which owner has the most reservations?','How much is settled to [name] this month?',
+                'Table with all owners and their properties'] },
+    { icon:'\ud83d\udc65', title:'Compare Owners',
+      text:'Compare the performance of different owners with detailed per-property metrics.',
+      examples:['Compare owners with ADR and margin','Which owner has the best margin?',
+                'Top 3 owners by billing','Comparative table of all owners'] },
+    { icon:'\ud83d\udcc8', title:'Year-over-Year (YoY)',
+      text:'If you have data from <strong>2 or more years</strong>, the assistant generates automatic comparisons with percentage variations.',
+      examples:['2024 vs 2025 comparison','Have reservations increased compared to last year?',
+                'ADR evolution by year','Which platform has grown the most?',
+                'Which properties have improved their billing this year?'] },
+    { icon:'\u2600\ufe0f', title:'Seasonality',
+      text:'Analyze performance by <strong>quarter</strong> and <strong>platform</strong>. Identify high and low seasons.',
+      examples:['Which is the most profitable quarter?','Seasonality by platform',
+                'Which months have the most reservations?','Compare high vs low season',
+                'Revenue table by quarter and platform'] },
+    { icon:'\ud83d\udd2e', title:'Prediction & Projection',
+      text:'With <strong>12+ months</strong> of data, generates a month-by-month projection for the next 12 months.',
+      examples:['Future occupancy prediction','How much will we bill next quarter?',
+                '6-month revenue projection','Which properties will have the most demand?'] },
+    { icon:'\ud83d\udce5', title:'Export to Excel',
+      text:'Download data in <strong>CSV format compatible with Excel</strong>. When asking about export, a download button appears.',
+      examples:['Export data to Excel','Download CSV with all reservations',
+                'I want an Excel with the owner breakdown','Export heatmap to CSV'] },
+    { icon:'\ud83d\udc68\u200d\ud83d\udcbc', title:'Agents & Marketing',
+      text:'Analyze the performance of agents managing reservations and marketing sources.',
+      examples:['Which agent manages the most reservations?','Performance by marketing source',
+                'Compare agents by billing','Which marketing channel generates the most revenue?'] },
+    { icon:'\ud83d\udccb', title:'Individual Reservations',
+      text:'You can search for specific reservations. The assistant shows the currently filtered reservations.',
+      examples:['What is the most expensive reservation?','Find reservations by [client]',
+                'Are there reservations longer than 14 nights?','What was the last reservation?'] },
+    { icon:'\u2699\ufe0f', title:'Special Agreements',
+      text:'The assistant knows the properties with <strong>80/20 guaranteed minimum</strong> and can analyze their specific performance.',
+      examples:['Which properties have the 80/20 agreement?','Performance of guaranteed minimum properties',
+                'Is the 80/20 agreement profitable?','Compare 80/20 vs standard properties'] },
+    { icon:'\ud83d\udee0\ufe0f', title:'Maintenance',
+      text:'Check the monthly maintenance fees configured per property.',
+      examples:['Which properties have maintenance fees?','Total monthly maintenance',
+                'How much is deducted for maintenance?'] },
+    { icon:'\u2705', title:'Validation Status',
+      text:'Check how many reservations are validated or pending.',
+      examples:['How many reservations are pending validation?','Validation status by property',
+                'Which properties have all reservations validated?'] },
+    { icon:'\ud83d\udd0d', title:'Automatic Alerts',
+      text:'When opening the assistant for the first time after loading data, it <strong>automatically detects</strong> anomalies.',
+      bullets:['Properties with low ADR (< 50\u20ac/night)','Properties with no reservations in the period',
+               'High percentage of pending validation','Properties with very low margin (< 30%)',
+               'Possible duplicate reservations'] },
+    { icon:'\ud83d\udd04', title:'Duplicates & Anomalies',
+      text:'Detects <strong>duplicate reservations</strong> (same client + property + dates) and amount anomalies.',
+      examples:['Are there duplicate reservations?','Show amount anomalies',
+                'Search for suspicious reservations','Are there reservations with amount 0?',
+                'Has any client booked the same dates twice?'] },
+    { icon:'\ud83d\udcca', title:'Client Segmentation',
+      text:'Classifies reservations into 3 stay types:',
+      bullets:['<strong>Getaway</strong>: 1-3 nights','<strong>Vacation</strong>: 4-13 nights',
+               '<strong>Long stay</strong>: 14+ nights'],
+      examples:['Segmentation by stay type','Which stay type generates the most revenue?'] },
+    { icon:'\ud83d\uddfa\ufe0f', title:'Occupancy Heatmap',
+      text:'Generates a <strong>visual heatmap</strong> with Unicode blocks showing occupancy by property and month.',
+      examples:['Occupancy heatmap','Heatmap by property and month',
+                'Which months are fullest?','Occupancy sparklines by property',
+                'Which properties have the most seasonality?'] },
+    { icon:'\u23f1\ufe0f', title:'Lead Time (Booking Advance)',
+      text:'Analyzes <strong>how many days before check-in</strong> reservations are made, by platform.',
+      examples:['Lead time by platform','How far in advance do they book on Booking?',
+                'Which platform has the most last-minute bookings?',
+                'Booking advance distribution',
+                'Lead time by stay type'] },
+    { icon:'\ud83d\udd2e', title:'What-If Simulator',
+      text:'Simulate hypothetical scenarios to see the financial impact <strong>before making decisions</strong>.',
+      examples:['What if we raise ADR by 10%?','Simulate reducing commission to 12%',
+                'What if we add 5 new properties?','Impact of raising cleaning by 10\u20ac',
+                'Simulate removing the payment gateway','What if we lose Booking?'] },
+    { icon:'\u26a1', title:'Quick Briefing',
+      text:'An <strong>ultra-condensed executive summary</strong> in 3-5 sentences with the most important information.',
+      examples:['Quick briefing','Give me the most important in 5 sentences',
+                'Flash executive summary','What should I know today?',
+                'General business status'] },
+    { icon:'\ud83e\udde0', title:'Conversation Memory',
+      text:'The assistant <strong>remembers entities</strong> (properties, owners, platforms) mentioned in conversation for more contextual responses.',
+      bullets:['Mention a property and subsequent questions will take it into account',
+               'You can chain questions: \u00abCompare property A vs B\u00bb \u2192 \u00abAnd in nights?\u00bb',
+               'History is automatically compacted to optimize tokens',
+               'Every 10+ messages the previous conversation is summarized'] },
+    { icon:'\ud83d\udcac', title:'Contextual Suggestions',
+      text:'After each response, the assistant shows <strong>2-3 follow-up buttons</strong> with related questions to deepen the analysis.' },
+    { icon:'\u26a1', title:'Advanced Tips',
+      bullets:['Use <strong>date filters</strong> before asking to limit the period',
+               'You can <strong>combine requests</strong>: \u00abADR by property and platform\u00bb',
+               'Ask for <strong>comparative tables</strong>: \u00abOwner table with ADR and margin\u00bb',
+               'Use <strong>superlatives</strong>: \u00abThe best\u00bb, \u00abThe worst\u00bb, \u00abTop 5\u00bb',
+               'Ask to <strong>export</strong> any analysis to CSV/Excel',
+               'The assistant <strong>responds in the language</strong> you ask in',
+               'You can request <strong>ASCII charts</strong> and formatted tables',
+               'Ask \u00abWhat else can you do?\u00bb if you need ideas',
+               'Assistant data is based <strong>only on your real reservations</strong>',
+               'You can change the API Key at any time from the panel',
+               'Color chips <strong>disappear after first use</strong> to stay out of the way'] },
+    { icon:'\u2139\ufe0f', title:'Technical Information',
+      bullets:['Model: <strong>Claude 3.5 Sonnet</strong> (Anthropic)','The API Key is stored in <strong>localStorage</strong> (never sent to our servers)',
+               'Data is sent directly to the Anthropic API with each question',
+               '<strong>24 categories</strong> of intelligent classification to optimize context',
+               '<strong>Entity memory</strong>: remembers properties, owners and platforms mentioned',
+               '<strong>Contextual suggestions</strong>: 2-3 follow-ups after each response',
+               'History is <strong>automatically compacted</strong> after 10+ messages',
+               'Contexts are <strong>cached 30 seconds</strong> for similar queries',
+               'Current version: <strong>' + APP_VERSION + '</strong>'] }
+  ]
+},
+de: {
+  title: 'Vollst\u00e4ndige KI-Assistenten-Anleitung',
+  subtitle: 'Alles, was Sie mit dem Assistenten tun k\u00f6nnen, mit echten Beispielen erkl\u00e4rt.',
+  closeBtn: 'Anleitung schlie\u00dfen \u00d7',
+  tipLabel: 'Tipp',
+  examplesLabel: 'Beispielfragen',
+  sections: [
+    { icon:'\ud83d\ude80', title:'Erste Schritte',
+      text:'Der Assistent analysiert <strong>alle geladenen Buchungen</strong> in der Anwendung. Stellen Sie vorher sicher:',
+      list:['Laden Sie Ihre Buchungen von <strong>Google Sheets</strong> oder einer <strong>Excel-Datei</strong>',
+            'Klicken Sie auf den <strong>\ud83e\udd16</strong> schwebenden Button unten rechts',
+            'Geben Sie Ihre Frage ein oder nutzen Sie die <strong>Schnell-Chips</strong> (farbige Buttons)'],
+      tip:'Beim ersten Mal wird ein Anthropic API-Schl\u00fcssel ben\u00f6tigt. Er wird lokal in Ihrem Browser gespeichert.' },
+    { icon:'\ud83d\udcca', title:'KPIs & Kennzahlen',
+      text:'Der Assistent berechnet automatisch diese Leistungskennzahlen:',
+      table:{headers:['KPI','Was es misst'],
+        rows:[['<strong>ADR</strong>','Durchschnittlicher Tagespreis (Umsatz / N\u00e4chte)'],
+              ['<strong>Durchschn. Aufenthalt</strong>','N\u00e4chte pro Buchung im Durchschnitt'],
+              ['<strong>Effektive Provision</strong>','% f\u00fcr Kanal+GTC+Gateway'],
+              ['<strong>Eigent\u00fcmermarge</strong>','% das beim Eigent\u00fcmer ankommt'],
+              ['<strong>Umsatz/Unterkunft</strong>','Durchschn. Abrechnung pro Unterkunft'],
+              ['<strong>Rankings</strong>','Top 5 und Bottom 5 nach Abrechnung und ADR']]},
+      examples:['Gib mir eine Zusammenfassung mit allen KPIs',
+                'Welche Unterkunft hat den h\u00f6chsten ADR?',
+                'Top 10 Unterk\u00fcnfte nach Umsatz',
+                'Wie hoch ist die effektive Provision?',
+                'Wie viel verdient jede Unterkunft durchschnittlich pro Monat?'] },
+    { icon:'\ud83c\udfe0', title:'Unterkunftsanalyse',
+      text:'Pr\u00fcfen Sie Kennzahlen einzelner Unterk\u00fcnfte oder vergleichen Sie sie.',
+      examples:['Wie l\u00e4uft Unterkunft MA-2-P3-1C?',
+                'Wie viele N\u00e4chte hat das Apartment Sunset Beach?',
+                'Vergleiche die 5 Unterk\u00fcnfte mit den meisten vs wenigsten Buchungen',
+                'Welche Unterk\u00fcnfte haben weniger als 10 Buchungen?',
+                'Ranking der Unterk\u00fcnfte nach N\u00e4chteanzahl'] },
+    { icon:'\ud83d\udcb0', title:'Provisionen & Kosten',
+      text:'Das System schl\u00fcsselt 3 Provisionsarten auf: <strong>Kanal</strong> (Booking, Airbnb...), <strong>GTC</strong> (Verwaltung) und <strong>Gateway</strong> (Stripe). Inklusive Reinigung, Amenities und IRPF.',
+      examples:['Provisionsaufschl\u00fcsselung nach Plattform',
+                'Wie viel zahlen wir an Booking?',
+                'Welche Plattform ist am teuersten?',
+                'Wie viel IRPF wurde insgesamt einbehalten?',
+                'Wie viel wird monatlich f\u00fcr Reinigung ausgegeben?',
+                'Welche Unterk\u00fcnfte haben die h\u00f6chsten Amenity-Kosten?'] },
+    { icon:'\ud83d\udc64', title:'Eigent\u00fcmer',
+      text:'Der Assistent kennt die Zuordnung von Unterk\u00fcnften zu Eigent\u00fcmern.',
+      examples:['\u00dcbersicht nach Eigent\u00fcmer','Wie hoch ist die Abrechnung f\u00fcr [Name]?',
+                'Welcher Eigent\u00fcmer hat die meisten Buchungen?','Wie viel wird [Name] diesen Monat abgerechnet?',
+                'Tabelle aller Eigent\u00fcmer und ihrer Unterk\u00fcnfte'] },
+    { icon:'\ud83d\udc65', title:'Eigent\u00fcmer vergleichen',
+      text:'Vergleichen Sie die Leistung verschiedener Eigent\u00fcmer mit detaillierten Kennzahlen.',
+      examples:['Eigent\u00fcmer mit ADR und Marge vergleichen','Welcher Eigent\u00fcmer hat die beste Marge?',
+                'Top 3 Eigent\u00fcmer nach Umsatz','Vergleichstabelle aller Eigent\u00fcmer'] },
+    { icon:'\ud83d\udcc8', title:'Jahresvergleich (YoY)',
+      text:'Bei Daten aus <strong>2+ Jahren</strong> erstellt der Assistent automatische Vergleiche mit prozentualen Ver\u00e4nderungen.',
+      examples:['Vergleich 2024 vs 2025','Sind die Buchungen gegen\u00fcber letztem Jahr gestiegen?',
+                'ADR-Entwicklung nach Jahr','Welche Plattform ist am meisten gewachsen?',
+                'Welche Unterk\u00fcnfte haben ihren Umsatz verbessert?'] },
+    { icon:'\u2600\ufe0f', title:'Saisonalit\u00e4t',
+      text:'Analysieren Sie die Leistung nach <strong>Quartal</strong> und <strong>Plattform</strong>. Identifizieren Sie Hoch- und Nebensaison.',
+      examples:['Welches Quartal ist am profitabelsten?','Saisonalit\u00e4t nach Plattform',
+                'Welche Monate haben die meisten Buchungen?','Hochsaison vs Nebensaison vergleichen',
+                'Umsatztabelle nach Quartal und Plattform'] },
+    { icon:'\ud83d\udd2e', title:'Prognose & Projektion',
+      text:'Mit <strong>12+ Monaten</strong> Daten wird eine monatliche Projektion f\u00fcr die n\u00e4chsten 12 Monate erstellt.',
+      examples:['Zuk\u00fcnftige Belegungsprognose','Wie viel werden wir n\u00e4chstes Quartal abrechnen?',
+                '6-Monats-Umsatzprognose','Welche Unterk\u00fcnfte werden am meisten nachgefragt?'] },
+    { icon:'\ud83d\udce5', title:'Nach Excel exportieren',
+      text:'Laden Sie Daten im <strong>CSV-Format f\u00fcr Excel</strong> herunter. Ein Download-Button erscheint bei Export-Anfragen.',
+      examples:['Daten nach Excel exportieren','CSV mit allen Buchungen herunterladen',
+                'Excel mit Eigent\u00fcmer-Aufschl\u00fcsselung','Heatmap als CSV exportieren'] },
+    { icon:'\ud83d\udc68\u200d\ud83d\udcbc', title:'Agenten & Marketing',
+      text:'Analysieren Sie die Leistung der Agenten und Marketingquellen.',
+      examples:['Welcher Agent verwaltet die meisten Buchungen?','Leistung nach Marketingquelle',
+                'Agenten nach Umsatz vergleichen','Welcher Marketingkanal generiert den meisten Umsatz?'] },
+    { icon:'\ud83d\udccb', title:'Einzelne Buchungen',
+      text:'Sie k\u00f6nnen nach bestimmten Buchungen suchen. Der Assistent zeigt die aktuell gefilterten Buchungen.',
+      examples:['Was ist die teuerste Buchung?','Buchungen von [Kunde] finden',
+                'Gibt es Buchungen \u00fcber 14 N\u00e4chte?','Was war die letzte Buchung?'] },
+    { icon:'\u2699\ufe0f', title:'Sondervereinbarungen',
+      text:'Der Assistent kennt Unterk\u00fcnfte mit <strong>80/20 Mindestgarantie</strong> und kann deren Leistung analysieren.',
+      examples:['Welche Unterk\u00fcnfte haben die 80/20-Vereinbarung?','Leistung der Mindestgarantie-Unterk\u00fcnfte',
+                'Ist die 80/20-Vereinbarung rentabel?','80/20 vs Standard-Unterk\u00fcnfte vergleichen'] },
+    { icon:'\ud83d\udee0\ufe0f', title:'Wartung',
+      text:'Pr\u00fcfen Sie die monatlichen Wartungsgeb\u00fchren pro Unterkunft.',
+      examples:['Welche Unterk\u00fcnfte haben Wartungsgeb\u00fchren?','Monatliche Wartung gesamt',
+                'Wie viel wird f\u00fcr Wartung abgezogen?'] },
+    { icon:'\u2705', title:'Validierungsstatus',
+      text:'Pr\u00fcfen Sie, wie viele Buchungen validiert oder ausstehend sind.',
+      examples:['Wie viele Buchungen fehlen zur Validierung?','Validierungsstatus nach Unterkunft',
+                'Welche Unterk\u00fcnfte sind vollst\u00e4ndig validiert?'] },
+    { icon:'\ud83d\udd0d', title:'Automatische Warnungen',
+      text:'Beim ersten \u00d6ffnen nach dem Laden erkennt der Assistent <strong>automatisch</strong> Anomalien.',
+      bullets:['Unterk\u00fcnfte mit niedrigem ADR (< 50\u20ac/Nacht)','Unterk\u00fcnfte ohne Buchungen im Zeitraum',
+               'Hoher Anteil ausstehender Validierungen','Unterk\u00fcnfte mit sehr niedriger Marge (< 30%)',
+               'M\u00f6gliche doppelte Buchungen'] },
+    { icon:'\ud83d\udd04', title:'Duplikate & Anomalien',
+      text:'Erkennt <strong>doppelte Buchungen</strong> (gleicher Kunde + Unterkunft + Daten) und Betragsanomalien.',
+      examples:['Gibt es doppelte Buchungen?','Betragsanomalien anzeigen',
+                'Verd\u00e4chtige Buchungen suchen','Gibt es Buchungen mit Betrag 0?',
+                'Hat ein Kunde zweimal die gleichen Daten gebucht?'] },
+    { icon:'\ud83d\udcca', title:'Kundensegmentierung',
+      text:'Klassifiziert Buchungen in 3 Aufenthaltstypen:',
+      bullets:['<strong>Kurzurlaub</strong>: 1-3 N\u00e4chte','<strong>Urlaub</strong>: 4-13 N\u00e4chte',
+               '<strong>Langzeitaufenthalt</strong>: 14+ N\u00e4chte'],
+      examples:['Segmentierung nach Aufenthaltsart','Welcher Aufenthaltstyp generiert den meisten Umsatz?'] },
+    { icon:'\ud83d\uddfa\ufe0f', title:'Belegungs-Heatmap',
+      text:'Erstellt eine <strong>visuelle Heatmap</strong> mit Unicode-Bl\u00f6cken f\u00fcr die Belegung nach Unterkunft und Monat.',
+      examples:['Belegungs-Heatmap','Heatmap nach Unterkunft und Monat',
+                'Welche Monate sind am vollsten?','Belegungs-Sparklines pro Unterkunft',
+                'Welche Unterk\u00fcnfte haben die st\u00e4rkste Saisonalit\u00e4t?'] },
+    { icon:'\u23f1\ufe0f', title:'Vorlaufzeit (Buchungsvorlauf)',
+      text:'Analysiert <strong>wie viele Tage vor dem Check-in</strong> gebucht wird, nach Plattform.',
+      examples:['Vorlaufzeit nach Plattform','Wie weit im Voraus buchen sie auf Booking?',
+                'Welche Plattform hat die meisten Last-Minute-Buchungen?',
+                'Verteilung der Buchungsvorlaufzeit',
+                'Vorlaufzeit nach Aufenthaltsart'] },
+    { icon:'\ud83d\udd2e', title:'Was-w\u00e4re-wenn Simulator',
+      text:'Simulieren Sie hypothetische Szenarien, um die finanzielle Auswirkung <strong>vor Entscheidungen</strong> zu sehen.',
+      examples:['Was wenn wir den ADR um 10% erh\u00f6hen?','Provisionsreduzierung auf 12% simulieren',
+                'Was wenn wir 5 neue Unterk\u00fcnfte hinzuf\u00fcgen?','Auswirkung einer Reinigungserh\u00f6hung um 10\u20ac',
+                'Zahlungs-Gateway entfernen simulieren','Was wenn wir Booking verlieren?'] },
+    { icon:'\u26a1', title:'Schnell-Briefing',
+      text:'Eine <strong>ultrakompakte Zusammenfassung</strong> in 3-5 S\u00e4tzen mit den wichtigsten Informationen.',
+      examples:['Schnelles Briefing','Gib mir das Wichtigste in 5 S\u00e4tzen',
+                'Flash-Zusammenfassung','Was sollte ich heute wissen?',
+                'Allgemeiner Gesch\u00e4ftsstatus'] },
+    { icon:'\ud83e\udde0', title:'Gespr\u00e4chsspeicher',
+      text:'Der Assistent <strong>merkt sich Entit\u00e4ten</strong> (Unterk\u00fcnfte, Eigent\u00fcmer, Plattformen) f\u00fcr kontextbezogenere Antworten.',
+      bullets:['Erw\u00e4hnen Sie eine Unterkunft und Folgefragen ber\u00fccksichtigen sie',
+               'Fragen verketten: \u00abVergleiche A vs B\u00bb \u2192 \u00abUnd bei N\u00e4chten?\u00bb',
+               'Der Verlauf wird automatisch komprimiert',
+               'Alle 10+ Nachrichten wird das Gespr\u00e4ch zusammengefasst'] },
+    { icon:'\ud83d\udcac', title:'Kontextbezogene Vorschl\u00e4ge',
+      text:'Nach jeder Antwort zeigt der Assistent <strong>2-3 Follow-up-Buttons</strong> mit verwandten Fragen zur Vertiefung der Analyse.' },
+    { icon:'\u26a1', title:'Fortgeschrittene Tipps',
+      bullets:['Nutzen Sie <strong>Datumsfilter</strong> vor der Frage, um den Zeitraum einzugrenzen',
+               'Sie k\u00f6nnen <strong>Anfragen kombinieren</strong>: \u00abADR nach Unterkunft und Plattform\u00bb',
+               'Bitten Sie um <strong>Vergleichstabellen</strong>: \u00abEigent\u00fcmertabelle mit ADR und Marge\u00bb',
+               'Verwenden Sie <strong>Superlative</strong>: \u00abDas Beste\u00bb, \u00abDas Schlechteste\u00bb, \u00abTop 5\u00bb',
+               'Bitten Sie um <strong>Export</strong> jeder Analyse als CSV/Excel',
+               'Der Assistent <strong>antwortet in der Sprache</strong>, in der Sie fragen',
+               'Sie k\u00f6nnen <strong>ASCII-Diagramme</strong> und formatierte Tabellen anfordern',
+               'Fragen Sie \u00abWas kannst du noch?\u00bb wenn Sie Ideen brauchen',
+               'Die Daten basieren <strong>nur auf Ihren echten Buchungen</strong>',
+               'Sie k\u00f6nnen den API-Schl\u00fcssel jederzeit im Panel \u00e4ndern',
+               'Farb-Chips <strong>verschwinden nach der ersten Nutzung</strong>'] },
+    { icon:'\u2139\ufe0f', title:'Technische Informationen',
+      bullets:['Modell: <strong>Claude 3.5 Sonnet</strong> (Anthropic)','API-Schl\u00fcssel in <strong>localStorage</strong> (nie an unsere Server gesendet)',
+               'Daten werden direkt an die Anthropic API gesendet',
+               '<strong>24 Kategorien</strong> intelligenter Klassifizierung zur Kontextoptimierung',
+               '<strong>Entit\u00e4tsspeicher</strong>: merkt sich erw\u00e4hnte Unterk\u00fcnfte, Eigent\u00fcmer und Plattformen',
+               '<strong>Kontextvorschl\u00e4ge</strong>: 2-3 Follow-ups nach jeder Antwort',
+               'Verlauf wird <strong>automatisch komprimiert</strong> nach 10+ Nachrichten',
+               'Kontexte werden <strong>30 Sekunden gecacht</strong> f\u00fcr \u00e4hnliche Anfragen',
+               'Aktuelle Version: <strong>' + APP_VERSION + '</strong>'] }
+  ]
+}
+};
+
+/**
+ * @description Renders AI guide content in current language.
+ * Called on load and on language change.
+ */
+function _renderAIGuide() {
+  var el = document.getElementById('ai-guide-body');
+  if (!el) return;
+  var L = _currentLang || 'es';
+  var g = _GUIDE_I18N[L] || _GUIDE_I18N.es;
+  el.innerHTML =
+    '<div class="ai-help-header">' +
+      '<h2>&#x1F4D6; ' + g.title + '</h2>' +
+      '<p>' + g.subtitle + '</p>' +
+      '<button class="ai-help-close" onclick="_toggleAIHelp()">' + g.closeBtn + '</button>' +
+    '</div>' +
+    g.sections.map(function(s) {
+      var h = '<div class="ai-help-section"><h3>' + s.icon + ' ' + s.title + '</h3>';
+      if (s.text) h += '<p>' + s.text + '</p>';
+      if (s.table) {
+        h += '<table class="ai-help-table"><tr>' + s.table.headers.map(function(th){ return '<th>'+th+'</th>'; }).join('') + '</tr>';
+        h += s.table.rows.map(function(r){ return '<tr>' + r.map(function(c){ return '<td>'+c+'</td>'; }).join('') + '</tr>'; }).join('');
+        h += '</table>';
+      }
+      if (s.list) {
+        h += '<ol>' + s.list.map(function(li){ return '<li>'+li+'</li>'; }).join('') + '</ol>';
+      }
+      if (s.tip) {
+        h += '<div class="ai-help-tip">&#x1F4A1; <strong>' + g.tipLabel + ':</strong> ' + s.tip + '</div>';
+      }
+      if (s.examples) {
+        h += '<div class="ai-help-example"><strong>' + g.examplesLabel + ':</strong><ul>' +
+          s.examples.map(function(ex){ return '<li>&laquo;'+ex+'&raquo;</li>'; }).join('') +
+        '</ul></div>';
+      }
+      if (s.bullets) {
+        h += '<ul>' + s.bullets.map(function(b){ return '<li>'+b+'</li>'; }).join('') + '</ul>';
+      }
+      return h + '</div>';
+    }).join('');
+}
+
+
 // === UTILITY: Debounce ===
 function debounce(fn, ms) {
   let timer = null;
@@ -2427,6 +2612,16 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.23.0',
+    date: '2026-02-16',
+    changes: [
+      'i18n Phase 2: Panel Asistente IA completo en ES/EN/DE (390 claves total)',
+      'Gu\u00EDa del Asistente IA generada din\u00e1micamente por idioma (26 secciones \u00d7 3 idiomas)',
+      'Chips r\u00e1pidos, alertas autom\u00e1ticas y follow-up suggestions traducidos',
+      'System prompt del IA adapta idioma de respuesta autom\u00e1ticamente',
+      'API Key prompt, rate limit y error messages traducidos',
+    ]},
   {
     version: '2.22.0',
     date: '2026-02-16',
@@ -8468,7 +8663,8 @@ let _aiAlertsShown = false; // Phase 4: anomaly alerts shown flag
 let _aiEntityMemory = { pisos: [], propietarios: [], plataformas: [] }; // Phase 5: entity tracking
 
 function sendAIChip(btn) {
-  var q = btn.getAttribute('data-q');
+  var qKey = btn.getAttribute('data-q-key');
+  var q = qKey ? t(qKey) : btn.getAttribute('data-q');
   if (!q) return;
   // Decode HTML entities
   var tmp = document.createElement('textarea');
@@ -8520,9 +8716,9 @@ function _showAnomalyAlerts() {
     }
   });
   if (lowAdr.length > 0) {
-    alerts.push('\u26A0\uFE0F **' + lowAdr.length + ' piso' + (lowAdr.length>1?'s':'') + ' con ADR < 50\u20AC/noche**: ' +
+    alerts.push('\u26A0\uFE0F **' + lowAdr.length + ' ' + t('alert.lowAdr') + '**: ' +
       lowAdr.slice(0,5).map(function(x){ return x.name + ' (' + f(x.adr) + '\u20AC)'; }).join(', ') +
-      (lowAdr.length > 5 ? '... y ' + (lowAdr.length-5) + ' m\u00E1s' : ''));
+      (lowAdr.length > 5 ? '... ' + t('alert.andMore').replace('%s', lowAdr.length-5) : ''));
   }
 
   // 2. Pisos sin reservas (en propietarios pero 0 reservas)
@@ -8537,7 +8733,7 @@ function _showAnomalyAlerts() {
       if (!found) sinReservas.push(k.toUpperCase());
     });
     if (sinReservas.length > 0) {
-      alerts.push('\uD83D\uDEAB **' + sinReservas.length + ' piso' + (sinReservas.length>1?'s':'') + ' sin reservas** en el periodo: ' +
+      alerts.push('\uD83D\uDEAB **' + sinReservas.length + ' ' + t('alert.noReserv') + '**: ' +
         sinReservas.slice(0,5).join(', ') + (sinReservas.length > 5 ? '...' : ''));
     }
   }
@@ -8545,7 +8741,7 @@ function _showAnomalyAlerts() {
   // 3. Alto % de pendientes de validar
   var pctPend = allReservas.length > 0 ? ((allReservas.length - validated.size) / allReservas.length * 100) : 0;
   if (pctPend > 50 && allReservas.length > 20) {
-    alerts.push('\u2705 **' + (allReservas.length - validated.size) + ' reservas pendientes** de validar (' + pctPend.toFixed(0) + '% del total)');
+    alerts.push('\u2705 **' + (allReservas.length - validated.size) + ' ' + t('alert.pendingVal') + '** (' + pctPend.toFixed(0) + '% ' + t('alert.ofTotal') + ')');
   }
 
   // 4. Pisos con margen propietario muy bajo (<30%)
@@ -8558,7 +8754,7 @@ function _showAnomalyAlerts() {
     }
   });
   if (lowMargin.length > 0) {
-    alerts.push('\uD83D\uDCC9 **' + lowMargin.length + ' piso' + (lowMargin.length>1?'s':'') + ' con margen < 30%**: ' +
+    alerts.push('\uD83D\uDCC9 **' + lowMargin.length + ' ' + t('alert.lowMargin') + '**: ' +
       lowMargin.slice(0,4).map(function(x){ return x.name + ' (' + x.margin.toFixed(0) + '%)'; }).join(', '));
   }
 
@@ -8571,7 +8767,7 @@ function _showAnomalyAlerts() {
     if (dupSeen[key]) dupCount++; else dupSeen[key] = true;
   });
   if (dupCount > 0) {
-    alerts.push('\uD83D\uDD04 **' + dupCount + ' posible' + (dupCount>1?'s':'') + ' duplicado' + (dupCount>1?'s':'') + '** detectados. Pregunta: \u00ABmu\u00E9strame los duplicados\u00BB');
+    alerts.push('\uD83D\uDD04 **' + dupCount + ' ' + t('alert.duplicates') + '** ' + t('alert.showDups'));
   }
 
   if (alerts.length > 0) {
@@ -8579,7 +8775,7 @@ function _showAnomalyAlerts() {
     alertDiv.className = 'ai-msg ai-alert';
     alertDiv.innerHTML = '<strong>' + t('alert.detected') + '</strong><br>' +
       alerts.join('<br>').replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') +
-      '<br><em style="font-size:11px;color:#6b7280;">Preg\u00FAntame sobre cualquiera de estas alertas para m\u00E1s detalle.</em>';
+      '<br><em style="font-size:11px;color:#6b7280;">' + t('alert.askMore') + '</em>';
     document.getElementById('ai-messages').appendChild(alertDiv);
     document.getElementById('ai-messages').scrollTop = document.getElementById('ai-messages').scrollHeight;
   }
@@ -8593,7 +8789,7 @@ function _toggleAIHelp() {
 function _getAIKey() {
   let key = SafeStorage.get('ai-api-key');
   if (!key) {
-    key = prompt('Introduce tu API Key de Anthropic para activar el asistente IA.\n\nLa clave se guarda localmente en tu navegador y nunca se comparte.\n\nPuedes obtenerla en: console.anthropic.com');
+    key = prompt(t('ai.apiKeyPrompt'));
     if (key && key.trim()) {
       SafeStorage.set('ai-api-key', key.trim());
     } else { return null; }
@@ -9527,51 +9723,51 @@ function _extractEntities(text) {
 function _getFollowUpSuggestions(cats) {
   var suggestions = [];
   if (cats.has('KPI') || cats.has('SUMMARY')) {
-    suggestions.push({q:'\u00BFQu\u00E9 pisos tienen el ADR m\u00E1s bajo?', label:'\uD83D\uDCC9 Pisos peor ADR'});
-    suggestions.push({q:'Exportar estos datos a Excel', label:'\uD83D\uDCE5 Exportar'});
-    suggestions.push({q:'Compara propietarios con m\u00E9tricas detalladas', label:'\uD83D\uDC65 Propietarios'});
+    suggestions.push({q:t('fu.worstAdrQ'), label:t('fu.worstAdr')});
+    suggestions.push({q:t('fu.exportQ'), label:t('fu.export')});
+    suggestions.push({q:t('fu.ownersQ'), label:t('fu.owners')});
   }
   if (cats.has('FINANCIAL')) {
-    suggestions.push({q:'\u00BFQu\u00E9 pasar\u00EDa si reducimos la comisi\u00F3n un 2%?', label:'\uD83D\uDD2E Simular -2%'});
-    suggestions.push({q:'Ranking de pisos por margen propietario', label:'\uD83D\uDCC8 Ranking margen'});
+    suggestions.push({q:t('fu.simMinusQ'), label:t('fu.simMinus')});
+    suggestions.push({q:t('fu.rankMarginQ'), label:t('fu.rankMargin')});
   }
   if (cats.has('PLATFORM')) {
-    suggestions.push({q:'\u00BFQu\u00E9 plataforma tiene mejor lead time?', label:'\u23F1\uFE0F Lead time'});
-    suggestions.push({q:'Segmentaci\u00F3n de estancias por plataforma', label:'\uD83D\uDCCA Segmentos'});
+    suggestions.push({q:t('fu.leadtimeQ'), label:t('fu.leadtime')});
+    suggestions.push({q:t('fu.segmentsQ'), label:t('fu.segments')});
   }
   if (cats.has('PROPERTY') || cats.has('CMP_OWNER')) {
-    suggestions.push({q:'Mapa de calor de ocupaci\u00F3n por mes', label:'\uD83D\uDDFA\uFE0F Heatmap'});
-    suggestions.push({q:'\u00BFHay reservas duplicadas o sospechosas?', label:'\uD83D\uDD0D Duplicados'});
+    suggestions.push({q:t('fu.heatmapQ'), label:t('fu.heatmap')});
+    suggestions.push({q:t('fu.duplicatesQ'), label:t('fu.duplicates')});
   }
   if (cats.has('PREDICT')) {
-    suggestions.push({q:'Estacionalidad por trimestre y plataforma', label:'\u2600\uFE0F Estacionalidad'});
-    suggestions.push({q:'\u00BFQu\u00E9 pasar\u00EDa si subimos ADR un 10%?', label:'\uD83D\uDD2E Simular +10%'});
+    suggestions.push({q:t('fu.seasonQ'), label:t('fu.season')});
+    suggestions.push({q:t('fu.simPlusQ'), label:t('fu.simPlus')});
   }
   if (cats.has('YOY')) {
-    suggestions.push({q:'Predicci\u00F3n de ocupaci\u00F3n futura', label:'\uD83D\uDD2E Predecir'});
-    suggestions.push({q:'Ranking de pisos con mayor crecimiento', label:'\uD83D\uDCC8 Top crecimiento'});
+    suggestions.push({q:t('fu.predictQ'), label:t('fu.predict')});
+    suggestions.push({q:t('fu.topGrowthQ'), label:t('fu.topGrowth')});
   }
   if (cats.has('SEASON')) {
-    suggestions.push({q:'\u00BFQu\u00E9 tipo de estancia predomina en temporada alta?', label:'\uD83C\uDFD6\uFE0F Segmentar alta'});
+    suggestions.push({q:t('fu.segHighQ'), label:t('fu.segHigh')});
   }
   if (cats.has('SEGMENT')) {
-    suggestions.push({q:'Lead time por tipo de estancia', label:'\u23F1\uFE0F Lead time'});
+    suggestions.push({q:t('fu.ltByStayQ'), label:t('fu.ltByStay')});
   }
   if (cats.has('LEADTIME')) {
-    suggestions.push({q:'\u00BFQu\u00E9 pisos se reservan con m\u00E1s antelaci\u00F3n?', label:'\uD83C\uDFE0 Por piso'});
+    suggestions.push({q:t('fu.byPropQ'), label:t('fu.byProp')});
   }
   if (cats.has('DUPCHECK')) {
-    suggestions.push({q:'Resumen ejecutivo con KPIs', label:'\uD83D\uDCCA KPIs'});
+    suggestions.push({q:t('fu.kpisQ'), label:t('fu.kpis')});
   }
   if (cats.has('WHATIF')) {
-    suggestions.push({q:'Desglose real de comisiones por plataforma', label:'\uD83D\uDCB0 Comisiones reales'});
+    suggestions.push({q:t('fu.realCommQ'), label:t('fu.realComm')});
   }
   if (cats.has('HEATMAP')) {
-    suggestions.push({q:'Predicci\u00F3n de ocupaci\u00F3n futura', label:'\uD83D\uDD2E Predecir'});
+    suggestions.push({q:t('fu.predictQ'), label:t('fu.predict')});
   }
   if (cats.has('BRIEFING')) {
-    suggestions.push({q:'Dame m\u00E1s detalle con KPIs completos', label:'\uD83D\uDCCA KPIs detallados'});
-    suggestions.push({q:'\u00BFHay algo an\u00F3malo que deba revisar?', label:'\u26A0\uFE0F Anomal\u00EDas'});
+    suggestions.push({q:t('fu.kpiDetailQ'), label:t('fu.kpiDetail')});
+    suggestions.push({q:t('fu.anomaliesQ'), label:t('fu.anomalies')});
   }
   // Deduplicate and limit to 3
   var seen = new Set();
@@ -9588,7 +9784,7 @@ async function sendAIMessage() {
   if (!text) return;
 
   if (!allReservas || allReservas.length === 0) {
-    _addAIMsg('error', 'Primero carga las reservas desde Google Sheets o Excel para poder responder preguntas.');
+    _addAIMsg('error', t('ai.loadFirst'));
     return;
   }
 
@@ -9633,7 +9829,7 @@ async function sendAIMessage() {
       '1. SOLO responde con los datos proporcionados. NUNCA inventes cifras.\n' +
       '2. Sin informaci\u00F3n: "No tengo esa informaci\u00F3n en los datos cargados."\n' +
       '3. NUNCA des consejos financieros, legales ni fiscales.\n' +
-      '4. Espa\u00F1ol por defecto. Conciso pero completo.\n' +
+      '4. Responde en ' + ({es:'espa\u00F1ol',en:'English',de:'Deutsch'}[_currentLang]||'espa\u00F1ol') + '. Conciso pero completo.\n' +
       '5. Cifras con 2 decimales y \u20AC. Indica siempre si son con/sin IVA.\n' +
       '6. Res\u00FAmenes = TODAS las reservas. Detalle = filtradas (max 50).\n' +
       '7. Si falta info, sugiere filtrar la tabla o reformular.\n' +
@@ -9682,7 +9878,7 @@ async function sendAIMessage() {
         let retryAfter = resp.headers.get('retry-after');
         if (retryAfter) waitSec = Math.min(parseInt(retryAfter) || waitSec, 90);
         _removeTyping();
-        _addAIMsg('info', '\u23F3 L\u00EDmite de API alcanzado. Reintentando en ' + waitSec + 's...');
+        _addAIMsg('info', t('ai.rateLimit').replace('%s', waitSec));
         await new Promise(function(resolve) { setTimeout(resolve, waitSec * 1000); });
         const infoMsgs = document.querySelectorAll('.ai-msg.info');
         infoMsgs.forEach(function(el) { el.remove(); });
@@ -9698,9 +9894,9 @@ async function sendAIMessage() {
       let errData = await resp.json().catch(function(){ return {}; });
       if (resp.status === 401) {
         SafeStorage.remove('ai-api-key');
-        _addAIMsg('error', 'API Key inv\u00E1lida. Se ha borrado. Vuelve a intentarlo.');
+        _addAIMsg('error', t('ai.invalidKey'));
       } else {
-        _addAIMsg('error', 'Error: ' + (errData.error && errData.error.message ? errData.error.message : resp.statusText));
+        _addAIMsg('error', t('ai.errorPrefix') + (errData.error && errData.error.message ? errData.error.message : resp.statusText));
       }
       _aiHistory.pop();
     } else {
@@ -9773,6 +9969,8 @@ async function sendAIMessage() {
 <script>
 // Initialize i18n on page load
 (function() {
+  // Render AI guide in default language first
+  if (typeof _renderAIGuide === 'function') _renderAIGuide();
   const saved = SafeStorage.get('liq-lang');
   if (saved && saved !== 'es') {
     // Defer to allow DOM to be ready

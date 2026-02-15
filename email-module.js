@@ -467,7 +467,7 @@ async function _sendGmail({ to, cc, subject, htmlBody, pdfBlob, filename }) {
     if (sendResp.status === 429) {
       throw new Error('Demasiadas solicitudes. Espera unos segundos e int\u00E9ntalo de nuevo.');
     }
-    throw new Error('Error al enviar el email: ' + (err.error?.message || sendResp.statusText));
+    throw new Error((window.t||String)('email.errorSend') + (err.error?.message || sendResp.statusText));
   }
 
   const result = await sendResp.json();
@@ -612,28 +612,28 @@ function handleEmailLiquidacion() {
   overlay.innerHTML = `
     <div class="email-modal">
       <div class="email-modal-header">
-        <h3>&#9993; Enviar Liquidaci\u00F3n por Email</h3>
+        <h3>${(window.t||String)('email.title')}</h3>
         <p>${_escHtml(alojName)} \u2014 ${_escHtml(mes)}</p>
       </div>
       <div class="email-modal-body">
         <div class="email-modal-field">
-          <label>Destinatario (${_escHtml(propName)})</label>
-          <input type="text" id="email-to" value="${_escHtml(propEmail)}" placeholder="email@ejemplo.com, otro@ejemplo.com" autocomplete="email">
+          <label>${(window.t||String)('email.recipient')} (${_escHtml(propName)})</label>
+          <input type="text" id="email-to" value="${_escHtml(propEmail)}" placeholder="${(window.t||String)('email.toPlaceholder')}" autocomplete="email">
         </div>
         <div class="email-modal-field">
-          <label>CC <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:#9ca3af;">\u2014 copia (opcional, separar con comas)</span></label>
-          <input type="text" id="email-cc" placeholder="copia1@ejemplo.com, copia2@ejemplo.com" autocomplete="email">
+          <label>CC <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:#9ca3af;">${(window.t||String)('email.ccLabel').replace(/^CC /,'')}</span></label>
+          <input type="text" id="email-cc" placeholder="${(window.t||String)('email.ccPlaceholder')}" autocomplete="email">
         </div>
         <div class="email-modal-field">
-          <label>Asunto</label>
+          <label>${(window.t||String)('email.subject')}</label>
           <input type="text" id="email-subject" value="${_escHtml(subject)}">
         </div>
         <div class="email-modal-field">
-          <label>Mensaje adicional (opcional)</label>
-          <textarea id="email-extra-msg" placeholder="A\u00F1ade un mensaje personalizado..."></textarea>
+          <label>${(window.t||String)('email.extraMsg')}</label>
+          <textarea id="email-extra-msg" placeholder="${(window.t||String)('email.extraPlaceholder')}"></textarea>
         </div>
         <div class="email-modal-field" style="margin-bottom:8px;">
-          <label>Idioma del email</label>
+          <label>${(window.t||String)('email.langLabel')}</label>
           <div style="display:flex;gap:8px;margin-top:4px;">
             <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:400;text-transform:none;letter-spacing:normal;font-size:13px;">
               <input type="radio" name="email-lang" value="es" checked style="width:14px;height:14px;"> Espa\u00F1ol
@@ -646,15 +646,15 @@ function handleEmailLiquidacion() {
         <div class="email-modal-field" style="margin-bottom:0;">
           <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
             <input type="checkbox" id="email-save-addr" ${propEmail ? '' : 'checked'} style="width:14px;height:14px;">
-            Guardar email del propietario
+            ${(window.t||String)('email.saveAddr')}
           </label>
         </div>
         <div class="email-status" id="email-status"></div>
       </div>
       <div class="email-modal-footer">
-        <button class="btn-cancel" onclick="closeEmailModal()">Cancelar</button>
+        <button class="btn-cancel" onclick="closeEmailModal()">${(window.t||String)('email.cancel')}</button>
         <button class="btn-send" id="email-send-btn" onclick="_doSendEmail('${alojName.replace(/'/g, "\\'")}', '${propName.replace(/'/g, "\\'")}', '${mes.replace(/'/g, "\\'")}', '${filename.replace(/'/g, "\\'")}')">
-          Enviar &#10148;
+          ${(window.t||String)('email.send')}
         </button>
       </div>
     </div>
@@ -755,8 +755,8 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     }, lang);
 
     // Step 2: Build HTML body
-    _setStatus(statusEl, 'sending', '&#9203; Enviando email a ' + _escHtml(toFinal) + (cc ? ' (CC: ' + _escHtml(cc) + ')' : '') + '...');
-    sendBtn.textContent = 'Enviando...';
+    _setStatus(statusEl, 'sending', (window.t||String)('email.sending').replace('%s', _escHtml(toFinal) + (cc ? ' (CC: ' + _escHtml(cc) + ')' : '')));
+    sendBtn.textContent = (window.t||String)('email.sendingBtn');
 
     let htmlBody = _buildEmailBody(propName, alojName, mes, lang);
     const extra = (extraMsg?.value || '').trim();
@@ -786,7 +786,7 @@ async function _doSendEmail(alojName, propName, mes, filename) {
 
     // Success
     _setStatus(statusEl, 'success', `&#10004; Email enviado correctamente a <strong>${_escHtml(toFinal)}</strong>`);
-    sendBtn.textContent = '\u00A1Enviado! \u2714';
+    sendBtn.textContent = (window.t||String)('email.sentBtn');
     sendBtn.style.background = 'linear-gradient(135deg, #1D4B56, #306472)';
     sendBtn.style.color = '#E0AE00';
     showToast('Email enviado a ' + toFinal, 'success');

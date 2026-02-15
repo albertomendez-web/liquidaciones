@@ -2172,7 +2172,8 @@ function t(key, ...args) {
   args.forEach(a => { text = text.replace('%s', a); });
   return text;
 }
-
+window.t = t; // Explicit global binding
+console.log('[i18n] System loaded:', Object.keys(I18N).length, 'keys, t()=' + typeof t, 'lang=' + _currentLang);
 function setLanguage(lang) {
   if (!['es','en','de'].includes(lang)) return;
   _currentLang = lang;
@@ -2200,6 +2201,7 @@ function setLanguage(lang) {
     el.classList.toggle('active', el.dataset.lang === lang);
   });
 }
+window.setLanguage = setLanguage; // Explicit global binding for onclick handlers
 
 function _updateI18nArrays() {
   // Update MONTH_NAMES and MONTH_FULL

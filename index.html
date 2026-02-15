@@ -2780,6 +2780,7 @@ const CHANGELOG = [
     changes: [
       'Email modal: protecci\u00f3n drag-out (mousedown dentro + mouseup fuera no cierra)',
       'Bot\u00f3n X a\u00f1adido en header del modal para cierre expl\u00edcito',
+      'Cache-buster: email-module.js carga con ?v=APP_VERSION para evitar cach\u00e9',
     ]
   },
   {
@@ -10080,7 +10081,7 @@ async function sendAIMessage() {
 })();
 // === END AI ASSISTANT ===
 </script>
-<script src="email-module.js"></script>
+<script>document.write('<script src="email-module.js?v='+APP_VERSION+'"><\/script>');</script>
 <script>
 // Initialize i18n on page load
 (function() {

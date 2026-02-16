@@ -1,0 +1,16 @@
+</script>
+<script>document.write('<script src="email-module.js?v='+APP_VERSION+'"><\/script>');</script>
+<script>
+// Initialize i18n on page load
+(function() {
+  // Render AI guide in default language first
+  if (typeof _renderAIGuide === 'function') _renderAIGuide();
+  const saved = SafeStorage.get('liq-lang');
+  if (saved && saved !== 'es') {
+    // Defer to allow DOM to be ready
+    setTimeout(() => setLanguage(saved), 100);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+<style id="col-visibility-style"></style>
+<style id="consol-col-visibility-style"></style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js" async defer></script>
+</head>
+<body>
+<div id="toast-container" class="toast-container"></div>
+
+<div class="sidebar">
+  <div class="logo"><h1 data-i18n="app.title">Liquidaciones</h1><p data-i18n="app.subtitle">Gesti&oacute;n de Reservas</p></div>
+  <nav style="margin-top:16px; flex:1;">
+    <div class="nav-item active" id="nav-upload" onclick="showScreen('upload')">&#128228; <span data-i18n="nav.upload">Cargar Fichero</span></div>
+    <div class="nav-item" id="nav-list" onclick="showScreen('list')">&#128203; <span data-i18n="nav.list">Por Reserva</span></div>
+    <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; <span data-i18n="nav.detail">Liquidaci&oacute;n Reserva</span></div>
+    <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; <span data-i18n="nav.consol">Por Alojamiento</span></div>
+    <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; <span data-i18n="nav.consoldetail">Liquidaci&oacute;n Alojamiento</span></div>
+    <div class="nav-divider" id="cfg-nav-divider"></div>
+    <div class="nav-label" data-i18n="nav.configLabel">Configuraci&oacute;n</div>
+    <div class="nav-item" id="nav-cfg-plat" onclick="showScreen('cfg-plat')">&#128225; <span data-i18n="config.salesChannel">Canal de Venta</span></div>
+    <div class="nav-item" id="nav-cfg-otros" onclick="showScreen('cfg-otros')">&#129529; <span data-i18n="config.gtcService">Servicio GTC / Limpieza</span></div>
+    <div class="nav-item" id="nav-cfg-pasarela" onclick="showScreen('cfg-pasarela')">&#128179; <span data-i18n="config.gateway">Pasarela</span></div>
+    <div class="nav-item" id="nav-cfg-impuestos" onclick="showScreen('cfg-impuestos')">&#128202; <span data-i18n="config.taxes">Impuestos</span></div>
+    <div class="nav-item" id="nav-cfg-8020" onclick="showScreen('cfg-8020')" style="color:#7c3aed;">&#8621; <span data-i18n="config.agreement8020">Acuerdo 80/20</span></div>
+    <div class="nav-item" id="nav-cfg-invoicing" onclick="showScreen('cfg-invoicing')" style="color:#059669;">&#128196; <span data-i18n="inv.tabTitle">Facturaci&oacute;n</span></div>
+  </nav>
+  <div class="sidebar-google" id="sidebar-google" style="display:none;">
+    <span class="status-dot" id="google-dot"></span>
+    <span class="status-text" id="google-status-text"></span>
+  </div>
+  <div class="sidebar-footer" id="file-indicator" style="display:none;">&#128206; <span id="file-name"></span></div>
+  <div id="sync-indicator" style="display:none;padding:8px 24px;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,0.6);">
+    <div class="sync-dot idle"></div>
+    <span class="sync-text" data-i18n="sync.synced">Sincronizado</span>
+  </div>
+  <div id="sync-toggle-btn" onclick="toggleSync()" style="display:none;padding:4px 24px 8px;cursor:pointer;font-size:11px;color:rgba(255,255,255,0.5);transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.8)'" onmouseout="this.style.color='rgba(255,255,255,0.5)'" title="Activar sincronizaci&oacute;n multi-usuario">
+    <span class="sync-toggle-dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#6b7280;margin-right:6px;vertical-align:middle;"></span>
+    <span class="sync-toggle-label" style="vertical-align:middle;">Sync OFF</span>
+  </div>
+  <div class="lang-selector" style="padding:8px 24px 12px;display:flex;gap:4px;align-items:center;">
+    <span style="font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.08em;margin-right:4px;" data-i18n="lang.label">Idioma</span>
+    <button class="lang-option active" data-lang="es" onclick="setLanguage('es')" style="background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.4)'" onmouseout="if(!this.classList.contains('active'))this.style.borderColor='rgba(255,255,255,0.15)'">ES</button>
+    <button class="lang-option" data-lang="en" onclick="setLanguage('en')" style="background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.4)'" onmouseout="if(!this.classList.contains('active'))this.style.borderColor='rgba(255,255,255,0.15)'">EN</button>
+    <button class="lang-option" data-lang="de" onclick="setLanguage('de')" style="background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:11px;font-weight:600;padding:3px 8px;border-radius:6px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(255,255,255,0.4)'" onmouseout="if(!this.classList.contains('active'))this.style.borderColor='rgba(255,255,255,0.15)'">DE</button>
+  </div>
+  <div class="sidebar-footer" id="version-indicator" style="cursor:pointer;" onclick="showVersionInfo()" title="Info de versi&oacute;n">v<span id="version-label"></span></div>
+  <div style="padding:0 24px 12px; font-size:11px;"><a href="#" onclick="event.preventDefault();showChangelog()" style="color:rgba(255,255,255,0.4);text-decoration:none;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">&#x1F4CB; <span data-i18n="changelog.link">Historial de cambios</span></a></div>
+</div>
+
+<!-- Changelog Modal -->
+<div class="changelog-overlay" id="changelog-overlay" onclick="if(event.target===this)closeChangelog()">
+  <div class="changelog-modal">
+    <div class="changelog-header">
+      <h3>&#x1F4CB; <span data-i18n="changelog.title">Historial de versiones</span></h3>
+      <button onclick="closeChangelog()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#6b7280;padding:4px;">&times;</button>
+    </div>
+    <div class="changelog-body" id="changelog-body"></div>
+  </div>
+</div>
+
+<!-- AI Assistant -->
+<button class="ai-fab" id="ai-fab" onclick="toggleAIPanel()" data-i18n-title="ai.title" title="Asistente Hist&oacute;rico Reservas">&#x1F916;<span class="fab-badge" id="ai-badge"></span></button>
+<div class="ai-panel" id="ai-panel">
+  <div class="ai-header">
+    <span style="font-size:20px;">&#x1F916;</span>
+    <h3 data-i18n="ai.title">Asistente Hist&oacute;rico Reservas</h3>
+    <button class="ai-help-btn" onclick="_toggleAIHelp()" data-i18n-title="ai.helpBtn" title="L&eacute;eme / Ayuda">&#x2753;</button>
+    <button class="ai-close" onclick="toggleAIPanel()">&times;</button>
+  </div>
+  <div class="ai-help-overlay" id="ai-help-overlay">
+    <div class="ai-help-scroll">
+      <div id="ai-guide-body"></div>
+    </div>
+  </div>
+  <div class="ai-messages" id="ai-messages">
+    <div class="ai-msg system" data-i18n="ai.subtitle">Preg&uacute;ntame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.</div>
+    <div class="ai-chips" id="ai-chips">
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.briefingQ" data-i18n="ai.chip.briefing">&#x26A1; Briefing</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.kpisQ" data-i18n="ai.chip.kpis">&#x1F4CA; KPIs</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.ownersQ" data-i18n="ai.chip.owners">&#x1F465; Propietarios</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.heatmapQ" data-i18n="ai.chip.heatmap">&#x1F5FA;&#xFE0F; Heatmap</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.duplicatesQ" data-i18n="ai.chip.duplicates">&#x1F50D; Duplicados</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.segmentsQ" data-i18n="ai.chip.segments">&#x1F4CA; Segmentos</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.leadtimeQ" data-i18n="ai.chip.leadtime">&#x23F1;&#xFE0F; Lead time</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.whatifQ" data-i18n="ai.chip.whatif">&#x1F52E; What-if</button>
+      <button class="ai-chip" onclick="sendAIChip(this)" data-q-key="ai.chip.exportQ" data-i18n="ai.chip.export">&#x1F4E5; Exportar</button>
+    </div>
+  </div>
+  <div class="ai-input-wrap">
+    <textarea id="ai-input" data-i18n="ai.placeholder" placeholder="Escribe tu pregunta..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAIMessage();}"></textarea>
+    <button id="ai-send" onclick="sendAIMessage()" data-i18n="ai.send">Enviar</button>
+  </div>
+</div>
+
+<div class="main">
+  <!-- UPLOAD -->
+  <div class="screen active" id="screen-upload">
+    <div class="upload-wrap"><div class="upload-inner">
+      <h2 data-i18n="upload.title">Cargar Reservas</h2>
+      <p data-i18n="upload.desc">Sube un fichero Excel o conecta con Google Sheets para cargar las reservas</p>
+      <div class="dropzone" id="dropzone"
+        ondragover="event.preventDefault(); this.classList.add('dragging');"
+        ondragleave="this.classList.remove('dragging');"
+        ondrop="event.preventDefault(); this.classList.remove('dragging'); handleFile(event.dataTransfer.files[0]);"
+        onclick="document.getElementById('fileInput').click();">
+        <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/></svg>
+        <div class="title" data-i18n="upload.drop">Arrastra tu fichero aqu&iacute;</div>
+        <div class="sub" data-i18n="upload.dropSub">o haz clic para seleccionar &mdash; formato .xlsx</div>
+      </div>
+      <input type="file" id="fileInput" accept=".xlsx,.xls" style="display:none;" onchange="handleFile(this.files[0]);">
+
+      <!-- GOOGLE SHEETS SECTION -->
+      <div class="gsheet-section" id="gsheet-section">
+        <h3>&#128202; <span data-i18n="upload.gsheet">Cargar desde Google Sheets</span></h3>
+        <p data-i18n="upload.gsheetDesc">Conecta con tu cuenta Google para cargar datos directamente desde una hoja de c&aacute;lculo</p>
+        <div id="gsheet-auth-area">
+          <div class="gsheet-status disconnected" id="gsheet-status">
+            <div class="dot"></div>
+            <span id="gsheet-status-label" data-i18n="upload.notConnected">No conectado</span>
+          </div>
+          <div class="gsheet-actions">
+            <button class="btn btn-primary" id="btn-google-connect" onclick="googleSignIn()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#fff"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#fff" opacity=".8"/></svg>
+              <span data-i18n="upload.connect">Conectar con Google</span>
+            </button>
+            <button class="btn btn-outline" id="btn-google-disconnect" onclick="googleSignOut()" style="display:none;" data-i18n="upload.disconnect">Desconectar</button>
+          </div>
+        </div>
+        <div id="gsheet-default-area" style="display:none; margin-top:20px;">
+          <div style="background:#f0f5ff;border:1.5px solid #c3d9ff;border-radius:10px;padding:16px 20px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#4f8cff;">&#9733; <span data-i18n="upload.defaultSheet">Hoja por defecto</span></span>
+              <div style="display:flex;gap:6px;">
+                <button class="btn btn-sm btn-primary" id="btn-load-default" onclick="loadDefaultSheet()">&#9654; <span data-i18n="upload.loadNow">Cargar ahora</span></button>
+                <button class="btn btn-sm btn-outline" onclick="editDefaultUrl()" title="Cambiar URL">&#9998;</button>
+                <button class="btn btn-sm" style="background:#ffebee;color:#e53935;padding:6px 10px;" onclick="clearDefaultUrl()" title="Quitar por defecto">&#10005;</button>
+              </div>
+            </div>
+            <div id="default-url-display" style="font-size:13px;color:#1a2744;font-weight:500;word-break:break-all;"></div>
+            <div id="default-url-edit" style="display:none;">
+              <div class="gsheet-url-row" style="margin-bottom:0;">
+                <input class="gsheet-url-input" type="text" id="default-url-edit-input" placeholder="https://docs.google.com/spreadsheets/d/..." onkeydown="if(event.key==='Enter')saveDefaultUrlEdit();">
+                <button class="btn btn-sm btn-success" onclick="saveDefaultUrlEdit()" data-i18n="upload.save">Guardar</button>
+                <button class="btn btn-sm btn-outline" onclick="cancelDefaultUrlEdit()" data-i18n="upload.cancel">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="gsheet-autoload-status" style="display:none;margin-top:12px;">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:10px;background:#e8f5e9;color:#2e7d32;font-size:13px;font-weight:500;">
+            <div class="gsheet-spinner" style="border-top-color:#43a047;border-color:#c8e6c9;width:18px;height:18px;"></div>
+            <span id="autoload-status-text" data-i18n="upload.loadingDefault">Cargando hoja por defecto...</span>
+          </div>
+        </div>
+        <div id="gsheet-no-default" style="display:none; margin-top:20px;">
+          <div style="background:#f8f9fb;border:1.5px dashed #dde1e8;border-radius:10px;padding:14px 20px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#9ca3af;margin-bottom:4px;" data-i18n="upload.defaultSheet">Hoja por defecto</div>
+                <div style="font-size:13px;color:#6b7280;" data-i18n="upload.configDesc">Configura una URL para cargar autom&aacute;ticamente al conectar</div>
+              </div>
+              <button class="btn btn-sm btn-outline" onclick="showSetDefaultUrl()" data-i18n="upload.configure">Configurar</button>
+            </div>
+            <div id="set-default-url-form" style="display:none;margin-top:12px;">
+              <div class="gsheet-url-row" style="margin-bottom:0;">
+                <input class="gsheet-url-input" type="text" id="set-default-url-input" placeholder="https://docs.google.com/spreadsheets/d/..." onkeydown="if(event.key==='Enter')saveNewDefaultUrl();">
+                <button class="btn btn-sm btn-success" onclick="saveNewDefaultUrl()" data-i18n="upload.save">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="gsheet-picker-area" style="display:none; margin-top:20px;">
+          <div class="gsheet-actions" style="margin-bottom:12px;">
+            <button class="btn btn-primary" onclick="openGooglePicker()">&#128193; <span data-i18n="upload.explore">Explorar Google Drive</span></button>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin:12px 0;">
+            <div style="flex:1;height:1px;background:#e0e4ea;"></div>
+            <span style="font-size:11px;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;" data-i18n="upload.pasteUrl">o pega la URL</span>
+            <div style="flex:1;height:1px;background:#e0e4ea;"></div>
+          </div>
+          <div class="gsheet-url-row">
+            <input class="gsheet-url-input" type="text" id="gsheet-url-input" placeholder="https://docs.google.com/spreadsheets/d/..." onkeydown="if(event.key==='Enter')loadFromUrl();">
+            <button class="btn btn-primary" onclick="loadFromUrl()" data-i18n="upload.load">Cargar</button>
+          </div>
+        </div>
+        <div id="gsheet-loading" style="display:none;" class="gsheet-loading">
+          <div class="gsheet-spinner"></div>
+          <span id="gsheet-loading-text" data-i18n="upload.loading">Cargando datos...</span>
+        </div>
+        <div id="gsheet-sheets-selector" style="display:none; margin-top:16px;">
+          <label style="font-size:12px;font-weight:600;color:#6b7280;display:block;margin-bottom:8px;" data-i18n="upload.selectSheet">Selecciona la hoja:</label>
+          <div id="gsheet-sheets-list" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+        </div>
+        <div class="gsheet-history" id="gsheet-history" style="display:none;">
+          <h4 data-i18n="upload.recentSheets">Hojas recientes</h4>
+          <div id="gsheet-history-list"></div>
+        </div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- LIST -->
+  <div class="screen" id="screen-list">
+    <div class="page-header" style="margin-bottom:28px;">
+      <h1 data-i18n="list.title">Por Reserva</h1>
+      <p data-i18n="list.desc">Revisa, ajusta y valida cada reserva antes de generar la liquidaci&oacute;n definitiva</p>
+    </div>
+    <div class="stats-row" id="stats-row"></div>
+    <div class="card filters-bar">
+      <label data-i18n="filter.filters">Filtros</label>
+      <div class="combo" id="combo-platform">
+        <input class="combo-input" type="text" data-i18n="filter.allPlatforms" placeholder="Todas las plataformas" onclick="openCombo('platform')" oninput="filterCombo('platform')">
+        <div class="combo-clear" onclick="clearCombo('platform')" title="Limpiar">&#10005;</div>
+        <div class="combo-list" id="combo-list-platform"></div>
+      </div>
+      <div class="combo" id="combo-aloj">
+        <input class="combo-input" type="text" data-i18n="filter.allProperties" placeholder="Todos los alojamientos" onclick="openCombo('aloj')" oninput="filterCombo('aloj')">
+        <div class="combo-clear" onclick="clearCombo('aloj')" title="Limpiar">&#10005;</div>
+        <div class="combo-list" id="combo-list-aloj"></div>
+      </div>
+      <div class="combo" id="combo-status" style="min-width:150px;">
+        <input class="combo-input" type="text" data-i18n="filter.allStatuses" placeholder="Todos los estados" readonly onclick="openSimpleCombo('status')" style="cursor:pointer;">
+        <div class="combo-clear" onclick="clearSimpleCombo('status')" title="Limpiar">&#10005;</div>
+        <div class="combo-list" id="combo-list-status"></div>
+      </div>
+      <div class="mp-wrap" id="mp-wrap-p">
+        <button class="mp-btn" id="mp-btn-p" onclick="toggleMonthPicker('p')"><span class="mp-icon">&#128197;</span> <span id="mp-label-p" data-i18n="filter.allMonths">Todos los meses</span></button>
+        <div class="mp-dd" id="mp-dd-p"></div>
+      </div>
+      <div class="filter-sep"></div>
+      <div class="search-wrap">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" class="search-input" id="search-preliq" data-i18n="filter.search" placeholder="Buscar cliente, importe, fecha..." oninput="onSearchPreliq(this.value)">
+        <div class="search-clear" id="search-preliq-clear" onclick="clearSearchPreliq()" style="display:none;">&#10005;</div>
+      </div>
+      <div class="filter-sep"></div>
+      <label data-i18n="filter.sort">Ordenar</label>
+      <div class="combo" id="combo-sort" style="min-width:160px;">
+        <input class="combo-input" type="text" data-i18n="filter.originalOrder" placeholder="Orden original" readonly onclick="openSimpleCombo('sort')" style="cursor:pointer;">
+        <div class="combo-list" id="combo-list-sort"></div>
+      </div>
+      <div class="combo" id="combo-sortdir" style="min-width:50px;">
+        <input class="combo-input" type="text" placeholder="&#8593;" readonly onclick="openSimpleCombo('sortdir')" style="cursor:pointer;text-align:center;padding:6px 8px;">
+        <div class="combo-list" id="combo-list-sortdir"></div>
+      </div>
+      <div class="filter-sep"></div>
+      <div class="col-toggle-wrap">
+        <button class="col-toggle-btn" onclick="toggleColDropdown()" data-i18n-title="misc.showHideCols" title="Mostrar/ocultar columnas">&#9783; <span data-i18n="filter.columns">Columnas</span></button>
+        <div class="col-toggle-dd" id="col-toggle-dd"></div>
+      </div>
+      <div class="filter-sep"></div>
+      <button class="btn btn-sm btn-orange" id="btn-validar-todas" onclick="validarTodas()" style="display:none;">&#10004; <span data-i18n="btn.validateAll">Validar todas</span></button>
+      <button class="btn btn-sm btn-success" id="btn-desvalidar-todas" onclick="desvalidarTodas()" style="display:none;">&#8617; <span data-i18n="btn.unvalidateAll">Desvalidar todas</span></button>
+      <span class="count" id="filter-count"></span>
+    </div>
+    <div class="card" style="padding:0; overflow:hidden;">
+      <div class="table-wrap">
+        <table><thead><tr id="table-header"></tr></thead><tbody id="table-body"></tbody><tfoot id="table-foot"></tfoot></table>
+      </div>
+      <div id="pagination-bar" class="no-print" style="display:none;padding:12px 20px;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid #eef0f4;flex-wrap:wrap;"></div>
+    </div>
+  </div>
+
+  <!-- DETAIL (individual) -->
+  <div class="screen" id="screen-detail">
+    <button class="btn btn-outline no-print" style="margin-bottom:24px;" onclick="showScreen('list')">&#8592; <span data-i18n="btn.backToList">Volver a la lista</span></button>
+    <div id="detail-content"></div>
+  </div>
+
+  <!-- CONSOLIDATED: grid of alojamientos -->
+  <div class="screen" id="screen-consol">
+    <div class="page-header" style="margin-bottom:28px;">
+      <h1 data-i18n="consol.title">Por Alojamiento</h1>
+      <p data-i18n="consol.desc">Consolida las reservas validadas de cada alojamiento para generar la liquidaci&oacute;n mensual</p>
+    </div>
+    <div class="stats-row" id="consol-stats"></div>
+    <div class="card filters-bar" style="padding:12px 24px;">
+      <div class="mp-wrap" id="mp-wrap-c">
+        <button class="mp-btn" id="mp-btn-c" onclick="toggleMonthPicker('c')"><span class="mp-icon">&#128197;</span> <span id="mp-label-c" data-i18n="filter.allMonths">Todos los meses</span></button>
+        <div class="mp-dd" id="mp-dd-c"></div>
+      </div>
+      <div class="filter-sep"></div>
+      <div class="search-wrap">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" class="search-input" id="search-consol" data-i18n="filter.searchConsol" placeholder="Buscar alojamiento, importe..." oninput="onSearchConsol(this.value)">
+        <div class="search-clear" id="search-consol-clear" onclick="clearSearchConsol()" style="display:none;">&#10005;</div>
+      </div>
+      <div class="filter-sep"></div>
+      <div class="val-toggle-wrap" id="val-toggle">
+        <button class="val-toggle-btn no-val active" id="vt-btn-noval" onclick="toggleConsolVal('noval')">
+          <span class="vt-dot"></span><span data-i18n="consol.notValidated">No Validadas</span><span class="vt-count" id="vt-count-noval">0</span>
+        </button>
+        <button class="val-toggle-btn si-val" id="vt-btn-val" onclick="toggleConsolVal('val')">
+          <span class="vt-dot"></span><span data-i18n="consol.validatedTab">Validadas</span><span class="vt-count" id="vt-count-val">0</span>
+        </button>
+      </div>
+      <div class="filter-sep"></div>
+      <label data-i18n="filter.sortBy">Ordenar por</label>
+      <div class="combo" id="combo-consolsort" style="min-width:190px;">
+        <input class="combo-input" type="text" data-i18n="sort.nameAZ" placeholder="Nombre A&#8593;Z" readonly onclick="openSimpleCombo('consolsort')" style="cursor:pointer;">
+        <div class="combo-clear" onclick="clearSimpleCombo('consolsort')" title="Limpiar">&#10005;</div>
+        <div class="combo-list" id="combo-list-consolsort"></div>
+      </div>
+    </div>
+    <div class="aloj-grid" id="aloj-grid"></div>
+  </div>
+
+  <!-- CONSOLIDATED DETAIL: one alojamiento -->
+  <div class="screen" id="screen-consoldetail">
+    <div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;">
+      <button class="btn btn-outline" onclick="showScreen('consol')">&#8592; <span data-i18n="btn.backToProperties">Volver a alojamientos</span></button>
+    </div>
+    <div id="consoldetail-content"></div>
+  </div>
+
+  <!-- Config screens (sidebar navigation) -->
+  <div class="screen" id="screen-cfg-plat">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#128225; <span data-i18n="config.salesChannel">Canal de Venta</span></h2><p data-i18n="cfg.platDesc">Comisiones por plataforma de reserva (% sobre total IVA incl.).</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-plat"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-otros">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#129529; <span data-i18n="config.gtcService">Servicio GTC / Limpieza / Amenities / Mant.</span></h2><p data-i18n="cfg.otrosDesc">Valores de gesti&oacute;n, limpieza, amenities y mantenimiento mensual.</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-otros"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-pasarela">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#128179; <span data-i18n="config.gateway">Pasarela</span></h2><p data-i18n="cfg.pasarelaDesc">Comisiones de pasarela por m&eacute;todo de pago.</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-pasarela"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-impuestos">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#128202; <span data-i18n="config.taxes">Impuestos</span></h2><p data-i18n="cfg.impuestosDesc">Retenci&oacute;n IRPF aplicable a las liquidaciones.</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-impuestos"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-8020">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2 style="color:#7c3aed;">&#8621; <span data-i18n="config.agreement8020">Acuerdo 80/20 GTC</span></h2><p data-i18n="cfg.8020Desc">Alojamientos propiedad GTC vendidos: el propietario recibe el 80% del Subtotal.</p></div>
+      <div class="cfg-page-body" id="tab-8020"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-invoicing">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2 style="color:#059669;">&#128196; <span data-i18n="inv.tabTitle">Facturaci&oacute;n</span></h2><p data-i18n="cfg.invoicingDesc">Configuraci&oacute;n de facturaci&oacute;n, empresas receptoras e integraci&oacute;n con Holded.</p></div>
+      <div class="cfg-page-body" id="tab-invoicing"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>

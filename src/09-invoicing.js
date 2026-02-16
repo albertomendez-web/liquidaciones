@@ -465,16 +465,16 @@ function matchHoldedToAlojamientos() {
  */
 function _extractContactData(contact) {
   return {
-    contactId: contact.id || '',
-    name: contact.name || '',
-    vatnumber: contact.vatnumber || contact.vatNumber || '',
-    email: contact.email || '',
-    phone: contact.phone || contact.mobile || '',
-    address: contact.billAddress || contact.address || '',
-    city: contact.billCity || contact.city || '',
-    postalCode: contact.billPostalCode || contact.postalCode || contact.billZip || contact.zip || '',
-    province: contact.billProvince || contact.province || '',
-    country: contact.billCountry || contact.country || contact.billCountryName || ''
+    contactId: String(contact.id || ''),
+    name: String(contact.name || ''),
+    vatnumber: String(contact.vatnumber || contact.vatNumber || ''),
+    email: String(contact.email || ''),
+    phone: String(contact.phone || contact.mobile || ''),
+    address: String(contact.billAddress || contact.address || ''),
+    city: String(contact.billCity || contact.city || ''),
+    postalCode: String(contact.billPostalCode || contact.postalCode || contact.billZip || contact.zip || ''),
+    province: String(contact.billProvince || contact.province || ''),
+    country: String(contact.billCountry || contact.country || contact.billCountryName || '')
   };
 }
 
@@ -694,8 +694,8 @@ function buildInvoiceHeader(alojName, periodStr) {
   var emisorNif = fiscal ? fiscal.vatnumber : '';
   var emisorAddr = '';
   if (fiscal) {
-    var parts = [fiscal.address, fiscal.postalCode, fiscal.city, fiscal.province, fiscal.country].filter(function(p) { return p && p.trim(); });
-    emisorAddr = parts.join(', ');
+    var parts = [fiscal.address, fiscal.postalCode, fiscal.city, fiscal.province, fiscal.country].filter(function(p) { return p && String(p).trim(); });
+    emisorAddr = parts.map(function(p) { return String(p).trim(); }).join(', ');
   }
   var emisorEmail = fiscal ? fiscal.email : '';
   var emisorPhone = fiscal ? fiscal.phone : '';

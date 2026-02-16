@@ -28,6 +28,23 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.32.0',
+    date: '2026-02-17',
+    changes: [
+      'F2: Holded API sync \u2014 descarga contactos y los vincula a propietarios autom\u00e1ticamente',
+      'Auto-matching: coincidencia exacta + parcial por nombre de propietario + c\u00f3digos en notes',
+      'Asignaci\u00f3n manual: dropdown con todos los contactos Holded para propietarios sin match',
+      'Cach\u00e9 fiscal: NIF, direcci\u00f3n, email, tel\u00e9fono persistidos en Google Sheets (hmap: keys)',
+      'CORS proxy autom\u00e1tico: fallback a corsproxy.io si Holded bloquea llamadas directas',
+      'Indicadores Holded en grid de alojamientos (\u2713 / \u2717 por propietario)',
+      'Panel de estad\u00edsticas de sync: contactos, vinculados, pendientes',
+      'Tabla de mapping propietario \u2194 contacto con b\u00fasqueda y ordenaci\u00f3n (pendientes primero)',
+      'Persistencia completa: contactos, mappings y estado de sync en Configuraci\u00f3n tab',
+      'i18n: 18 nuevas claves ES/EN/DE para secci\u00f3n de sincronizaci\u00f3n',
+      'Combo buscable para asignaci\u00f3n manual de contactos Holded (reemplaza select)',
+    ]
+  },
+  {
     version: '2.31.0',
     date: '2026-02-17',
     changes: [

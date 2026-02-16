@@ -1,11 +1,11 @@
 // ==============================================================================================================================
-//  [M09] INVOICING \u2014 Facturaci\u00f3n: configuraci\u00f3n, generaci\u00f3n y Holded integration
+//  [M09] INVOICING — Facturación: configuración, generación y Holded integration
 // ==============================================================================================================================
 
 // --- Invoice Companies ---
 let _invoiceCompanies = [
-  { id: 'gtc', name: 'Green Tropical Coast S.L.', cif: 'B88560065', address: 'Calle Mar\u00eda Moliner, 3 - C 19, Las Rozas De Madrid, 28232, Madrid' },
-  { id: 'gee', name: 'Green Efficient Execution S.L.', cif: 'B02789048', address: 'Calle Mar\u00eda Moliner, 3 - C 19, Las Rozas De Madrid, 28232, Madrid' }
+  { id: 'gtc', name: 'Green Tropical Coast S.L.', cif: 'B88560065', address: 'Calle María Moliner, 3 - C 19, Las Rozas De Madrid, 28232, Madrid' },
+  { id: 'gee', name: 'Green Efficient Execution S.L.', cif: 'B02789048', address: 'Calle María Moliner, 3 - C 19, Las Rozas De Madrid, 28232, Madrid' }
 ];
 
 // --- Invoice config per alojamiento ---
@@ -14,6 +14,12 @@ let _invoiceConfig = {};
 
 // --- Holded API key ---
 let _holdedApiKey = '';
+
+// --- Holded Contacts Cache ---
+let _holdedContacts = [];    // Full array from Holded API
+let _holdedMapping = {};     // alojKey → { contactId, name, vatnumber, email, address, city, postalCode, province, country, phone }
+let _holdedSyncStatus = { lastSync: null, contactCount: 0, matchedCount: 0, error: '' };
+let _holdedSyncing = false;
 
 // --- Helpers ---
 function getInvoiceConfig(alojamiento) {
@@ -37,18 +43,28 @@ function getInvoiceCompanyById(id) {
   return _invoiceCompanies.find(function(c) { return c.id === id; }) || null;
 }
 
+/**
+ * @description Devuelve datos fiscales del propietario de un alojamiento desde Holded.
+ * Usado por F3 (generación de factura) y F5 (push a Holded).
+ * @param {string} alojName - Nombre del alojamiento
+ * @returns {object|null} { contactId, name, vatnumber, email, address, city, postalCode, province, country, phone }
+ */
+function getHoldedFiscalData(alojName) {
+  if (!alojName) return null;
+  var key = alojName.trim().toLowerCase();
+  return _holdedMapping[key] || null;
+}
+
 // --- Invoice number: YYYY-MM ---
 function getInvoiceNumber(periodStr) {
-  // periodStr is like "Enero 2026" or "January 2026"
   var parts = periodStr.trim().split(/\s+/);
   if (parts.length < 2) return '';
   var year = parts[parts.length - 1];
   var monthName = parts.slice(0, parts.length - 1).join(' ');
   var monthIdx = -1;
-  // Try Spanish months
   var esMonths = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   var enMonths = ['january','february','march','april','may','june','july','august','september','october','november','december'];
-  var deMonths = ['januar','februar','m\u00e4rz','april','mai','juni','juli','august','september','oktober','november','dezember'];
+  var deMonths = ['januar','februar','märz','april','mai','juni','juli','august','september','oktober','november','dezember'];
   var lower = monthName.toLowerCase();
   monthIdx = esMonths.indexOf(lower);
   if (monthIdx < 0) monthIdx = enMonths.indexOf(lower);
@@ -66,19 +82,18 @@ function getInvoiceDate(periodStr) {
   var monthIdx = -1;
   var esMonths = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   var enMonths = ['january','february','march','april','may','june','july','august','september','october','november','december'];
-  var deMonths = ['januar','februar','m\u00e4rz','april','mai','juni','juli','august','september','oktober','november','dezember'];
+  var deMonths = ['januar','februar','märz','april','mai','juni','juli','august','september','oktober','november','dezember'];
   var lower = monthName.toLowerCase();
   monthIdx = esMonths.indexOf(lower);
   if (monthIdx < 0) monthIdx = enMonths.indexOf(lower);
   if (monthIdx < 0) monthIdx = deMonths.indexOf(lower);
   if (monthIdx < 0 || isNaN(year)) return '';
-  // Last day of month: day 0 of next month
   var lastDay = new Date(year, monthIdx + 1, 0);
   return String(lastDay.getDate()).padStart(2, '0') + '/' + String(monthIdx + 1).padStart(2, '0') + '/' + year;
 }
 
 // ==============================================================================================================================
-//  CONFIG MODAL TAB: Facturaci\u00f3n
+//  CONFIG TAB: Facturación
 // ==============================================================================================================================
 
 function renderInvoicingTab() {
@@ -123,6 +138,9 @@ function renderInvoicingTab() {
 
   html += '</div>'; // end inv-top-row
 
+  // --- Holded Sync Section ---
+  html += renderHoldedSyncSection();
+
   // --- Alojamientos grid ---
   var alojs = [];
   if (typeof getAlojamientos === 'function') {
@@ -155,6 +173,7 @@ function renderInvoicingTab() {
       var on = cfg.enabled;
       var prop = typeof getPropietario === 'function' ? getPropietario(name) : '';
       var safeName = name.replace(/'/g, "\\'");
+      var fiscal = _holdedMapping[key];
 
       html += '<div class="inv-aloj-row' + (on ? ' inv-aloj-on' : '') + '" data-aloj="' + esc(name) + '" data-prop="' + esc(prop) + '">';
       html += '<div class="toggle" onclick="toggleInvoiceAloj(\'' + safeName + '\')">';
@@ -163,7 +182,14 @@ function renderInvoicingTab() {
       html += '<div class="inv-aloj-info">';
       html += '<div class="inv-aloj-name">' + esc(name) + '</div>';
       if (prop && prop !== t('consol.missingOwner')) {
-        html += '<div class="inv-aloj-prop">' + esc(prop) + '</div>';
+        html += '<div class="inv-aloj-prop">' + esc(prop);
+        // Holded match indicator
+        if (fiscal) {
+          html += ' <span class="inv-holded-badge" title="' + esc(fiscal.vatnumber || '') + '">&#10003; Holded</span>';
+        } else if (_holdedContacts.length > 0) {
+          html += ' <span class="inv-holded-badge inv-holded-miss" title="' + t('inv.syncNoMatch') + '">&#10007; Holded</span>';
+        }
+        html += '</div>';
       }
       html += '</div>';
       if (on) {
@@ -181,7 +207,382 @@ function renderInvoicingTab() {
   return html;
 }
 
-// --- Actions ---
+// ==============================================================================================================================
+//  HOLDED SYNC SECTION
+// ==============================================================================================================================
+
+function renderHoldedSyncSection() {
+  var html = '<div class="inv-top-card inv-sync-card">';
+  html += '<div class="inv-section-title">&#128260; ' + t('inv.syncTitle') + '</div>';
+  html += '<div class="inv-section-desc">' + t('inv.syncDesc') + '</div>';
+
+  if (!_holdedApiKey) {
+    html += '<div class="inv-sync-empty">' + t('inv.syncNeedKey') + '</div>';
+    html += '</div>';
+    return html;
+  }
+
+  // Sync button + status row
+  html += '<div class="inv-sync-row">';
+  if (_holdedSyncing) {
+    html += '<button class="inv-btn inv-btn-primary" disabled><span class="inv-spin">&#9203;</span> ' + t('inv.syncing') + '</button>';
+  } else {
+    html += '<button class="inv-btn inv-btn-primary" onclick="syncHoldedContacts()">&#128260; ' + t('inv.syncNow') + '</button>';
+  }
+  if (_holdedSyncStatus.lastSync) {
+    var d = new Date(_holdedSyncStatus.lastSync);
+    var timeStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    html += '<span class="inv-sync-time">' + t('inv.syncLast') + ': ' + timeStr + '</span>';
+  }
+  html += '</div>';
+
+  // Error
+  if (_holdedSyncStatus.error) {
+    html += '<div class="inv-sync-error">&#9888; ' + esc(_holdedSyncStatus.error) + '</div>';
+  }
+
+  // Stats
+  if (_holdedContacts.length > 0) {
+    var matchedCount = Object.keys(_holdedMapping).length;
+    var totalAlojs = 0;
+    if (typeof getAlojamientos === 'function') totalAlojs = getAlojamientos().length;
+
+    html += '<div class="inv-sync-stats">';
+    html += '<div class="inv-sync-stat"><span class="inv-sync-num">' + _holdedContacts.length + '</span>' + t('inv.syncContacts') + '</div>';
+    html += '<div class="inv-sync-stat"><span class="inv-sync-num inv-sync-ok">' + matchedCount + '</span>' + t('inv.syncMatched') + '</div>';
+    if (totalAlojs > matchedCount) {
+      html += '<div class="inv-sync-stat"><span class="inv-sync-num inv-sync-warn">' + (totalAlojs - matchedCount) + '</span>' + t('inv.syncUnmatched') + '</div>';
+    }
+    html += '</div>';
+
+    // Mapping table
+    var alojs = [];
+    if (typeof getAlojamientos === 'function') {
+      alojs = getAlojamientos().map(function(a) { return a.name; }).sort();
+    }
+    if (alojs.length > 0) {
+      html += '<div class="inv-sync-map-header">';
+      html += '<div class="inv-section-title" style="margin:0;font-size:13px;">&#128279; ' + t('inv.syncMapping') + '</div>';
+      html += '<input class="inv-search-input" id="inv-map-search" placeholder="&#128269; ' + t('inv.searchPlaceholder') + '" oninput="filterHoldedMapping(this.value)" style="width:200px;" />';
+      html += '</div>';
+      html += '<div class="inv-sync-map" id="inv-sync-map">';
+      // Sort: unmatched first
+      var sorted = alojs.slice().sort(function(a, b) {
+        var aM = _holdedMapping[a.trim().toLowerCase()] ? 1 : 0;
+        var bM = _holdedMapping[b.trim().toLowerCase()] ? 1 : 0;
+        if (aM !== bM) return aM - bM;
+        return a.localeCompare(b);
+      });
+      sorted.forEach(function(name) {
+        var key = name.trim().toLowerCase();
+        var prop = typeof getPropietario === 'function' ? getPropietario(name) : '';
+        var mapping = _holdedMapping[key];
+        var safeName = name.replace(/'/g, "\\'");
+        html += '<div class="inv-map-row' + (mapping ? ' inv-map-ok' : '') + '" data-aloj="' + esc(name) + '" data-prop="' + esc(prop) + '">';
+        html += '<div class="inv-map-aloj">';
+        html += '<div class="inv-map-name">' + esc(name) + '</div>';
+        if (prop && prop !== t('consol.missingOwner')) html += '<div class="inv-map-prop">' + esc(prop) + '</div>';
+        html += '</div>';
+        html += '<div class="inv-map-contact">';
+        if (mapping) {
+          html += '<span class="inv-map-match">&#10003; ' + esc(mapping.name) + '</span>';
+          if (mapping.vatnumber) html += '<span class="inv-map-nif">' + esc(mapping.vatnumber) + '</span>';
+          html += '<button class="inv-btn inv-btn-sm inv-map-clear" onclick="clearHoldedMapping(\'' + safeName + '\')" title="' + t('inv.syncClear') + '">&#10007;</button>';
+        } else {
+          var comboId = 'hc-' + key.replace(/[^a-z0-9]/g, '_');
+          html += '<div class="inv-combo" id="' + comboId + '">';
+          html += '<input class="inv-combo-input" placeholder="' + t('inv.syncAssign') + '…" onfocus="openHoldedCombo(\'' + comboId + '\')" oninput="filterHoldedCombo(\'' + comboId + '\', this.value)" />';
+          html += '<div class="inv-combo-drop">';
+          _holdedContacts.forEach(function(c) {
+            var label = c.name + (c.vatnumber ? ' (' + c.vatnumber + ')' : '');
+            html += '<div class="inv-combo-opt" data-id="' + c.id + '" data-search="' + esc(label.toLowerCase()) + '" onclick="pickHoldedCombo(\'' + safeName + '\',\'' + c.id + '\')">' + esc(label) + '</div>';
+          });
+          html += '</div></div>';
+        }
+        html += '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+  }
+
+  html += '</div>';
+  return html;
+}
+
+// ==============================================================================================================================
+//  HOLDED API FUNCTIONS
+// ==============================================================================================================================
+
+const HOLDED_API_BASE = 'https://api.holded.com/api/invoicing/v1';
+const HOLDED_CORS_PROXY = 'https://corsproxy.io/?url=';
+
+/**
+ * @description Realiza una petición a la API de Holded con CORS proxy automático.
+ */
+async function _holdedFetch(endpoint) {
+  var url = HOLDED_API_BASE + endpoint;
+  var headers = { 'key': _holdedApiKey, 'Accept': 'application/json' };
+
+  // Try direct first
+  try {
+    var resp = await fetch(url, { headers: headers, mode: 'cors' });
+    if (resp.ok) return await resp.json();
+    if (resp.status === 401 || resp.status === 403) throw new Error(t('inv.syncAuthError'));
+    if (resp.status >= 400) throw new Error('HTTP ' + resp.status);
+  } catch(e) {
+    if (e.message && e.message.indexOf(t('inv.syncAuthError')) >= 0) throw e;
+    console.log('[Holded] Direct failed, trying CORS proxy:', e.message);
+  }
+
+  // Fallback: CORS proxy
+  try {
+    var proxyUrl = HOLDED_CORS_PROXY + encodeURIComponent(url);
+    var resp2 = await fetch(proxyUrl, { headers: headers });
+    if (resp2.ok) return await resp2.json();
+    if (resp2.status === 401 || resp2.status === 403) throw new Error(t('inv.syncAuthError'));
+    throw new Error('HTTP ' + resp2.status);
+  } catch(e2) {
+    console.error('[Holded] Proxy also failed:', e2.message);
+    throw e2;
+  }
+}
+
+/**
+ * @description Obtiene todos los contactos de Holded (con paginación).
+ */
+async function fetchHoldedContacts() {
+  var allContacts = [];
+  var page = 1;
+  var hasMore = true;
+
+  while (hasMore) {
+    var data = await _holdedFetch('/contacts?page=' + page);
+    if (!Array.isArray(data) || data.length === 0) {
+      hasMore = false;
+    } else {
+      allContacts = allContacts.concat(data);
+      if (data.length < 500) hasMore = false;
+      page++;
+      if (page > 20) hasMore = false;
+    }
+  }
+  return allContacts;
+}
+
+/**
+ * @description Normaliza un string para comparación fuzzy.
+ */
+function _normalizeForMatch(str) {
+  return (str || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, '')
+    .replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * @description Auto-matching: mapea contactos Holded a alojamientos por nombre de propietario.
+ * Estrategia:
+ *   1. Match exacto nombre propietario → nombre contacto
+ *   2. Match parcial (propietario contenido en contacto o viceversa)
+ *   3. Match por código en customFields o notes del contacto (ej: [MA-2-P3-1C])
+ */
+function matchHoldedToAlojamientos() {
+  if (_holdedContacts.length === 0) return 0;
+  var alojs = [];
+  if (typeof getAlojamientos === 'function') {
+    alojs = getAlojamientos().map(function(a) { return a.name; });
+  }
+  if (alojs.length === 0) return 0;
+
+  // Build contact lookup by normalized name
+  var contactByName = {};
+  var contactByCode = {};
+  _holdedContacts.forEach(function(c) {
+    var norm = _normalizeForMatch(c.name);
+    if (norm) contactByName[norm] = c;
+    if (c.tradeName) {
+      var norm2 = _normalizeForMatch(c.tradeName);
+      if (norm2) contactByName[norm2] = c;
+    }
+    // Check code or notes for property codes like [MA-2-P3-1C]
+    var codeStr = (c.code || '') + ' ' + (c.notes || '');
+    var codeMatches = codeStr.match(/\[([A-Z0-9\-]+)\]/g);
+    if (codeMatches) {
+      codeMatches.forEach(function(m) {
+        var code = m.replace(/[\[\]]/g, '').toLowerCase();
+        contactByCode[code] = c;
+      });
+    }
+  });
+
+  var newMatched = 0;
+  alojs.forEach(function(name) {
+    var key = name.trim().toLowerCase();
+    if (_holdedMapping[key]) return; // already mapped
+
+    var prop = typeof getPropietario === 'function' ? getPropietario(name) : '';
+    if (!prop || prop === t('consol.missingOwner')) return;
+
+    var normProp = _normalizeForMatch(prop);
+    var contact = null;
+
+    // Strategy 1: Exact match
+    if (contactByName[normProp]) {
+      contact = contactByName[normProp];
+    }
+
+    // Strategy 2: Partial match
+    if (!contact && normProp.length >= 4) {
+      for (var normC in contactByName) {
+        if (normC.indexOf(normProp) >= 0 || normProp.indexOf(normC) >= 0) {
+          contact = contactByName[normC];
+          break;
+        }
+      }
+    }
+
+    // Strategy 3: Property code in contact notes
+    if (!contact) {
+      var alojCode = name.trim().toLowerCase().replace(/\s+/g, '-');
+      if (contactByCode[alojCode]) contact = contactByCode[alojCode];
+    }
+
+    if (contact) {
+      _holdedMapping[key] = _extractContactData(contact);
+      newMatched++;
+    }
+  });
+
+  return newMatched;
+}
+
+/**
+ * @description Extrae datos fiscales relevantes de un contacto Holded.
+ */
+function _extractContactData(contact) {
+  return {
+    contactId: contact.id || '',
+    name: contact.name || '',
+    vatnumber: contact.vatnumber || contact.vatNumber || '',
+    email: contact.email || '',
+    phone: contact.phone || contact.mobile || '',
+    address: contact.billAddress || contact.address || '',
+    city: contact.billCity || contact.city || '',
+    postalCode: contact.billPostalCode || contact.postalCode || contact.billZip || contact.zip || '',
+    province: contact.billProvince || contact.province || '',
+    country: contact.billCountry || contact.country || contact.billCountryName || ''
+  };
+}
+
+/**
+ * @description Ejecuta sincronización completa con Holded.
+ */
+async function syncHoldedContacts() {
+  if (!_holdedApiKey) { showToast(t('inv.syncNeedKey'), 'warning'); return; }
+  if (_holdedSyncing) return;
+  _holdedSyncing = true;
+  _holdedSyncStatus.error = '';
+  renderInvoicingConfigTab();
+
+  try {
+    showToast(t('inv.syncStarted'), 'info');
+    var contacts = await fetchHoldedContacts();
+    _holdedContacts = contacts;
+    _holdedSyncStatus.contactCount = contacts.length;
+    _holdedSyncStatus.lastSync = new Date().toISOString();
+
+    // Auto-match (only fills unmapped slots)
+    var newMatched = matchHoldedToAlojamientos();
+    _holdedSyncStatus.matchedCount = Object.keys(_holdedMapping).length;
+
+    // Persist
+    scheduleGlobalConfigSave();
+
+    var msg = t('inv.syncDone').replace('%c', contacts.length).replace('%m', newMatched || 0);
+    showToast(msg, 'success');
+    console.log('[Holded] Sync complete:', contacts.length, 'contacts,', newMatched, 'new matches');
+  } catch(e) {
+    _holdedSyncStatus.error = e.message || t('inv.syncError');
+    showToast(t('inv.syncError') + ': ' + e.message, 'error');
+    console.error('[Holded] Sync error:', e);
+  }
+
+  _holdedSyncing = false;
+  renderInvoicingConfigTab();
+}
+
+// --- Manual assignment ---
+function assignHoldedContact(alojName, contactId) {
+  if (!contactId) return;
+  var key = alojName.trim().toLowerCase();
+  var contact = _holdedContacts.find(function(c) { return c.id === contactId; });
+  if (!contact) return;
+  _holdedMapping[key] = _extractContactData(contact);
+  _holdedSyncStatus.matchedCount = Object.keys(_holdedMapping).length;
+  scheduleGlobalConfigSave();
+  renderInvoicingConfigTab();
+  showToast(t('inv.syncAssigned').replace('%a', alojName).replace('%c', contact.name), 'success');
+}
+
+function clearHoldedMapping(alojName) {
+  var key = alojName.trim().toLowerCase();
+  delete _holdedMapping[key];
+  _holdedSyncStatus.matchedCount = Object.keys(_holdedMapping).length;
+  scheduleGlobalConfigSave();
+  renderInvoicingConfigTab();
+}
+
+function filterHoldedMapping(query) {
+  var container = document.getElementById('inv-sync-map');
+  if (!container) return;
+  var q = (query || '').toLowerCase();
+  container.querySelectorAll('.inv-map-row').forEach(function(row) {
+    var aloj = (row.getAttribute('data-aloj') || '').toLowerCase();
+    var prop = (row.getAttribute('data-prop') || '').toLowerCase();
+    row.style.display = (!q || aloj.indexOf(q) >= 0 || prop.indexOf(q) >= 0) ? '' : 'none';
+  });
+}
+
+// --- Holded searchable combo ---
+function openHoldedCombo(comboId) {
+  // Close any other open combos first
+  document.querySelectorAll('.inv-combo.open').forEach(function(el) {
+    if (el.id !== comboId) el.classList.remove('open');
+  });
+  var el = document.getElementById(comboId);
+  if (!el) return;
+  el.classList.add('open');
+  // Reset filter
+  var opts = el.querySelectorAll('.inv-combo-opt');
+  opts.forEach(function(o) { o.style.display = ''; });
+}
+
+function filterHoldedCombo(comboId, query) {
+  var el = document.getElementById(comboId);
+  if (!el) return;
+  var q = (query || '').toLowerCase();
+  var opts = el.querySelectorAll('.inv-combo-opt');
+  opts.forEach(function(o) {
+    var s = o.getAttribute('data-search') || '';
+    o.style.display = (!q || s.indexOf(q) >= 0) ? '' : 'none';
+  });
+}
+
+function pickHoldedCombo(alojName, contactId) {
+  // Close all combos
+  document.querySelectorAll('.inv-combo.open').forEach(function(el) { el.classList.remove('open'); });
+  assignHoldedContact(alojName, contactId);
+}
+
+// Close combos on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.inv-combo')) {
+    document.querySelectorAll('.inv-combo.open').forEach(function(el) { el.classList.remove('open'); });
+  }
+});
+
+// --- F1 Actions (unchanged) ---
 function toggleHoldedKeyVisibility() {
   var inp = document.getElementById('inv-holded-key');
   if (!inp) return;
@@ -192,7 +593,6 @@ function saveHoldedKey() {
   var inp = document.getElementById('inv-holded-key');
   if (!inp) return;
   _holdedApiKey = inp.value.trim();
-  // Immediate save (not debounced) — critical credential
   if (typeof saveGlobalConfigToSheet === 'function') saveGlobalConfigToSheet();
   renderInvoicingConfigTab();
   showToast(_holdedApiKey ? t('inv.apiSaved') : t('inv.apiRemoved'), 'success');
@@ -224,8 +624,7 @@ function filterInvoiceAlojs(query) {
   var grid = document.getElementById('inv-aloj-grid');
   if (!grid) return;
   var q = (query || '').toLowerCase();
-  var rows = grid.querySelectorAll('.inv-aloj-row');
-  rows.forEach(function(row) {
+  grid.querySelectorAll('.inv-aloj-row').forEach(function(row) {
     var aloj = (row.getAttribute('data-aloj') || '').toLowerCase();
     var prop = (row.getAttribute('data-prop') || '').toLowerCase();
     row.style.display = (!q || aloj.indexOf(q) >= 0 || prop.indexOf(q) >= 0) ? '' : 'none';
@@ -263,7 +662,6 @@ function addInvoiceCompany() {
   var newAddr = prompt(t('inv.companyAddr') + ':');
   if (newAddr === null) return;
   var id = newName.trim().split(/\s+/).map(function(w) { return w[0]; }).join('').toLowerCase();
-  // Ensure unique id
   var base = id;
   var n = 1;
   while (_invoiceCompanies.some(function(c) { return c.id === id; })) { id = base + n; n++; }
@@ -274,7 +672,7 @@ function addInvoiceCompany() {
 }
 
 // ==============================================================================================================================
-//  PERSISTENCE: build/parse config rows for invoicing
+//  PERSISTENCE: build/parse config rows for invoicing + Holded
 // ==============================================================================================================================
 
 function buildInvoicingConfigRows() {
@@ -292,6 +690,21 @@ function buildInvoicingConfigRows() {
   if (_holdedApiKey) {
     rows.push(['holded_api_key', _holdedApiKey]);
   }
+  // Holded contacts cache (compact: only id+name+vatnumber+email for select rendering)
+  if (_holdedContacts.length > 0) {
+    var compact = _holdedContacts.map(function(c) {
+      return { id: c.id, name: c.name, vatnumber: c.vatnumber || c.vatNumber || '', email: c.email || '' };
+    });
+    rows.push(['holded_contacts', JSON.stringify(compact)]);
+  }
+  // Holded mapping per alojamiento
+  Object.keys(_holdedMapping).forEach(function(key) {
+    rows.push(['hmap:' + key, JSON.stringify(_holdedMapping[key])]);
+  });
+  // Holded sync status
+  if (_holdedSyncStatus.lastSync) {
+    rows.push(['holded_sync', JSON.stringify({ lastSync: _holdedSyncStatus.lastSync, contactCount: _holdedSyncStatus.contactCount, matchedCount: _holdedSyncStatus.matchedCount })]);
+  }
   return rows;
 }
 
@@ -307,9 +720,28 @@ function parseInvoicingConfig(key, val) {
     _holdedApiKey = val;
     return true;
   }
+  if (key === 'holded_contacts') {
+    try {
+      var parsed2 = JSON.parse(val);
+      if (Array.isArray(parsed2)) _holdedContacts = parsed2;
+    } catch(e) { console.warn('[Holded] Error parsing contacts cache:', e); }
+    return true;
+  }
+  if (key === 'holded_sync') {
+    try {
+      var parsed3 = JSON.parse(val);
+      if (parsed3 && typeof parsed3 === 'object') Object.assign(_holdedSyncStatus, parsed3);
+    } catch(e) { console.warn('[Holded] Error parsing sync status:', e); }
+    return true;
+  }
+  if (key.startsWith('hmap:')) {
+    try {
+      _holdedMapping[key.substring(5)] = JSON.parse(val);
+    } catch(e) { console.warn('[Holded] Error parsing mapping:', e); }
+    return true;
+  }
   if (key.startsWith('inv:')) {
-    var alojKey = key.substring(4);
-    _invoiceConfig[alojKey] = { enabled: true, companyId: val || (_invoiceCompanies[0] ? _invoiceCompanies[0].id : '') };
+    _invoiceConfig[key.substring(4)] = { enabled: true, companyId: val || (_invoiceCompanies[0] ? _invoiceCompanies[0].id : '') };
     return true;
   }
   return false;

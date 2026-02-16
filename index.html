@@ -477,25 +477,44 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 @keyframes invSpin { to { transform: rotate(360deg); } }
 .inv-spin { display: inline-block; animation: invSpin 1s linear infinite; }
 
-/* === INVOICE HEADER (F3) === */
-.inv-fiscal-header { background: #fff; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; page-break-inside: avoid; }
-.inv-fiscal-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-.inv-fiscal-badge { font-size: 18px; font-weight: 800; color: #1a1a1a; letter-spacing: 2px; }
-.inv-fiscal-meta { display: flex; gap: 20px; }
-.inv-fiscal-meta-item { text-align: right; }
-.inv-fiscal-label { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af; font-weight: 600; }
-.inv-fiscal-val { font-size: 14px; font-weight: 700; color: #1a1a1a; }
-.inv-fiscal-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; border-top: 1.5px solid #f3f4f6; padding-top: 14px; }
-.inv-fiscal-party { }
-.inv-fiscal-party-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; font-weight: 700; margin-bottom: 4px; }
-.inv-fiscal-party-name { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
-.inv-fiscal-party-detail { font-size: 11px; color: #4b5563; line-height: 1.5; }
-.inv-fiscal-detail-label { font-weight: 600; color: #6b7280; }
-.inv-fiscal-party-warn { font-size: 10px; color: #d97706; margin-top: 4px; font-style: italic; }
+/* ─── INVOICE PRINT LAYOUT (F3 mockup) ─── */
+.inv-page { position: relative; background: #fff; }
+.inv-top-bar { height: 5px; background: linear-gradient(90deg, var(--hm-teal), #c8a84e); }
+.inv-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 20px 28px 16px; }
+.inv-header-left { display: flex; flex-direction: column; gap: 2px; }
+.inv-title { font-size: 20pt; font-weight: 800; color: var(--hm-teal); letter-spacing: 2px; line-height: 1; }
+.inv-subtitle { font-size: 8pt; color: #8a8a9a; margin-top: 3px; }
+.inv-header-right { text-align: right; }
+.inv-logo { font-size: 15pt; color: #c8a84e; line-height: 1; font-style: italic; font-weight: 700; }
+.inv-logo-sub { font-size: 7pt; color: #8a8a9a; letter-spacing: 2px; }
+.inv-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 16px; margin-top: 8px; text-align: right; }
+.inv-meta-label { font-size: 6.5pt; text-transform: uppercase; letter-spacing: .8px; color: #8a8a9a; }
+.inv-meta-value { font-size: 10pt; font-weight: 600; color: #1a1a2e; }
+.inv-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 0 28px; border-top: 1.5px solid #e2e2e8; border-bottom: 1.5px solid #e2e2e8; }
+.inv-party { padding: 12px 0; }
+.inv-party:first-child { padding-right: 18px; border-right: 1px solid #e2e2e8; }
+.inv-party:last-child { padding-left: 18px; }
+.inv-party-label { font-size: 6.5pt; text-transform: uppercase; letter-spacing: 1.2px; color: var(--hm-teal); font-weight: 700; margin-bottom: 5px; }
+.inv-party-name { font-size: 10.5pt; font-weight: 700; color: #1a1a2e; margin-bottom: 2px; }
+.inv-party-detail { font-size: 8.5pt; color: #4a4a5a; line-height: 1.5; }
+.inv-party-nif { font-weight: 600; color: #1a1a2e; }
+.inv-party-warn { font-size: 8.5pt; color: #d97706; margin-top: 4px; font-style: italic; }
+.inv-section-title { margin: 18px 28px 8px; font-size: 7pt; text-transform: uppercase; letter-spacing: 1.5px; color: var(--hm-teal); font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.inv-section-title::after { content: ''; flex: 1; height: 1px; background: #e2e2e8; }
+.inv-fiscal-box { margin: 16px 28px 0; border: 1.5px solid var(--hm-teal); border-radius: 8px; overflow: hidden; page-break-inside: avoid; }
+.inv-fiscal-box-title { background: #e8f4f7; padding: 7px 16px; font-size: 7pt; text-transform: uppercase; letter-spacing: 1.2px; color: var(--hm-teal); font-weight: 700; border-bottom: 1px solid #e2e2e8; }
+.inv-fiscal-table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+.inv-fiscal-table td { padding: 6px 16px; border-bottom: 1px solid #f0f0f4; }
+.inv-fiscal-table td:last-child { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; width: 120px; }
+.inv-fiscal-table tr.ift-bold td { font-weight: 700; font-size: 10pt; }
+.inv-fiscal-table tr.ift-total td { background: var(--hm-teal); color: #fff; font-weight: 700; font-size: 12pt; padding: 9px 16px; border: none; }
+.inv-footer { margin: 20px 28px 0; padding-top: 10px; border-top: 1px solid #e2e2e8; display: flex; justify-content: space-between; font-size: 7.5pt; color: #8a8a9a; padding-bottom: 16px; }
+.inv-footer-note { max-width: 60%; line-height: 1.5; }
+.inv-footer-page { font-weight: 600; }
 /* Invoice generate button */
 .inv-btn-generate { display: inline-flex; align-items: center; gap: 4px; padding: 8px 16px; border: 1.5px solid #7c3aed; background: #f5f3ff; color: #7c3aed; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
 .inv-btn-generate:hover { background: #7c3aed; color: #fff; }
-@media print { .inv-fiscal-header { border: 1px solid #d1d5db; box-shadow: none; } }
+@media print { .inv-page { box-shadow: none; } .inv-fiscal-box { break-inside: avoid; } }
 
 @media print { .cpv-ico { display: none !important; } }
 .liq-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--hm-teal-dark); position: relative; z-index: 1; }
@@ -1521,9 +1540,9 @@ function toggleConsolVal(mode) {
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 7. NUNCA reutilizar un n\u00famero de versi\u00f3n ya existente
  * ===================================================================================================
  */
-const APP_VERSION = '2.33.7';
-const APP_BUILD   = '2026-02-18T00:30:00+01:00';
-const APP_CHANGES = 'Sync refresca datos de contactos ya mapeados (NIF desde code)';
+const APP_VERSION = '2.34.0';
+const APP_BUILD   = '2026-02-18T00:45:00+01:00';
+const APP_CHANGES = 'F3: Nuevo diseno factura mockup profesional con resumen fiscal';
 
 // ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -2307,8 +2326,15 @@ const I18N = {
   'inv.invoiceTitle':   { es:'FACTURA', en:'INVOICE', de:'RECHNUNG' },
   'inv.invoiceNum':     { es:'N\u00ba Factura', en:'Invoice No.', de:'Rechnungsnr.' },
   'inv.invoiceDate':    { es:'Fecha', en:'Date', de:'Datum' },
+  'inv.invoiceSubtitle':{ es:'Documento de liquidaci\u00f3n mensual', en:'Monthly settlement document', de:'Monatliches Abrechnungsdokument' },
   'inv.issuer':         { es:'EMISOR', en:'ISSUER', de:'AUSSTELLER' },
   'inv.recipient':      { es:'DESTINATARIO', en:'RECIPIENT', de:'EMPF\u00c4NGER' },
+  'inv.detailTitle':    { es:'Detalle de reservas', en:'Reservation detail', de:'Reservierungsdetails' },
+  'inv.fiscalSummary':  { es:'Resumen fiscal', en:'Fiscal summary', de:'Steuer\u00fcbersicht' },
+  'inv.taxBase':        { es:'Base imponible', en:'Tax base', de:'Steuerbemessungsgrundlage' },
+  'inv.totalToSettle':  { es:'Total a liquidar', en:'Total to settle', de:'Gesamtbetrag' },
+  'inv.footerNote':     { es:'Este documento constituye la liquidaci\u00f3n mensual de gesti\u00f3n de alquiler vacacional conforme al contrato de gesti\u00f3n suscrito entre las partes.', en:'This document constitutes the monthly vacation rental management settlement pursuant to the management contract between the parties.', de:'Dieses Dokument stellt die monatliche Abrechnung der Ferienvermietungsverwaltung gem\u00e4\u00df dem zwischen den Parteien geschlossenen Verwaltungsvertrag dar.' },
+  'inv.page':           { es:'P\u00e1gina', en:'Page', de:'Seite' },
   'inv.noAloj':         { es:'No hay alojamiento seleccionado', en:'No property selected', de:'Keine Unterkunft ausgew\u00e4hlt' },
   'inv.notEnabled':     { es:'Facturaci\u00f3n no activada para este alojamiento', en:'Invoicing not enabled for this property', de:'Rechnungsstellung f\u00fcr diese Unterkunft nicht aktiviert' },
   'btn.generateInvoice':{ es:'Factura', en:'Invoice', de:'Rechnung' },
@@ -3046,6 +3072,18 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.34.0',
+    date: '2026-02-18',
+    changes: [
+      'F3: Nuevo dise\u00f1o de factura profesional con layout tipo mockup A4',
+      'Cabecera: barra gradiente + FACTURA + logo h\u00f4mity + n\u00ba factura + fecha',
+      'Partes: Emisor (propietario con NIF) | Destinatario (empresa con CIF) en columnas',
+      'Resumen fiscal: caja con base imponible, IRPF, IVA 21%, total a liquidar',
+      'Footer con nota legal y p\u00e1gina',
+      'i18n: 7 nuevas claves ES/EN/DE para factura',
+    ]
+  },
   {
     version: '2.33.2',
     date: '2026-02-17',
@@ -11254,10 +11292,11 @@ function addInvoiceCompany() {
 // ==============================================================================================================================
 
 /**
- * @description Construye la cabecera fiscal de la factura.
+ * @description Construye la cabecera fiscal de la factura (nuevo diseño mockup).
  * Emisor: propietario (datos de Holded). Receptor: empresa GTC/GEE.
+ * Retorna { headerHtml, fiscalFooterHtml } para envolver las cards.
  */
-function buildInvoiceHeader(alojName, periodStr) {
+function buildInvoiceParts(alojName, periodStr) {
   var company = getInvoiceCompany(alojName);
   var fiscal = getHoldedFiscalData(alojName);
   var prop = typeof getPropietario === 'function' ? getPropietario(alojName) : '';
@@ -11280,37 +11319,44 @@ function buildInvoiceHeader(alojName, periodStr) {
   var receptorCif = company ? company.cif : '';
   var receptorAddr = company ? company.address : '';
 
-  var html = '<div class="inv-fiscal-header">';
-  html += '<div class="inv-fiscal-top">';
-  html += '<div class="inv-fiscal-badge">' + t('inv.invoiceTitle') + '</div>';
-  html += '<div class="inv-fiscal-meta">';
-  html += '<div class="inv-fiscal-meta-item"><span class="inv-fiscal-label">' + t('inv.invoiceNum') + '</span><span class="inv-fiscal-val">' + esc(invNum) + '</span></div>';
-  html += '<div class="inv-fiscal-meta-item"><span class="inv-fiscal-label">' + t('inv.invoiceDate') + '</span><span class="inv-fiscal-val">' + esc(invDate) + '</span></div>';
-  html += '</div>';
-  html += '</div>';
+  // ── HEADER HTML ──
+  var h = '<div class="inv-page">';
+  h += '<div class="inv-top-bar"></div>';
 
-  html += '<div class="inv-fiscal-parties">';
-  // Emisor
-  html += '<div class="inv-fiscal-party">';
-  html += '<div class="inv-fiscal-party-label">' + t('inv.issuer') + '</div>';
-  html += '<div class="inv-fiscal-party-name">' + esc(emisorName) + '</div>';
-  if (emisorNif) html += '<div class="inv-fiscal-party-detail"><span class="inv-fiscal-detail-label">NIF/CIF:</span> ' + esc(emisorNif) + '</div>';
-  if (emisorAddr) html += '<div class="inv-fiscal-party-detail">' + esc(emisorAddr) + '</div>';
-  if (emisorEmail) html += '<div class="inv-fiscal-party-detail">' + esc(emisorEmail) + '</div>';
-  if (emisorPhone) html += '<div class="inv-fiscal-party-detail">' + esc(emisorPhone) + '</div>';
-  if (!fiscal) html += '<div class="inv-fiscal-party-warn">&#9888; ' + t('inv.syncNoMatch') + '</div>';
-  html += '</div>';
-  // Receptor
-  html += '<div class="inv-fiscal-party">';
-  html += '<div class="inv-fiscal-party-label">' + t('inv.recipient') + '</div>';
-  html += '<div class="inv-fiscal-party-name">' + esc(receptorName) + '</div>';
-  if (receptorCif) html += '<div class="inv-fiscal-party-detail"><span class="inv-fiscal-detail-label">CIF:</span> ' + esc(receptorCif) + '</div>';
-  if (receptorAddr) html += '<div class="inv-fiscal-party-detail">' + esc(receptorAddr) + '</div>';
-  html += '</div>';
-  html += '</div>';
-  html += '</div>';
+  h += '<div class="inv-header">';
+  h += '<div class="inv-header-left">';
+  h += '<div class="inv-title">FACTURA</div>';
+  h += '<div class="inv-subtitle">' + t('inv.invoiceSubtitle') + '</div>';
+  h += '</div>';
+  h += '<div class="inv-header-right">';
+  h += '<div class="inv-logo">h\u00F4mity</div>';
+  h += '<div class="inv-logo-sub">holidays</div>';
+  h += '<div class="inv-meta-grid">';
+  h += '<div><div class="inv-meta-label">' + t('inv.invoiceNum') + '</div><div class="inv-meta-value">' + esc(invNum) + '</div></div>';
+  h += '<div><div class="inv-meta-label">' + t('inv.invoiceDate') + '</div><div class="inv-meta-value">' + esc(invDate) + '</div></div>';
+  h += '</div></div></div>';
 
-  return html;
+  // Parties
+  h += '<div class="inv-parties">';
+  h += '<div class="inv-party">';
+  h += '<div class="inv-party-label">' + t('inv.issuer') + '</div>';
+  h += '<div class="inv-party-name">' + esc(emisorName) + '</div>';
+  if (emisorNif) h += '<div class="inv-party-detail"><span class="inv-party-nif">NIF/CIF: ' + esc(emisorNif) + '</span></div>';
+  if (emisorAddr) h += '<div class="inv-party-detail">' + esc(emisorAddr) + '</div>';
+  if (emisorEmail) h += '<div class="inv-party-detail">' + esc(emisorEmail) + '</div>';
+  if (emisorPhone) h += '<div class="inv-party-detail">' + esc(emisorPhone) + '</div>';
+  if (!fiscal) h += '<div class="inv-party-warn">&#9888; ' + t('inv.syncNoMatch') + '</div>';
+  h += '</div>';
+  h += '<div class="inv-party">';
+  h += '<div class="inv-party-label">' + t('inv.recipient') + '</div>';
+  h += '<div class="inv-party-name">' + esc(receptorName) + '</div>';
+  if (receptorCif) h += '<div class="inv-party-detail"><span class="inv-party-nif">CIF: ' + esc(receptorCif) + '</span></div>';
+  if (receptorAddr) h += '<div class="inv-party-detail">' + esc(receptorAddr) + '</div>';
+  h += '</div></div>';
+
+  h += '<div class="inv-section-title">' + t('inv.detailTitle') + '</div>';
+
+  return h;
 }
 
 /**
@@ -11328,9 +11374,8 @@ function handleGenerarFactura(alojNameParam) {
     // Build liquidation cards in document language
     var result = _withLang(_docLang, buildPrintCards);
     if (!result) { showToast('Error: buildPrintCards returned null', 'error'); return; }
-    console.log('[Invoice] Cards built OK');
 
-    // Build period string in doc language
+    // Build period string
     var periodStr = _withLang(_docLang, function() {
       var ps = '';
       try {
@@ -11345,28 +11390,31 @@ function handleGenerarFactura(alojNameParam) {
       if (!ps) { var now = new Date(); ps = t('month.full.' + now.getMonth()) + ' ' + now.getFullYear(); }
       return ps;
     });
-    console.log('[Invoice] Period:', periodStr);
 
-    // Build fiscal header
+    // Build invoice header
     var headerHtml = _withLang(_docLang, function() {
-      return buildInvoiceHeader(alojName, periodStr);
+      return buildInvoiceParts(alojName, periodStr);
     });
-    console.log('[Invoice] Header built, length:', headerHtml ? headerHtml.length : 0);
+
+    // Build fiscal summary from consolidated data
+    var fiscalHtml = _withLang(_docLang, function() {
+      return _buildFiscalSummary(alojName);
+    });
 
     var previewZone = document.getElementById('preview-zone');
     var printZone = document.getElementById('print-zone');
     var actions = document.getElementById('consol-actions');
-
     if (!previewZone) { showToast('Error: preview-zone not found', 'error'); return; }
 
-    previewZone.innerHTML = '<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;text-align:center;">'
-      + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button></div>'
+    previewZone.innerHTML = '<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,rgba(30,30,50,.95) 80%,transparent);padding:10px 0 14px;text-align:center;backdrop-filter:blur(8px);">'
+      + '<button class="btn btn-outline" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button> '
+      + '<button class="btn btn-success" style="background:#c8a84e;border-color:#c8a84e;" onclick="printFromPreview()">&#128424; ' + t('btn.print') + ' / PDF</button>'
+      + '</div>'
       + headerHtml
       + result.cardsHtml + result.summaryHtml
-      + '<div class="liq-actions no-print" style="margin-top:28px;justify-content:center;">'
-      + '<button class="btn btn-success" onclick="printFromPreview()">&#128424; ' + t('btn.print') + '</button>'
-      + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button>'
-      + '</div>';
+      + fiscalHtml
+      + '<div class="inv-footer"><div class="inv-footer-note">' + t('inv.footerNote') + '</div><div class="inv-footer-page">' + t('inv.page') + ' 1</div></div>'
+      + '</div>'; // close inv-page
 
     if (printZone) { printZone.style.display = 'none'; printZone.classList.remove('print-target'); }
     if (actions) actions.style.display = 'none';
@@ -11379,6 +11427,47 @@ function handleGenerarFactura(alojNameParam) {
     console.error('[Invoice] Error:', e);
     showToast('Error factura: ' + e.message, 'error');
   }
+}
+
+/**
+ * @description Construye el resumen fiscal desde los datos consolidados.
+ * Replica la lógica de _buildConsolSummaryInner para IRPF/IVA.
+ */
+function _buildFiscalSummary(alojName) {
+  var h = '';
+  try {
+    var data = _getConsolCalcsAndSums(alojName);
+    if (!data || !data.sums) return '';
+
+    var sums = data.sums;
+    var _isSplit = typeof isGtcSplit === 'function' && isGtcSplit(alojName);
+    var _ded = typeof getConsolDeductions === 'function' ? getConsolDeductions(alojName) : { totalBase: 0 };
+    var _gtcSplitAmt = _isSplit && typeof GTC_SPLIT_RATE !== 'undefined' ? sums.sub * GTC_SPLIT_RATE : 0;
+    var _ownerBase = _isSplit ? sums.sub - _gtcSplitAmt : sums.sub;
+    var adjSub = _ownerBase - _ded.totalBase;
+    var avgIrpfRate = sums.sub > 0 ? sums.ret / sums.sub : 0;
+    var adjRet = adjSub * avgIrpfRate;
+    var adjIva = adjSub * IVA_SUBTOTAL;
+    var adjLiq = adjSub - adjRet + adjIva;
+
+    var fmt2 = function(v) { return v.toFixed(2).replace('.', ',') + ' \u20AC'; };
+    var irpfPct = (avgIrpfRate * 100).toFixed(0);
+
+    h += '<div class="inv-section-title">' + t('inv.fiscalSummary') + '</div>';
+    h += '<div class="inv-fiscal-box">';
+    h += '<div class="inv-fiscal-box-title">' + t('inv.fiscalSummary') + '</div>';
+    h += '<table class="inv-fiscal-table">';
+    h += '<tr class="ift-bold"><td>' + t('inv.taxBase') + '</td><td>' + fmt2(adjSub) + '</td></tr>';
+    if (avgIrpfRate > 0) {
+      h += '<tr><td>' + t('liq.irpf') + ' (' + irpfPct + '%)</td><td style="color:#c0392b;">\u2212 ' + fmt2(adjRet) + '</td></tr>';
+    }
+    h += '<tr><td>IVA (21%)</td><td style="color:#27ae60;">+ ' + fmt2(adjIva) + '</td></tr>';
+    h += '<tr class="ift-total"><td>' + t('inv.totalToSettle') + '</td><td>' + fmt2(adjLiq) + '</td></tr>';
+    h += '</table></div>';
+  } catch(e) {
+    console.warn('[Invoice] Fiscal summary error:', e);
+  }
+  return h;
 }
 
 // ==============================================================================================================================

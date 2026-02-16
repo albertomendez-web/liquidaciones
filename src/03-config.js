@@ -28,6 +28,18 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.34.0',
+    date: '2026-02-18',
+    changes: [
+      'F3: Nuevo dise\u00f1o de factura profesional con layout tipo mockup A4',
+      'Cabecera: barra gradiente + FACTURA + logo h\u00f4mity + n\u00ba factura + fecha',
+      'Partes: Emisor (propietario con NIF) | Destinatario (empresa con CIF) en columnas',
+      'Resumen fiscal: caja con base imponible, IRPF, IVA 21%, total a liquidar',
+      'Footer con nota legal y p\u00e1gina',
+      'i18n: 7 nuevas claves ES/EN/DE para factura',
+    ]
+  },
+  {
     version: '2.33.2',
     date: '2026-02-17',
     changes: [

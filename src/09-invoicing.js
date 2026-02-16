@@ -726,10 +726,11 @@ function addInvoiceCompany() {
 // ==============================================================================================================================
 
 /**
- * @description Construye la cabecera fiscal de la factura.
+ * @description Construye la cabecera fiscal de la factura (nuevo diseño mockup).
  * Emisor: propietario (datos de Holded). Receptor: empresa GTC/GEE.
+ * Retorna { headerHtml, fiscalFooterHtml } para envolver las cards.
  */
-function buildInvoiceHeader(alojName, periodStr) {
+function buildInvoiceParts(alojName, periodStr) {
   var company = getInvoiceCompany(alojName);
   var fiscal = getHoldedFiscalData(alojName);
   var prop = typeof getPropietario === 'function' ? getPropietario(alojName) : '';
@@ -752,37 +753,44 @@ function buildInvoiceHeader(alojName, periodStr) {
   var receptorCif = company ? company.cif : '';
   var receptorAddr = company ? company.address : '';
 
-  var html = '<div class="inv-fiscal-header">';
-  html += '<div class="inv-fiscal-top">';
-  html += '<div class="inv-fiscal-badge">' + t('inv.invoiceTitle') + '</div>';
-  html += '<div class="inv-fiscal-meta">';
-  html += '<div class="inv-fiscal-meta-item"><span class="inv-fiscal-label">' + t('inv.invoiceNum') + '</span><span class="inv-fiscal-val">' + esc(invNum) + '</span></div>';
-  html += '<div class="inv-fiscal-meta-item"><span class="inv-fiscal-label">' + t('inv.invoiceDate') + '</span><span class="inv-fiscal-val">' + esc(invDate) + '</span></div>';
-  html += '</div>';
-  html += '</div>';
+  // ── HEADER HTML ──
+  var h = '<div class="inv-page">';
+  h += '<div class="inv-top-bar"></div>';
 
-  html += '<div class="inv-fiscal-parties">';
-  // Emisor
-  html += '<div class="inv-fiscal-party">';
-  html += '<div class="inv-fiscal-party-label">' + t('inv.issuer') + '</div>';
-  html += '<div class="inv-fiscal-party-name">' + esc(emisorName) + '</div>';
-  if (emisorNif) html += '<div class="inv-fiscal-party-detail"><span class="inv-fiscal-detail-label">NIF/CIF:</span> ' + esc(emisorNif) + '</div>';
-  if (emisorAddr) html += '<div class="inv-fiscal-party-detail">' + esc(emisorAddr) + '</div>';
-  if (emisorEmail) html += '<div class="inv-fiscal-party-detail">' + esc(emisorEmail) + '</div>';
-  if (emisorPhone) html += '<div class="inv-fiscal-party-detail">' + esc(emisorPhone) + '</div>';
-  if (!fiscal) html += '<div class="inv-fiscal-party-warn">&#9888; ' + t('inv.syncNoMatch') + '</div>';
-  html += '</div>';
-  // Receptor
-  html += '<div class="inv-fiscal-party">';
-  html += '<div class="inv-fiscal-party-label">' + t('inv.recipient') + '</div>';
-  html += '<div class="inv-fiscal-party-name">' + esc(receptorName) + '</div>';
-  if (receptorCif) html += '<div class="inv-fiscal-party-detail"><span class="inv-fiscal-detail-label">CIF:</span> ' + esc(receptorCif) + '</div>';
-  if (receptorAddr) html += '<div class="inv-fiscal-party-detail">' + esc(receptorAddr) + '</div>';
-  html += '</div>';
-  html += '</div>';
-  html += '</div>';
+  h += '<div class="inv-header">';
+  h += '<div class="inv-header-left">';
+  h += '<div class="inv-title">FACTURA</div>';
+  h += '<div class="inv-subtitle">' + t('inv.invoiceSubtitle') + '</div>';
+  h += '</div>';
+  h += '<div class="inv-header-right">';
+  h += '<div class="inv-logo">h\u00F4mity</div>';
+  h += '<div class="inv-logo-sub">holidays</div>';
+  h += '<div class="inv-meta-grid">';
+  h += '<div><div class="inv-meta-label">' + t('inv.invoiceNum') + '</div><div class="inv-meta-value">' + esc(invNum) + '</div></div>';
+  h += '<div><div class="inv-meta-label">' + t('inv.invoiceDate') + '</div><div class="inv-meta-value">' + esc(invDate) + '</div></div>';
+  h += '</div></div></div>';
 
-  return html;
+  // Parties
+  h += '<div class="inv-parties">';
+  h += '<div class="inv-party">';
+  h += '<div class="inv-party-label">' + t('inv.issuer') + '</div>';
+  h += '<div class="inv-party-name">' + esc(emisorName) + '</div>';
+  if (emisorNif) h += '<div class="inv-party-detail"><span class="inv-party-nif">NIF/CIF: ' + esc(emisorNif) + '</span></div>';
+  if (emisorAddr) h += '<div class="inv-party-detail">' + esc(emisorAddr) + '</div>';
+  if (emisorEmail) h += '<div class="inv-party-detail">' + esc(emisorEmail) + '</div>';
+  if (emisorPhone) h += '<div class="inv-party-detail">' + esc(emisorPhone) + '</div>';
+  if (!fiscal) h += '<div class="inv-party-warn">&#9888; ' + t('inv.syncNoMatch') + '</div>';
+  h += '</div>';
+  h += '<div class="inv-party">';
+  h += '<div class="inv-party-label">' + t('inv.recipient') + '</div>';
+  h += '<div class="inv-party-name">' + esc(receptorName) + '</div>';
+  if (receptorCif) h += '<div class="inv-party-detail"><span class="inv-party-nif">CIF: ' + esc(receptorCif) + '</span></div>';
+  if (receptorAddr) h += '<div class="inv-party-detail">' + esc(receptorAddr) + '</div>';
+  h += '</div></div>';
+
+  h += '<div class="inv-section-title">' + t('inv.detailTitle') + '</div>';
+
+  return h;
 }
 
 /**
@@ -800,9 +808,8 @@ function handleGenerarFactura(alojNameParam) {
     // Build liquidation cards in document language
     var result = _withLang(_docLang, buildPrintCards);
     if (!result) { showToast('Error: buildPrintCards returned null', 'error'); return; }
-    console.log('[Invoice] Cards built OK');
 
-    // Build period string in doc language
+    // Build period string
     var periodStr = _withLang(_docLang, function() {
       var ps = '';
       try {
@@ -817,28 +824,31 @@ function handleGenerarFactura(alojNameParam) {
       if (!ps) { var now = new Date(); ps = t('month.full.' + now.getMonth()) + ' ' + now.getFullYear(); }
       return ps;
     });
-    console.log('[Invoice] Period:', periodStr);
 
-    // Build fiscal header
+    // Build invoice header
     var headerHtml = _withLang(_docLang, function() {
-      return buildInvoiceHeader(alojName, periodStr);
+      return buildInvoiceParts(alojName, periodStr);
     });
-    console.log('[Invoice] Header built, length:', headerHtml ? headerHtml.length : 0);
+
+    // Build fiscal summary from consolidated data
+    var fiscalHtml = _withLang(_docLang, function() {
+      return _buildFiscalSummary(alojName);
+    });
 
     var previewZone = document.getElementById('preview-zone');
     var printZone = document.getElementById('print-zone');
     var actions = document.getElementById('consol-actions');
-
     if (!previewZone) { showToast('Error: preview-zone not found', 'error'); return; }
 
-    previewZone.innerHTML = '<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;text-align:center;">'
-      + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button></div>'
+    previewZone.innerHTML = '<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,rgba(30,30,50,.95) 80%,transparent);padding:10px 0 14px;text-align:center;backdrop-filter:blur(8px);">'
+      + '<button class="btn btn-outline" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button> '
+      + '<button class="btn btn-success" style="background:#c8a84e;border-color:#c8a84e;" onclick="printFromPreview()">&#128424; ' + t('btn.print') + ' / PDF</button>'
+      + '</div>'
       + headerHtml
       + result.cardsHtml + result.summaryHtml
-      + '<div class="liq-actions no-print" style="margin-top:28px;justify-content:center;">'
-      + '<button class="btn btn-success" onclick="printFromPreview()">&#128424; ' + t('btn.print') + '</button>'
-      + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button>'
-      + '</div>';
+      + fiscalHtml
+      + '<div class="inv-footer"><div class="inv-footer-note">' + t('inv.footerNote') + '</div><div class="inv-footer-page">' + t('inv.page') + ' 1</div></div>'
+      + '</div>'; // close inv-page
 
     if (printZone) { printZone.style.display = 'none'; printZone.classList.remove('print-target'); }
     if (actions) actions.style.display = 'none';
@@ -851,6 +861,47 @@ function handleGenerarFactura(alojNameParam) {
     console.error('[Invoice] Error:', e);
     showToast('Error factura: ' + e.message, 'error');
   }
+}
+
+/**
+ * @description Construye el resumen fiscal desde los datos consolidados.
+ * Replica la lógica de _buildConsolSummaryInner para IRPF/IVA.
+ */
+function _buildFiscalSummary(alojName) {
+  var h = '';
+  try {
+    var data = _getConsolCalcsAndSums(alojName);
+    if (!data || !data.sums) return '';
+
+    var sums = data.sums;
+    var _isSplit = typeof isGtcSplit === 'function' && isGtcSplit(alojName);
+    var _ded = typeof getConsolDeductions === 'function' ? getConsolDeductions(alojName) : { totalBase: 0 };
+    var _gtcSplitAmt = _isSplit && typeof GTC_SPLIT_RATE !== 'undefined' ? sums.sub * GTC_SPLIT_RATE : 0;
+    var _ownerBase = _isSplit ? sums.sub - _gtcSplitAmt : sums.sub;
+    var adjSub = _ownerBase - _ded.totalBase;
+    var avgIrpfRate = sums.sub > 0 ? sums.ret / sums.sub : 0;
+    var adjRet = adjSub * avgIrpfRate;
+    var adjIva = adjSub * IVA_SUBTOTAL;
+    var adjLiq = adjSub - adjRet + adjIva;
+
+    var fmt2 = function(v) { return v.toFixed(2).replace('.', ',') + ' \u20AC'; };
+    var irpfPct = (avgIrpfRate * 100).toFixed(0);
+
+    h += '<div class="inv-section-title">' + t('inv.fiscalSummary') + '</div>';
+    h += '<div class="inv-fiscal-box">';
+    h += '<div class="inv-fiscal-box-title">' + t('inv.fiscalSummary') + '</div>';
+    h += '<table class="inv-fiscal-table">';
+    h += '<tr class="ift-bold"><td>' + t('inv.taxBase') + '</td><td>' + fmt2(adjSub) + '</td></tr>';
+    if (avgIrpfRate > 0) {
+      h += '<tr><td>' + t('liq.irpf') + ' (' + irpfPct + '%)</td><td style="color:#c0392b;">\u2212 ' + fmt2(adjRet) + '</td></tr>';
+    }
+    h += '<tr><td>IVA (21%)</td><td style="color:#27ae60;">+ ' + fmt2(adjIva) + '</td></tr>';
+    h += '<tr class="ift-total"><td>' + t('inv.totalToSettle') + '</td><td>' + fmt2(adjLiq) + '</td></tr>';
+    h += '</table></div>';
+  } catch(e) {
+    console.warn('[Invoice] Fiscal summary error:', e);
+  }
+  return h;
 }
 
 // ==============================================================================================================================

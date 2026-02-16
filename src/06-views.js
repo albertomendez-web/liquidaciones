@@ -62,7 +62,7 @@ function viewDetail(idx) {
   document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
     <div class="liq-gold-bar-top"></div>
     <div class="liq-header"><div class="liq-header-top"><div><div class="type">${isV?t('liq.settlement'):t('liq.reservation')}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="${_propClick}">${_prop}</div></div>
-    <div style="display:flex;align-items:center;gap:12px;"><div class="liq-period-badge"><div class="liq-period-label">${t('liq.settlement')}</div><div class="liq-period-value">${_periodStr}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div>
+    <div style="display:flex;align-items:center;gap:12px;"><div class="liq-period-badge"><div class="liq-period-label">${t('liq.period')}</div><div class="liq-period-value">${_periodStr}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div>
     ${isV?'<span class="badge-liq badge-liq-green">&#10003; ' + t('status.validated') + '</span>':'<span class="badge-liq badge-liq-amber">' + t('status.pending') + '</span>'}</div></div>
     <div class="liq-meta-strip"><div class="liq-meta-item"><div class="liq-meta-label">${t("col.alojamiento")}</div><div class="liq-meta-value cpv" data-cpv="${esc(r.alojamiento)}" onclick="copyVal(this.dataset.cpv,this)">${esc(r.alojamiento)}${_cpvSvg}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">${t("sort.fechaEntrada")}</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>

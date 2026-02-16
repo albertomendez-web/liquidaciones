@@ -363,9 +363,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-header-logo { font-family: Georgia, 'Times New Roman', serif; }
 .liq-header-logo .logo-main { font-size: 24px; font-weight: 300; color: var(--hm-gold); letter-spacing: 0.01em; }
 .liq-header-logo .logo-sub { font-size: 11px; font-weight: 300; color: var(--hm-blue-gray); letter-spacing: 0.08em; margin-left: 4px; }
-.liq-period-badge { border-radius: 20px; padding: 8px 22px 10px; text-align: center; background: #1a2744; box-shadow: 0 2px 8px rgba(26,39,68,0.18); }
+.liq-period-badge { text-align: left; }
 .liq-period-badge .liq-period-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--hm-gold); margin-bottom: 1px; }
-.liq-period-badge .liq-period-value { font-size: 15px; font-weight: 700; color: #fff; white-space: nowrap; }
+.liq-period-badge .liq-period-value { font-size: 15px; font-weight: 700; color: var(--hm-gold); white-space: nowrap; }
 
 /* === COPY-TO-CLIPBOARD === */
 .cpv { position: relative; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 1px 2px; border-radius: 3px; }
@@ -514,7 +514,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .liq-header::after { display: none !important; }
   .liq-gold-bar-top, .liq-gold-bar-bottom { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-header-logo { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .liq-period-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 4px 10px !important; }
+  .liq-period-badge { padding: 0 !important; }
   .liq-period-badge .liq-period-label { font-size: 7px !important; }
   .liq-period-badge .liq-period-value { font-size: 11px !important; }
   .liq-header-top { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; padding: 12px 20px 6px !important; position: static !important; z-index: auto !important; }
@@ -7250,7 +7250,7 @@ function viewDetail(idx) {
   document.getElementById("detail-content").innerHTML=`<div class="liq-container print-target" id="print-zone">
     <div class="liq-gold-bar-top"></div>
     <div class="liq-header"><div class="liq-header-top"><div><div class="type">${isV?t('liq.settlement'):t('liq.reservation')}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="${_propClick}">${_prop}</div></div>
-    <div style="display:flex;align-items:center;gap:12px;"><div class="liq-period-badge"><div class="liq-period-label">${t('liq.settlement')}</div><div class="liq-period-value">${_periodStr}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div>
+    <div style="display:flex;align-items:center;gap:12px;"><div class="liq-period-badge"><div class="liq-period-label">${t('liq.period')}</div><div class="liq-period-value">${_periodStr}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div>
     ${isV?'<span class="badge-liq badge-liq-green">&#10003; ' + t('status.validated') + '</span>':'<span class="badge-liq badge-liq-amber">' + t('status.pending') + '</span>'}</div></div>
     <div class="liq-meta-strip"><div class="liq-meta-item"><div class="liq-meta-label">${t("col.alojamiento")}</div><div class="liq-meta-value cpv" data-cpv="${esc(r.alojamiento)}" onclick="copyVal(this.dataset.cpv,this)">${esc(r.alojamiento)}${_cpvSvg}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">${t("sort.fechaEntrada")}</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>

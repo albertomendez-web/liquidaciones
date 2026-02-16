@@ -433,6 +433,18 @@ function matchHoldedToAlojamientos() {
   });
 
   var newMatched = 0;
+
+  // First: refresh data for already-mapped contacts (picks up new fields like code/NIF)
+  var contactById = {};
+  _holdedContacts.forEach(function(c) { if (c.id) contactById[c.id] = c; });
+  Object.keys(_holdedMapping).forEach(function(key) {
+    var existing = _holdedMapping[key];
+    if (existing && existing.contactId && contactById[existing.contactId]) {
+      _holdedMapping[key] = _extractContactData(contactById[existing.contactId]);
+    }
+  });
+
+  // Then: match unmapped
   alojs.forEach(function(name) {
     var key = name.trim().toLowerCase();
     if (_holdedMapping[key]) return; // already mapped

@@ -366,6 +366,33 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-period-badge { border: 1.5px solid rgba(212,160,23,0.4); border-radius: 8px; padding: 6px 14px; text-align: center; background: rgba(212,160,23,0.08); }
 .liq-period-badge .liq-period-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hm-gold); margin-bottom: 2px; }
 .liq-period-badge .liq-period-value { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; }
+
+/* === COPY-TO-CLIPBOARD === */
+.cpv { position: relative; cursor: pointer; transition: background 0.15s; border-radius: 3px; }
+.cpv:hover { background: rgba(79,140,255,0.10); }
+.cpv .cpv-ico { display: none; margin-left: 5px; font-size: 11px; color: #9ca3af; vertical-align: middle; transition: color 0.15s; }
+.cpv:hover .cpv-ico { display: inline; }
+.cpv.cpv-ok .cpv-ico { display: inline; color: #16a34a; }
+.cpv.cpv-ok { background: rgba(22,163,106,0.08); }
+/* Priority HIGH: full cell clickable */
+td.cpv-cell { cursor: pointer; transition: background 0.15s; position: relative; }
+td.cpv-cell:hover { background: rgba(79,140,255,0.08); }
+td.cpv-cell .cpv-ico { display: none; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 10px; color: #9ca3af; }
+td.cpv-cell:hover .cpv-ico { display: block; }
+td.cpv-cell.cpv-ok .cpv-ico { display: block; color: #16a34a; }
+td.cpv-cell.cpv-ok { background: rgba(22,163,106,0.08); }
+/* Meta strip copyable values */
+.liq-meta-value.cpv:hover, .consol-meta-value.cpv:hover { background: rgba(255,255,255,0.12); }
+.liq-meta-value.cpv.cpv-ok, .consol-meta-value.cpv.cpv-ok { background: rgba(22,163,106,0.15); }
+/* Total hero copyable */
+.cd-total-hero-amount.cpv:hover { background: rgba(79,140,255,0.06); border-radius: 8px; }
+.cd-total-hero-amount.cpv.cpv-ok { background: rgba(22,163,106,0.08); border-radius: 8px; }
+.liq-total-value.cpv:hover { background: rgba(255,255,255,0.08); border-radius: 6px; }
+.liq-total-value.cpv.cpv-ok { background: rgba(22,163,106,0.12); border-radius: 6px; }
+.cd-total-bar-amount.cpv { cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: background 0.15s; }
+.cd-total-bar-amount.cpv:hover { background: rgba(255,255,255,0.08); }
+.cd-total-bar-amount.cpv.cpv-ok { background: rgba(22,163,106,0.15); }
+@media print { .cpv-ico { display: none !important; } }
 .liq-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--hm-teal-dark); position: relative; z-index: 1; }
 .liq-meta-strip .liq-meta-item { padding: 12px 32px; border-right: 1px solid rgba(255,255,255,0.06); }
 .liq-meta-strip .liq-meta-item:nth-child(3n) { border-right: none; }
@@ -1364,9 +1391,9 @@ function toggleConsolVal(mode) {
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 2. Decidir bump: MAJOR / MINOR / PATCH
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 3. Actualizar APP_VERSION con nueva versiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 4. Actualizar APP_BUILD con fecha/hora actual Madrid (+01/+02)
-const APP_VERSION = '2.27.0';
-const APP_BUILD   = '2026-02-17T07:30:00+01:00';
-const APP_CHANGES = 'Meses traducidos, badge periodo en print cards y consoldetail, Volver redundante eliminado';
+const APP_VERSION = '2.28.0';
+const APP_BUILD   = '2026-02-17T08:15:00+01:00';
+const APP_CHANGES = 'Copy-to-clipboard en campos clave, meses traducidos, badge periodo, Volver sticky';
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 7. NUNCA reutilizar un nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºmero de versiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n ya existente
  * ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚Â
  */
@@ -1418,6 +1445,41 @@ function showToast(message, type, duration) {
     toast.classList.add('leaving');
     setTimeout(function() { if (toast.parentNode) toast.remove(); }, 250);
   }, duration);
+}
+
+// === COPY TO CLIPBOARD ===
+function copyVal(text, el) {
+  if (!text) return;
+  var clean = text.replace(/\s+/g, ' ').trim();
+  navigator.clipboard.writeText(clean).then(function() {
+    // Visual feedback on element
+    if (el) {
+      el.classList.add('cpv-ok');
+      var ico = el.querySelector('.cpv-ico');
+      if (ico) { ico.innerHTML = '&#10003;'; }
+      setTimeout(function() {
+        el.classList.remove('cpv-ok');
+        if (ico) { ico.innerHTML = '&#128203;'; }
+      }, 1200);
+    }
+  }).catch(function() {
+    // Fallback
+    var ta = document.createElement('textarea');
+    ta.value = clean; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (el) { el.classList.add('cpv-ok'); setTimeout(function(){ el.classList.remove('cpv-ok'); }, 1200); }
+  });
+}
+// Helper: wrap text in copyable span (priority HIGH - full area clickable)
+function _cpv(text) {
+  var safe = String(text).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;');
+  return '<span class="cpv" data-cpv="' + safe + '" onclick="event.stopPropagation();copyVal(this.dataset.cpv,this)">' + esc(text) + '<span class="cpv-ico">&#128203;</span></span>';
+}
+// Helper: wrap raw HTML in copyable container (for formatted values like amounts)
+function _cpvRaw(text, html) {
+  var safe = String(text).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;');
+  return '<span class="cpv" data-cpv="' + safe + '" onclick="event.stopPropagation();copyVal(this.dataset.cpv,this)">' + html + '<span class="cpv-ico">&#128203;</span></span>';
 }
 
 
@@ -2783,6 +2845,19 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.28.0',
+    date: '2026-02-17',
+    changes: [
+      'Copy-to-clipboard: funci\u00f3n global copyVal() + helpers _cpv/_cpvRaw con feedback visual',
+      'Prioridad ALTA (clic en valor): ID Reserva, Localizador, Total a Liquidar en tablas principal y consoldetail',
+      'Prioridad ALTA: meta-strip detalle reserva (Alojamiento, ID, Localizador) copiables',
+      'Prioridad ALTA: Total hero y total bar en consoldetail copiables',
+      'Prioridad MEDIA: Facturaci\u00f3n total en consoldetail meta-strip copiable',
+      'CSS: hover highlight azul sutil + flash verde en confirmaci\u00f3n + icono clipboard aparece on hover',
+      'Volver a alojamientos sticky (position:sticky top:0) con degradado',
+    ]
+  },
   {
     version: '2.27.0',
     date: '2026-02-17',
@@ -5880,8 +5955,8 @@ function _buildRowHtml(r) {
   const psO = selectWithValue(isB ? _selectCache.pasBooking : _selectCache.pasStripe, s.pasarelaRate);
   return `<tr ${isV ? 'class="validated"' : (c.ceTotal > 0 ? 'class="ce-highlighted"' : (c.ceSinIvaTotal > 0 ? 'class="ce2-highlighted"' : ''))} id="row-${r.idx}">
     <td class="col-estado">${isV ? '<span class="badge badge-green">&#10003; ' + t('status.validated') + '</span>' : '<span class="badge badge-amber">' + t('status.pending') + '</span>'}</td>
-    <td class="col-idReserva muted" style="font-size:12px;">${r.id}</td>
-    <td class="col-localizador muted" style="font-size:11px;white-space:nowrap;">${r.localizador}</td>
+    <td class="col-idReserva muted" style="font-size:12px;">${_cpv(r.id)}</td>
+    <td class="col-localizador muted" style="font-size:11px;white-space:nowrap;">${_cpv(r.localizador)}</td>
     <td class="col-fechaAlta muted" style="font-size:12px;">${r._fmtAlta}</td>
     <td class="col-cliente bold ellip">${esc(r.cliente)}</td>
     <td class="col-alojamiento ellip muted">${esc(r.alojamiento)}</td>
@@ -5913,7 +5988,7 @@ function _buildRowHtml(r) {
     <td class="col-irpf" style="text-align:center;vertical-align:middle;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><select class="sel" onchange="changeSetting(${r.idx},'irpf',parseFloat(this.value))" ${dis}>${iO}</select>
       <span style="font-size:11px;color:#e53935;font-variant-numeric:tabular-nums;">&#8211; ${fmt(c.ret)} &#8364;</span></div></td>
     <td class="col-iva21" style="text-align:center;vertical-align:middle;"><span style="font-size:11px;color:#43a047;font-variant-numeric:tabular-nums;">+ ${fmt(c.iva)} &#8364;</span></td>
-    <td class="col-totalLiquidar right bold" style="color:${c.totalLiq >= 0 ? '#1a2744' : '#e53935'}">${fmt(c.totalLiq)} &#8364;</td>
+    <td class="col-totalLiquidar right bold" style="color:${c.totalLiq >= 0 ? '#1a2744' : '#e53935'}">${_cpvRaw(fmt(c.totalLiq), fmt(c.totalLiq) + ' &#8364;')}</td>
     <td class="col-observacion ellip muted" style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;" title="${esc(r.observacion)}">${esc(r.observacion)}</td>
     <td class="col-acciones"><div style="display:flex;gap:6px;">
       <button class="btn btn-sm btn-primary" onclick="viewDetail(${r.idx})">&#128065;</button>
@@ -7176,11 +7251,11 @@ function viewDetail(idx) {
     <div class="liq-header"><div class="liq-header-top"><div><div class="type">${isV?t('liq.settlement'):t('liq.reservation')}</div><div class="name"${_propStyle} title="Clic para editar propietario" onclick="${_propClick}">${_prop}</div></div>
     <div style="display:flex;align-items:center;gap:12px;"><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div>
     ${isV?'<span class="badge-liq badge-liq-green">&#10003; ' + t('status.validated') + '</span>':'<span class="badge-liq badge-liq-amber">' + t('status.pending') + '</span>'}</div></div>
-    <div class="liq-meta-strip"><div class="liq-meta-item"><div class="liq-meta-label">${t("col.alojamiento")}</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
+    <div class="liq-meta-strip"><div class="liq-meta-item"><div class="liq-meta-label">${t("col.alojamiento")}</div><div class="liq-meta-value cpv" data-cpv="${esc(r.alojamiento)}" onclick="copyVal(this.dataset.cpv,this)">${esc(r.alojamiento)}<span class="cpv-ico">&#128203;</span></div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">${t("sort.fechaEntrada")}</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">${t("liq.salesChannel")}</div><div class="liq-meta-value">${r.plataforma}</div></div>
-    <div class="liq-meta-item"><div class="liq-meta-label">${t("sort.idReserva")}</div><div class="liq-meta-value">${r.id}</div></div>
-    <div class="liq-meta-item"><div class="liq-meta-label">${t("sort.localizador")}</div><div class="liq-meta-value sm">${r.localizador}</div></div>
+    <div class="liq-meta-item"><div class="liq-meta-label">${t("sort.idReserva")}</div><div class="liq-meta-value cpv" data-cpv="${r.id}" onclick="copyVal(this.dataset.cpv,this)">${r.id}<span class="cpv-ico">&#128203;</span></div></div>
+    <div class="liq-meta-item"><div class="liq-meta-label">${t("sort.localizador")}</div><div class="liq-meta-value sm cpv" data-cpv="${r.localizador}" onclick="copyVal(this.dataset.cpv,this)">${r.localizador}<span class="cpv-ico">&#128203;</span></div></div>
     <div class="liq-meta-item"><div class="liq-meta-label">${t("col.edificio")}</div><div class="liq-meta-value">${esc(r.edificio)}</div></div></div></div>
     <div class="liq-sec">
       <div class="liq-row bold"><span>${t('liq.totalVAT')}</span><span class="liq-val">${fv(c.total)}</span></div>
@@ -7202,7 +7277,7 @@ function viewDetail(idx) {
       <div class="liq-row" style="margin-top:8px"><span>${t('liq.irpfWithholding')} ${_sel(irpfOptions, c.irpfRate, r.idx, 'irpf', true)}</span><span class="liq-val neg">${fv(-c.ret)}</span></div>
       <div class="liq-row"><span>${t('liq.vatSubtotal')} (${(IVA_SUBTOTAL*100).toFixed(0)}%)</span><span class="liq-val pos">${fv(c.iva)}</span></div>
     </div>
-    <div class="liq-total-bar"><div class="liq-total"><div><span class="liq-total-label">${t("liq.totalToSettle")}</span><div class="liq-total-label-sub">${t("liq.monthlySettlement")}</div></div><span class="liq-total-value">${fmt(c.totalLiq)} \u20AC</span></div></div>
+    <div class="liq-total-bar"><div class="liq-total"><div><span class="liq-total-label">${t("liq.totalToSettle")}</span><div class="liq-total-label-sub">${t("liq.monthlySettlement")}</div></div><span class="liq-total-value cpv" data-cpv="${fmt(c.totalLiq)}" onclick="event.stopPropagation();copyVal(this.dataset.cpv,this)">${fmt(c.totalLiq)} \u20AC<span class="cpv-ico">&#128203;</span></span></div></div>
     <div class="liq-gold-bar-bottom"></div></div>
     <div class="liq-actions no-print">
       ${!isV?`<button class="btn btn-orange" onclick="toggleValidate(${r.idx})">&#10003; ${t('btn.validate')}</button>`:`<button class="btn btn-success" onclick="toggleValidate(${r.idx})">&#8617; ${t('btn.unvalidate')}</button>`}
@@ -7760,8 +7835,8 @@ function viewConsolDetail(alojName) {
 
     return `<tr ${isV?'class="validated"':''} id="crow-${r.idx}">
       <td class="cc-estado">${isV?'<span class="badge badge-green">&#10003; ' + t('status.validated') + '</span>':'<span class="badge badge-amber">' + t('status.pending') + '</span>'}</td>
-      <td class="cc-idReserva" style="font-size:12px;color:#6b7280;">${r.id}</td>
-      <td class="cc-localizador" style="font-size:11px;color:#6b7280;white-space:nowrap;">${r.localizador}</td>
+      <td class="cc-idReserva" style="font-size:12px;color:#6b7280;">${_cpv(r.id)}</td>
+      <td class="cc-localizador" style="font-size:11px;color:#6b7280;white-space:nowrap;">${_cpv(r.localizador)}</td>
       <td class="cc-fechaAlta" style="font-size:12px;color:#6b7280;">${r._fmtAlta}</td>
       <td class="cc-cliente bold ellip">${esc(r.cliente)}</td>
       <td class="cc-edificio ellip" style="font-size:12px;color:#6b7280;">${esc(r.edificio)}</td>
@@ -7829,7 +7904,7 @@ function viewConsolDetail(alojName) {
     <td class="cc-subtotal" style="${_cfs}text-align:right;">${fmt(cSub)} &#8364;</td>
     <td class="cc-irpf" style="${_cfr}">&#8211; ${fmt(cRet)} &#8364;</td>
     <td class="cc-iva21" style="${_cfs}text-align:center;color:#81c784;font-variant-numeric:tabular-nums;">+ ${fmt(cIva21)} &#8364;</td>
-    <td class="cc-totalLiquidar" style="${_cfs}text-align:right;color:#81d4fa;font-size:14px;">${fmt(cLiq)} &#8364;</td>
+    <td class="cc-totalLiquidar" style="${_cfs}text-align:right;color:#81d4fa;font-size:14px;">${_cpvRaw(fmt(cLiq), fmt(cLiq) + ' &#8364;')}</td>
     <td class="cc-observacion" style="${_cfs}"></td>
     <td class="cc-acciones" style="${_cfs}"></td>
   </tr>`;
@@ -7889,7 +7964,7 @@ function viewConsolDetail(alojName) {
           <div class="consol-meta-item"><div class="consol-meta-label">${t("consol.owner")}</div><div class="consol-meta-value${_propIsMissing?' alert':''}" style="cursor:pointer" title="Clic para editar propietario" onclick="editPropietarioInline('${a.name.replace(/'/g,"\\'")}', this)">${_propName}</div></div>
           <div class="consol-meta-item"><div class="consol-meta-label">${t("consol.building")}</div><div class="consol-meta-value">${a.edificio}</div></div>
           <div class="consol-meta-item"><div class="consol-meta-label">${t("consol.numReservations")}</div><div class="consol-meta-value">${filteredReservas.length}</div></div>
-          <div class="consol-meta-item"><div class="consol-meta-label">${t("stats.billing")}</div><div class="consol-meta-value">${fmt(sumTotal)} \u20AC</div></div>
+          <div class="consol-meta-item"><div class="consol-meta-label">${t("stats.billing")}</div><div class="consol-meta-value cpv" data-cpv="${fmt(sumTotal)}" onclick="event.stopPropagation();copyVal(this.dataset.cpv,this)">${fmt(sumTotal)} \u20AC<span class="cpv-ico">&#128203;</span></div></div>
         </div>
       </div>
 
@@ -7986,7 +8061,7 @@ ${_isSplit ? `<div class="cd-split-mini">
             <div style="flex:1;"></div>
             <div class="cd-total-hero" id="csf-total">
               <div class="cd-total-hero-label">${t(_isSplit ? 'consol.toSettleOwner' : 'consol.totalToSettle')}</div>
-              <div class="cd-total-hero-amount">${fmt(adjLiq)} <span class="eur">\u20AC</span></div>
+              <div class="cd-total-hero-amount cpv" data-cpv="${fmt(adjLiq)}" onclick="event.stopPropagation();copyVal(this.dataset.cpv,this)">${fmt(adjLiq)} <span class="eur">\u20AC</span><span class="cpv-ico">&#128203;</span></div>
             </div>
             <div class="no-print" style="margin-top:12px;">
               <div style="margin-bottom:8px;text-align:center;"><span style="font-size:11px;color:#9ca3af;margin-right:6px;">${t('doc.langLabel')}:</span>${_buildDocLangPicker()}</div>
@@ -8018,7 +8093,7 @@ ${_isSplit ? `<div class="cd-split-mini">
 
         <div class="cd-total-bar" id="csf-total-bar">
           <div class="cd-total-bar-label">${t(_isSplit ? 'consol.toSettleOwner' : 'consol.totalToSettle')}<strong>${a.name}</strong></div>
-          <div class="cd-total-bar-amount">${fmt(adjLiq)} \u20AC</div>
+          <div class="cd-total-bar-amount cpv" data-cpv="${fmt(adjLiq)}" onclick="event.stopPropagation();copyVal(this.dataset.cpv,this)">${fmt(adjLiq)} \u20AC<span class="cpv-ico">&#128203;</span></div>
         </div>
         <div class="liq-gold-bar-bottom"></div>
       </div>

@@ -2197,6 +2197,8 @@ const I18N = {
   'inv.companyCif':     { es:'CIF', en:'Tax ID', de:'Steuernummer' },
   'inv.companyAddr':    { es:'Direcci\u00f3n fiscal', en:'Fiscal address', de:'Steueradresse' },
   'inv.companyUpdated': { es:'Empresa actualizada', en:'Company updated', de:'Firma aktualisiert' },
+  'cfg.8020sold':        { es:'vendidos (80/20 activo)', en:'sold (80/20 active)', de:'verkauft (80/20 aktiv)' },
+
   'cfg.platCommDesc':    { es:'% sobre total reserva (IVA incl.)', en:'% of total booking (VAT incl.)', de:'% der Gesamtbuchung (inkl. MwSt.)' },
   'cfg.pasarelaBooking': { es:'Pasarela Booking', en:'Booking Gateway', de:'Booking Zahlungs-Gateway' },
   'cfg.pasarelaBookDesc':{ es:'Solo para Booking.com', en:'Booking.com only', de:'Nur f\u00fcr Booking.com' },
@@ -8607,11 +8609,9 @@ function buildGtcSplitSection() {
       '<div class="toggle" onclick="toggleGtcSplit(\'' + name.replace(/'/g, "\\'") + '\')"><div class="toggle-track' + (on ? ' on' : '') + '" style="' + (on ? 'background:#7c3aed;' : '') + '"><div class="toggle-thumb"></div></div></div></div>';
   }).join('<div class="gtc-split-divider-row"></div>');
   const count = alojs.filter(function(n){ return isGtcSplit(n); }).length;
-  return '<div class="gtc-split-section"><div class="gtc-split-title">' +
-    '&#8621; Acuerdo 80/20 GTC</div>' +
-    '<div class="gtc-split-desc">Alojamientos propiedad GTC. Activa los que ya est\u00E1n vendidos: GTC retiene el 20% del Subtotal Reservas, el propietario recibe el 80%.</div>' +
+  return '<div class="gtc-split-section">' +
     '<div class="gtc-split-list">' + rows + '</div>' +
-    '<div class="gtc-split-counter"><span class="badge">' + count + '</span> de ' + alojs.length + ' vendido' + (count !== 1 ? 's' : '') + ' (80/20 activo)</div></div>';
+    '<div class="gtc-split-counter"><span class="badge">' + count + '</span> ' + t('inv.of') + ' ' + alojs.length + ' ' + t('cfg.8020sold') + '</div></div>';
 }
 function toggleGtcSplit(alojName) {
   const idx = _gtcSplitAlojamientos.indexOf(alojName);

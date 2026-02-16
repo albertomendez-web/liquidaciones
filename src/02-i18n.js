@@ -590,6 +590,8 @@ const I18N = {
   'inv.companyCif':     { es:'CIF', en:'Tax ID', de:'Steuernummer' },
   'inv.companyAddr':    { es:'Direcci\u00f3n fiscal', en:'Fiscal address', de:'Steueradresse' },
   'inv.companyUpdated': { es:'Empresa actualizada', en:'Company updated', de:'Firma aktualisiert' },
+  'cfg.8020sold':        { es:'vendidos (80/20 activo)', en:'sold (80/20 active)', de:'verkauft (80/20 aktiv)' },
+
   'cfg.platCommDesc':    { es:'% sobre total reserva (IVA incl.)', en:'% of total booking (VAT incl.)', de:'% der Gesamtbuchung (inkl. MwSt.)' },
   'cfg.pasarelaBooking': { es:'Pasarela Booking', en:'Booking Gateway', de:'Booking Zahlungs-Gateway' },
   'cfg.pasarelaBookDesc':{ es:'Solo para Booking.com', en:'Booking.com only', de:'Nur f\u00fcr Booking.com' },

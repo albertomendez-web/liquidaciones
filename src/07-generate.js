@@ -296,11 +296,9 @@ function buildGtcSplitSection() {
       '<div class="toggle" onclick="toggleGtcSplit(\'' + name.replace(/'/g, "\\'") + '\')"><div class="toggle-track' + (on ? ' on' : '') + '" style="' + (on ? 'background:#7c3aed;' : '') + '"><div class="toggle-thumb"></div></div></div></div>';
   }).join('<div class="gtc-split-divider-row"></div>');
   const count = alojs.filter(function(n){ return isGtcSplit(n); }).length;
-  return '<div class="gtc-split-section"><div class="gtc-split-title">' +
-    '&#8621; Acuerdo 80/20 GTC</div>' +
-    '<div class="gtc-split-desc">Alojamientos propiedad GTC. Activa los que ya est\u00E1n vendidos: GTC retiene el 20% del Subtotal Reservas, el propietario recibe el 80%.</div>' +
+  return '<div class="gtc-split-section">' +
     '<div class="gtc-split-list">' + rows + '</div>' +
-    '<div class="gtc-split-counter"><span class="badge">' + count + '</span> de ' + alojs.length + ' vendido' + (count !== 1 ? 's' : '') + ' (80/20 activo)</div></div>';
+    '<div class="gtc-split-counter"><span class="badge">' + count + '</span> ' + t('inv.of') + ' ' + alojs.length + ' ' + t('cfg.8020sold') + '</div></div>';
 }
 function toggleGtcSplit(alojName) {
   const idx = _gtcSplitAlojamientos.indexOf(alojName);

@@ -52,7 +52,20 @@ function getInvoiceCompanyById(id) {
 function getHoldedFiscalData(alojName) {
   if (!alojName) return null;
   var key = alojName.trim().toLowerCase();
-  return _holdedMapping[key] || null;
+  var data = _holdedMapping[key];
+  if (!data) return null;
+  // Sanitize: address may be persisted as object from Holded API
+  if (data.address && typeof data.address === 'object') {
+    var addrObj = data.address;
+    data.city = String(addrObj.city || data.city || '');
+    data.postalCode = String(addrObj.postalCode || data.postalCode || '');
+    data.province = String(addrObj.province || data.province || '');
+    data.country = String(addrObj.country || data.country || '');
+    data.address = String(addrObj.address || '');
+  }
+  // Strip property code prefix: "[MA-2-P6-0C] Name" → "Name"
+  if (data.name) data.name = String(data.name).replace(/^\[.*?\]\s*/, '');
+  return data;
 }
 
 // --- Invoice number: YYYY-MM ---
@@ -464,17 +477,39 @@ function matchHoldedToAlojamientos() {
  * @description Extrae datos fiscales relevantes de un contacto Holded.
  */
 function _extractContactData(contact) {
+  // Holded may return billAddress as object: { address, city, postalCode, province, country }
+  var addr = contact.billAddress || contact.address || '';
+  var city = '', postalCode = '', province = '', country = '';
+
+  if (addr && typeof addr === 'object') {
+    city = String(addr.city || '');
+    postalCode = String(addr.postalCode || '');
+    province = String(addr.province || '');
+    country = String(addr.country || '');
+    addr = String(addr.address || '');
+  } else {
+    addr = String(addr || '');
+    city = String(contact.billCity || contact.city || '');
+    postalCode = String(contact.billPostalCode || contact.postalCode || contact.billZip || contact.zip || '');
+    province = String(contact.billProvince || contact.province || '');
+    country = String(contact.billCountry || contact.country || contact.billCountryName || '');
+  }
+
+  // Strip property code prefix from name: "[MA-2-P6-0C] Pedro García" → "Pedro García"
+  var name = String(contact.name || '');
+  name = name.replace(/^\[.*?\]\s*/, '');
+
   return {
     contactId: String(contact.id || ''),
-    name: String(contact.name || ''),
+    name: name,
     vatnumber: String(contact.vatnumber || contact.vatNumber || ''),
     email: String(contact.email || ''),
     phone: String(contact.phone || contact.mobile || ''),
-    address: String(contact.billAddress || contact.address || ''),
-    city: String(contact.billCity || contact.city || ''),
-    postalCode: String(contact.billPostalCode || contact.postalCode || contact.billZip || contact.zip || ''),
-    province: String(contact.billProvince || contact.province || ''),
-    country: String(contact.billCountry || contact.country || contact.billCountryName || '')
+    address: addr,
+    city: city,
+    postalCode: postalCode,
+    province: province,
+    country: country
   };
 }
 

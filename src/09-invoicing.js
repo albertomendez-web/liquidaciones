@@ -742,56 +742,68 @@ function buildInvoiceHeader(alojName, periodStr) {
  * @description Genera factura: liquidación con cabecera fiscal.
  */
 function handleGenerarFactura(alojNameParam) {
-  var alojName = alojNameParam || currentConsolAloj;
-  if (alojName) currentConsolAloj = alojName;
-  if (!alojName) { showToast(t('inv.noAloj'), 'warning'); return; }
-  if (!isInvoiceEnabled(alojName)) { showToast(t('inv.notEnabled'), 'warning'); return; }
+  try {
+    var alojName = alojNameParam || currentConsolAloj;
+    if (alojName) currentConsolAloj = alojName;
+    if (!alojName) { showToast(t('inv.noAloj'), 'warning'); return; }
+    if (!isInvoiceEnabled(alojName)) { showToast(t('inv.notEnabled'), 'warning'); return; }
 
-  // Build liquidation cards in document language
-  var result = _withLang(_docLang, buildPrintCards);
-  if (!result) return;
+    console.log('[Invoice] Generating for:', alojName);
 
-  // Build period string in doc language
-  var periodStr = _withLang(_docLang, function() {
-    var ps = '';
-    try {
-      if (typeof _mpSelYears !== 'undefined' && _mpSelYears.size > 0) {
-        var yr = [..._mpSelYears].sort()[0];
-        if (typeof _mpSelMonths !== 'undefined' && _mpSelMonths.size >= 1) {
-          var ms = [..._mpSelMonths].sort(function(a,b){return a-b;});
-          ps = ms.map(function(m){return t('month.full.'+m);}).join(', ') + ' ' + yr;
-        } else { ps = '' + yr; }
-      }
-    } catch(e) {}
-    if (!ps) { var now = new Date(); ps = t('month.full.' + now.getMonth()) + ' ' + now.getFullYear(); }
-    return ps;
-  });
+    // Build liquidation cards in document language
+    var result = _withLang(_docLang, buildPrintCards);
+    if (!result) { showToast('Error: buildPrintCards returned null', 'error'); return; }
+    console.log('[Invoice] Cards built OK');
 
-  // Build fiscal header
-  var headerHtml = _withLang(_docLang, function() {
-    return buildInvoiceHeader(alojName, periodStr);
-  });
+    // Build period string in doc language
+    var periodStr = _withLang(_docLang, function() {
+      var ps = '';
+      try {
+        if (typeof _mpSelYears !== 'undefined' && _mpSelYears.size > 0) {
+          var yr = [..._mpSelYears].sort()[0];
+          if (typeof _mpSelMonths !== 'undefined' && _mpSelMonths.size >= 1) {
+            var ms = [..._mpSelMonths].sort(function(a,b){return a-b;});
+            ps = ms.map(function(m){return t('month.full.'+m);}).join(', ') + ' ' + yr;
+          } else { ps = '' + yr; }
+        }
+      } catch(e) {}
+      if (!ps) { var now = new Date(); ps = t('month.full.' + now.getMonth()) + ' ' + now.getFullYear(); }
+      return ps;
+    });
+    console.log('[Invoice] Period:', periodStr);
 
-  var previewZone = document.getElementById('preview-zone');
-  var printZone = document.getElementById('print-zone');
-  var actions = document.getElementById('consol-actions');
+    // Build fiscal header
+    var headerHtml = _withLang(_docLang, function() {
+      return buildInvoiceHeader(alojName, periodStr);
+    });
+    console.log('[Invoice] Header built, length:', headerHtml ? headerHtml.length : 0);
 
-  previewZone.innerHTML = '<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;text-align:center;">'
-    + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button></div>'
-    + headerHtml
-    + result.cardsHtml + result.summaryHtml
-    + '<div class="liq-actions no-print" style="margin-top:28px;justify-content:center;">'
-    + '<button class="btn btn-success" onclick="printFromPreview()">&#128424; ' + t('btn.print') + '</button>'
-    + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button>'
-    + '</div>';
+    var previewZone = document.getElementById('preview-zone');
+    var printZone = document.getElementById('print-zone');
+    var actions = document.getElementById('consol-actions');
 
-  printZone.style.display = 'none';
-  printZone.classList.remove('print-target');
-  if (actions) actions.style.display = 'none';
-  previewZone.style.display = 'block';
-  previewZone.classList.add('print-target');
-  _previewActive = true;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!previewZone) { showToast('Error: preview-zone not found', 'error'); return; }
+
+    previewZone.innerHTML = '<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;text-align:center;">'
+      + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button></div>'
+      + headerHtml
+      + result.cardsHtml + result.summaryHtml
+      + '<div class="liq-actions no-print" style="margin-top:28px;justify-content:center;">'
+      + '<button class="btn btn-success" onclick="printFromPreview()">&#128424; ' + t('btn.print') + '</button>'
+      + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button>'
+      + '</div>';
+
+    if (printZone) { printZone.style.display = 'none'; printZone.classList.remove('print-target'); }
+    if (actions) actions.style.display = 'none';
+    previewZone.style.display = 'block';
+    previewZone.classList.add('print-target');
+    _previewActive = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('[Invoice] Preview active');
+  } catch(e) {
+    console.error('[Invoice] Error:', e);
+    showToast('Error factura: ' + e.message, 'error');
+  }
 }
 
 // ==============================================================================================================================

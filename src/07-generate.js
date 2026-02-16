@@ -282,6 +282,7 @@ function renderConfigModal() {
   document.getElementById("tab-impuestos").innerHTML =
     buildOS("Retenci\u00F3n IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR");
   document.getElementById("tab-8020").innerHTML = buildGtcSplitSection();
+  document.getElementById("tab-invoicing").innerHTML = renderInvoicingTab();
 }
 function addPS(){aL(pasarelaStripeOptions,"add-ps",100);} function delPS(i){dL(pasarelaStripeOptions,i);}
 function addPB(){aL(pasarelaBookingOptions,"add-pb",100);} function delPB(i){dL(pasarelaBookingOptions,i);}

@@ -235,6 +235,9 @@ function buildGlobalConfigRows() {
       rows.push(['extras:' + k, JSON.stringify(exs)]);
     }
   });
+  // Invoicing config
+  var invRows = buildInvoicingConfigRows();
+  for (var ir = 0; ir < invRows.length; ir++) rows.push(invRows[ir]);
   return rows;
 }
 
@@ -410,6 +413,9 @@ function applyConfigFromRows(rows) {
       } else if (key.startsWith('extras:')) {
         const extAloj = key.substring(7);
         try { _consolExtras[extAloj] = JSON.parse(val); } catch(e) { _consolExtras[extAloj] = []; }
+      } else {
+        // Delegate to invoicing parser
+        if (typeof parseInvoicingConfig === 'function') parseInvoicingConfig(key, val);
       }
     }
 

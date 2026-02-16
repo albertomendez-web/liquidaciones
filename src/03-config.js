@@ -28,6 +28,18 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.30.0',
+    date: '2026-02-17',
+    changes: [
+      'Nuevo m\u00f3dulo 09-invoicing.js: sistema de facturaci\u00f3n',
+      'Config: pesta\u00f1a Facturaci\u00f3n con toggle por alojamiento',
+      'Config: empresas receptoras (GTC + GEE) editables y a\u00f1adibles',
+      'Config: campo API key Holded con persistencia',
+      'Cada alojamiento con factura asigna empresa receptora',
+      'N\u00famero factura autom\u00e1tico YYYY-MM, fecha fin de mes',
+    ]
+  },
+  {
     version: '2.29.3',
     date: '2026-02-17',
     changes: [

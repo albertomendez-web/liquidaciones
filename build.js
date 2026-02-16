@@ -49,6 +49,7 @@ const PARTS = [
   '06-views.js',
   '07-generate.js',
   '08-ai.js',
+  '09-invoicing.js',
   'tail.html',
 ];
 

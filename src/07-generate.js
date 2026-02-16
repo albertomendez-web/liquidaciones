@@ -251,7 +251,7 @@ function renderConfigPages() {
   let pH = '';
   pN.forEach(name => {
     const safe = name.replace(/[^a-zA-Z0-9]/g,'');
-    pH += buildOS(name, "% sobre total reserva (IVA incl.)", platformOptions[name], "%", `add-plat-${safe}`, `addP_${safe}`, `delP_${safe}`);
+    pH += buildOS(name, t("cfg.platCommDesc"), platformOptions[name], "%", `add-plat-${safe}`, `addP_${safe}`, `delP_${safe}`);
     window[`addP_${safe}`] = function() { const inp=document.getElementById(`add-plat-${safe}`); const v=parseFloat(inp.value);
       if(isNaN(v)||v<0||v>100){showToast("Porcentaje v\u00e1lido: 0-100", "warning");return;} if(platformOptions[name].some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;}
       platformOptions[name].push(v); platformOptions[name].sort((a,b)=>a-b); inp.value=""; renderConfigPages(); scheduleGlobalConfigSave(); };
@@ -261,17 +261,17 @@ function renderConfigPages() {
   document.getElementById("tab-pasarela").innerHTML =
     buildOS(t("cfg.pasarelaStripe"),t("cfg.pasarelaDesc"),pasarelaStripeOptions,"%","add-ps","addPS","delPS") +
     '<hr class="section-divider">' +
-    buildOS("Pasarela Booking","Solo para Booking.com",pasarelaBookingOptions,"%","add-pb","addPB","delPB");
+    buildOS(t("cfg.pasarelaBooking"),t("cfg.pasarelaBookDesc"),pasarelaBookingOptions,"%","add-pb","addPB","delPB");
   document.getElementById("tab-otros").innerHTML =
-    buildOS("Gesti\u00F3n GTC","% sobre base sin IVA",gtcOptions,"%","add-gtc","addGTC","delGTC") +
+    buildOS(t("cfg.gestionGtc"),t("cfg.gestionGtcDesc"),gtcOptions,"%","add-gtc","addGTC","delGTC") +
     '<hr class="section-divider">' +
-    buildOS("Limpieza","\u20AC sin IVA",cleaningOptions," \u20AC","add-cl","addCL","delCL") +
+    buildOS(t("cfg.limpieza"),t("cfg.limpiezaDesc"),cleaningOptions," \u20AC","add-cl","addCL","delCL") +
     '<hr class="section-divider">' +
-    buildOS("Amenities","Coste fijo por reserva en \u20AC",amenitiesOptions," \u20AC","add-am","addAM","delAM") +
+    buildOS(t("cfg.amenities"),t("cfg.amenitiesDesc"),amenitiesOptions," \u20AC","add-am","addAM","delAM") +
     '<hr class="section-divider">' +
     buildOS(t("liq.maintenanceMonthly"),t("liq.maintenanceDesc"),maintenanceOptions," \u20AC","add-mt","addMT","delMT");
   document.getElementById("tab-impuestos").innerHTML =
-    buildOS("Retenci\u00F3n IRPF","Porcentaje",irpfOptions,"%","add-ir","addIR","delIR");
+    buildOS(t("cfg.irpfTitle"),t("cfg.irpfDesc"),irpfOptions,"%","add-ir","addIR","delIR");
   document.getElementById("tab-8020").innerHTML = buildGtcSplitSection();
   document.getElementById("tab-invoicing").innerHTML = renderInvoicingTab();
 }

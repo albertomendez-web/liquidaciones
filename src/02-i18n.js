@@ -566,6 +566,32 @@ const I18N = {
   'csv.validated':     { es:'Validada', en:'Validated', de:'Validiert' },
   'csv.pending':       { es:'Pendiente', en:'Pending', de:'Ausstehend' },
 
+  // === INVOICING ===
+  'inv.tabTitle':       { es:'Facturaci\u00f3n', en:'Invoicing', de:'Rechnungsstellung' },
+  'inv.holdedTitle':    { es:'Holded API', en:'Holded API', de:'Holded API' },
+  'inv.holdedDesc':     { es:'Clave API para sincronizar contactos y crear facturas en Holded.', en:'API key to sync contacts and create invoices in Holded.', de:'API-Schl\u00fcssel zum Synchronisieren von Kontakten und Erstellen von Rechnungen in Holded.' },
+  'inv.holdedPlaceholder': { es:'Introduce tu API key de Holded', en:'Enter your Holded API key', de:'Holded API-Schl\u00fcssel eingeben' },
+  'inv.save':           { es:'Guardar', en:'Save', de:'Speichern' },
+  'inv.apiConfigured':  { es:'API key configurada', en:'API key configured', de:'API-Schl\u00fcssel konfiguriert' },
+  'inv.apiPending':     { es:'Sin configurar', en:'Not configured', de:'Nicht konfiguriert' },
+  'inv.apiSaved':       { es:'API key guardada', en:'API key saved', de:'API-Schl\u00fcssel gespeichert' },
+  'inv.apiRemoved':     { es:'API key eliminada', en:'API key removed', de:'API-Schl\u00fcssel entfernt' },
+  'inv.companiesTitle': { es:'Empresas receptoras de factura', en:'Invoice recipient companies', de:'Rechnungsempf\u00e4nger' },
+  'inv.companiesDesc':  { es:'Empresas que reciben las facturas de los propietarios.', en:'Companies that receive invoices from property owners.', de:'Unternehmen, die Rechnungen von Eigent\u00fcmern erhalten.' },
+  'inv.edit':           { es:'Editar', en:'Edit', de:'Bearbeiten' },
+  'inv.address':        { es:'Direcci\u00f3n', en:'Address', de:'Adresse' },
+  'inv.addCompany':     { es:'+ A\u00f1adir empresa', en:'+ Add company', de:'+ Firma hinzuf\u00fcgen' },
+  'inv.alojTitle':      { es:'Facturaci\u00f3n por alojamiento', en:'Invoicing per property', de:'Rechnungsstellung pro Unterkunft' },
+  'inv.alojDesc':       { es:'Activa la generaci\u00f3n de factura para cada alojamiento y selecciona la empresa receptora.', en:'Enable invoice generation per property and select the recipient company.', de:'Rechnungserstellung pro Unterkunft aktivieren und Empf\u00e4ngerunternehmen w\u00e4hlen.' },
+  'inv.noData':         { es:'Carga datos para ver los alojamientos disponibles.', en:'Load data to see available properties.', de:'Daten laden, um verf\u00fcgbare Unterk\u00fcnfte zu sehen.' },
+  'inv.activeCount':    { es:'con facturaci\u00f3n activa', en:'with active invoicing', de:'mit aktiver Rechnungsstellung' },
+  'inv.of':             { es:'de', en:'of', de:'von' },
+  'inv.companyName':    { es:'Raz\u00f3n social', en:'Company name', de:'Firmenname' },
+  'inv.companyCif':     { es:'CIF', en:'Tax ID', de:'Steuernummer' },
+  'inv.companyAddr':    { es:'Direcci\u00f3n fiscal', en:'Fiscal address', de:'Steueradresse' },
+  'inv.companyUpdated': { es:'Empresa actualizada', en:'Company updated', de:'Firma aktualisiert' },
+  'inv.companyAdded':   { es:'Empresa a\u00f1adida', en:'Company added', de:'Firma hinzugef\u00fcgt' },
+
 };
 
 function t(key, ...args) {

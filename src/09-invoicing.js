@@ -86,46 +86,46 @@ function renderInvoicingTab() {
 
   // --- Section 1: Holded API Key ---
   html += '<div class="inv-section">';
-  html += '<div class="inv-section-title">&#128273; Holded API</div>';
-  html += '<div class="inv-section-desc">Clave API para sincronizar contactos y crear facturas en Holded.</div>';
+  html += '<div class="inv-section-title">&#128273; ' + t('inv.holdedTitle') + '</div>';
+  html += '<div class="inv-section-desc">' + t('inv.holdedDesc') + '</div>';
   html += '<div class="inv-api-row">';
-  html += '<input type="password" id="inv-holded-key" class="inv-input" placeholder="Introduce tu API key de Holded" value="' + esc(_holdedApiKey) + '" />';
+  html += '<input type="password" id="inv-holded-key" class="inv-input" placeholder="' + t('inv.holdedPlaceholder') + '" value="' + esc(_holdedApiKey) + '" />';
   html += '<button class="inv-btn inv-btn-sm" onclick="toggleHoldedKeyVisibility()">&#128065;</button>';
-  html += '<button class="inv-btn inv-btn-primary inv-btn-sm" onclick="saveHoldedKey()">Guardar</button>';
+  html += '<button class="inv-btn inv-btn-primary inv-btn-sm" onclick="saveHoldedKey()">' + t('inv.save') + '</button>';
   html += '</div>';
   if (_holdedApiKey) {
-    html += '<div class="inv-api-status inv-api-ok">&#10003; API key configurada</div>';
+    html += '<div class="inv-api-status inv-api-ok">&#10003; ' + t('inv.apiConfigured') + '</div>';
   } else {
-    html += '<div class="inv-api-status inv-api-pending">Sin configurar</div>';
+    html += '<div class="inv-api-status inv-api-pending">' + t('inv.apiPending') + '</div>';
   }
   html += '</div>';
 
   // --- Section 2: Empresas receptoras ---
   html += '<hr class="section-divider">';
   html += '<div class="inv-section">';
-  html += '<div class="inv-section-title">&#127970; Empresas receptoras de factura</div>';
-  html += '<div class="inv-section-desc">Empresas que reciben las facturas de los propietarios.</div>';
+  html += '<div class="inv-section-title">&#127970; ' + t('inv.companiesTitle') + '</div>';
+  html += '<div class="inv-section-desc">' + t('inv.companiesDesc') + '</div>';
   html += '<div class="inv-companies">';
   _invoiceCompanies.forEach(function(c, i) {
     html += '<div class="inv-company-card">';
     html += '<div class="inv-company-header">';
     html += '<span class="inv-company-badge">' + c.id.toUpperCase() + '</span>';
     html += '<span class="inv-company-name">' + esc(c.name) + '</span>';
-    html += '<button class="inv-btn inv-btn-sm" onclick="editInvoiceCompany(' + i + ')" title="Editar">&#9998;</button>';
+    html += '<button class="inv-btn inv-btn-sm" onclick="editInvoiceCompany(' + i + ')" title="' + t('inv.edit') + '">&#9998;</button>';
     html += '</div>';
-    html += '<div class="inv-company-detail"><span class="inv-label">CIF:</span> ' + esc(c.cif) + '</div>';
-    html += '<div class="inv-company-detail"><span class="inv-label">Direcci\u00f3n:</span> ' + esc(c.address) + '</div>';
+    html += '<div class="inv-company-detail"><span class="inv-label">' + t('inv.companyCif') + ':</span> ' + esc(c.cif) + '</div>';
+    html += '<div class="inv-company-detail"><span class="inv-label">' + t('inv.address') + ':</span> ' + esc(c.address) + '</div>';
     html += '</div>';
   });
   html += '</div>';
-  html += '<button class="inv-btn inv-btn-outline" onclick="addInvoiceCompany()" style="margin-top:8px;">+ A\u00f1adir empresa</button>';
+  html += '<button class="inv-btn inv-btn-outline" onclick="addInvoiceCompany()" style="margin-top:8px;">' + t('inv.addCompany') + '</button>';
   html += '</div>';
 
   // --- Section 3: Toggle por alojamiento ---
   html += '<hr class="section-divider">';
   html += '<div class="inv-section">';
-  html += '<div class="inv-section-title">&#128196; Facturaci\u00f3n por alojamiento</div>';
-  html += '<div class="inv-section-desc">Activa la generaci\u00f3n de factura para cada alojamiento y selecciona la empresa receptora.</div>';
+  html += '<div class="inv-section-title">&#128196; ' + t('inv.alojTitle') + '</div>';
+  html += '<div class="inv-section-desc">' + t('inv.alojDesc') + '</div>';
 
   // Get all known alojamientos from data
   var alojs = [];
@@ -135,7 +135,7 @@ function renderInvoicingTab() {
   }
 
   if (alojs.length === 0) {
-    html += '<div style="padding:16px;text-align:center;color:#9ca3af;font-size:13px;">Carga datos para ver los alojamientos disponibles.</div>';
+    html += '<div style="padding:16px;text-align:center;color:#9ca3af;font-size:13px;">' + t('inv.noData') + '</div>';
   } else {
     var enabledCount = 0;
     html += '<div class="inv-aloj-list">';
@@ -189,7 +189,7 @@ function saveHoldedKey() {
   _holdedApiKey = inp.value.trim();
   scheduleGlobalConfigSave();
   renderInvoicingConfigTab();
-  showToast(_holdedApiKey ? 'API key guardada' : 'API key eliminada', 'success');
+  showToast(_holdedApiKey ? t('inv.apiSaved') : t('inv.apiRemoved'), 'success');
 }
 
 function toggleInvoiceAloj(alojName) {
@@ -223,26 +223,26 @@ function renderInvoicingConfigTab() {
 function editInvoiceCompany(idx) {
   var c = _invoiceCompanies[idx];
   if (!c) return;
-  var newName = prompt('Raz\u00f3n social:', c.name);
+  var newName = prompt(t('inv.companyName') + ':', c.name);
   if (newName === null) return;
-  var newCif = prompt('CIF:', c.cif);
+  var newCif = prompt(t('inv.companyCif') + ':', c.cif);
   if (newCif === null) return;
-  var newAddr = prompt('Direcci\u00f3n fiscal:', c.address);
+  var newAddr = prompt(t('inv.companyAddr') + ':', c.address);
   if (newAddr === null) return;
   c.name = newName.trim();
   c.cif = newCif.trim();
   c.address = newAddr.trim();
   scheduleGlobalConfigSave();
   renderInvoicingConfigTab();
-  showToast('Empresa actualizada', 'success');
+  showToast(t('inv.companyUpdated'), 'success');
 }
 
 function addInvoiceCompany() {
-  var newName = prompt('Raz\u00f3n social:');
+  var newName = prompt(t('inv.companyName') + ':');
   if (!newName) return;
-  var newCif = prompt('CIF:');
+  var newCif = prompt(t('inv.companyCif') + ':');
   if (!newCif) return;
-  var newAddr = prompt('Direcci\u00f3n fiscal:');
+  var newAddr = prompt(t('inv.companyAddr') + ':');
   if (newAddr === null) return;
   var id = newName.trim().split(/\s+/).map(function(w) { return w[0]; }).join('').toLowerCase();
   // Ensure unique id
@@ -252,7 +252,7 @@ function addInvoiceCompany() {
   _invoiceCompanies.push({ id: id, name: newName.trim(), cif: newCif.trim(), address: (newAddr || '').trim() });
   scheduleGlobalConfigSave();
   renderInvoicingConfigTab();
-  showToast('Empresa a\u00f1adida', 'success');
+  showToast(t('inv.companyAdded'), 'success');
 }
 
 // ==============================================================================================================================

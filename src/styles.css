@@ -465,6 +465,26 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 @keyframes invSpin { to { transform: rotate(360deg); } }
 .inv-spin { display: inline-block; animation: invSpin 1s linear infinite; }
 
+/* === INVOICE HEADER (F3) === */
+.inv-fiscal-header { background: #fff; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; page-break-inside: avoid; }
+.inv-fiscal-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.inv-fiscal-badge { font-size: 18px; font-weight: 800; color: #1a1a1a; letter-spacing: 2px; }
+.inv-fiscal-meta { display: flex; gap: 20px; }
+.inv-fiscal-meta-item { text-align: right; }
+.inv-fiscal-label { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af; font-weight: 600; }
+.inv-fiscal-val { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+.inv-fiscal-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; border-top: 1.5px solid #f3f4f6; padding-top: 14px; }
+.inv-fiscal-party { }
+.inv-fiscal-party-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: #9ca3af; font-weight: 700; margin-bottom: 4px; }
+.inv-fiscal-party-name { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
+.inv-fiscal-party-detail { font-size: 11px; color: #4b5563; line-height: 1.5; }
+.inv-fiscal-detail-label { font-weight: 600; color: #6b7280; }
+.inv-fiscal-party-warn { font-size: 10px; color: #d97706; margin-top: 4px; font-style: italic; }
+/* Invoice generate button */
+.inv-btn-generate { display: inline-flex; align-items: center; gap: 4px; padding: 8px 16px; border: 1.5px solid #7c3aed; background: #f5f3ff; color: #7c3aed; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
+.inv-btn-generate:hover { background: #7c3aed; color: #fff; }
+@media print { .inv-fiscal-header { border: 1px solid #d1d5db; box-shadow: none; } }
+
 @media print { .cpv-ico { display: none !important; } }
 .liq-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--hm-teal-dark); position: relative; z-index: 1; }
 .liq-meta-strip .liq-meta-item { padding: 12px 32px; border-right: 1px solid rgba(255,255,255,0.06); }

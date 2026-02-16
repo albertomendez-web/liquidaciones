@@ -28,6 +28,17 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.33.0',
+    date: '2026-02-17',
+    changes: [
+      'F3: Generaci\u00f3n de factura \u2014 liquidaci\u00f3n con cabecera fiscal del propietario (emisor) y empresa GTC/GEE (receptor)',
+      'Cabecera fiscal: n\u00famero de factura, fecha, NIF, direcci\u00f3n, email, tel\u00e9fono del emisor desde Holded',
+      'Bot\u00f3n "Factura" en vista consolidada y lista (solo para alojamientos con facturaci\u00f3n activa)',
+      'Aviso visual si el propietario no tiene datos fiscales vinculados de Holded',
+      'i18n: claves ES/EN/DE para cabecera fiscal y bot\u00f3n factura',
+    ]
+  },
+  {
     version: '2.32.1',
     date: '2026-02-17',
     changes: [

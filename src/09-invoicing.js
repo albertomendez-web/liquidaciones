@@ -672,6 +672,125 @@ function addInvoiceCompany() {
 }
 
 // ==============================================================================================================================
+//  F3: INVOICE GENERATION — Factura = Liquidación + cabecera fiscal
+// ==============================================================================================================================
+
+/**
+ * @description Construye la cabecera fiscal de la factura.
+ * Emisor: propietario (datos de Holded). Receptor: empresa GTC/GEE.
+ */
+function buildInvoiceHeader(alojName, periodStr) {
+  var company = getInvoiceCompany(alojName);
+  var fiscal = getHoldedFiscalData(alojName);
+  var prop = typeof getPropietario === 'function' ? getPropietario(alojName) : '';
+  var invNum = getInvoiceNumber(periodStr);
+  var invDate = getInvoiceDate(periodStr);
+
+  // Emisor: propietario
+  var emisorName = fiscal ? fiscal.name : prop;
+  var emisorNif = fiscal ? fiscal.vatnumber : '';
+  var emisorAddr = '';
+  if (fiscal) {
+    var parts = [fiscal.address, fiscal.postalCode, fiscal.city, fiscal.province, fiscal.country].filter(function(p) { return p && p.trim(); });
+    emisorAddr = parts.join(', ');
+  }
+  var emisorEmail = fiscal ? fiscal.email : '';
+  var emisorPhone = fiscal ? fiscal.phone : '';
+
+  // Receptor: empresa
+  var receptorName = company ? company.name : 'Green Tropical Coast S.L.';
+  var receptorCif = company ? company.cif : '';
+  var receptorAddr = company ? company.address : '';
+
+  var html = '<div class="inv-fiscal-header">';
+  html += '<div class="inv-fiscal-top">';
+  html += '<div class="inv-fiscal-badge">' + t('inv.invoiceTitle') + '</div>';
+  html += '<div class="inv-fiscal-meta">';
+  html += '<div class="inv-fiscal-meta-item"><span class="inv-fiscal-label">' + t('inv.invoiceNum') + '</span><span class="inv-fiscal-val">' + esc(invNum) + '</span></div>';
+  html += '<div class="inv-fiscal-meta-item"><span class="inv-fiscal-label">' + t('inv.invoiceDate') + '</span><span class="inv-fiscal-val">' + esc(invDate) + '</span></div>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="inv-fiscal-parties">';
+  // Emisor
+  html += '<div class="inv-fiscal-party">';
+  html += '<div class="inv-fiscal-party-label">' + t('inv.issuer') + '</div>';
+  html += '<div class="inv-fiscal-party-name">' + esc(emisorName) + '</div>';
+  if (emisorNif) html += '<div class="inv-fiscal-party-detail"><span class="inv-fiscal-detail-label">NIF/CIF:</span> ' + esc(emisorNif) + '</div>';
+  if (emisorAddr) html += '<div class="inv-fiscal-party-detail">' + esc(emisorAddr) + '</div>';
+  if (emisorEmail) html += '<div class="inv-fiscal-party-detail">' + esc(emisorEmail) + '</div>';
+  if (emisorPhone) html += '<div class="inv-fiscal-party-detail">' + esc(emisorPhone) + '</div>';
+  if (!fiscal) html += '<div class="inv-fiscal-party-warn">&#9888; ' + t('inv.syncNoMatch') + '</div>';
+  html += '</div>';
+  // Receptor
+  html += '<div class="inv-fiscal-party">';
+  html += '<div class="inv-fiscal-party-label">' + t('inv.recipient') + '</div>';
+  html += '<div class="inv-fiscal-party-name">' + esc(receptorName) + '</div>';
+  if (receptorCif) html += '<div class="inv-fiscal-party-detail"><span class="inv-fiscal-detail-label">CIF:</span> ' + esc(receptorCif) + '</div>';
+  if (receptorAddr) html += '<div class="inv-fiscal-party-detail">' + esc(receptorAddr) + '</div>';
+  html += '</div>';
+  html += '</div>';
+  html += '</div>';
+
+  return html;
+}
+
+/**
+ * @description Genera factura: liquidación con cabecera fiscal.
+ */
+function handleGenerarFactura() {
+  var alojName = currentConsolAloj;
+  if (!alojName) { showToast(t('inv.noAloj'), 'warning'); return; }
+  if (!isInvoiceEnabled(alojName)) { showToast(t('inv.notEnabled'), 'warning'); return; }
+
+  // Build liquidation cards in document language
+  var result = _withLang(_docLang, buildPrintCards);
+  if (!result) return;
+
+  // Build period string in doc language
+  var periodStr = _withLang(_docLang, function() {
+    var ps = '';
+    try {
+      if (typeof _mpSelYears !== 'undefined' && _mpSelYears.size > 0) {
+        var yr = [..._mpSelYears].sort()[0];
+        if (typeof _mpSelMonths !== 'undefined' && _mpSelMonths.size >= 1) {
+          var ms = [..._mpSelMonths].sort(function(a,b){return a-b;});
+          ps = ms.map(function(m){return t('month.full.'+m);}).join(', ') + ' ' + yr;
+        } else { ps = '' + yr; }
+      }
+    } catch(e) {}
+    if (!ps) { var now = new Date(); ps = t('month.full.' + now.getMonth()) + ' ' + now.getFullYear(); }
+    return ps;
+  });
+
+  // Build fiscal header
+  var headerHtml = _withLang(_docLang, function() {
+    return buildInvoiceHeader(alojName, periodStr);
+  });
+
+  var previewZone = document.getElementById('preview-zone');
+  var printZone = document.getElementById('print-zone');
+  var actions = document.getElementById('consol-actions');
+
+  previewZone.innerHTML = '<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;text-align:center;">'
+    + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button></div>'
+    + headerHtml
+    + result.cardsHtml + result.summaryHtml
+    + '<div class="liq-actions no-print" style="margin-top:28px;justify-content:center;">'
+    + '<button class="btn btn-success" onclick="printFromPreview()">&#128424; ' + t('btn.print') + '</button>'
+    + '<button class="btn btn-outline" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button>'
+    + '</div>';
+
+  printZone.style.display = 'none';
+  printZone.classList.remove('print-target');
+  if (actions) actions.style.display = 'none';
+  previewZone.style.display = 'block';
+  previewZone.classList.add('print-target');
+  _previewActive = true;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ==============================================================================================================================
 //  PERSISTENCE: build/parse config rows for invoicing + Holded
 // ==============================================================================================================================
 

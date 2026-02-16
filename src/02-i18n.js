@@ -635,6 +635,16 @@ const I18N = {
   'inv.syncClear':      { es:'Desvincular', en:'Unlink', de:'Verkn\u00fcpfung l\u00f6sen' },
   'inv.syncNoMatch':    { es:'Sin contacto Holded vinculado', en:'No Holded contact linked', de:'Kein Holded-Kontakt verkn\u00fcpft' },
 
+  // Invoice generation (F3)
+  'inv.invoiceTitle':   { es:'FACTURA', en:'INVOICE', de:'RECHNUNG' },
+  'inv.invoiceNum':     { es:'N\u00ba Factura', en:'Invoice No.', de:'Rechnungsnr.' },
+  'inv.invoiceDate':    { es:'Fecha', en:'Date', de:'Datum' },
+  'inv.issuer':         { es:'EMISOR', en:'ISSUER', de:'AUSSTELLER' },
+  'inv.recipient':      { es:'DESTINATARIO', en:'RECIPIENT', de:'EMPF\u00c4NGER' },
+  'inv.noAloj':         { es:'No hay alojamiento seleccionado', en:'No property selected', de:'Keine Unterkunft ausgew\u00e4hlt' },
+  'inv.notEnabled':     { es:'Facturaci\u00f3n no activada para este alojamiento', en:'Invoicing not enabled for this property', de:'Rechnungsstellung f\u00fcr diese Unterkunft nicht aktiviert' },
+  'btn.generateInvoice':{ es:'Factura', en:'Invoice', de:'Rechnung' },
+
 };
 
 function t(key, ...args) {

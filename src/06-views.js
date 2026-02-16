@@ -882,7 +882,7 @@ ${_isSplit ? `<div class="cd-split-mini">
                 ? `<button class="cd-btn-generate" onclick="handleGenerar()">&#128424; ${t('btn.generate')}</button>
                    <button class="pdf-download-btn" onclick="handleDownloadPdf()">&#11123; ${t('btn.downloadPdf')}</button>
                    <button class="email-btn" onclick="handleEmailLiquidacion()">&#9993; ${t('btn.sendEmail')}</button>
-                   ${isInvoiceEnabled(a.name) ? '<button class="inv-btn-generate" onclick="handleGenerarFactura()">&#128196; ' + t('btn.generateInvoice') + '</button>' : ''}`
+                   ${isInvoiceEnabled(a.name) ? '<button class="inv-btn-generate" onclick="handleGenerarFactura(\'' + a.name.replace(/'/g, "\\'") + '\')">&#128196; ' + t('btn.generateInvoice') + '</button>' : ''}`
                 : `<button class="cd-btn-generate disabled">${t('btn.validateFirst')}</button>
                    <button class="pdf-download-btn disabled">&#11123; ${t('btn.downloadPdf')}</button>
                    <button class="email-btn disabled">&#9993; ${t('btn.sendEmail')}</button>`}

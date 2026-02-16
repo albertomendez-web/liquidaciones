@@ -28,6 +28,14 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.33.2',
+    date: '2026-02-17',
+    changes: [
+      'Fix bot\u00f3n Factura: currentConsolAloj era null al pulsar, ahora pasa alojName directo al onclick',
+      'Fix persistencia Holded: eliminada cach\u00e9 contactos gigante, mappings persisten correctamente',
+    ]
+  },
+  {
     version: '2.33.1',
     date: '2026-02-17',
     changes: [

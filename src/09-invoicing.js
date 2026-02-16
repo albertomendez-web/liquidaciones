@@ -741,8 +741,9 @@ function buildInvoiceHeader(alojName, periodStr) {
 /**
  * @description Genera factura: liquidación con cabecera fiscal.
  */
-function handleGenerarFactura() {
-  var alojName = currentConsolAloj;
+function handleGenerarFactura(alojNameParam) {
+  var alojName = alojNameParam || currentConsolAloj;
+  if (alojName) currentConsolAloj = alojName;
   if (!alojName) { showToast(t('inv.noAloj'), 'warning'); return; }
   if (!isInvoiceEnabled(alojName)) { showToast(t('inv.notEnabled'), 'warning'); return; }
 

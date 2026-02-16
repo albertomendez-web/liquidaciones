@@ -206,7 +206,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .modal-tab:hover { color: #4f8cff; }
 .modal-tab.active { color: #4f8cff; border-bottom-color: #4f8cff; }
 .modal-tab.active-purple { color: #7c3aed !important; border-bottom-color: #7c3aed !important; }
-/* 80/20 GTC Split Section Ã¢â‚¬â€ v2.3.1 original style */
+/* 80/20 GTC Split Section — v2.3.1 original style */
 .gtc-split-section { background: linear-gradient(135deg,#faf5ff,#f3e8ff); border: 1.5px solid #d8b4fe; border-radius: 10px; margin: 8px 0 0; padding: 14px 16px; }
 .gtc-split-title { font-size: 12px; font-weight: 700; color: #7c3aed; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
 .gtc-split-desc { font-size: 11px; color: #6b7280; margin-bottom: 12px; line-height: 1.5; }
@@ -478,10 +478,10 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .print-target { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none !important; border-radius: 0 !important; }
   .sidebar, .btn, .no-print, .liq-actions, .gear-btn, .email-btn, .pdf-download-btn { display: none !important; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Containers ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Containers --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .consol-container, .liq-container { max-width: 100% !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; border: none !important; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Consolidated header (CRITICAL: overflow + z-index reset) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Consolidated header (CRITICAL: overflow + z-index reset) --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .consol-header { overflow: visible !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .consol-header::before { display: none !important; }
   .consol-header .header-top { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; padding: 14px 20px 6px !important; position: static !important; z-index: auto !important; }
@@ -497,7 +497,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .consol-meta-label { font-size: 7px !important; margin-bottom: 2px !important; }
   .consol-meta-value { font-size: 11px !important; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Individual header ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Individual header --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .liq-header { overflow: visible !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-header::before { display: none !important; }
   .liq-header::after { display: none !important; }
@@ -514,24 +514,24 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .liq-meta-label { font-size: 7px !important; margin-bottom: 2px !important; }
   .liq-meta-value { font-size: 11px !important; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Badge ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Badge --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .badge-liq { font-size: 8px !important; padding: 3px 8px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Consolidated body & table ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Consolidated body & table --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .consol-body { box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; }
   .table-wrap { overflow: visible !important; }
   table { page-break-inside: auto; }
   thead { display: table-header-group; }
   tr { page-break-inside: avoid; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Mini table ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â compact for landscape A4 ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Mini table --Â¬Ã‚Â compact for landscape A4 --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .consol-mini-table { table-layout: fixed !important; width: 100% !important; }
   .consol-mini-table th { padding: 4px 5px !important; font-size: 8px !important; }
   .consol-mini-table td { padding: 4px 5px !important; font-size: 9px !important; }
   .consol-mini-table .ellip { max-width: 0; }
   .badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 7px !important; padding: 1px 4px !important; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Summary 2-column ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Summary 2-column --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .cd-summary-section { display: grid !important; grid-template-columns: 1.2fr 0.8fr !important; page-break-inside: avoid !important; break-inside: avoid !important; max-width: 100% !important; }
   .cd-summary-left { padding: 14px 18px !important; }
   .cd-summary-right { padding: 14px 18px !important; display: flex !important; flex-direction: column !important; }
@@ -548,7 +548,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .consol-split-bar { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .consol-split-bar-gtc, .consol-split-bar-owner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Quick stats (right column) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Quick stats (right column) --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .cd-quick-stats { gap: 6px !important; margin-bottom: 10px !important; }
   .cd-qs-item { padding: 6px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-qs-label { font-size: 7px !important; }
@@ -556,20 +556,20 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .cd-tb-row { font-size: 10px !important; padding: 2px 0 !important; }
   .cd-split-mini { padding: 4px 8px !important; margin: 4px 0 !important; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Total hero ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Total hero --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .cd-total-hero { padding: 12px !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-total-hero-label { font-size: 8px !important; }
   .cd-total-hero-amount { font-size: 22px !important; }
   .cd-btn-generate { display: none !important; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Total bar (full-width) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Total bar (full-width) --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .cd-total-bar { padding: 10px 16px !important; border-radius: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-total-bar::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .cd-total-bar-label { font-size: 8px !important; }
   .cd-total-bar-label strong { font-size: 14px !important; }
   .cd-total-bar-amount { font-size: 22px !important; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Individual liquidacion rows ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Individual liquidacion rows --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .liq-sec { padding: 10px 20px !important; }
   .liq-row { padding: 4px 0 !important; font-size: 11px !important; }
   .liq-row.bold { margin: 0 -20px !important; padding: 6px 20px !important; font-size: 12px !important; }
@@ -587,7 +587,7 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .liq-sw { display: none !important; }
   .liq-sel { font-size: 10px !important; }
 
-  /* ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ Print cards ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ */
+  /* --Å¡Ã‚Â¬--Å¡Ã‚Â¬ Print cards --Å¡Ã‚Â¬--Å¡Ã‚Â¬ */
   .print-card { page-break-inside: avoid !important; break-inside: avoid !important; margin-bottom: 12px !important; }
   .print-summary { page-break-inside: avoid !important; break-inside: avoid !important; margin-top: 12px !important; }
   .consol-summary-block { page-break-inside: avoid !important; break-inside: avoid !important; }

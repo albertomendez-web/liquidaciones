@@ -156,30 +156,30 @@ function _classifyQuery(text) {
   cats.add('GLOBAL');
 
   var patterns = {
-    FINANCIAL: /comisi[oÃ³]n|irpf|retenci[oÃ³]n|limpieza|amenities|pasarela|desglose|coste|gasto|margen|beneficio|ingres/i,
+    FINANCIAL: /comisi[o\u00f3]n|irpf|retenci[o\u00f3]n|limpieza|amenities|pasarela|desglose|coste|gasto|margen|beneficio|ingres/i,
     PLATFORM:  /plataforma|booking|airbnb|vrbo|canal|venta|stripe/i,
     PROPERTY:  /alojamiento|piso|apartamento|propiedad|vivienda|top.*(aloj|piso)|ranking/i,
-    OWNER:     /propietario|due[Ã±n]o|liquidaci[oÃ³]n\s+(de|para|del)|qui[eÃ©]n|owner/i,
-    TIME:      /mes(es)?|mensual|enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|trimestre|semestre|estacion|temporada|verano|invierno|a[Ã±n]o|anual|201|202|comparar?|vs|versus|evolu|creci|tendencia/i,
-    AGENT:     /agente|atendido|gestion[oÃ³]?|qui[eÃ©]n (atiende|gestiona|lleva)/i,
-    MARKETING: /marketing|origen|captaci|campa[Ã±n]a|fuente|canal.*(market|captac)/i,
-    GTC_SPLIT: /80.?20|m[iÃ­]nimo.*garant|acuerdo|split|especial/i,
+    OWNER:     /propietario|due[\u00f1n]o|liquidaci[o\u00f3]n\s+(de|para|del)|qui[e\u00e9]n|owner/i,
+    TIME:      /mes(es)?|mensual|enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|trimestre|semestre|estacion|temporada|verano|invierno|a[\u00f1n]o|anual|201|202|comparar?|vs|versus|evolu|creci|tendencia/i,
+    AGENT:     /agente|atendido|gestion[o\u00f3]?|qui[e\u00e9]n (atiende|gestiona|lleva)/i,
+    MARKETING: /marketing|origen|captaci|campa[\u00f1n]a|fuente|canal.*(market|captac)/i,
+    GTC_SPLIT: /80.?20|m[i\u00ed]nimo.*garant|acuerdo|split|especial/i,
     MAINT:     /mantenimiento|extra(ordinari)?|cuota|gasto.*fijo/i,
     VALIDATE:  /validar?|validaci|pendiente|estado|revisar/i,
-    DETAIL:    /detalle|lista|reserva.*(de|del|para)|cliente|localizador|busca|espec[iÃ­]fic/i,
+    DETAIL:    /detalle|lista|reserva.*(de|del|para)|cliente|localizador|busca|espec[i\u00ed]fic/i,
     SUMMARY:   /resumen|ejecutivo|general|total|global|overview|todo|completo/i,
-    KPI:       /kpi|indicador|adr|revpar|ocupaci|media|promedio|ratio|eficiencia|rendimiento|m[eÃ©]trica|estad[iÃ­]stic/i,
-    YOY:       /interanual|yoy|year.over|a[Ã±n]o.a.a[Ã±n]o|compar.*(a[Ã±n]o|anual|201|202)|creci.*anual|vs\s*20[12]/i,
+    KPI:       /kpi|indicador|adr|revpar|ocupaci|media|promedio|ratio|eficiencia|rendimiento|m[e\u00e9]trica|estad[i\u00ed]stic/i,
+    YOY:       /interanual|yoy|year.over|a[\u00f1n]o.a.a[\u00f1n]o|compar.*(a[\u00f1n]o|anual|201|202)|creci.*anual|vs\s*20[12]/i,
     SEASON:    /estacion|temporada|verano|invierno|alta|baja|trimestre|q[1234]|t[1234]|pico|valle/i,
     CMP_OWNER: /compar.*propietario|propietario.*vs|versus.*propietario|pisos\s+de\s+\w+\s+(vs|contra|frente|compar)/i,
-    PREDICT:   /predicci[oÃ³]n|proyecci[oÃ³]n|previsi[oÃ³]n|estimar?|pronostic|futuro|pr[oÃ³]ximo|siguiente|forecast/i,
+    PREDICT:   /predicci[o\u00f3]n|proyecci[o\u00f3]n|previsi[o\u00f3]n|estimar?|pronostic|futuro|pr[o\u00f3]ximo|siguiente|forecast/i,
     EXPORT:    /export|excel|csv|descargar?|generar?.*(tabla|archivo|fichero)|guardar.*(tabla|datos)/i,
-    DUPCHECK:  /duplicad|sospech|an[oÃ³]mal|raro|extra[Ã±n]|repetid|error|inconsist/i,
+    DUPCHECK:  /duplicad|sospech|an[o\u00f3]mal|raro|extra[\u00f1n]|repetid|error|inconsist/i,
     SEGMENT:   /segmento|tipo.*(estancia|cliente|reserva)|escapada|corta|larga|media.*(estancia|duraci)|clasificar?/i,
-    HEATMAP:   /heatmap|mapa.*calor|calendario|ocupaci[oÃ³]n.*(mes|piso|visual)|vista.*(anual|mensual|calend)|parrilla/i,
-    LEADTIME:  /antelaci[oÃ³]n|lead.?time|anticipo|d[iÃ­]as.*antes|reserv.*(anticip|antelac|previo)|cuando.*reserv/i,
-    BRIEFING:  /briefing|resumen.*r[aÃ¡]pido|3.*frase|estado.*actual|lo m[aÃ¡]s.*importante|titulares|flash|quick/i,
-    WHATIF:    /qu[eÃ©].*pasar|simular?|simulaci|what.?if|hipot[eÃ©]tic|escenario|si.*subir|si.*bajar|si.*cambiar|ahorrar[iÃ­]amos/i,
+    HEATMAP:   /heatmap|mapa.*calor|calendario|ocupaci[o\u00f3]n.*(mes|piso|visual)|vista.*(anual|mensual|calend)|parrilla/i,
+    LEADTIME:  /antelaci[o\u00f3]n|lead.?time|anticipo|d[i\u00ed]as.*antes|reserv.*(anticip|antelac|previo)|cuando.*reserv/i,
+    BRIEFING:  /briefing|resumen.*r[a\u00e1]pido|3.*frase|estado.*actual|lo m[a\u00e1]s.*importante|titulares|flash|quick/i,
+    WHATIF:    /qu[e\u00e9].*pasar|simular?|simulaci|what.?if|hipot[e\u00e9]tic|escenario|si.*subir|si.*bajar|si.*cambiar|ahorrar[i\u00ed]amos/i,
   };
 
   Object.keys(patterns).forEach(function(cat) {
@@ -235,10 +235,10 @@ function buildAIContext(cats) {
 
   // Always compute global
   var byAloj = {}, byPlat = {}, byMes = {}, byYear = {}, byAgent = {}, byMarketing = {};
-  var byPlatQ = {}; // plataforma Ã— trimestre (seasonality)
-  var byAlojYear = {}; // alojamiento Ã— a\u00F1o (YoY)
+  var byPlatQ = {}; // plataforma x trimestre (seasonality)
+  var byAlojYear = {}; // alojamiento x a\u00F1o (YoY)
   var bySegment = {corta:0, media:0, larga:0, cortaN:0, mediaN:0, largaN:0, cortaI:0, mediaI:0, largaI:0}; // Phase 5
-  var byAlojMes = {}; // Phase 5: heatmap alojÃ—mes
+  var byAlojMes = {}; // Phase 5: heatmap alojxmes
   var leadTimes = []; // Phase 5: lead time data
   var dupCandidates = []; // Phase 5: duplicate candidates
   var G = {n:0, noch:0, imp:0, base:0, cPlat:0, cGTC:0, cPas:0, limp:0, amen:0, ce:0, ce2:0, irpf:0, liq:0, val:0, pend:0};
@@ -306,7 +306,7 @@ function buildAIContext(cats) {
       else if (n <= 7) { bySegment.media++; bySegment.mediaN += n; bySegment.mediaI += c.total; }
       else { bySegment.larga++; bySegment.largaN += n; bySegment.largaI += c.total; }
     }
-    // Phase 5: Heatmap alojÃ—mes
+    // Phase 5: Heatmap alojxmes
     if (needHeatmap && fE) {
       var hmKey = (r.alojamiento || 'Sin') + '|' + (fE.getMonth()+1).toString().padStart(2,'0');
       if (!byAlojMes[hmKey]) byAlojMes[hmKey] = {n:0, noch:0};
@@ -573,7 +573,7 @@ function buildAIContext(cats) {
     }
   }
 
-  // COMPARACIÃ“N DE PROPIETARIOS (detalle por owner con mÃ©tricas por piso)
+  // COMPARACI\u00d3N DE PROPIETARIOS (detalle por owner con m\u00e9tricas por piso)
   if (needCmpOwner && _propietariosMap && Object.keys(_propietariosMap).length > 0) {
     var cmpOwners = {};
     allReservas.forEach(function(r) {

@@ -6,19 +6,23 @@
  * Uso: node build.js
  * 
  * Estructura:
- *   src/head.html          — DOCTYPE, meta, fonts, external scripts
- *   src/styles.css         — Todo el CSS (<style>...</style>)
- *   src/body.html          — HTML body + apertura <script>
- *   src/00-versioning.js   — APP_VERSION, APP_BUILD, CHANGELOG
- *   src/01-utils.js        — esc, fmt, toast, copyVal, SafeStorage
- *   src/02-i18n.js         — I18N data + t() function
- *   src/03-config.js       — Constants, state, DOMContentLoaded init
- *   src/04-google.js       — OAuth, Picker, Sheets read/write, persistence
- *   src/05-tables.js       — Main table rendering, stats, pagination
- *   src/06-views.js        — viewDetail, consolDetail, monthly deductions
- *   src/07-generate.js     — handleGenerar, print cards, PDF
- *   src/08-ai.js           — AI assistant panel
- *   src/tail.html          — </script>, email-module loader, init, closing
+ *   src/head.html            — DOCTYPE, meta, fonts, external scripts
+ *   src/styles.css           — Todo el CSS (<style>...</style>)
+ *   src/body.html            — HTML body + apertura <script>
+ *   src/00-versioning.js     — APP_VERSION, APP_BUILD, CHANGELOG
+ *   src/01-utils.js          — esc, fmt, toast, copyVal, SafeStorage, debounce, safeGet
+ *   src/02-i18n.js           — I18N data + t() function
+ *   src/03-config.js         — Constants, state, DOMContentLoaded init
+ *   src/04-google.js         — OAuth, Picker, Sheets read/load, sheet history
+ *   src/04b-persistence.js   — Config tab persistence, propietarios, write-back
+ *   src/04c-sync.js          — Multi-user sync polling system
+ *   src/04d-core.js          — GTC config, cache, filters, calcLiquidacion, data parsing
+ *   src/04e-navigation.js    — showScreen, columns, sorting, stats, renderTable
+ *   src/05-tables.js         — CE system, table rendering details
+ *   src/06-views.js          — viewDetail, consolDetail, monthly deductions
+ *   src/07-generate.js       — handleGenerar, print cards, PDF
+ *   src/08-ai.js             — AI assistant panel
+ *   src/tail.html            — </script>, email-module loader, init, closing
  */
 
 const fs = require('fs');
@@ -37,6 +41,10 @@ const PARTS = [
   '02-i18n.js',
   '03-config.js',
   '04-google.js',
+  '04b-persistence.js',
+  '04c-sync.js',
+  '04d-core.js',
+  '04e-navigation.js',
   '05-tables.js',
   '06-views.js',
   '07-generate.js',
@@ -89,6 +97,6 @@ console.log('\nMódulos ensamblados:');
 for (const file of PARTS) {
   const fp = path.join(SRC, file);
   const lc = fs.readFileSync(fp, 'utf8').split('\n').length;
-  const pad = file.padEnd(22);
+  const pad = file.padEnd(25);
   console.log(`  ${pad} ${String(lc).padStart(5)} líneas`);
 }

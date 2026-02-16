@@ -335,7 +335,7 @@ function _ceRefreshPanel(type, idx, view) {
 function _refreshCEPanel(idx, view)  { _ceRefreshPanel('ce', idx, view); }
 function _refreshCE2Panel(idx, view) { _ceRefreshPanel('ce2', idx, view); }
 
-// Keyboard handler (Enter: label→amt, amt→new row; Escape: remove if empty)
+// Keyboard handler (Enter: labelâ†’amt, amtâ†’new row; Escape: remove if empty)
 function _ceKeyHandler(e, type, idx, view, isAmt) {
   if (e.key !== 'Enter') return;
   e.preventDefault();
@@ -499,18 +499,18 @@ document.addEventListener('input', function(e) {
   }, 400);
 });
 
-// === KEYBOARD: Enter labelÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢amt, Enter amtÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢new row, EscapeÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢remove if empty ===
+// === KEYBOARD: Enter labelÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢amt, Enter amtÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢new row, EscapeÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢remove if empty ===
 function _cexKey(e, alojName, isAmt) {
   if (e.key === 'Enter') {
     e.preventDefault();
     var row = e.target.closest('.cex-item-row');
     if (!row) return;
     if (!isAmt) {
-      // Enter on label ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ focus amount
+      // Enter on label ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ focus amount
       var amt = row.querySelector('.cex-inp-amt');
       if (amt) { amt.focus(); amt.select(); }
     } else {
-      // Enter on amount ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ trigger change, then add new row
+      // Enter on amount ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ trigger change, then add new row
       e.target.dispatchEvent(new Event('change', {bubbles:true}));
       addConsolExtra(alojName);
     }
@@ -531,16 +531,16 @@ function _cexKey(e, alojName, isAmt) {
   }
 }
 
-// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ [M14-PATCH] Patch ligero consolidado (sin reconstruir DOM) ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+// ----- [M14-PATCH] Patch ligero consolidado (sin reconstruir DOM) ------------------------
 
 /**
- * @description Sistema de actualizaciÃƒÆ’Ã‚Â³n ligera para la vista consolidada.
+ * @description Sistema de actualizaci\u00f3n ligera para la vista consolidada.
  * En vez de reconstruir todo el DOM con viewConsolDetail(), estas funciones
  * parchean solo las celdas/secciones que han cambiado:
- *   - _patchConsolRowCells() ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ actualiza celdas numÃƒÆ’Ã‚Â©ricas de una fila
- *   - _patchConsolFooterRow() ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ actualiza totales del tfoot
- *   - _buildConsolSummaryInner() ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ regenera HTML del resumen financiero
- *   - _getConsolCalcsAndSums() ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ helper de cÃƒÆ’Ã‚Â¡lculo reutilizable
+ *   - _patchConsolRowCells()  ->  actualiza celdas num\u00e9ricas de una fila
+ *   - _patchConsolFooterRow()  ->  actualiza totales del tfoot
+ *   - _buildConsolSummaryInner()  ->  regenera HTML del resumen financiero
+ *   - _getConsolCalcsAndSums()  ->  helper de c\u00e1lculo reutilizable
  */
 
 // === LIGHTWEIGHT CONSOL PATCH (no DOM rebuild) ===
@@ -709,13 +709,13 @@ function _patchConsolLightweight(idx, oldC, newC) {
   if (summaryBlock) summaryBlock.innerHTML = _buildConsolSummaryInner(data.calcs, data.sums, currentConsolAloj);
 }
 
-// ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ [M12-KEYBOARD] Atajos de teclado para CE/CE2 ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
+// ----- [M12-KEYBOARD] Atajos de teclado para CE/CE2 ---------------------------------------------------
 /**
  * @description Manejo de Enter/Escape en campos CE/CE2:
- *   - Enter en nombre ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ mueve foco a importe
- *   - Enter en importe ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ crea nueva fila
- *   - Escape en fila vacÃƒÆ’Ã‚Â­a ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ la elimina
- * PatrÃƒÆ’Ã‚Â³n zero-jump: la fila se inserta PRIMERO, los nÃƒÆ’Ã‚Âºmeros se actualizan
+ *   - Enter en nombre  ->  mueve foco a importe
+ *   - Enter en importe  ->  crea nueva fila
+ *   - Escape en fila vac\u00eda  ->  la elimina
+ * Patr\u00f3n zero-jump: la fila se inserta PRIMERO, los n\u00fameros se actualizan
  * en el siguiente frame con requestAnimationFrame para evitar layout thrashing.
  */
 
@@ -746,8 +746,8 @@ function _patchMainRowCells(idx, oldC, newC) {
   }
 }
 /**
- * @description Render completo de la tabla: filtrado + stats + cabecera + filas + footer + paginaciÃƒÆ’Ã‚Â³n.
- * Se llama tras cambios en filtros, datos o navegaciÃƒÆ’Ã‚Â³n.
+ * @description Render completo de la tabla: filtrado + stats + cabecera + filas + footer + paginaci\u00f3n.
+ * Se llama tras cambios en filtros, datos o navegaci\u00f3n.
  * @private
  */
 function _renderFull() {
@@ -948,7 +948,7 @@ function _updateFooter(count, tNoches, tTotal, tBase, tComPlat, tComGTC, tLimp, 
 /**
  * @description Cambia un ajuste individual de una reserva y actualiza la UI.
  * Usa delta-update: actualiza solo la fila afectada sin re-render completo.
- * @param {number} i - ÃƒÆ’Ã‚Ândice de la reserva
+ * @param {number} i - ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Ândice de la reserva
  * @param {string} k - Clave del setting ('comPlataforma', 'comGTC', etc.)
  * @param {*} v - Nuevo valor
  */
@@ -1040,12 +1040,12 @@ function _getOrComputeStats(fil) {
 // \u2500\u2500\u2500 IN-PLACE ROW UPDATE O(1) \u2500\u2500\u2500
 /**
  * @description Actualiza una sola fila de la tabla sin reconstruir todo el DOM.
- * TÃƒÆ’Ã‚Â©cnica delta-update: compara cÃƒÆ’Ã‚Â¡lculos antiguos vs nuevos y actualiza solo
- * las celdas numÃƒÆ’Ã‚Â©ricas que han cambiado, mÃƒÆ’Ã‚Â¡s el footer incrementalmente.
- * @param {number} idx - ÃƒÆ’Ã‚Ândice de la reserva
- * @param {Object} oldC - CÃƒÆ’Ã‚Â¡lculos anteriores (de calcLiquidacion)
- * @param {Object} newC - CÃƒÆ’Ã‚Â¡lculos nuevos
- * @param {boolean} validationFlipped - Si cambiÃƒÆ’Ã‚Â³ el estado de validaciÃƒÆ’Ã‚Â³n
+ * T\u00e9cnica delta-update: compara c\u00e1lculos antiguos vs nuevos y actualiza solo
+ * las celdas num\u00e9ricas que han cambiado, m\u00e1s el footer incrementalmente.
+ * @param {number} idx - ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Ândice de la reserva
+ * @param {Object} oldC - C\u00e1lculos anteriores (de calcLiquidacion)
+ * @param {Object} newC - C\u00e1lculos nuevos
+ * @param {boolean} validationFlipped - Si cambi\u00f3 el estado de validaci\u00f3n
  * @private
  */
 function _patchSingleRow(idx, oldC, newC, validationFlipped) {
@@ -1155,13 +1155,13 @@ function _renderStatsFromCache(fil, st) {
 }
 
 let highlightIdx = null;
-// ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
-//  [M13] DETAIL_VIEW ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Vista de detalle individual de una reserva
-// ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
+// ==============================================================================================================================
+//  [M13] DETAIL_VIEW ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Vista de detalle individual de una reserva
+// ==============================================================================================================================
 
 /**
- * @description Navega a una reserva especÃƒÆ’Ã‚Â­fica: cambia de pÃƒÆ’Ã‚Â¡gina si necesario y la resalta.
- * @param {number} idx - ÃƒÆ’Ã‚Ândice de la reserva en allReservas[]
+ * @description Navega a una reserva espec\u00edfica: cambia de p\u00e1gina si necesario y la resalta.
+ * @param {number} idx - ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Ândice de la reserva en allReservas[]
  */
 function goToReserva(idx) {
   // Reset filters so the reservation is visible
@@ -1196,6 +1196,6 @@ function goToReserva(idx) {
 // \\u2500\\u2500\\u2500 INDIVIDUAL DETAIL \\u2500\\u2500\\u2500
 /**
  * @description Renderiza la vista de detalle de una reserva individual.
- * Muestra desglose completo de la liquidaciÃƒÆ’Ã‚Â³n con controles editables.
- * @param {number} idx - ÃƒÆ’Ã‚Ândice de la reserva en allReservas[]
+ * Muestra desglose completo de la liquidaci\u00f3n con controles editables.
+ * @param {number} idx - ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Ândice de la reserva en allReservas[]
  */

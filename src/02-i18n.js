@@ -1,17 +1,17 @@
 const I18N = {
-  // ——— Navigation ———
+  // â€”â€”â€” Navigation â€”â€”â€”
   'nav.upload':        { es:'Cargar Fichero', en:'Load File', de:'Datei laden' },
   'nav.list':          { es:'Por Reserva', en:'By Reservation', de:'Nach Buchung' },
   'nav.detail':        { es:'Liquidaci\u00f3n Reserva', en:'Reservation Settlement', de:'Buchungsabrechnung' },
   'nav.consol':        { es:'Por Alojamiento', en:'By Property', de:'Nach Unterkunft' },
   'nav.consoldetail':  { es:'Liquidaci\u00f3n Alojamiento', en:'Property Settlement', de:'Unterkunftsabrechnung' },
 
-  // ——— Logo / Title ———
+  // â€”â€”â€” Logo / Title â€”â€”â€”
   'app.title':         { es:'Liquidaciones', en:'Settlements', de:'Abrechnungen' },
   'app.subtitle':      { es:'Gesti\u00f3n de Reservas', en:'Reservation Management', de:'Buchungsverwaltung' },
   'app.doctitle':      { es:'Liquidaciones \u2014 Gesti\u00f3n de Reservas', en:'Settlements \u2014 Reservation Management', de:'Abrechnungen \u2014 Buchungsverwaltung' },
 
-  // ——— Upload Screen ———
+  // â€”â€”â€” Upload Screen â€”â€”â€”
   'upload.title':      { es:'Cargar Reservas', en:'Load Reservations', de:'Buchungen laden' },
   'upload.desc':       { es:'Sube un fichero Excel o conecta con Google Sheets para cargar las reservas', en:'Upload an Excel file or connect to Google Sheets to load reservations', de:'Laden Sie eine Excel-Datei hoch oder verbinden Sie sich mit Google Sheets' },
   'upload.drop':       { es:'Arrastra tu fichero aqu\u00ed', en:'Drag your file here', de:'Datei hierher ziehen' },
@@ -37,15 +37,15 @@ const I18N = {
   'upload.connectedGoogle': { es:'Conectado con Google', en:'Connected with Google', de:'Mit Google verbunden' },
   'upload.googleConnected': { es:'Google conectado', en:'Google connected', de:'Google verbunden' },
 
-  // ——— List Screen ———
+  // â€”â€”â€” List Screen â€”â€”â€”
   'list.title':        { es:'Por Reserva', en:'By Reservation', de:'Nach Buchung' },
   'list.desc':         { es:'Revisa, ajusta y valida cada reserva antes de generar la liquidaci\u00f3n definitiva', en:'Review, adjust and validate each reservation before generating the final settlement', de:'\u00dcberpr\u00fcfen, anpassen und validieren Sie jede Buchung vor der endg\u00fcltigen Abrechnung' },
 
-  // ——— Consolidated Screen ———
+  // â€”â€”â€” Consolidated Screen â€”â€”â€”
   'consol.title':      { es:'Por Alojamiento', en:'By Property', de:'Nach Unterkunft' },
   'consol.desc':       { es:'Consolida las reservas validadas de cada alojamiento para generar la liquidaci\u00f3n mensual', en:'Consolidate validated reservations per property to generate the monthly settlement', de:'Konsolidieren Sie validierte Buchungen pro Unterkunft f\u00fcr die monatliche Abrechnung' },
 
-  // ——— Filters / Labels ———
+  // â€”â€”â€” Filters / Labels â€”â€”â€”
   'filter.filters':    { es:'Filtros', en:'Filters', de:'Filter' },
   'filter.allPlatforms': { es:'Todas las plataformas', en:'All platforms', de:'Alle Plattformen' },
   'filter.allProperties': { es:'Todos los alojamientos', en:'All properties', de:'Alle Unterk\u00fcnfte' },
@@ -57,7 +57,7 @@ const I18N = {
   'filter.originalOrder': { es:'Orden original', en:'Original order', de:'Urspr\u00fcngliche Reihenfolge' },
   'filter.columns':    { es:'Columnas', en:'Columns', de:'Spalten' },
 
-  // ——— Column Labels ———
+  // â€”â€”â€” Column Labels â€”â€”â€”
   'col.estado':        { es:'Estado', en:'Status', de:'Status' },
   'col.idReserva':     { es:'ID<br>Reserva', en:'Reservation<br>ID', de:'Buchungs-<br>ID' },
   'col.localizador':   { es:'Localizador', en:'Locator', de:'Buchungscode' },
@@ -87,12 +87,12 @@ const I18N = {
   'col.totalLiquidar': { es:'A<br>Liquidar', en:'To<br>Settle', de:'Zur<br>Abrechnung' },
   'col.observacion':   { es:'Observaci\u00f3n', en:'Notes', de:'Bemerkungen' },
 
-  // ——— Status Badges ———
+  // â€”â€”â€” Status Badges â€”â€”â€”
   'status.validated':  { es:'Validada', en:'Validated', de:'Validiert' },
   'status.pending':    { es:'Pendiente', en:'Pending', de:'Ausstehend' },
   'status.ready':      { es:'Lista', en:'Ready', de:'Bereit' },
 
-  // ——— Stats Cards ———
+  // â€”â€”â€” Stats Cards â€”â€”â€”
   'stats.reservations': { es:'Reservas', en:'Reservations', de:'Buchungen' },
   'stats.totalReservations': { es:'Total Reservas', en:'Total Reservations', de:'Gesamt Buchungen' },
   'stats.totalToSettle': { es:'Total a Liquidar', en:'Total to Settle', de:'Gesamt zur Abrechnung' },
@@ -103,7 +103,7 @@ const I18N = {
   'stats.nights':      { es:'Noches', en:'Nights', de:'N\u00e4chte' },
   'stats.billing':     { es:'Facturaci\u00f3n', en:'Billing', de:'Umsatz' },
 
-  // ——— Buttons / Actions ———
+  // â€”â€”â€” Buttons / Actions â€”â€”â€”
   'btn.validate':      { es:'Validar', en:'Validate', de:'Validieren' },
   'btn.unvalidate':    { es:'Desvalidar', en:'Unvalidate', de:'Zur\u00fccksetzen' },
   'btn.print':         { es:'Imprimir', en:'Print', de:'Drucken' },
@@ -115,7 +115,7 @@ const I18N = {
   'btn.downloadPdf':   { es:'Descargar PDF', en:'Download PDF', de:'PDF herunterladen' },
   'btn.sendEmail':     { es:'Enviar por Email', en:'Send by Email', de:'Per E-Mail senden' },
 
-  // ——— Liquidation Detail Labels ———
+  // â€”â€”â€” Liquidation Detail Labels â€”â€”â€”
   'liq.reservation':   { es:'Liquidaci\u00f3n Reserva', en:'Reservation Settlement', de:'Buchungsabrechnung' },
   'liq.monthlyConsol': { es:'Liquidaci\u00f3n Mensual Consolidada', en:'Monthly Consolidated Settlement', de:'Monatliche konsolidierte Abrechnung' },
   'liq.totalVAT':      { es:'Total Reserva (IVA incluido)', en:'Total Reservation (VAT included)', de:'Gesamt Buchung (MwSt. inkl.)' },
@@ -131,7 +131,7 @@ const I18N = {
   'liq.specialConcepts': { es:'Conceptos especiales (sin IVA)', en:'Special Concepts (excl. VAT)', de:'Sonderposten (ohne MwSt.)' },
   'liq.noName':        { es:'Sin nombre', en:'No name', de:'Ohne Namen' },
 
-  // ——— Consolidated Labels ———
+  // â€”â€”â€” Consolidated Labels â€”â€”â€”
   'consol.summary':    { es:'Resumen consolidado', en:'Consolidated Summary', de:'Konsolidierte Zusammenfassung' },
   'consol.quickSummary': { es:'Resumen R\u00e1pido', en:'Quick Summary', de:'Kurz\u00fcbersicht' },
   'consol.totalReservasVAT': { es:'Total Reservas (IVA incluido)', en:'Total Reservations (VAT included)', de:'Gesamt Buchungen (MwSt. inkl.)' },
@@ -160,7 +160,7 @@ const I18N = {
   'consol.ownerReceives': { es:'Propietario recibe', en:'Owner receives', de:'Eigent\u00fcmer erh\u00e4lt' },
   'consol.toSettleOwner': { es:'Total a Liquidar \u2014 Propietario', en:'Total to Settle \u2014 Owner', de:'Gesamt zur Abrechnung \u2014 Eigent\u00fcmer' },
 
-  // ——— Config Modal ———
+  // â€”â€”â€” Config Modal â€”â€”â€”
   'config.title':      { es:'Configurar Valores', en:'Configure Values', de:'Werte konfigurieren' },
   'config.salesChannel': { es:'Canal de Venta', en:'Sales Channel', de:'Vertriebskanal' },
   'config.gtcService': { es:'Servicio GTC / Limpieza / Amenities / Mant.', en:'GTC Service / Cleaning / Amenities / Maint.', de:'GTC Service / Reinigung / Ausstattung / Wartung' },
@@ -168,7 +168,7 @@ const I18N = {
   'config.taxes':      { es:'Impuestos', en:'Taxes', de:'Steuern' },
   'config.agreement8020': { es:'Acuerdo 80/20', en:'80/20 Agreement', de:'80/20 Vereinbarung' },
 
-  // ——— Sort/Status Options ———
+  // â€”â€”â€” Sort/Status Options â€”â€”â€”
   'sort.original':     { es:'Orden original', en:'Original order', de:'Urspr\u00fcngliche Reihenfolge' },
   'sort.status':       { es:'Estado', en:'Status', de:'Status' },
   'sort.idReserva':    { es:'ID Reserva', en:'Reservation ID', de:'Buchungs-ID' },
@@ -205,7 +205,7 @@ const I18N = {
   'consol.notValidated': { es:'No Validadas', en:'Not Validated', de:'Nicht validiert' },
   'consol.validatedTab': { es:'Validadas', en:'Validated', de:'Validiert' },
 
-  // ——— Month names ———
+  // â€”â€”â€” Month names â€”â€”â€”
   'month.short.0': { es:'Ene', en:'Jan', de:'Jan' },
   'month.short.1': { es:'Feb', en:'Feb', de:'Feb' },
   'month.short.2': { es:'Mar', en:'Mar', de:'M\u00e4r' },
@@ -231,15 +231,15 @@ const I18N = {
   'month.full.10': { es:'Noviembre', en:'November', de:'November' },
   'month.full.11': { es:'Diciembre', en:'December', de:'Dezember' },
 
-  // ——— Sync ———
+  // â€”â€”â€” Sync â€”â€”â€”
   'sync.synced':       { es:'Sincronizado', en:'Synced', de:'Synchronisiert' },
   'sync.syncing':      { es:'Sincronizando...', en:'Syncing...', de:'Synchronisierung...' },
 
-  // ——— Changelog / Version ———
+  // â€”â€”â€” Changelog / Version â€”â€”â€”
   'changelog.title':   { es:'Historial de versiones', en:'Version history', de:'Versionshistorie' },
   'changelog.link':    { es:'Historial de cambios', en:'Changelog', de:'\u00c4nderungsprotokoll' },
 
-  // ——— AI Assistant ———
+  // â€”â€”â€” AI Assistant â€”â€”â€”
   'ai.title':          { es:'Asistente Hist\u00f3rico Reservas', en:'Reservations History Assistant', de:'Buchungshistorie-Assistent' },
   'ai.placeholder':    { es:'Escribe tu pregunta...', en:'Type your question...', de:'Schreiben Sie Ihre Frage...' },
   'ai.send':           { es:'Enviar', en:'Send', de:'Senden' },
@@ -247,23 +247,23 @@ const I18N = {
   'ai.guideDesc':      { es:'Todo lo que puedes hacer con el asistente, explicado con ejemplos reales.', en:'Everything you can do with the assistant, explained with real examples.', de:'Alles, was Sie mit dem Assistenten tun k\u00f6nnen, mit Beispielen erkl\u00e4rt.' },
   'ai.closeGuide':     { es:'Cerrar gu\u00eda', en:'Close guide', de:'Anleitung schlie\u00dfen' },
 
-  // ——— Pagination ———
+  // â€”â€”â€” Pagination â€”â€”â€”
   'pagination.showing': { es:'Mostrando', en:'Showing', de:'Zeige' },
   'pagination.of':     { es:'de', en:'of', de:'von' },
   'pagination.reservations': { es:'reservas', en:'reservations', de:'Buchungen' },
   'pagination.rowsPerPage': { es:'Filas/p\u00e1g:', en:'Rows/page:', de:'Zeilen/Seite:' },
 
-  // ——— Preview / Print ———
+  // â€”â€”â€” Preview / Print â€”â€”â€”
   'preview.show':      { es:'Se mostrar\u00e1 previsualizaci\u00f3n', en:'Preview will be shown', de:'Vorschau wird angezeigt' },
   'preview.direct':    { es:'Se imprimir\u00e1 directamente', en:'Will print directly', de:'Wird direkt gedruckt' },
   'preview.change':    { es:'Cambiar', en:'Change', de:'\u00c4ndern' },
   'preview.before':    { es:'Ver previsualizaci\u00f3n antes', en:'Show preview first', de:'Vorschau zuerst anzeigen' },
   'preview.dontAsk':   { es:'No preguntar m\u00e1s', en:'Don\u0027t ask again', de:'Nicht mehr fragen' },
 
-  // ——— Language Selector ———
+  // â€”â€”â€” Language Selector â€”â€”â€”
   'lang.label':        { es:'Idioma', en:'Language', de:'Sprache' },
 
-  // ——— Misc ———
+  // â€”â€”â€” Misc â€”â€”â€”
   'misc.clean':        { es:'Limpiar', en:'Clear', de:'L\u00f6schen' },
   'misc.close':        { es:'Cerrar', en:'Close', de:'Schlie\u00dfen' },
   'misc.clickToEditOwner': { es:'Clic para editar propietario', en:'Click to edit owner', de:'Klicken zum Bearbeiten des Eigent\u00fcmers' },
@@ -271,13 +271,13 @@ const I18N = {
   'misc.removeDefault': { es:'Quitar por defecto', en:'Remove default', de:'Standard entfernen' },
   'misc.configValues': { es:'Configurar valores', en:'Configure values', de:'Werte konfigurieren' },
   'misc.showHideCols': { es:'Mostrar/ocultar columnas', en:'Show/hide columns', de:'Spalten ein-/ausblenden' },
-  // ——— Columns (extra) ———
+  // â€”â€”â€” Columns (extra) â€”â€”â€”
   'col.comGtc':          { es:'Gesti\u00f3n<br>GTC', en:'GTC<br>Mgmt', de:'GTC<br>Verw.' },
   'col.conceptosEsp':    { es:'Conceptos<br>Esp.', en:'Special<br>Items', de:'Sonder-<br>posten' },
   'col.conceptosSinIVA': { es:'Conceptos<br>s/IVA', en:'Items<br>No VAT', de:'Posten<br>o.MwSt.' },
 
 
-  // ——— Toast / Loading messages ———
+  // â€”â€”â€” Toast / Loading messages â€”â€”â€”
   'toast.googleNotInit':  { es:'Google API no inicializada. Recarga la p\u00e1gina.', en:'Google API not initialized. Reload the page.', de:'Google API nicht initialisiert. Seite neu laden.' },
   'toast.defaultUrlInvalid': { es:'La URL por defecto no es v\u00e1lida.', en:'Default URL is not valid.', de:'Standard-URL ist ung\u00fcltig.' },
   'toast.enterValidUrl':  { es:'Introduce una URL v\u00e1lida.', en:'Enter a valid URL.', de:'Geben Sie eine g\u00fcltige URL ein.' },
@@ -307,7 +307,7 @@ const I18N = {
   'sync.activateBtn':    { es:'Activar sincronizaci\u00f3n multi-usuario', en:'Activate multi-user sync', de:'Multi-User-Sync aktivieren' },
 
 
-  // ——— Phase 2A: AI Assistant visible elements ———
+  // â€”â€”â€” Phase 2A: AI Assistant visible elements â€”â€”â€”
   'ai.subtitle':       { es:'Preg\u00fantame sobre tus reservas, liquidaciones, importes... Respondo solo con tus datos reales.', en:'Ask me about your reservations, settlements, amounts... I only answer with your real data.', de:'Fragen Sie mich zu Ihren Buchungen, Abrechnungen, Betr\u00e4gen... Ich antworte nur mit Ihren echten Daten.' },
   'ai.closeGuideBtn':  { es:'Cerrar gu\u00eda \u00d7', en:'Close guide \u00d7', de:'Anleitung schlie\u00dfen \u00d7' },
   'ai.chip.briefing':  { es:'\u26a1 Briefing', en:'\u26a1 Briefing', de:'\u26a1 Briefing' },
@@ -339,7 +339,7 @@ const I18N = {
   'alert.askMore':     { es:'Preg\u00fantame sobre cualquiera de estas alertas para m\u00e1s detalle.', en:'Ask me about any of these alerts for more detail.', de:'Fragen Sie mich zu diesen Warnungen f\u00fcr mehr Details.' },
 
 
-  // ——— Follow-up suggestion labels & queries ———
+  // â€”â€”â€” Follow-up suggestion labels & queries â€”â€”â€”
   'fu.worstAdr':      { es:'\ud83d\udcc9 Pisos peor ADR', en:'\ud83d\udcc9 Lowest ADR', de:'\ud83d\udcc9 Niedrigster ADR' },
   'fu.worstAdrQ':     { es:'\u00bfQu\u00e9 pisos tienen el ADR m\u00e1s bajo?', en:'Which properties have the lowest ADR?', de:'Welche Unterk\u00fcnfte haben den niedrigsten ADR?' },
   'fu.export':        { es:'\ud83d\udce5 Exportar', en:'\ud83d\udce5 Export', de:'\ud83d\udce5 Exportieren' },
@@ -393,16 +393,16 @@ const I18N = {
   'ai.invalidKey':    { es:'API Key inv\u00e1lida. Se ha borrado. Vuelve a intentarlo.', en:'Invalid API Key. It has been deleted. Please try again.', de:'Ung\u00fcltiger API-Schl\u00fcssel. Er wurde gel\u00f6scht. Bitte versuchen Sie es erneut.' },
 
 
-  // ——— CE panels, buttons, consol detail ———
+  // â€”â€”â€” CE panels, buttons, consol detail â€”â€”â€”
   'ce.placeholderPet': { es:'E.g.: Pet...', en:'E.g.: Pet...', de:'Z.B.: Haustier...' },
   'ce.placeholderRep': { es:'E.g.: Repair...', en:'E.g.: Repair...', de:'Z.B.: Reparatur...' },
 
 
-  // ——— Email modal ———
+  // â€”â€”â€” Email modal â€”â€”â€”
 
 
 
-  // ——— Phase 1: Missing visible translations ———
+  // â€”â€”â€” Phase 1: Missing visible translations â€”â€”â€”
   'stats.filtered':       { es:'filtradas', en:'filtered', de:'gefiltert' },
   'stats.filteredOf':     { es:'filtradas', en:'filtered', de:'gefiltert' },
   'stats.reservationCount': { es:'reservas', en:'reservations', de:'Buchungen' },
@@ -448,7 +448,7 @@ const I18N = {
   'pdf.generating':    { es:'Generando...', en:'Generating...', de:'Wird erstellt...' },
   'pdf.generatingWait':{ es:'Generando PDF, espera un momento...', en:'Generating PDF, please wait...', de:'PDF wird erstellt, bitte warten...' },
   'pdf.errorRead':     { es:'Error al leer el archivo PDF', en:'Error reading PDF file', de:'Fehler beim Lesen der PDF-Datei' },
-  // ——— v2.24.0: CE panels ———
+  // â€”â€”â€” v2.24.0: CE panels â€”â€”â€”
   'ce.title':          { es:'\u26a0 Conceptos especiales', en:'\u26a0 Special Concepts', de:'\u26a0 Sonderposten' },
   'ce.internalOnly':   { es:'\ud83d\udc41 Solo uso interno', en:'\ud83d\udc41 Internal use only', de:'\ud83d\udc41 Nur intern' },
   'ce.addItem':        { es:'+ A\u00f1adir concepto', en:'+ Add concept', de:'+ Posten hinzuf\u00fcgen' },
@@ -467,14 +467,14 @@ const I18N = {
   'ce2.final':         { es:'final', en:'final', de:'Endwert' },
   'ce2.placeholder':   { es:'Ej: Reparaci\u00f3n...', en:'E.g.: Repair...', de:'Z.B.: Reparatur...' },
   'cex.placeholder':   { es:'Concepto...', en:'Concept...', de:'Posten...' },
-  // ——— v2.24.0: Buttons ———
+  // â€”â€”â€” v2.24.0: Buttons â€”â€”â€”
   'btn.downloadPdfLiq': { es:'Descargar PDF', en:'Download PDF', de:'PDF herunterladen' },
   'btn.sendEmailLiq':  { es:'Enviar por Email', en:'Send by Email', de:'Per E-Mail senden' },
-  // ——— v2.24.0: Maintenance ———
+  // â€”â€”â€” v2.24.0: Maintenance â€”â€”â€”
   'liq.maintenance':   { es:'Mantenimiento', en:'Maintenance', de:'Instandhaltung' },
   'liq.maintenanceMonthly': { es:'Mantenimiento mensual', en:'Monthly maintenance', de:'Monatliche Instandhaltung' },
   'liq.maintenanceDesc': { es:'Importe base (+ 21% IVA) por liquidaci\u00f3n', en:'Base amount (+ 21% VAT) per settlement', de:'Grundbetrag (+ 21% MwSt.) pro Abrechnung' },
-  // ——— v2.24.0: Email modal ———
+  // â€”â€”â€” v2.24.0: Email modal â€”â€”â€”
   'email.title':       { es:'\u2709 Enviar Liquidaci\u00f3n por Email', en:'\u2709 Send Settlement by Email', de:'\u2709 Abrechnung per E-Mail senden' },
   'email.recipient':   { es:'Destinatario', en:'Recipient', de:'Empf\u00e4nger' },
   'email.ccLabel':     { es:'CC \u2014 copia (opcional, separar con comas)', en:'CC \u2014 copy (optional, comma-separated)', de:'CC \u2014 Kopie (optional, kommagetrennt)' },
@@ -495,7 +495,7 @@ const I18N = {
   'email.sendingBtn':  { es:'Enviando...', en:'Sending...', de:'Wird gesendet...' },
   'email.sentBtn':     { es:'\u00a1Enviado! \u2714', en:'Sent! \u2714', de:'Gesendet! \u2714' },
   'email.errorSend':   { es:'Error al enviar el email: ', en:'Error sending email: ', de:'Fehler beim E-Mail-Versand: ' },
-  // ——— v2.24.0: Liquidation detail (replaces _en? ternary) ———
+  // â€”â€”â€” v2.24.0: Liquidation detail (replaces _en? ternary) â€”â€”â€”
   'liq.totalResIva':   { es:'Total Reserva (IVA incluido)', en:'Total Booking (VAT included)', de:'Buchungssumme (inkl. MwSt.)' },
   'liq.ivaReserva':    { es:'IVA Reserva', en:'Booking VAT', de:'Buchungs-MwSt.' },
   'liq.baseExclVat':   { es:'Base sin IVA', en:'Base excl. VAT', de:'Nettobetrag' },
@@ -528,14 +528,14 @@ const I18N = {
   'liq.vat':           { es:'IVA', en:'VAT', de:'MwSt.' },
   'liq.consolLabel':   { es:'Resumen consolidado', en:'Consolidated summary', de:'Zusammenfassung' },
   'liq.ownerSuffix':   { es:' \u2014 Propietario', en:' \u2014 Owner', de:' \u2014 Eigent\u00fcmer' },
-  // ——— v2.24.0: Config modal ———
+  // â€”â€”â€” v2.24.0: Config modal â€”â€”â€”
   'cfg.pasarelaStripe': { es:'Pasarela Stripe', en:'Stripe Gateway', de:'Stripe-Zahlungsabwicklung' },
   'cfg.pasarelaDesc':  { es:'Plataformas distintas de Booking', en:'Platforms other than Booking', de:'Plattformen au\u00dfer Booking' },
-  // ——— v2.24.0: Messages ———
+  // â€”â€”â€” v2.24.0: Messages â€”â€”â€”
   'msg.noHeader':      { es:'No se encontr\u00f3 la cabecera ID Reserva.', en:'Header row ID Reserva not found.', de:'Kopfzeile ID Reserva nicht gefunden.' },
   'msg.noGtcAlojs':    { es:'No hay alojamientos GTC configurados.', en:'No GTC properties configured.', de:'Keine GTC-Unterk\u00fcnfte konfiguriert.' },
   'msg.noData':        { es:'No hay datos cargados.', en:'No data loaded.', de:'Keine Daten geladen.' },
-  // ——— v2.24.0: CSV export headers ———
+  // â€”â€”â€” v2.24.0: CSV export headers â€”â€”â€”
   'csv.property':      { es:'Alojamiento', en:'Property', de:'Unterkunft' },
   'csv.reservations':  { es:'Reservas', en:'Reservations', de:'Buchungen' },
   'csv.nights':        { es:'Noches', en:'Nights', de:'N\u00e4chte' },
@@ -743,7 +743,7 @@ function _i18nRefreshUI() {
 
 
 
-// ——— AI Guide i18n data (v2.22.0) ———
+// â€”â€”â€” AI Guide i18n data (v2.22.0) â€”â€”â€”
 var _GUIDE_I18N = {
 es: {
   title: 'Gu\u00eda completa del Asistente IA',

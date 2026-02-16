@@ -110,3 +110,27 @@ const SafeStorage = {
 // ═══════════════════════════════════════════════════════════════
 let _currentLang = SafeStorage.get('liq-lang') || 'es';
 
+// === UTILITY: Debounce ===
+function debounce(fn, ms) {
+  let timer = null;
+  const debounced = function() {
+    const args = arguments;
+    const ctx = this;
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(function() { timer = null; fn.apply(ctx, args); }, ms);
+  };
+  debounced.cancel = function() { if (timer) { clearTimeout(timer); timer = null; } };
+  return debounced;
+}
+
+// === UTILITY: Safe property access ===
+function safeGet(obj, path, fallback) {
+  if (!obj) return fallback;
+  const keys = path.split('.');
+  let current = obj;
+  for (let i = 0; i < keys.length; i++) {
+    if (current == null || typeof current !== 'object') return fallback;
+    current = current[keys[i]];
+  }
+  return current !== undefined ? current : fallback;
+}

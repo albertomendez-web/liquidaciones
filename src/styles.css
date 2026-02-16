@@ -352,9 +352,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-header-logo { font-family: Georgia, 'Times New Roman', serif; }
 .liq-header-logo .logo-main { font-size: 24px; font-weight: 300; color: var(--hm-gold); letter-spacing: 0.01em; }
 .liq-header-logo .logo-sub { font-size: 11px; font-weight: 300; color: var(--hm-blue-gray); letter-spacing: 0.08em; margin-left: 4px; }
-.liq-period-badge { text-align: left; }
+.liq-period-badge { text-align: left; padding: 0; }
 .liq-period-badge .liq-period-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--hm-gold); margin-bottom: 1px; }
-.liq-period-badge .liq-period-value { font-size: 15px; font-weight: 700; color: var(--hm-gold); white-space: nowrap; }
+.liq-period-badge .liq-period-value { font-size: 15px; font-weight: 700; color: #fff; white-space: nowrap; }
 
 /* === COPY-TO-CLIPBOARD === */
 .cpv { position: relative; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 1px 2px; border-radius: 3px; }

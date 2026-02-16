@@ -28,6 +28,13 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.32.1',
+    date: '2026-02-17',
+    changes: [
+      'Combo buscable para asignaci\u00f3n manual de contactos Holded (reemplaza select nativo)',
+    ]
+  },
+  {
     version: '2.32.0',
     date: '2026-02-17',
     changes: [
@@ -41,7 +48,6 @@ const CHANGELOG = [
       'Tabla de mapping propietario \u2194 contacto con b\u00fasqueda y ordenaci\u00f3n (pendientes primero)',
       'Persistencia completa: contactos, mappings y estado de sync en Configuraci\u00f3n tab',
       'i18n: 18 nuevas claves ES/EN/DE para secci\u00f3n de sincronizaci\u00f3n',
-      'Combo buscable para asignaci\u00f3n manual de contactos Holded (reemplaza select)',
     ]
   },
   {

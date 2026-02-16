@@ -615,6 +615,26 @@ const I18N = {
 
   'inv.companyAdded':   { es:'Empresa a\u00f1adida', en:'Company added', de:'Firma hinzugef\u00fcgt' },
 
+  // Holded Sync (F2)
+  'inv.syncTitle':      { es:'Sincronizaci\u00f3n Holded', en:'Holded Sync', de:'Holded-Synchronisierung' },
+  'inv.syncDesc':       { es:'Descarga contactos de Holded y los vincula autom\u00e1ticamente a los propietarios de cada alojamiento.', en:'Download contacts from Holded and auto-match them to property owners.', de:'Kontakte aus Holded herunterladen und automatisch den Eigent\u00fcmern zuordnen.' },
+  'inv.syncNeedKey':    { es:'Configura la API key de Holded para activar la sincronizaci\u00f3n.', en:'Configure the Holded API key to enable sync.', de:'Holded API-Schl\u00fcssel konfigurieren, um die Synchronisierung zu aktivieren.' },
+  'inv.syncNow':        { es:'Sincronizar ahora', en:'Sync now', de:'Jetzt synchronisieren' },
+  'inv.syncing':        { es:'Sincronizando\u2026', en:'Syncing\u2026', de:'Synchronisierung\u2026' },
+  'inv.syncLast':       { es:'\u00daltima sincronizaci\u00f3n', en:'Last sync', de:'Letzte Synchronisierung' },
+  'inv.syncStarted':    { es:'Conectando con Holded\u2026', en:'Connecting to Holded\u2026', de:'Verbindung zu Holded\u2026' },
+  'inv.syncDone':       { es:'Sincronizaci\u00f3n completada: %c contactos, %m nuevos v\u00ednculos', en:'Sync complete: %c contacts, %m new matches', de:'Synchronisierung abgeschlossen: %c Kontakte, %m neue Zuordnungen' },
+  'inv.syncError':      { es:'Error de sincronizaci\u00f3n', en:'Sync error', de:'Synchronisierungsfehler' },
+  'inv.syncAuthError':  { es:'API key inv\u00e1lida o sin permisos', en:'Invalid API key or no permissions', de:'Ung\u00fcltiger API-Schl\u00fcssel oder keine Berechtigung' },
+  'inv.syncContacts':   { es:' contactos en Holded', en:' contacts in Holded', de:' Kontakte in Holded' },
+  'inv.syncMatched':    { es:' vinculados', en:' matched', de:' zugeordnet' },
+  'inv.syncUnmatched':  { es:' sin vincular', en:' unmatched', de:' nicht zugeordnet' },
+  'inv.syncMapping':    { es:'Vinculaci\u00f3n propietario \u2194 contacto Holded', en:'Owner \u2194 Holded contact mapping', de:'Eigent\u00fcmer \u2194 Holded-Kontakt Zuordnung' },
+  'inv.syncAssign':     { es:'Asignar contacto', en:'Assign contact', de:'Kontakt zuweisen' },
+  'inv.syncAssigned':   { es:'%a vinculado a %c', en:'%a linked to %c', de:'%a verkn\u00fcpft mit %c' },
+  'inv.syncClear':      { es:'Desvincular', en:'Unlink', de:'Verkn\u00fcpfung l\u00f6sen' },
+  'inv.syncNoMatch':    { es:'Sin contacto Holded vinculado', en:'No Holded contact linked', de:'Kein Holded-Kontakt verkn\u00fcpft' },
+
 };
 
 function t(key, ...args) {

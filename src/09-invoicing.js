@@ -767,15 +767,14 @@ function handleGenerarFactura(alojNameParam) {
 }
 
 /**
- * @description Construye el HTML completo de la factura en estilo mockup.
- * Lee datos reales de reservas y genera todo con clases inv-*.
+ * @description Construye el HTML completo de la factura simplificada.
+ * Concepto único + resumen fiscal. El detalle queda en la liquidación anexa.
  */
 function _buildInvoiceFullHtml(alojName) {
   var data = _getConsolCalcsAndSums(alojName);
   if (!data || !data.calcs || data.calcs.length === 0) return '';
 
-  var calcs = data.calcs, sums = data.sums, a = data.a;
-  var numRes = calcs.length;
+  var calcs = data.calcs, sums = data.sums;
   var prop = typeof getPropietario === 'function' ? getPropietario(alojName) : '';
   var propEmail = typeof getPropietarioEmail === 'function' ? getPropietarioEmail(alojName) : '';
 
@@ -814,6 +813,18 @@ function _buildInvoiceFullHtml(alojName) {
   var receptorCif = company ? company.cif : '';
   var receptorAddr = company ? company.address : '';
 
+  // Consolidated fiscal calcs
+  var _ded = typeof getConsolDeductions === 'function' ? getConsolDeductions(alojName) : { maintBase: 0, extrasTotal: 0, totalBase: 0 };
+  var _isSplit = typeof isGtcSplit === 'function' && isGtcSplit(alojName);
+  var _gtcSplitAmt = _isSplit && typeof GTC_SPLIT_RATE !== 'undefined' ? sums.sub * GTC_SPLIT_RATE : 0;
+  var _ownerBase = _isSplit ? sums.sub - _gtcSplitAmt : sums.sub;
+  var adjSub = _ownerBase - _ded.totalBase;
+  var avgIrpfRate = sums.sub > 0 ? sums.ret / sums.sub : 0;
+  var adjRet = adjSub * avgIrpfRate;
+  var adjIva = adjSub * IVA_SUBTOTAL;
+  var adjLiq = adjSub - adjRet + adjIva;
+  var irpfPct = (avgIrpfRate * 100).toFixed(0);
+
   var h = '<div class="inv-page">';
   h += '<div class="inv-top-bar"></div>';
 
@@ -821,7 +832,6 @@ function _buildInvoiceFullHtml(alojName) {
   h += '<div class="inv-header">';
   h += '<div class="inv-header-left">';
   h += '<div class="inv-title">FACTURA</div>';
-  h += '<div class="inv-subtitle">' + t('inv.invoiceSubtitle') + '</div>';
   h += '</div>';
   h += '<div class="inv-header-right">';
   h += '<div class="inv-logo">h\u00F4mity</div>';
@@ -849,136 +859,14 @@ function _buildInvoiceFullHtml(alojName) {
   if (receptorAddr) h += '<div class="inv-party-detail">' + esc(receptorAddr) + '</div>';
   h += '</div></div>';
 
-  // ── RESERVATION DETAILS ──
-  h += '<div class="inv-section-title">' + t('inv.detailTitle') + '</div>';
-
-  calcs.forEach(function(x, i) {
-    var r = x.r, s = x.s, c = x.c;
-    var guest = r.cliente || '\u2014';
-    var ivaRes = c.total - c.baseSinIVA;
-
-    // Reservation header
-    h += '<div class="inv-res-header">';
-    h += '<div><div class="inv-res-title">' + t('liq.title') + ' ' + (i+1) + ' ' + t('consol.of') + ' ' + numRes + '</div>';
-    h += '<div class="inv-res-name">' + esc(guest) + '</div></div>';
-    h += '<div class="inv-res-period">' + esc(periodStr) + '</div>';
-    h += '</div>';
-
-    // Meta row
-    h += '<div class="inv-res-meta">';
-    h += '<div><span class="inv-rm-label">' + t('liq.alojamiento') + '</span><br><span class="inv-rm-value">' + esc(r.alojamiento) + '</span></div>';
-    h += '<div><span class="inv-rm-label">' + t('liq.fechas') + '</span><br><span class="inv-rm-value">' + esc(r._fmtEntrada) + ' \u2192 ' + esc(r._fmtSalida) + '</span></div>';
-    h += '<div><span class="inv-rm-label">' + t('liq.canal') + '</span><br><span class="inv-rm-value">' + esc(r.plataforma) + '</span></div>';
-    h += '<div><span class="inv-rm-label">' + t('liq.idReserva') + '</span><br><span class="inv-rm-value">' + esc(r.id) + '</span></div>';
-    h += '<div><span class="inv-rm-label">' + t('liq.localizador') + '</span><br><span class="inv-rm-value">' + esc(r.localizador) + '</span></div>';
-    h += '<div><span class="inv-rm-label">' + t('liq.edificio') + '</span><br><span class="inv-rm-value">' + esc(r.edificio || '\u2014') + '</span></div>';
-    h += '</div>';
-
-    // Table
-    h += '<table class="inv-tbl">';
-    h += '<tr class="ir-bold"><td>' + t('liq.totalVAT') + '</td><td>' + fmt2(c.total) + '</td></tr>';
-    h += '<tr class="ir-sub"><td>' + t('liq.ivaReserva') + ' (10%)</td><td class="inv-neg">\u2212 ' + fmt2(ivaRes) + '</td></tr>';
-    h += '<tr class="ir-bold"><td>' + t('liq.baseSinIVA') + '</td><td>' + fmt2(c.baseSinIVA) + '</td></tr>';
-    h += '<tr class="ir-div"><td colspan="2"></td></tr>';
-
-    // Commissions
-    if (c.comPlat > 0) {
-      var comLabel = t('liq.canalVenta') + ' ' + esc(r.plataforma) + ' (' + (c.comRate * 100).toFixed(1) + '%)';
-      h += '<tr class="ir-sub"><td>' + comLabel + '</td><td class="inv-neg">\u2212 ' + fmt2(c.comPlat) + '</td></tr>';
-    }
-    h += '<tr class="ir-sub"><td>' + t('liq.gestionGTC') + ' (' + (c.gtcRate * 100).toFixed(0) + '%)</td><td class="inv-neg">\u2212 ' + fmt2(c.comGTC) + '</td></tr>';
-    h += '<tr class="ir-sub"><td>' + t('liq.limpieza') + ' (' + fmt2(c.limp) + ')</td><td class="inv-neg">\u2212 ' + fmt2(c.limp) + '</td></tr>';
-    if (c.amen > 0) h += '<tr class="ir-sub"><td>' + t('liq.amenities') + ' (' + fmt2(c.amen) + ')</td><td class="inv-neg">\u2212 ' + fmt2(c.amen) + '</td></tr>';
-    if (c.comPas > 0) {
-      var pasRate = s.pasarelaRate ? (s.pasarelaRate * 100).toFixed(1) : '?';
-      h += '<tr class="ir-sub"><td>' + t('liq.pasarela') + ' (' + pasRate + '%)</td><td class="inv-neg">\u2212 ' + fmt2(c.comPas) + '</td></tr>';
-    }
-    if (c.ceSinIvaTotal > 0) {
-      var ce2 = s.conceptosSinIVA || [];
-      ce2.forEach(function(item) {
-        h += '<tr class="ir-sub"><td>' + esc(item.name || 'Concepto') + '</td><td class="inv-neg">\u2212 ' + fmt2(item.amount || 0) + '</td></tr>';
-      });
-    }
-    h += '<tr class="ir-div"><td colspan="2"></td></tr>';
-
-    // Subtotal + IRPF + IVA
-    h += '<tr class="ir-bold"><td>' + t('liq.subtotal') + '</td><td>' + fmt2(c.sub) + '</td></tr>';
-    if (c.ret > 0) h += '<tr class="ir-sub"><td>' + t('liq.irpf') + ' (' + (c.irpfRate * 100).toFixed(0) + '%)</td><td class="inv-neg">\u2212 ' + fmt2(c.ret) + '</td></tr>';
-    h += '<tr class="ir-sub"><td>' + t('liq.ivaSubtotal') + ' (21%)</td><td class="inv-pos">' + fmt2(c.iva) + '</td></tr>';
-    h += '</table>';
-
-    // Liquidation total bar
-    h += '<div class="inv-stbar">';
-    h += '<div><div class="inv-stbar-label">' + t('liq.totalLabel') + '</div>';
-    h += '<div class="inv-stbar-name">' + t('liq.monthlyLiq') + '</div></div>';
-    h += '<div class="inv-stbar-amount">' + fmt2(c.totalLiq) + '</div>';
-    h += '</div>';
-
-    if (i < numRes - 1) h += '<div style="height:16px;"></div>';
-  });
-
-  // ── CONSOLIDATED SUMMARY ──
-  var _ded = typeof getConsolDeductions === 'function' ? getConsolDeductions(alojName) : { maintBase: 0, extrasTotal: 0, totalBase: 0 };
-  var _isSplit = typeof isGtcSplit === 'function' && isGtcSplit(alojName);
-  var _gtcSplitAmt = _isSplit && typeof GTC_SPLIT_RATE !== 'undefined' ? sums.sub * GTC_SPLIT_RATE : 0;
-  var _ownerBase = _isSplit ? sums.sub - _gtcSplitAmt : sums.sub;
-  var adjSub = _ownerBase - _ded.totalBase;
-  var avgIrpfRate = sums.sub > 0 ? sums.ret / sums.sub : 0;
-  var adjRet = adjSub * avgIrpfRate;
-  var adjIva = adjSub * IVA_SUBTOTAL;
-  var adjLiq = adjSub - adjRet + adjIva;
-  var edificio = calcs[0] ? calcs[0].r.edificio : '';
-
-  h += '<div class="inv-section-title">' + t('consol.summaryTitle') + '</div>';
-
-  h += '<div class="inv-consol-hdr">';
-  h += '<div><div class="inv-ch-sm">' + t('consol.summaryTitle') + ' \u2014 ' + numRes + ' ' + t('consol.reservas') + '</div>';
-  h += '<div class="inv-ch-title">' + esc(alojName) + '</div></div>';
-  h += '<div class="inv-ch-right">';
-  h += '<div class="inv-ch-period">' + esc(periodStr) + '</div>';
-  h += '<div class="inv-ch-prop">' + esc(prop) + '</div>';
-  h += '</div></div>';
-
-  // Consol meta row
-  h += '<div class="inv-res-meta" style="margin:0 28px;border-radius:0 0 6px 6px;">';
-  h += '<div><span class="inv-rm-label">' + t('liq.edificio') + '</span><br><span class="inv-rm-value">' + esc(edificio || '\u2014') + '</span></div>';
-  h += '<div><span class="inv-rm-label">N\u00BA ' + t('consol.reservas') + '</span><br><span class="inv-rm-value">' + numRes + '</span></div>';
-  h += '<div><span class="inv-rm-label">' + t('consol.propietario') + '</span><br><span class="inv-rm-value">' + esc(prop) + '</span></div>';
+  // ── CONCEPTO ──
+  h += '<div class="inv-section-title">' + t('inv.conceptTitle') + '</div>';
+  h += '<div class="inv-concept">';
+  h += '<div class="inv-concept-text">' + t('inv.conceptBody').replace('{aloj}', esc(alojName)).replace('{period}', esc(periodStr)) + '</div>';
   h += '</div>';
 
-  // Consolidated table
-  h += '<table class="inv-tbl">';
-  h += '<tr class="ir-bold"><td>' + t('consol.subtotalReservas') + '</td><td>' + fmt2(sums.sub) + '</td></tr>';
-  if (_isSplit) {
-    h += '<tr class="ir-sub"><td>' + t('consol.gtcSplit') + '</td><td class="inv-neg">\u2212 ' + fmt2(_gtcSplitAmt) + '</td></tr>';
-  }
-  if (_ded.maintBase > 0) {
-    h += '<tr class="ir-sub"><td>' + t('consol.maint') + '</td><td class="inv-neg">\u2212 ' + fmt2(_ded.maintBase) + '</td></tr>';
-  }
-  if (_ded.extrasTotal > 0) {
-    var extras = typeof getConsolExtras === 'function' ? getConsolExtras(alojName) : [];
-    extras.forEach(function(ex) {
-      h += '<tr class="ir-sub"><td>' + esc(ex.name) + '</td><td class="inv-neg">\u2212 ' + fmt2(ex.amount) + '</td></tr>';
-    });
-  }
-  h += '<tr class="ir-div"><td colspan="2"></td></tr>';
-  h += '<tr class="ir-bold"><td>' + t('consol.subtotalFinal') + '</td><td>' + fmt2(adjSub) + '</td></tr>';
-  var irpfPct = (avgIrpfRate * 100).toFixed(0);
-  if (avgIrpfRate > 0) h += '<tr class="ir-sub"><td>' + t('liq.irpf') + ' (' + irpfPct + '%)</td><td class="inv-neg">\u2212 ' + fmt2(adjRet) + '</td></tr>';
-  h += '<tr class="ir-sub"><td>IVA 21%</td><td class="inv-pos">+ ' + fmt2(adjIva) + '</td></tr>';
-  h += '</table>';
-
-  // Consolidated total bar
-  h += '<div class="inv-stbar">';
-  h += '<div><div class="inv-stbar-label">' + t('liq.totalLabel') + '</div>';
-  h += '<div class="inv-stbar-name">' + t('consol.consolidatedTotal') + '</div></div>';
-  h += '<div class="inv-stbar-amount">' + fmt2(adjLiq) + '</div>';
-  h += '</div>';
-
-  // ── FISCAL SUMMARY ──
-  h += '<div class="inv-section-title">' + t('inv.fiscalSummary') + '</div>';
-  h += '<div class="inv-fiscal-box">';
-  h += '<div class="inv-fiscal-box-title">' + t('inv.fiscalSummary') + '</div>';
+  // ── RESUMEN FISCAL ──
+  h += '<div class="inv-fiscal-box" style="margin-top:24px;">';
   h += '<table class="inv-fiscal-table">';
   h += '<tr class="ift-bold"><td>' + t('inv.taxBase') + '</td><td>' + fmt2(adjSub) + '</td></tr>';
   if (avgIrpfRate > 0) h += '<tr><td>' + t('liq.irpf') + ' (' + irpfPct + '%)</td><td style="color:#c0392b;">\u2212 ' + fmt2(adjRet) + '</td></tr>';

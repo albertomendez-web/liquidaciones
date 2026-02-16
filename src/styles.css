@@ -519,6 +519,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .inv-ch-right { text-align: right; }
 .inv-ch-period { font-size: 8pt; opacity: .7; }
 .inv-ch-prop { font-size: 8pt; opacity: .85; margin-top: 2px; }
+/* Concept description */
+.inv-concept { margin: 0 28px; padding: 16px 20px; background: #f8f9fb; border-left: 3px solid var(--hm-teal); border-radius: 0 6px 6px 0; }
+.inv-concept-text { font-size: 10pt; color: #1a1a2e; line-height: 1.6; }
 /* Fiscal summary box */
 .inv-fiscal-box { margin: 16px 28px 0; border: 1.5px solid var(--hm-teal); border-radius: 8px; overflow: hidden; page-break-inside: avoid; }
 .inv-fiscal-box-title { background: #e8f4f7; padding: 7px 16px; font-size: 7pt; text-transform: uppercase; letter-spacing: 1.2px; color: var(--hm-teal); font-weight: 700; border-bottom: 1px solid #e2e2e8; }

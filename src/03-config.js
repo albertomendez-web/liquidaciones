@@ -28,6 +28,17 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.34.2',
+    date: '2026-02-18',
+    changes: [
+      'F3: Factura simplificada — concepto \u00fanico + resumen fiscal',
+      'Concepto: "Servicios de gesti\u00f3n y explotaci\u00f3n tur\u00edstica del alojamiento [X] — Periodo. Seg\u00fan detalle en hoja de liquidaci\u00f3n adjunta."',
+      'Sin detalle de reservas ni consolidado en factura (queda en liquidaci\u00f3n anexa)',
+      'CSS: .inv-concept con borde teal izquierdo',
+      'i18n: inv.conceptTitle, inv.conceptBody ES/EN/DE',
+    ]
+  },
+  {
     version: '2.34.1',
     date: '2026-02-18',
     changes: [

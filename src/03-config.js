@@ -28,6 +28,17 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.34.1',
+    date: '2026-02-18',
+    changes: [
+      'F3: Factura completa construida desde cero con HTML propio (clases inv-*)',
+      'Ya NO usa buildPrintCards — genera todo el contenido directamente desde datos',
+      'Secciones: Header + Parties + Detalle reservas + Consolidado + Resumen fiscal + Footer',
+      'CSS: 25+ nuevas clases inv-* (res-header, res-meta, tbl, stbar, consol-hdr)',
+      'i18n: 25+ nuevas claves liq.*/consol.* para factura ES/EN/DE',
+    ]
+  },
+  {
     version: '2.34.0',
     date: '2026-02-18',
     changes: [

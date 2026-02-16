@@ -725,19 +725,80 @@ function addInvoiceCompany() {
 //  F3: INVOICE GENERATION — Factura = Liquidación + cabecera fiscal
 // ==============================================================================================================================
 
+// buildInvoiceParts removed — replaced by _buildInvoiceFullHtml in handleGenerarFactura
+
 /**
- * @description Construye la cabecera fiscal de la factura (nuevo diseño mockup).
- * Emisor: propietario (datos de Holded). Receptor: empresa GTC/GEE.
- * Retorna { headerHtml, fiscalFooterHtml } para envolver las cards.
+ * @description Genera factura: liquidación con cabecera fiscal.
  */
-function buildInvoiceParts(alojName, periodStr) {
+function handleGenerarFactura(alojNameParam) {
+  try {
+    var alojName = alojNameParam || currentConsolAloj;
+    if (alojName) currentConsolAloj = alojName;
+    if (!alojName) { showToast(t('inv.noAloj'), 'warning'); return; }
+    if (!isInvoiceEnabled(alojName)) { showToast(t('inv.notEnabled'), 'warning'); return; }
+    console.log('[Invoice] Generating for:', alojName);
+
+    var fullHtml = _withLang(_docLang, function() {
+      return _buildInvoiceFullHtml(alojName);
+    });
+    if (!fullHtml) { showToast('Error building invoice', 'error'); return; }
+
+    var previewZone = document.getElementById('preview-zone');
+    var printZone = document.getElementById('print-zone');
+    var actions = document.getElementById('consol-actions');
+    if (!previewZone) { showToast('Error: preview-zone not found', 'error'); return; }
+
+    previewZone.innerHTML = '<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,rgba(30,30,50,.95) 80%,transparent);padding:10px 0 14px;text-align:center;backdrop-filter:blur(8px);">'
+      + '<button class="btn btn-outline" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button> '
+      + '<button class="btn btn-success" style="background:#c8a84e;border-color:#c8a84e;" onclick="printFromPreview()">&#128424; ' + t('btn.print') + ' / PDF</button>'
+      + '</div>' + fullHtml;
+
+    if (printZone) { printZone.style.display = 'none'; printZone.classList.remove('print-target'); }
+    if (actions) actions.style.display = 'none';
+    previewZone.style.display = 'block';
+    previewZone.classList.add('print-target');
+    _previewActive = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('[Invoice] Preview active');
+  } catch(e) {
+    console.error('[Invoice] Error:', e);
+    showToast('Error factura: ' + e.message, 'error');
+  }
+}
+
+/**
+ * @description Construye el HTML completo de la factura en estilo mockup.
+ * Lee datos reales de reservas y genera todo con clases inv-*.
+ */
+function _buildInvoiceFullHtml(alojName) {
+  var data = _getConsolCalcsAndSums(alojName);
+  if (!data || !data.calcs || data.calcs.length === 0) return '';
+
+  var calcs = data.calcs, sums = data.sums, a = data.a;
+  var numRes = calcs.length;
+  var prop = typeof getPropietario === 'function' ? getPropietario(alojName) : '';
+  var propEmail = typeof getPropietarioEmail === 'function' ? getPropietarioEmail(alojName) : '';
+
+  // Period string
+  var periodStr = '';
+  try {
+    if (typeof _mpSelYears !== 'undefined' && _mpSelYears.size > 0) {
+      var yr = [..._mpSelYears].sort()[0];
+      if (typeof _mpSelMonths !== 'undefined' && _mpSelMonths.size >= 1) {
+        var ms = [..._mpSelMonths].sort(function(a,b){return a-b;});
+        periodStr = ms.map(function(m){return t('month.full.'+m);}).join(', ') + ' ' + yr;
+      } else { periodStr = '' + yr; }
+    }
+  } catch(e) {}
+  if (!periodStr) { var now = new Date(); periodStr = t('month.full.' + now.getMonth()) + ' ' + now.getFullYear(); }
+
   var company = getInvoiceCompany(alojName);
   var fiscal = getHoldedFiscalData(alojName);
-  var prop = typeof getPropietario === 'function' ? getPropietario(alojName) : '';
   var invNum = getInvoiceNumber(periodStr);
   var invDate = getInvoiceDate(periodStr);
+  var fmt2 = function(v) { return v.toFixed(2).replace('.', ',') + ' \u20AC'; };
 
-  // Emisor: propietario
+  // Emisor data
   var emisorName = fiscal ? fiscal.name : prop;
   var emisorNif = fiscal ? fiscal.vatnumber : '';
   var emisorAddr = '';
@@ -745,18 +806,18 @@ function buildInvoiceParts(alojName, periodStr) {
     var parts = [fiscal.address, fiscal.postalCode, fiscal.city, fiscal.province, fiscal.country].filter(function(p) { return p && String(p).trim(); });
     emisorAddr = parts.map(function(p) { return String(p).trim(); }).join(', ');
   }
-  var emisorEmail = fiscal ? fiscal.email : '';
+  var emisorEmail = fiscal ? fiscal.email : propEmail;
   var emisorPhone = fiscal ? fiscal.phone : '';
 
-  // Receptor: empresa
+  // Receptor data
   var receptorName = company ? company.name : 'Green Tropical Coast S.L.';
   var receptorCif = company ? company.cif : '';
   var receptorAddr = company ? company.address : '';
 
-  // ── HEADER HTML ──
   var h = '<div class="inv-page">';
   h += '<div class="inv-top-bar"></div>';
 
+  // ── HEADER ──
   h += '<div class="inv-header">';
   h += '<div class="inv-header-left">';
   h += '<div class="inv-title">FACTURA</div>';
@@ -770,7 +831,7 @@ function buildInvoiceParts(alojName, periodStr) {
   h += '<div><div class="inv-meta-label">' + t('inv.invoiceDate') + '</div><div class="inv-meta-value">' + esc(invDate) + '</div></div>';
   h += '</div></div></div>';
 
-  // Parties
+  // ── PARTIES ──
   h += '<div class="inv-parties">';
   h += '<div class="inv-party">';
   h += '<div class="inv-party-label">' + t('inv.issuer') + '</div>';
@@ -788,119 +849,150 @@ function buildInvoiceParts(alojName, periodStr) {
   if (receptorAddr) h += '<div class="inv-party-detail">' + esc(receptorAddr) + '</div>';
   h += '</div></div>';
 
+  // ── RESERVATION DETAILS ──
   h += '<div class="inv-section-title">' + t('inv.detailTitle') + '</div>';
 
-  return h;
-}
+  calcs.forEach(function(x, i) {
+    var r = x.r, s = x.s, c = x.c;
+    var guest = r.cliente || '\u2014';
+    var ivaRes = c.total - c.baseSinIVA;
 
-/**
- * @description Genera factura: liquidación con cabecera fiscal.
- */
-function handleGenerarFactura(alojNameParam) {
-  try {
-    var alojName = alojNameParam || currentConsolAloj;
-    if (alojName) currentConsolAloj = alojName;
-    if (!alojName) { showToast(t('inv.noAloj'), 'warning'); return; }
-    if (!isInvoiceEnabled(alojName)) { showToast(t('inv.notEnabled'), 'warning'); return; }
+    // Reservation header
+    h += '<div class="inv-res-header">';
+    h += '<div><div class="inv-res-title">' + t('liq.title') + ' ' + (i+1) + ' ' + t('consol.of') + ' ' + numRes + '</div>';
+    h += '<div class="inv-res-name">' + esc(guest) + '</div></div>';
+    h += '<div class="inv-res-period">' + esc(periodStr) + '</div>';
+    h += '</div>';
 
-    console.log('[Invoice] Generating for:', alojName);
+    // Meta row
+    h += '<div class="inv-res-meta">';
+    h += '<div><span class="inv-rm-label">' + t('liq.alojamiento') + '</span><br><span class="inv-rm-value">' + esc(r.alojamiento) + '</span></div>';
+    h += '<div><span class="inv-rm-label">' + t('liq.fechas') + '</span><br><span class="inv-rm-value">' + esc(r._fmtEntrada) + ' \u2192 ' + esc(r._fmtSalida) + '</span></div>';
+    h += '<div><span class="inv-rm-label">' + t('liq.canal') + '</span><br><span class="inv-rm-value">' + esc(r.plataforma) + '</span></div>';
+    h += '<div><span class="inv-rm-label">' + t('liq.idReserva') + '</span><br><span class="inv-rm-value">' + esc(r.id) + '</span></div>';
+    h += '<div><span class="inv-rm-label">' + t('liq.localizador') + '</span><br><span class="inv-rm-value">' + esc(r.localizador) + '</span></div>';
+    h += '<div><span class="inv-rm-label">' + t('liq.edificio') + '</span><br><span class="inv-rm-value">' + esc(r.edificio || '\u2014') + '</span></div>';
+    h += '</div>';
 
-    // Build liquidation cards in document language
-    var result = _withLang(_docLang, buildPrintCards);
-    if (!result) { showToast('Error: buildPrintCards returned null', 'error'); return; }
+    // Table
+    h += '<table class="inv-tbl">';
+    h += '<tr class="ir-bold"><td>' + t('liq.totalVAT') + '</td><td>' + fmt2(c.total) + '</td></tr>';
+    h += '<tr class="ir-sub"><td>' + t('liq.ivaReserva') + ' (10%)</td><td class="inv-neg">\u2212 ' + fmt2(ivaRes) + '</td></tr>';
+    h += '<tr class="ir-bold"><td>' + t('liq.baseSinIVA') + '</td><td>' + fmt2(c.baseSinIVA) + '</td></tr>';
+    h += '<tr class="ir-div"><td colspan="2"></td></tr>';
 
-    // Build period string
-    var periodStr = _withLang(_docLang, function() {
-      var ps = '';
-      try {
-        if (typeof _mpSelYears !== 'undefined' && _mpSelYears.size > 0) {
-          var yr = [..._mpSelYears].sort()[0];
-          if (typeof _mpSelMonths !== 'undefined' && _mpSelMonths.size >= 1) {
-            var ms = [..._mpSelMonths].sort(function(a,b){return a-b;});
-            ps = ms.map(function(m){return t('month.full.'+m);}).join(', ') + ' ' + yr;
-          } else { ps = '' + yr; }
-        }
-      } catch(e) {}
-      if (!ps) { var now = new Date(); ps = t('month.full.' + now.getMonth()) + ' ' + now.getFullYear(); }
-      return ps;
-    });
-
-    // Build invoice header
-    var headerHtml = _withLang(_docLang, function() {
-      return buildInvoiceParts(alojName, periodStr);
-    });
-
-    // Build fiscal summary from consolidated data
-    var fiscalHtml = _withLang(_docLang, function() {
-      return _buildFiscalSummary(alojName);
-    });
-
-    var previewZone = document.getElementById('preview-zone');
-    var printZone = document.getElementById('print-zone');
-    var actions = document.getElementById('consol-actions');
-    if (!previewZone) { showToast('Error: preview-zone not found', 'error'); return; }
-
-    previewZone.innerHTML = '<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,rgba(30,30,50,.95) 80%,transparent);padding:10px 0 14px;text-align:center;backdrop-filter:blur(8px);">'
-      + '<button class="btn btn-outline" style="background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);" onclick="exitPreview()">&#8592; ' + t('btn.backToLiq') + '</button> '
-      + '<button class="btn btn-success" style="background:#c8a84e;border-color:#c8a84e;" onclick="printFromPreview()">&#128424; ' + t('btn.print') + ' / PDF</button>'
-      + '</div>'
-      + headerHtml
-      + result.cardsHtml + result.summaryHtml
-      + fiscalHtml
-      + '<div class="inv-footer"><div class="inv-footer-note">' + t('inv.footerNote') + '</div><div class="inv-footer-page">' + t('inv.page') + ' 1</div></div>'
-      + '</div>'; // close inv-page
-
-    if (printZone) { printZone.style.display = 'none'; printZone.classList.remove('print-target'); }
-    if (actions) actions.style.display = 'none';
-    previewZone.style.display = 'block';
-    previewZone.classList.add('print-target');
-    _previewActive = true;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    console.log('[Invoice] Preview active');
-  } catch(e) {
-    console.error('[Invoice] Error:', e);
-    showToast('Error factura: ' + e.message, 'error');
-  }
-}
-
-/**
- * @description Construye el resumen fiscal desde los datos consolidados.
- * Replica la lógica de _buildConsolSummaryInner para IRPF/IVA.
- */
-function _buildFiscalSummary(alojName) {
-  var h = '';
-  try {
-    var data = _getConsolCalcsAndSums(alojName);
-    if (!data || !data.sums) return '';
-
-    var sums = data.sums;
-    var _isSplit = typeof isGtcSplit === 'function' && isGtcSplit(alojName);
-    var _ded = typeof getConsolDeductions === 'function' ? getConsolDeductions(alojName) : { totalBase: 0 };
-    var _gtcSplitAmt = _isSplit && typeof GTC_SPLIT_RATE !== 'undefined' ? sums.sub * GTC_SPLIT_RATE : 0;
-    var _ownerBase = _isSplit ? sums.sub - _gtcSplitAmt : sums.sub;
-    var adjSub = _ownerBase - _ded.totalBase;
-    var avgIrpfRate = sums.sub > 0 ? sums.ret / sums.sub : 0;
-    var adjRet = adjSub * avgIrpfRate;
-    var adjIva = adjSub * IVA_SUBTOTAL;
-    var adjLiq = adjSub - adjRet + adjIva;
-
-    var fmt2 = function(v) { return v.toFixed(2).replace('.', ',') + ' \u20AC'; };
-    var irpfPct = (avgIrpfRate * 100).toFixed(0);
-
-    h += '<div class="inv-section-title">' + t('inv.fiscalSummary') + '</div>';
-    h += '<div class="inv-fiscal-box">';
-    h += '<div class="inv-fiscal-box-title">' + t('inv.fiscalSummary') + '</div>';
-    h += '<table class="inv-fiscal-table">';
-    h += '<tr class="ift-bold"><td>' + t('inv.taxBase') + '</td><td>' + fmt2(adjSub) + '</td></tr>';
-    if (avgIrpfRate > 0) {
-      h += '<tr><td>' + t('liq.irpf') + ' (' + irpfPct + '%)</td><td style="color:#c0392b;">\u2212 ' + fmt2(adjRet) + '</td></tr>';
+    // Commissions
+    if (c.comPlat > 0) {
+      var comLabel = t('liq.canalVenta') + ' ' + esc(r.plataforma) + ' (' + (c.comRate * 100).toFixed(1) + '%)';
+      h += '<tr class="ir-sub"><td>' + comLabel + '</td><td class="inv-neg">\u2212 ' + fmt2(c.comPlat) + '</td></tr>';
     }
-    h += '<tr><td>IVA (21%)</td><td style="color:#27ae60;">+ ' + fmt2(adjIva) + '</td></tr>';
-    h += '<tr class="ift-total"><td>' + t('inv.totalToSettle') + '</td><td>' + fmt2(adjLiq) + '</td></tr>';
-    h += '</table></div>';
-  } catch(e) {
-    console.warn('[Invoice] Fiscal summary error:', e);
+    h += '<tr class="ir-sub"><td>' + t('liq.gestionGTC') + ' (' + (c.gtcRate * 100).toFixed(0) + '%)</td><td class="inv-neg">\u2212 ' + fmt2(c.comGTC) + '</td></tr>';
+    h += '<tr class="ir-sub"><td>' + t('liq.limpieza') + ' (' + fmt2(c.limp) + ')</td><td class="inv-neg">\u2212 ' + fmt2(c.limp) + '</td></tr>';
+    if (c.amen > 0) h += '<tr class="ir-sub"><td>' + t('liq.amenities') + ' (' + fmt2(c.amen) + ')</td><td class="inv-neg">\u2212 ' + fmt2(c.amen) + '</td></tr>';
+    if (c.comPas > 0) {
+      var pasRate = s.pasarelaRate ? (s.pasarelaRate * 100).toFixed(1) : '?';
+      h += '<tr class="ir-sub"><td>' + t('liq.pasarela') + ' (' + pasRate + '%)</td><td class="inv-neg">\u2212 ' + fmt2(c.comPas) + '</td></tr>';
+    }
+    if (c.ceSinIvaTotal > 0) {
+      var ce2 = s.conceptosSinIVA || [];
+      ce2.forEach(function(item) {
+        h += '<tr class="ir-sub"><td>' + esc(item.name || 'Concepto') + '</td><td class="inv-neg">\u2212 ' + fmt2(item.amount || 0) + '</td></tr>';
+      });
+    }
+    h += '<tr class="ir-div"><td colspan="2"></td></tr>';
+
+    // Subtotal + IRPF + IVA
+    h += '<tr class="ir-bold"><td>' + t('liq.subtotal') + '</td><td>' + fmt2(c.sub) + '</td></tr>';
+    if (c.ret > 0) h += '<tr class="ir-sub"><td>' + t('liq.irpf') + ' (' + (c.irpfRate * 100).toFixed(0) + '%)</td><td class="inv-neg">\u2212 ' + fmt2(c.ret) + '</td></tr>';
+    h += '<tr class="ir-sub"><td>' + t('liq.ivaSubtotal') + ' (21%)</td><td class="inv-pos">' + fmt2(c.iva) + '</td></tr>';
+    h += '</table>';
+
+    // Liquidation total bar
+    h += '<div class="inv-stbar">';
+    h += '<div><div class="inv-stbar-label">' + t('liq.totalLabel') + '</div>';
+    h += '<div class="inv-stbar-name">' + t('liq.monthlyLiq') + '</div></div>';
+    h += '<div class="inv-stbar-amount">' + fmt2(c.totalLiq) + '</div>';
+    h += '</div>';
+
+    if (i < numRes - 1) h += '<div style="height:16px;"></div>';
+  });
+
+  // ── CONSOLIDATED SUMMARY ──
+  var _ded = typeof getConsolDeductions === 'function' ? getConsolDeductions(alojName) : { maintBase: 0, extrasTotal: 0, totalBase: 0 };
+  var _isSplit = typeof isGtcSplit === 'function' && isGtcSplit(alojName);
+  var _gtcSplitAmt = _isSplit && typeof GTC_SPLIT_RATE !== 'undefined' ? sums.sub * GTC_SPLIT_RATE : 0;
+  var _ownerBase = _isSplit ? sums.sub - _gtcSplitAmt : sums.sub;
+  var adjSub = _ownerBase - _ded.totalBase;
+  var avgIrpfRate = sums.sub > 0 ? sums.ret / sums.sub : 0;
+  var adjRet = adjSub * avgIrpfRate;
+  var adjIva = adjSub * IVA_SUBTOTAL;
+  var adjLiq = adjSub - adjRet + adjIva;
+  var edificio = calcs[0] ? calcs[0].r.edificio : '';
+
+  h += '<div class="inv-section-title">' + t('consol.summaryTitle') + '</div>';
+
+  h += '<div class="inv-consol-hdr">';
+  h += '<div><div class="inv-ch-sm">' + t('consol.summaryTitle') + ' \u2014 ' + numRes + ' ' + t('consol.reservas') + '</div>';
+  h += '<div class="inv-ch-title">' + esc(alojName) + '</div></div>';
+  h += '<div class="inv-ch-right">';
+  h += '<div class="inv-ch-period">' + esc(periodStr) + '</div>';
+  h += '<div class="inv-ch-prop">' + esc(prop) + '</div>';
+  h += '</div></div>';
+
+  // Consol meta row
+  h += '<div class="inv-res-meta" style="margin:0 28px;border-radius:0 0 6px 6px;">';
+  h += '<div><span class="inv-rm-label">' + t('liq.edificio') + '</span><br><span class="inv-rm-value">' + esc(edificio || '\u2014') + '</span></div>';
+  h += '<div><span class="inv-rm-label">N\u00BA ' + t('consol.reservas') + '</span><br><span class="inv-rm-value">' + numRes + '</span></div>';
+  h += '<div><span class="inv-rm-label">' + t('consol.propietario') + '</span><br><span class="inv-rm-value">' + esc(prop) + '</span></div>';
+  h += '</div>';
+
+  // Consolidated table
+  h += '<table class="inv-tbl">';
+  h += '<tr class="ir-bold"><td>' + t('consol.subtotalReservas') + '</td><td>' + fmt2(sums.sub) + '</td></tr>';
+  if (_isSplit) {
+    h += '<tr class="ir-sub"><td>' + t('consol.gtcSplit') + '</td><td class="inv-neg">\u2212 ' + fmt2(_gtcSplitAmt) + '</td></tr>';
   }
+  if (_ded.maintBase > 0) {
+    h += '<tr class="ir-sub"><td>' + t('consol.maint') + '</td><td class="inv-neg">\u2212 ' + fmt2(_ded.maintBase) + '</td></tr>';
+  }
+  if (_ded.extrasTotal > 0) {
+    var extras = typeof getConsolExtras === 'function' ? getConsolExtras(alojName) : [];
+    extras.forEach(function(ex) {
+      h += '<tr class="ir-sub"><td>' + esc(ex.name) + '</td><td class="inv-neg">\u2212 ' + fmt2(ex.amount) + '</td></tr>';
+    });
+  }
+  h += '<tr class="ir-div"><td colspan="2"></td></tr>';
+  h += '<tr class="ir-bold"><td>' + t('consol.subtotalFinal') + '</td><td>' + fmt2(adjSub) + '</td></tr>';
+  var irpfPct = (avgIrpfRate * 100).toFixed(0);
+  if (avgIrpfRate > 0) h += '<tr class="ir-sub"><td>' + t('liq.irpf') + ' (' + irpfPct + '%)</td><td class="inv-neg">\u2212 ' + fmt2(adjRet) + '</td></tr>';
+  h += '<tr class="ir-sub"><td>IVA 21%</td><td class="inv-pos">+ ' + fmt2(adjIva) + '</td></tr>';
+  h += '</table>';
+
+  // Consolidated total bar
+  h += '<div class="inv-stbar">';
+  h += '<div><div class="inv-stbar-label">' + t('liq.totalLabel') + '</div>';
+  h += '<div class="inv-stbar-name">' + t('consol.consolidatedTotal') + '</div></div>';
+  h += '<div class="inv-stbar-amount">' + fmt2(adjLiq) + '</div>';
+  h += '</div>';
+
+  // ── FISCAL SUMMARY ──
+  h += '<div class="inv-section-title">' + t('inv.fiscalSummary') + '</div>';
+  h += '<div class="inv-fiscal-box">';
+  h += '<div class="inv-fiscal-box-title">' + t('inv.fiscalSummary') + '</div>';
+  h += '<table class="inv-fiscal-table">';
+  h += '<tr class="ift-bold"><td>' + t('inv.taxBase') + '</td><td>' + fmt2(adjSub) + '</td></tr>';
+  if (avgIrpfRate > 0) h += '<tr><td>' + t('liq.irpf') + ' (' + irpfPct + '%)</td><td style="color:#c0392b;">\u2212 ' + fmt2(adjRet) + '</td></tr>';
+  h += '<tr><td>IVA (21%)</td><td style="color:#27ae60;">+ ' + fmt2(adjIva) + '</td></tr>';
+  h += '<tr class="ift-total"><td>' + t('inv.totalToSettle') + '</td><td>' + fmt2(adjLiq) + '</td></tr>';
+  h += '</table></div>';
+
+  // ── FOOTER ──
+  h += '<div class="inv-footer">';
+  h += '<div class="inv-footer-note">' + t('inv.footerNote') + '</div>';
+  h += '<div class="inv-footer-page">' + t('inv.page') + ' 1</div>';
+  h += '</div>';
+
+  h += '</div>'; // close inv-page
   return h;
 }
 

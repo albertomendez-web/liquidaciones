@@ -187,7 +187,8 @@ function saveHoldedKey() {
   var inp = document.getElementById('inv-holded-key');
   if (!inp) return;
   _holdedApiKey = inp.value.trim();
-  scheduleGlobalConfigSave();
+  // Immediate save (not debounced) — critical credential
+  if (typeof saveGlobalConfigToSheet === 'function') saveGlobalConfigToSheet();
   renderInvoicingConfigTab();
   showToast(_holdedApiKey ? t('inv.apiSaved') : t('inv.apiRemoved'), 'success');
 }

@@ -2,17 +2,39 @@
 # Uso: .\deploy.ps1
 #
 # Flujo:
-#   1. Si hay zip: extraer (sobreescribe src/ y otros archivos)
-#   2. Limpiar basura (.tmp, .zip residuales)
-#   3. node build.js: genera index.html desde src/
-#   4. git add + commit + push
+#   1. Esperar descargas incompletas (.tmp/.crdownload)
+#   2. Si hay zip: extraer y borrar
+#   3. Limpiar basura (.tmp residuales)
+#   4. node build.js: genera index.html desde src/
+#   5. git add + commit + push
 
 $ErrorActionPreference = "Stop"
 Set-Location "C:\Liquidaciones-GTC"
 
 Write-Host ""
 
-# 1. Si hay algun zip, extraer y borrar
+# 1. Esperar descargas incompletas (Chrome deja .tmp y .crdownload)
+$maxWait = 30
+$waited = 0
+while ($waited -lt $maxWait) {
+    $pending = @(Get-ChildItem *.tmp, *.crdownload -ErrorAction SilentlyContinue | Where-Object { $_.Length -gt 0 })
+    if ($pending.Count -eq 0) { break }
+    if ($waited -eq 0) {
+        Write-Host "Esperando descarga..." -ForegroundColor Yellow -NoNewline
+    }
+    Write-Host "." -NoNewline -ForegroundColor Yellow
+    Start-Sleep -Seconds 1
+    $waited++
+}
+if ($waited -gt 0 -and $waited -lt $maxWait) {
+    Write-Host " OK" -ForegroundColor Green
+} elseif ($waited -ge $maxWait) {
+    Write-Host ""
+    Write-Host "  Timeout esperando descarga. Revisa si el zip se bajo bien." -ForegroundColor Red
+    exit 1
+}
+
+# 2. Si hay algun zip, extraer y borrar
 $zips = Get-ChildItem *.zip -ErrorAction SilentlyContinue
 if ($zips) {
     foreach ($z in $zips) {
@@ -23,11 +45,10 @@ if ($zips) {
     }
 }
 
-# 2. Limpiar basura (.tmp que dejan los zips/descargas)
+# 3. Limpiar basura (.tmp residuales)
 $tmps = Get-ChildItem *.tmp -ErrorAction SilentlyContinue
 if ($tmps) {
     foreach ($t in $tmps) {
-        # Si git lo trackea, marcarlo para borrar del repo
         $tracked = git ls-files $t.Name 2>$null
         if ($tracked) {
             git rm -f $t.Name 2>$null
@@ -38,7 +59,7 @@ if ($tmps) {
     Write-Host "  Limpieza: $($tmps.Count) .tmp eliminado(s)" -ForegroundColor DarkGray
 }
 
-# 3. Build: concatenar src/ -> index.html
+# 4. Build: concatenar src/ -> index.html
 if (Test-Path "build.js") {
     Write-Host ""
     $buildResult = node build.js 2>&1
@@ -52,27 +73,17 @@ if (Test-Path "build.js") {
     Write-Host "  (sin build.js - usando index.html directo)" -ForegroundColor DarkGray
 }
 
-# 4. Git: add + commit + push
+# 5. Git: add + commit + push
 Write-Host ""
 git add -A
 $status = git status --porcelain
 if ($status) {
-    # Leer version del index.html generado
     $verLine = Select-String -Path "index.html" -Pattern "^const APP_VERSION = '(.+)';" | Select-Object -First 1
-    if ($verLine) {
-        $ver = $verLine.Matches.Groups[1].Value
-    } else {
-        $ver = "update"
-    }
-    
-    # Leer cambios
+    if ($verLine) { $ver = $verLine.Matches.Groups[1].Value } else { $ver = "update" }
+
     $chgLine = Select-String -Path "index.html" -Pattern "^const APP_CHANGES = '(.+)';" | Select-Object -First 1
-    if ($chgLine) {
-        $chg = $chgLine.Matches.Groups[1].Value
-    } else {
-        $chg = "update"
-    }
-    
+    if ($chgLine) { $chg = $chgLine.Matches.Groups[1].Value } else { $chg = "update" }
+
     $msg = "v${ver}: ${chg}"
     git commit -m $msg
     git push origin main

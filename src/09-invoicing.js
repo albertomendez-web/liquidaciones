@@ -241,14 +241,15 @@ function renderHoldedSyncSection() {
     html += '<div class="inv-sync-error">&#9888; ' + esc(_holdedSyncStatus.error) + '</div>';
   }
 
-  // Stats
-  if (_holdedContacts.length > 0) {
-    var matchedCount = Object.keys(_holdedMapping).length;
+  // Stats — show when contacts loaded OR mappings exist from persistence
+  var matchedCount = Object.keys(_holdedMapping).length;
+  if (_holdedContacts.length > 0 || matchedCount > 0 || _holdedSyncStatus.contactCount > 0) {
     var totalAlojs = 0;
     if (typeof getAlojamientos === 'function') totalAlojs = getAlojamientos().length;
 
+    var contactDisplayCount = _holdedContacts.length || _holdedSyncStatus.contactCount || 0;
     html += '<div class="inv-sync-stats">';
-    html += '<div class="inv-sync-stat"><span class="inv-sync-num">' + _holdedContacts.length + '</span>' + t('inv.syncContacts') + '</div>';
+    html += '<div class="inv-sync-stat"><span class="inv-sync-num">' + contactDisplayCount + '</span>' + t('inv.syncContacts') + '</div>';
     html += '<div class="inv-sync-stat"><span class="inv-sync-num inv-sync-ok">' + matchedCount + '</span>' + t('inv.syncMatched') + '</div>';
     if (totalAlojs > matchedCount) {
       html += '<div class="inv-sync-stat"><span class="inv-sync-num inv-sync-warn">' + (totalAlojs - matchedCount) + '</span>' + t('inv.syncUnmatched') + '</div>';
@@ -288,7 +289,7 @@ function renderHoldedSyncSection() {
           html += '<span class="inv-map-match">&#10003; ' + esc(mapping.name) + '</span>';
           if (mapping.vatnumber) html += '<span class="inv-map-nif">' + esc(mapping.vatnumber) + '</span>';
           html += '<button class="inv-btn inv-btn-sm inv-map-clear" onclick="clearHoldedMapping(\'' + safeName + '\')" title="' + t('inv.syncClear') + '">&#10007;</button>';
-        } else {
+        } else if (_holdedContacts.length > 0) {
           var comboId = 'hc-' + key.replace(/[^a-z0-9]/g, '_');
           html += '<div class="inv-combo" id="' + comboId + '">';
           html += '<input class="inv-combo-input" placeholder="' + t('inv.syncAssign') + '…" onfocus="openHoldedCombo(\'' + comboId + '\')" oninput="filterHoldedCombo(\'' + comboId + '\', this.value)" />';
@@ -298,6 +299,8 @@ function renderHoldedSyncSection() {
             html += '<div class="inv-combo-opt" data-id="' + c.id + '" data-search="' + esc(label.toLowerCase()) + '" onclick="pickHoldedCombo(\'' + safeName + '\',\'' + c.id + '\')">' + esc(label) + '</div>';
           });
           html += '</div></div>';
+        } else {
+          html += '<span class="inv-sync-hint">&#128260; ' + t('inv.syncToAssign') + '</span>';
         }
         html += '</div>';
         html += '</div>';
@@ -809,14 +812,7 @@ function buildInvoicingConfigRows() {
   if (_holdedApiKey) {
     rows.push(['holded_api_key', _holdedApiKey]);
   }
-  // Holded contacts cache (compact: only id+name+vatnumber+email for select rendering)
-  if (_holdedContacts.length > 0) {
-    var compact = _holdedContacts.map(function(c) {
-      return { id: c.id, name: c.name, vatnumber: c.vatnumber || c.vatNumber || '', email: c.email || '' };
-    });
-    rows.push(['holded_contacts', JSON.stringify(compact)]);
-  }
-  // Holded mapping per alojamiento
+  // Holded mapping per alojamiento (these are small, ~200 chars each)
   Object.keys(_holdedMapping).forEach(function(key) {
     rows.push(['hmap:' + key, JSON.stringify(_holdedMapping[key])]);
   });
@@ -824,6 +820,8 @@ function buildInvoicingConfigRows() {
   if (_holdedSyncStatus.lastSync) {
     rows.push(['holded_sync', JSON.stringify({ lastSync: _holdedSyncStatus.lastSync, contactCount: _holdedSyncStatus.contactCount, matchedCount: _holdedSyncStatus.matchedCount })]);
   }
+  // NOTE: holded_contacts NOT persisted (too large for Sheets cell). Re-fetch with "Sync now".
+  console.log('[Invoicing] buildConfigRows:', rows.length, 'rows, mappings:', Object.keys(_holdedMapping).length);
   return rows;
 }
 

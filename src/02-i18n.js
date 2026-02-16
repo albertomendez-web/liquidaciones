@@ -634,6 +634,7 @@ const I18N = {
   'inv.syncAssigned':   { es:'%a vinculado a %c', en:'%a linked to %c', de:'%a verkn\u00fcpft mit %c' },
   'inv.syncClear':      { es:'Desvincular', en:'Unlink', de:'Verkn\u00fcpfung l\u00f6sen' },
   'inv.syncNoMatch':    { es:'Sin contacto Holded vinculado', en:'No Holded contact linked', de:'Kein Holded-Kontakt verkn\u00fcpft' },
+  'inv.syncToAssign':   { es:'Sincroniza para asignar', en:'Sync to assign', de:'Synchronisieren zum Zuweisen' },
 
   // Invoice generation (F3)
   'inv.invoiceTitle':   { es:'FACTURA', en:'INVOICE', de:'RECHNUNG' },

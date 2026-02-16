@@ -28,6 +28,16 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.33.1',
+    date: '2026-02-17',
+    changes: [
+      'Fix persistencia Holded: eliminada cach\u00e9 de contactos (JSON demasiado grande para celda Sheets)',
+      'Mappings propietario \u2194 contacto ahora persisten correctamente entre recargas',
+      'Stats y tabla de mapping visibles tras recarga aunque contactos no est\u00e9n en memoria',
+      'Mensaje "Sincroniza para asignar" en alojamientos sin vincular cuando contactos no cargados',
+    ]
+  },
+  {
     version: '2.33.0',
     date: '2026-02-17',
     changes: [

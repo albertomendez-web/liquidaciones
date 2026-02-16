@@ -363,6 +363,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-header-logo { font-family: Georgia, 'Times New Roman', serif; }
 .liq-header-logo .logo-main { font-size: 24px; font-weight: 300; color: var(--hm-gold); letter-spacing: 0.01em; }
 .liq-header-logo .logo-sub { font-size: 11px; font-weight: 300; color: var(--hm-blue-gray); letter-spacing: 0.08em; margin-left: 4px; }
+.liq-period-badge { border: 1.5px solid rgba(212,160,23,0.4); border-radius: 8px; padding: 6px 14px; text-align: center; background: rgba(212,160,23,0.08); }
+.liq-period-badge .liq-period-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--hm-gold); margin-bottom: 2px; }
+.liq-period-badge .liq-period-value { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; }
 .liq-meta-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; background: var(--hm-teal-dark); position: relative; z-index: 1; }
 .liq-meta-strip .liq-meta-item { padding: 12px 32px; border-right: 1px solid rgba(255,255,255,0.06); }
 .liq-meta-strip .liq-meta-item:nth-child(3n) { border-right: none; }
@@ -497,6 +500,9 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
   .liq-header::after { display: none !important; }
   .liq-gold-bar-top, .liq-gold-bar-bottom { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .liq-header-logo { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .liq-period-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 4px 10px !important; }
+  .liq-period-badge .liq-period-label { font-size: 7px !important; }
+  .liq-period-badge .liq-period-value { font-size: 11px !important; }
   .liq-header-top { display: flex !important; justify-content: space-between !important; align-items: flex-start !important; padding: 12px 20px 6px !important; position: static !important; z-index: auto !important; }
   .liq-header .type { font-size: 9px !important; }
   .liq-header .name { font-size: 17px !important; line-height: 1.2 !important; }
@@ -1112,7 +1118,9 @@ tr.ce2-highlighted { background:#faf8ff; }
 
   <!-- CONSOLIDATED DETAIL: one alojamiento -->
   <div class="screen" id="screen-consoldetail">
-    <button class="btn btn-outline no-print" style="margin-bottom:24px;" onclick="showScreen('consol')">&#8592; <span data-i18n="btn.backToProperties">Volver a alojamientos</span></button>
+    <div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;">
+      <button class="btn btn-outline" onclick="showScreen('consol')">&#8592; <span data-i18n="btn.backToProperties">Volver a alojamientos</span></button>
+    </div>
     <div id="consoldetail-content"></div>
   </div>
 </div>
@@ -1356,9 +1364,9 @@ function toggleConsolVal(mode) {
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 2. Decidir bump: MAJOR / MINOR / PATCH
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 3. Actualizar APP_VERSION con nueva versiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 4. Actualizar APP_BUILD con fecha/hora actual Madrid (+01/+02)
- *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 5. Actualizar APP_CHANGES con resumen breve (< 100 chars)
- *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 6. AÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â±adir entrada al array CHANGELOG (al principio)
- *       con version, date (ISO Madrid), y array changes detallado
+const APP_VERSION = '2.27.0';
+const APP_BUILD   = '2026-02-17T07:30:00+01:00';
+const APP_CHANGES = 'Meses traducidos, badge periodo en print cards y consoldetail, Volver redundante eliminado';
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 7. NUNCA reutilizar un nÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Âºmero de versiÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â³n ya existente
  * ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢Ãƒâ€šÃ‚Â
  */
@@ -1966,6 +1974,7 @@ const I18N = {
   'liq.irpfWithhold':  { es:'Retenci\u00f3n IRPF', en:'IRPF Withholding', de:'IRPF-Einbehalt' },
   'liq.vatOnSub':      { es:'IVA del Subtotal', en:'VAT on Subtotal', de:'MwSt. auf Zwischensumme' },
   'liq.settlement':    { es:'Liquidaci\u00f3n', en:'Settlement', de:'Abrechnung' },
+  'liq.period':        { es:'Per\u00edodo', en:'Period', de:'Zeitraum' },
   'liq.of':            { es:'de', en:'of', de:'von' },
   'liq.property':      { es:'Alojamiento', en:'Property', de:'Unterkunft' },
   'liq.dates':         { es:'Fechas', en:'Dates', de:'Zeitraum' },
@@ -2774,6 +2783,18 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.27.0',
+    date: '2026-02-17',
+    changes: [
+      'Meses traducidos en email/PDF: _getCurrentLiqMonth() usa t() para respetar _withLang',
+      'Subject, filename y body del email ahora muestran el mes en el idioma del documento',
+      'Badge de per\u00edodo a\u00f1adido a print cards (por reserva + resumen) con estilo gold',
+      'Per\u00edodo visible en meta strip de Liquidaci\u00f3n Alojamiento on-screen',
+      'Eliminado bot\u00f3n Volver redundante al final de consoldetail (ya existe arriba)',
+      'Nueva i18n key: liq.period (ES/EN/DE)',
+    ]
+  },
   {
     version: '2.26.2',
     date: '2026-02-17',
@@ -7831,6 +7852,19 @@ function viewConsolDetail(alojName) {
   const sumNoches = calcs.reduce((s, x) => s + x.r._nights, 0);
   const sumVGO = sumComPlat + sumComGTC + sumLimp + sumAmen + sumComPas;
 
+  // Compute period string for display
+  var _periodStr = '';
+  try {
+    if (typeof _mpSelYears !== 'undefined' && _mpSelYears.size > 0) {
+      const _yr = [..._mpSelYears].sort()[0];
+      if (typeof _mpSelMonths !== 'undefined' && _mpSelMonths.size >= 1) {
+        const _ms = [..._mpSelMonths].sort((a, b) => a - b);
+        _periodStr = _ms.map(m => t('month.full.' + m)).join(', ') + ' ' + _yr;
+      } else { _periodStr = '' + _yr; }
+    }
+  } catch(e) {}
+  if (!_periodStr) { const _now = new Date(); _periodStr = t('month.full.' + _now.getMonth()) + ' ' + _now.getFullYear(); }
+
   const content = `
     <div class="consol-container print-target" id="print-zone">
       <div class="liq-gold-bar-top" style="border-radius:14px 14px 0 0;"></div>
@@ -7851,6 +7885,7 @@ function viewConsolDetail(alojName) {
           </div>
         </div>
         <div class="consol-meta-strip">
+          <div class="consol-meta-item"><div class="consol-meta-label">${t("liq.period")}</div><div class="consol-meta-value" style="color:#d4a017;font-weight:700;">${_periodStr}</div></div>
           <div class="consol-meta-item"><div class="consol-meta-label">${t("consol.owner")}</div><div class="consol-meta-value${_propIsMissing?' alert':''}" style="cursor:pointer" title="Clic para editar propietario" onclick="editPropietarioInline('${a.name.replace(/'/g,"\\'")}', this)">${_propName}</div></div>
           <div class="consol-meta-item"><div class="consol-meta-label">${t("consol.building")}</div><div class="consol-meta-value">${a.edificio}</div></div>
           <div class="consol-meta-item"><div class="consol-meta-label">${t("consol.numReservations")}</div><div class="consol-meta-value">${filteredReservas.length}</div></div>
@@ -7989,10 +8024,6 @@ ${_isSplit ? `<div class="cd-split-mini">
       </div>
     </div>
 
-    <div class="no-print" style="display:flex;justify-content:center;padding:16px;">
-      <button class="btn btn-outline" onclick="showScreen('consol')">&#8592; ${t('btn.back')}</button>
-    </div>
-
     <div id="preview-zone" style="display:none;"></div>`;
 
   _previewActive = false;
@@ -8052,6 +8083,19 @@ function buildPrintCards(lang) {
   const calcs_src = _mpHasFilter() ? a.reservas.filter(r => _mpMatchDate(r._dEntrada)) : a.reservas;
   const calcs = calcs_src.map(r => ({ r, s: settings[r.idx] || {}, c: getLiq(r) }));
 
+  // Compute period string in document language (t() is set via _withLang)
+  var _periodStr = '';
+  try {
+    if (typeof _mpSelYears !== 'undefined' && _mpSelYears.size > 0) {
+      const _yr = [..._mpSelYears].sort()[0];
+      if (typeof _mpSelMonths !== 'undefined' && _mpSelMonths.size >= 1) {
+        const _ms = [..._mpSelMonths].sort((a, b) => a - b);
+        _periodStr = _ms.map(m => t('month.full.' + m)).join(', ') + ' ' + _yr;
+      } else { _periodStr = '' + _yr; }
+    }
+  } catch(e) {}
+  if (!_periodStr) { const _now = new Date(); _periodStr = t('month.full.' + _now.getMonth()) + ' ' + _now.getFullYear(); }
+
   let cardsHtml = calcs.map((x, i) => {
     const r = x.r, s = x.s, c = x.c;
     const isB = r.plataforma === 'Booking.com';
@@ -8092,7 +8136,7 @@ function buildPrintCards(lang) {
     return `<div class="liq-container print-card" style="margin-bottom:24px;">
       <div class="liq-gold-bar-top"></div>
       <div class="liq-header">
-        <div class="liq-header-top"><div><div class="type">${t('liq.settlement')} ${i+1} ${t('liq.of')} ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div>
+        <div class="liq-header-top"><div><div class="type">${t('liq.settlement')} ${i+1} ${t('liq.of')} ${calcs.length}</div><div class="name">${getPropietario(r.alojamiento)}</div></div><div style="display:flex;align-items:flex-start;gap:16px;"><div class="liq-period-badge"><div class="liq-period-label">${t('liq.settlement')}</div><div class="liq-period-value">${_periodStr}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div></div>
         <div class="liq-meta-strip">
           <div class="liq-meta-item"><div class="liq-meta-label">${t('liq.property')}</div><div class="liq-meta-value">${esc(r.alojamiento)}</div></div>
           <div class="liq-meta-item"><div class="liq-meta-label">${t('liq.dates')}</div><div class="liq-meta-value">${formatDate(r.fechaEntrada)} &#8594; ${formatDate(r.fechaSalida)}</div></div>
@@ -8129,7 +8173,7 @@ function buildPrintCards(lang) {
   const summaryHtml = `<div class="liq-container print-summary" style="margin-top:8px;">
     <div class="liq-gold-bar-top"></div>
     <div class="liq-header">
-      <div class="liq-header-top"><div><div class="type">${t('liq.consolSummary')} \u2014 ${calcs.length} ${t('liq.reservations')}</div><div class="name">${a.name}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div>
+      <div class="liq-header-top"><div><div class="type">${t('liq.consolSummary')} \u2014 ${calcs.length} ${t('liq.reservations')}</div><div class="name">${a.name}</div></div><div style="display:flex;align-items:flex-start;gap:16px;"><div class="liq-period-badge"><div class="liq-period-label">${t('liq.settlement')}</div><div class="liq-period-value">${_periodStr}</div></div><div class="liq-header-logo"><span class="logo-main">h\u00F4mity</span><span class="logo-sub">holidays</span></div></div></div>
       <div class="liq-meta-strip">
         <div class="liq-meta-item"><div class="liq-meta-label">${t('liq.building')}</div><div class="liq-meta-value">${a.edificio}</div></div>
         <div class="liq-meta-item"><div class="liq-meta-label">${t('liq.numReserv')}</div><div class="liq-meta-value">${calcs.length}</div></div>

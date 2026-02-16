@@ -333,10 +333,10 @@ async function handleDownloadPdf() {
   const alojName = currentConsolAloj;
   if (!alojName) { showToast('No hay liquidaci\u00F3n seleccionada', 'error'); return; }
 
-  const mes = _getCurrentLiqMonth();
+  const pdfLang = (typeof _docLang !== 'undefined') ? _docLang : 'es';
+  const mes = (typeof _withLang === 'function') ? _withLang(pdfLang, _getCurrentLiqMonth) : _getCurrentLiqMonth();
   const safeName = alojName.replace(/[^a-zA-Z0-9\-_]/g, '_');
   const safeMonth = mes.replace(/[^a-zA-Z0-9\-_]/g, '_');
-  const pdfLang = (typeof _docLang !== 'undefined') ? _docLang : 'es';
   const pfx = pdfLang === 'en' ? 'Settlement' : pdfLang === 'de' ? 'Abrechnung' : 'Liquidacion';
   const filename = `${pfx}_${safeName}_${safeMonth}.pdf`;
 
@@ -608,8 +608,9 @@ function handleEmailLiquidacion() {
     return;
   }
 
-  const mes = _getCurrentLiqMonth();
   const _emailLangDefault = (typeof _docLang !== 'undefined') ? _docLang : 'es';
+  // Compute month in document language so subject/filename match
+  const mes = (typeof _withLang === 'function') ? _withLang(_emailLangDefault, _getCurrentLiqMonth) : _getCurrentLiqMonth();
   const safeName = alojName.replace(/[^a-zA-Z0-9\-_]/g, '_');
   const safeMonth = mes.replace(/[^a-zA-Z0-9\-_]/g, '_');
   const _emailLangPfx = { es: 'Liquidacion', en: 'Settlement', de: 'Abrechnung' };
@@ -777,10 +778,13 @@ async function _doSendEmail(alojName, propName, mes, filename) {
 
     const lang = document.querySelector('input[name="email-lang"]:checked')?.value || 'es';
 
+    // Recompute month name in the selected language
+    const mesLang = (typeof _withLang === 'function') ? _withLang(lang, _getCurrentLiqMonth) : mes;
+
     // Override filename based on selected language
     const _lPfx = { es: 'Liquidacion', en: 'Settlement', de: 'Abrechnung' };
     const safeFn = alojName.replace(/[^a-zA-Z0-9\-_]/g, '_');
-    const safeMo = mes.replace(/[^a-zA-Z0-9\-_]/g, '_');
+    const safeMo = mesLang.replace(/[^a-zA-Z0-9\-_]/g, '_');
     const actualFilename = `${_lPfx[lang] || 'Liquidacion'}_${safeFn}_${safeMo}.pdf`;
 
     const pdfBlob = await _generatePdf((step, total, msg) => {
@@ -791,7 +795,7 @@ async function _doSendEmail(alojName, propName, mes, filename) {
     _setStatus(statusEl, 'sending', (window.t||String)('email.sending').replace('%s', _escHtml(toFinal) + (cc ? ' (CC: ' + _escHtml(cc) + ')' : '')));
     sendBtn.textContent = (window.t||String)('email.sendingBtn');
 
-    let htmlBody = _buildEmailBody(propName, alojName, mes, lang);
+    let htmlBody = _buildEmailBody(propName, alojName, mesLang, lang);
     const extra = (extraMsg?.value || '').trim();
     if (extra) {
       // Insert custom message before the signature divider
@@ -852,23 +856,28 @@ function _setStatus(el, type, html) {
  * @returns {string} Month in readable format (e.g., "Enero 2026")
  */
 function _getCurrentLiqMonth() {
-  const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-                 'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  // Use t() if available (works with _withLang), fallback to MONTH_FULL or Spanish
+  var _mName = function(idx) {
+    if (typeof t === 'function' && typeof I18N !== 'undefined') return t('month.full.' + idx);
+    if (typeof MONTH_FULL !== 'undefined' && MONTH_FULL.length === 12) return MONTH_FULL[idx];
+    return ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+            'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][idx];
+  };
   try {
     if (typeof _mpSelYears !== 'undefined' && _mpSelYears.size > 0) {
       const year = [..._mpSelYears].sort()[0];
       if (typeof _mpSelMonths !== 'undefined' && _mpSelMonths.size === 1) {
-        return MESES[[..._mpSelMonths][0]] + ' ' + year;
+        return _mName([..._mpSelMonths][0]) + ' ' + year;
       }
       if (typeof _mpSelMonths !== 'undefined' && _mpSelMonths.size > 1) {
         const months = [..._mpSelMonths].sort((a, b) => a - b);
-        return months.map(m => MESES[m]).join(', ') + ' ' + year;
+        return months.map(m => _mName(m)).join(', ') + ' ' + year;
       }
       return year.toString();
     }
   } catch (e) { /* ignore */ }
   const now = new Date();
-  return MESES[now.getMonth()] + ' ' + now.getFullYear();
+  return _mName(now.getMonth()) + ' ' + now.getFullYear();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════

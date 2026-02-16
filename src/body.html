@@ -255,7 +255,9 @@
 
   <!-- DETAIL (individual) -->
   <div class="screen" id="screen-detail">
-    <button class="btn btn-outline no-print" style="margin-bottom:24px;" onclick="showScreen('list')">&#8592; <span data-i18n="btn.backToList">Volver a la lista</span></button>
+    <div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;text-align:center;">
+      <button class="btn btn-outline" onclick="showScreen('list')">&#8592; <span data-i18n="btn.backToLiq">Volver a la liquidaci\u00f3n</span></button>
+    </div>
     <div id="detail-content"></div>
   </div>
 

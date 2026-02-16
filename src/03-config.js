@@ -28,14 +28,10 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
-    version: '2.29.1',
+    version: '2.29.2',
     date: '2026-02-17',
     changes: [
-      'Periodo: label LIQUIDACI\u00d3N dorado + valor blanco sin pill (estilo consistente con headers)',
-      'Refactor: 04-google.js (2147 l\u00edneas) split en 5 m\u00f3dulos (google/persistence/sync/core/navigation)',
-      'Fix encoding: 153+ strings funcionales corregidas (toasts, regex AI, showToast)',
-      'debounce() y safeGet() movidos de 03-config a 01-utils',
-      'Build system: 17 m\u00f3dulos src/ con build.js actualizado',
+      'Bot\u00f3n Volver a liquidaci\u00f3n: sticky centrado en vista detalle reserva (mismo estilo que Volver a alojamientos)',
     ]
   },
   {

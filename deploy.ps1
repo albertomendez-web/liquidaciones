@@ -2,9 +2,10 @@
 # Uso: .\deploy.ps1
 #
 # Flujo:
-#   1. Si hay zip → extraer (sobreescribe src/ y otros archivos)
-#   2. node build.js → genera index.html desde src/
-#   3. git add + commit + push
+#   1. Si hay zip: extraer (sobreescribe src/ y otros archivos)
+#   2. Limpiar basura (.tmp, .zip residuales)
+#   3. node build.js: genera index.html desde src/
+#   4. git add + commit + push
 
 $ErrorActionPreference = "Stop"
 Set-Location "C:\Liquidaciones-GTC"
@@ -17,31 +18,41 @@ if ($zips) {
     foreach ($z in $zips) {
         Write-Host "Descomprimiendo $($z.Name)..." -ForegroundColor Cyan
         Expand-Archive -Path $z.FullName -DestinationPath . -Force
-        # Listar lo extraido
-        $extracted = Expand-Archive -Path $z.FullName -DestinationPath "$env:TEMP\_deploy_peek" -Force -PassThru 2>$null
-        # Approach: just list files after extraction
         Remove-Item $z.FullName -Force
+        Write-Host "  OK" -ForegroundColor Green
     }
-    # Show what was updated
-    $files = Get-ChildItem *.zip -ErrorAction SilentlyContinue
-    Write-Host "  Zip(s) procesado(s)" -ForegroundColor DarkGray
 }
 
-# 2. Build: concatenar src/ → index.html
+# 2. Limpiar basura (.tmp que dejan los zips/descargas)
+$tmps = Get-ChildItem *.tmp -ErrorAction SilentlyContinue
+if ($tmps) {
+    foreach ($t in $tmps) {
+        # Si git lo trackea, marcarlo para borrar del repo
+        $tracked = git ls-files $t.Name 2>$null
+        if ($tracked) {
+            git rm -f $t.Name 2>$null
+        } else {
+            Remove-Item $t.FullName -Force
+        }
+    }
+    Write-Host "  Limpieza: $($tmps.Count) .tmp eliminado(s)" -ForegroundColor DarkGray
+}
+
+# 3. Build: concatenar src/ -> index.html
 if (Test-Path "build.js") {
     Write-Host ""
     $buildResult = node build.js 2>&1
     $buildExit = $LASTEXITCODE
-    $buildResult | ForEach-Object { Write-Host "  $_" -ForegroundColor $(if ($_ -match '✅') { 'Green' } elseif ($_ -match '⚠|❌') { 'Red' } else { 'Gray' }) }
+    $buildResult | ForEach-Object { Write-Host "  $_" }
     if ($buildExit -ne 0) {
-        Write-Host "`n❌ Build fallido. Abortando deploy." -ForegroundColor Red
+        Write-Host "`nBuild fallido. Abortando deploy." -ForegroundColor Red
         exit 1
     }
 } else {
-    Write-Host "  (sin build.js — usando index.html directo)" -ForegroundColor DarkGray
+    Write-Host "  (sin build.js - usando index.html directo)" -ForegroundColor DarkGray
 }
 
-# 3. Git: add + commit + push
+# 4. Git: add + commit + push
 Write-Host ""
 git add -A
 $status = git status --porcelain

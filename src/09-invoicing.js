@@ -502,7 +502,7 @@ function _extractContactData(contact) {
   return {
     contactId: String(contact.id || ''),
     name: name,
-    vatnumber: String(contact.vatnumber || contact.vatNumber || ''),
+    vatnumber: String(contact.vatnumber || contact.vatNumber || contact.code || ''),
     email: String(contact.email || ''),
     phone: String(contact.phone || contact.mobile || ''),
     address: addr,

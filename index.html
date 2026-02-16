@@ -1088,9 +1088,7 @@ tr.ce2-highlighted { background:#faf8ff; }
 
   <!-- DETAIL (individual) -->
   <div class="screen" id="screen-detail">
-    <div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;text-align:center;">
-      <button class="btn btn-outline" onclick="showScreen('list')">&#8592; <span data-i18n="btn.backToLiq">Volver a la liquidaci\u00f3n</span></button>
-    </div>
+    <button class="btn btn-outline no-print" style="margin-bottom:24px;" onclick="showScreen('list')">&#8592; <span data-i18n="btn.backToList">Volver a la lista</span></button>
     <div id="detail-content"></div>
   </div>
 
@@ -1383,9 +1381,9 @@ function toggleConsolVal(mode) {
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 7. NUNCA reutilizar un n\u00famero de versi\u00f3n ya existente
  * ===================================================================================================
  */
-const APP_VERSION = '2.29.2';
-const APP_BUILD   = '2026-02-17T13:00:00+01:00';
-const APP_CHANGES = 'Bot\u00f3n Volver a liquidaci\u00f3n sticky centrado en detalle reserva';
+const APP_VERSION = '2.29.3';
+const APP_BUILD   = '2026-02-17T14:00:00+01:00';
+const APP_CHANGES = 'Bot\u00f3n Volver a liquidaci\u00f3n sticky centrado en previsualizaci\u00f3n';
 
 // ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -2820,10 +2818,20 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
-    version: '2.29.2',
+    version: '2.29.3',
     date: '2026-02-17',
     changes: [
-      'Bot\u00f3n Volver a liquidaci\u00f3n: sticky centrado en vista detalle reserva (mismo estilo que Volver a alojamientos)',
+      'Bot\u00f3n Volver a liquidaci\u00f3n: sticky centrado en previsualizaci\u00f3n generada',
+    ]
+  },
+  {
+    version: '2.29.1',
+    date: '2026-02-17',
+    changes: [
+      'Periodo: label LIQUIDACI\u00d3N dorado + valor blanco sin pill',
+      'Refactor: 04-google.js split en 5 m\u00f3dulos',
+      'Fix encoding: 153+ strings funcionales corregidas',
+      'Build system: 17 m\u00f3dulos src/',
     ]
   },
   {
@@ -8292,8 +8300,11 @@ function showPrintPreview() {
   const previewZone = document.getElementById('preview-zone');
   const actions = document.getElementById('consol-actions');
 
-  // Populate preview zone with cards + action buttons
-  previewZone.innerHTML = result.cardsHtml + result.summaryHtml
+  // Populate preview zone with sticky back button + cards + action buttons
+  previewZone.innerHTML = `<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;text-align:center;">
+        <button class="btn btn-outline" onclick="exitPreview()">&#8592; ${t('btn.backToLiq')}</button>
+      </div>`
+    + result.cardsHtml + result.summaryHtml
     + `<div class="liq-actions no-print" style="margin-top:28px;justify-content:center;">
         <button class="btn btn-success" onclick="printFromPreview()">&#128424; ${t('btn.print')}</button>
         <button class="btn btn-outline" onclick="exitPreview()">&#8592; ${t('btn.backToLiq')}</button>

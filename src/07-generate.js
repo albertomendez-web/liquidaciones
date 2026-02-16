@@ -159,8 +159,11 @@ function showPrintPreview() {
   const previewZone = document.getElementById('preview-zone');
   const actions = document.getElementById('consol-actions');
 
-  // Populate preview zone with cards + action buttons
-  previewZone.innerHTML = result.cardsHtml + result.summaryHtml
+  // Populate preview zone with sticky back button + cards + action buttons
+  previewZone.innerHTML = `<div class="no-print" style="position:sticky;top:0;z-index:50;background:linear-gradient(to bottom,#f1f3f8 80%,transparent);padding:12px 0 16px;text-align:center;">
+        <button class="btn btn-outline" onclick="exitPreview()">&#8592; ${t('btn.backToLiq')}</button>
+      </div>`
+    + result.cardsHtml + result.summaryHtml
     + `<div class="liq-actions no-print" style="margin-top:28px;justify-content:center;">
         <button class="btn btn-success" onclick="printFromPreview()">&#128424; ${t('btn.print')}</button>
         <button class="btn btn-outline" onclick="exitPreview()">&#8592; ${t('btn.backToLiq')}</button>

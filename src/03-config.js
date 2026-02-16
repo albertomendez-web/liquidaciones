@@ -28,10 +28,20 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
-    version: '2.29.2',
+    version: '2.29.3',
     date: '2026-02-17',
     changes: [
-      'Bot\u00f3n Volver a liquidaci\u00f3n: sticky centrado en vista detalle reserva (mismo estilo que Volver a alojamientos)',
+      'Bot\u00f3n Volver a liquidaci\u00f3n: sticky centrado en previsualizaci\u00f3n generada',
+    ]
+  },
+  {
+    version: '2.29.1',
+    date: '2026-02-17',
+    changes: [
+      'Periodo: label LIQUIDACI\u00d3N dorado + valor blanco sin pill',
+      'Refactor: 04-google.js split en 5 m\u00f3dulos',
+      'Fix encoding: 153+ strings funcionales corregidas',
+      'Build system: 17 m\u00f3dulos src/',
     ]
   },
   {

@@ -84,8 +84,11 @@ function getInvoiceDate(periodStr) {
 function renderInvoicingTab() {
   var html = '';
 
-  // --- Section 1: Holded API Key ---
-  html += '<div class="inv-section">';
+  // --- Top row: API + Companies side by side ---
+  html += '<div class="inv-top-row">';
+
+  // Left: Holded API
+  html += '<div class="inv-top-card">';
   html += '<div class="inv-section-title">&#128273; ' + t('inv.holdedTitle') + '</div>';
   html += '<div class="inv-section-desc">' + t('inv.holdedDesc') + '</div>';
   html += '<div class="inv-api-row">';
@@ -100,11 +103,9 @@ function renderInvoicingTab() {
   }
   html += '</div>';
 
-  // --- Section 2: Empresas receptoras ---
-  html += '<hr class="section-divider">';
-  html += '<div class="inv-section">';
+  // Right: Companies
+  html += '<div class="inv-top-card">';
   html += '<div class="inv-section-title">&#127970; ' + t('inv.companiesTitle') + '</div>';
-  html += '<div class="inv-section-desc">' + t('inv.companiesDesc') + '</div>';
   html += '<div class="inv-companies">';
   _invoiceCompanies.forEach(function(c, i) {
     html += '<div class="inv-company-card">';
@@ -114,20 +115,15 @@ function renderInvoicingTab() {
     html += '<button class="inv-btn inv-btn-sm" onclick="editInvoiceCompany(' + i + ')" title="' + t('inv.edit') + '">&#9998;</button>';
     html += '</div>';
     html += '<div class="inv-company-detail"><span class="inv-label">' + t('inv.companyCif') + ':</span> ' + esc(c.cif) + '</div>';
-    html += '<div class="inv-company-detail"><span class="inv-label">' + t('inv.address') + ':</span> ' + esc(c.address) + '</div>';
     html += '</div>';
   });
   html += '</div>';
   html += '<button class="inv-btn inv-btn-outline" onclick="addInvoiceCompany()" style="margin-top:8px;">' + t('inv.addCompany') + '</button>';
   html += '</div>';
 
-  // --- Section 3: Toggle por alojamiento ---
-  html += '<hr class="section-divider">';
-  html += '<div class="inv-section">';
-  html += '<div class="inv-section-title">&#128196; ' + t('inv.alojTitle') + '</div>';
-  html += '<div class="inv-section-desc">' + t('inv.alojDesc') + '</div>';
+  html += '</div>'; // end inv-top-row
 
-  // Get all known alojamientos from data
+  // --- Alojamientos grid ---
   var alojs = [];
   if (typeof getAlojamientos === 'function') {
     var alojList = getAlojamientos();
@@ -135,43 +131,52 @@ function renderInvoicingTab() {
   }
 
   if (alojs.length === 0) {
-    html += '<div style="padding:16px;text-align:center;color:#9ca3af;font-size:13px;">' + t('inv.noData') + '</div>';
+    html += '<div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;">' + t('inv.noData') + '</div>';
   } else {
     var enabledCount = 0;
-    html += '<div class="inv-aloj-list">';
+    alojs.forEach(function(name) {
+      var key = name.trim().toLowerCase();
+      var cfg = _invoiceConfig[key] || { enabled: false };
+      if (cfg.enabled) enabledCount++;
+    });
+
+    // Header with search + counter
+    html += '<div class="inv-aloj-header">';
+    html += '<div class="inv-section-title" style="margin:0;">&#128196; ' + t('inv.alojTitle') + '</div>';
+    html += '<input class="inv-search-input" id="inv-search" placeholder="&#128269; ' + t('inv.searchPlaceholder') + '" oninput="filterInvoiceAlojs(this.value)" />';
+    html += '<div class="inv-counter"><span class="badge">' + enabledCount + '</span> ' + t('inv.of') + ' ' + alojs.length + ' ' + t('inv.activeCount') + '</div>';
+    html += '</div>';
+
+    // Grid
+    html += '<div class="inv-aloj-grid" id="inv-aloj-grid">';
     alojs.forEach(function(name) {
       var key = name.trim().toLowerCase();
       var cfg = _invoiceConfig[key] || { enabled: false, companyId: _invoiceCompanies.length > 0 ? _invoiceCompanies[0].id : '' };
       var on = cfg.enabled;
-      if (on) enabledCount++;
       var prop = typeof getPropietario === 'function' ? getPropietario(name) : '';
+      var safeName = name.replace(/'/g, "\\'");
 
-      html += '<div class="inv-aloj-row' + (on ? ' inv-aloj-on' : '') + '">';
-      // Toggle
-      html += '<div class="toggle" onclick="toggleInvoiceAloj(\'' + name.replace(/'/g, "\\'") + '\')">';
+      html += '<div class="inv-aloj-row' + (on ? ' inv-aloj-on' : '') + '" data-aloj="' + esc(name) + '" data-prop="' + esc(prop) + '">';
+      html += '<div class="toggle" onclick="toggleInvoiceAloj(\'' + safeName + '\')">';
       html += '<div class="toggle-track' + (on ? ' on' : '') + '" style="' + (on ? 'background:#059669;' : '') + '">';
       html += '<div class="toggle-thumb"></div></div></div>';
-      // Info
       html += '<div class="inv-aloj-info">';
       html += '<div class="inv-aloj-name">' + esc(name) + '</div>';
       if (prop && prop !== t('consol.missingOwner')) {
         html += '<div class="inv-aloj-prop">' + esc(prop) + '</div>';
       }
       html += '</div>';
-      // Company selector (only visible when enabled)
       if (on) {
-        html += '<select class="inv-select" onchange="setInvoiceCompany(\'' + name.replace(/'/g, "\\'") + '\', this.value)">';
-        _invoiceCompanies.forEach(function(c) {
-          html += '<option value="' + c.id + '"' + (cfg.companyId === c.id ? ' selected' : '') + '>' + c.id.toUpperCase() + ' - ' + esc(c.name) + '</option>';
+        html += '<select class="inv-select" onchange="setInvoiceCompany(\'' + safeName + '\', this.value)">';
+        _invoiceCompanies.forEach(function(co) {
+          html += '<option value="' + co.id + '"' + (cfg.companyId === co.id ? ' selected' : '') + '>' + co.id.toUpperCase() + '</option>';
         });
         html += '</select>';
       }
       html += '</div>';
     });
     html += '</div>';
-    html += '<div class="inv-counter"><span class="badge">' + enabledCount + '</span> de ' + alojs.length + ' con facturaci\u00f3n activa</div>';
   }
-  html += '</div>';
 
   return html;
 }
@@ -213,6 +218,18 @@ function setInvoiceCompany(alojName, companyId) {
     _invoiceConfig[key].companyId = companyId;
   }
   scheduleGlobalConfigSave();
+}
+
+function filterInvoiceAlojs(query) {
+  var grid = document.getElementById('inv-aloj-grid');
+  if (!grid) return;
+  var q = (query || '').toLowerCase();
+  var rows = grid.querySelectorAll('.inv-aloj-row');
+  rows.forEach(function(row) {
+    var aloj = (row.getAttribute('data-aloj') || '').toLowerCase();
+    var prop = (row.getAttribute('data-prop') || '').toLowerCase();
+    row.style.display = (!q || aloj.indexOf(q) >= 0 || prop.indexOf(q) >= 0) ? '' : 'none';
+  });
 }
 
 function renderInvoicingConfigTab() {

@@ -14,6 +14,14 @@
     <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; <span data-i18n="nav.detail">Liquidaci&oacute;n Reserva</span></div>
     <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; <span data-i18n="nav.consol">Por Alojamiento</span></div>
     <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; <span data-i18n="nav.consoldetail">Liquidaci&oacute;n Alojamiento</span></div>
+    <div class="nav-divider" id="cfg-nav-divider"></div>
+    <div class="nav-label" data-i18n="nav.configLabel">Configuraci&oacute;n</div>
+    <div class="nav-item" id="nav-cfg-plat" onclick="showScreen('cfg-plat')">&#128225; <span data-i18n="config.salesChannel">Canal de Venta</span></div>
+    <div class="nav-item" id="nav-cfg-otros" onclick="showScreen('cfg-otros')">&#129529; <span data-i18n="config.gtcService">Servicio GTC / Limpieza</span></div>
+    <div class="nav-item" id="nav-cfg-pasarela" onclick="showScreen('cfg-pasarela')">&#128179; <span data-i18n="config.gateway">Pasarela</span></div>
+    <div class="nav-item" id="nav-cfg-impuestos" onclick="showScreen('cfg-impuestos')">&#128202; <span data-i18n="config.taxes">Impuestos</span></div>
+    <div class="nav-item" id="nav-cfg-8020" onclick="showScreen('cfg-8020')" style="color:#7c3aed;">&#8621; <span data-i18n="config.agreement8020">Acuerdo 80/20</span></div>
+    <div class="nav-item" id="nav-cfg-invoicing" onclick="showScreen('cfg-invoicing')" style="color:#059669;">&#128196; <span data-i18n="inv.tabTitle">Facturaci&oacute;n</span></div>
   </nav>
   <div class="sidebar-google" id="sidebar-google" style="display:none;">
     <span class="status-dot" id="google-dot"></span>
@@ -235,7 +243,6 @@
         <div class="combo-list" id="combo-list-sortdir"></div>
       </div>
       <div class="filter-sep"></div>
-      <button class="gear-btn" onclick="openConfigModal()" data-i18n-title="misc.configValues" title="Configurar valores">&#9881;</button>
       <div class="col-toggle-wrap">
         <button class="col-toggle-btn" onclick="toggleColDropdown()" data-i18n-title="misc.showHideCols" title="Mostrar/ocultar columnas">&#9783; <span data-i18n="filter.columns">Columnas</span></button>
         <div class="col-toggle-dd" id="col-toggle-dd"></div>
@@ -306,30 +313,42 @@
   </div>
 </div>
 
-<!-- CONFIG MODAL -->
-<div class="modal-overlay" id="config-modal" style="display:none;" onclick="if(event.target===this)closeConfigModal();">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>&#9881; <span data-i18n="config.title">Configurar Valores</span></h3>
-      <button class="modal-close" onclick="closeConfigModal()">&#10005;</button>
-    </div>
-    <div class="modal-tabs">
-      <button class="modal-tab active" onclick="switchTab('tab-plat',this)" data-i18n="config.salesChannel">Canal de Venta</button>
-      <button class="modal-tab" onclick="switchTab('tab-otros',this)" data-i18n="config.gtcService">Servicio GTC / Limpieza / Amenities / Mant.</button>
-      <button class="modal-tab" onclick="switchTab('tab-pasarela',this)" data-i18n="config.gateway">Pasarela</button>
-      <button class="modal-tab" onclick="switchTab('tab-impuestos',this)" data-i18n="config.taxes">Impuestos</button>
-      <button class="modal-tab" onclick="switchTab('tab-8020',this)" style="color:#7c3aed;" data-i18n="config.agreement8020">Acuerdo 80/20</button>
-      <button class="modal-tab" onclick="switchTab('tab-invoicing',this)" style="color:#059669;">&#128196; <span data-i18n="inv.tabTitle">Facturación</span></button>
-    </div>
-    <div class="modal-body">
-      <div class="tab-panel active" id="tab-plat"></div>
-      <div class="tab-panel" id="tab-otros"></div>
-      <div class="tab-panel" id="tab-pasarela"></div>
-      <div class="tab-panel" id="tab-impuestos"></div>
-      <div class="tab-panel" id="tab-8020"></div>
-      <div class="tab-panel" id="tab-invoicing"></div>
+  <!-- Config screens (sidebar navigation) -->
+  <div class="screen" id="screen-cfg-plat">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#128225; <span data-i18n="config.salesChannel">Canal de Venta</span></h2><p data-i18n="cfg.platDesc">Comisiones por plataforma de reserva (% sobre total IVA incl.).</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-plat"></div>
     </div>
   </div>
-</div>
+  <div class="screen" id="screen-cfg-otros">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#129529; <span data-i18n="config.gtcService">Servicio GTC / Limpieza / Amenities / Mant.</span></h2><p data-i18n="cfg.otrosDesc">Valores de gesti&oacute;n, limpieza, amenities y mantenimiento mensual.</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-otros"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-pasarela">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#128179; <span data-i18n="config.gateway">Pasarela</span></h2><p data-i18n="cfg.pasarelaDesc">Comisiones de pasarela por m&eacute;todo de pago.</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-pasarela"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-impuestos">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#128202; <span data-i18n="config.taxes">Impuestos</span></h2><p data-i18n="cfg.impuestosDesc">Retenci&oacute;n IRPF aplicable a las liquidaciones.</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-impuestos"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-8020">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2 style="color:#7c3aed;">&#8621; <span data-i18n="config.agreement8020">Acuerdo 80/20 GTC</span></h2><p data-i18n="cfg.8020Desc">Alojamientos propiedad GTC vendidos: el propietario recibe el 80% del Subtotal.</p></div>
+      <div class="cfg-page-body" id="tab-8020"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-invoicing">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2 style="color:#059669;">&#128196; <span data-i18n="inv.tabTitle">Facturaci&oacute;n</span></h2><p data-i18n="cfg.invoicingDesc">Configuraci&oacute;n de facturaci&oacute;n, empresas receptoras e integraci&oacute;n con Holded.</p></div>
+      <div class="cfg-page-body" id="tab-invoicing"></div>
+    </div>
+  </div>
 
 <script>

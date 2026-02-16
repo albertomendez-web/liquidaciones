@@ -590,6 +590,15 @@ const I18N = {
   'inv.companyCif':     { es:'CIF', en:'Tax ID', de:'Steuernummer' },
   'inv.companyAddr':    { es:'Direcci\u00f3n fiscal', en:'Fiscal address', de:'Steueradresse' },
   'inv.companyUpdated': { es:'Empresa actualizada', en:'Company updated', de:'Firma aktualisiert' },
+  'inv.searchPlaceholder': { es:'Buscar alojamiento o propietario...', en:'Search property or owner...', de:'Unterkunft oder Eigent\u00fcmer suchen...' },
+  'nav.configLabel':      { es:'Configuraci\u00f3n', en:'Settings', de:'Einstellungen' },
+  'cfg.platDesc':         { es:'Comisiones por plataforma de reserva (% sobre total IVA incl.).', en:'Booking platform commissions (% of total incl. VAT).', de:'Buchungsplattform-Provisionen (% des Gesamtbetrags inkl. MwSt.).' },
+  'cfg.otrosDesc':        { es:'Valores de gesti\u00f3n, limpieza, amenities y mantenimiento mensual.', en:'Management, cleaning, amenities and monthly maintenance values.', de:'Management-, Reinigungs-, Amenities- und monatliche Wartungswerte.' },
+  'cfg.pasarelaDesc':     { es:'Comisiones de pasarela por m\u00e9todo de pago.', en:'Payment gateway commissions by method.', de:'Zahlungs-Gateway-Provisionen nach Methode.' },
+  'cfg.impuestosDesc':    { es:'Retenci\u00f3n IRPF aplicable a las liquidaciones.', en:'IRPF withholding applicable to settlements.', de:'IRPF-Einbehaltung f\u00fcr Abrechnungen.' },
+  'cfg.8020Desc':         { es:'Alojamientos propiedad GTC vendidos: el propietario recibe el 80% del Subtotal.', en:'GTC-owned sold properties: owner receives 80% of Subtotal.', de:'Verkaufte GTC-eigene Unterk\u00fcnfte: Eigent\u00fcmer erh\u00e4lt 80% der Zwischensumme.' },
+  'cfg.invoicingDesc':    { es:'Configuraci\u00f3n de facturaci\u00f3n, empresas receptoras e integraci\u00f3n con Holded.', en:'Invoicing configuration, recipient companies and Holded integration.', de:'Rechnungskonfiguration, Empf\u00e4ngerunternehmen und Holded-Integration.' },
+
   'inv.companyAdded':   { es:'Empresa a\u00f1adida', en:'Company added', de:'Firma hinzugef\u00fcgt' },
 
 };

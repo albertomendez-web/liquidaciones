@@ -369,6 +369,27 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-total-value.cpv:hover .cpv-ico, .cd-total-bar-amount.cpv:hover .cpv-ico { opacity: 0.6; }
 .cd-total-bar-amount.cpv { cursor: pointer; padding: 2px 6px; display: inline-flex; align-items: center; gap: 5px; }
 
+
+/* === CONFIG PAGES (sidebar navigation) === */
+.cfg-page { padding: 24px 32px; }
+.cfg-page-header { margin-bottom: 20px; }
+.cfg-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.cfg-page-header p { font-size: 13px; color: #6b7280; margin: 0; }
+.cfg-page-body { }
+.cfg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.cfg-grid .modal-section { background: #fff; border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); margin-bottom: 0; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 6px 12px; }
+.nav-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.3); padding: 10px 12px 3px; font-weight: 700; }
+
+/* === INVOICING: top row + grid === */
+.inv-top-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media (max-width: 1100px) { .inv-top-row { grid-template-columns: 1fr; } }
+.inv-top-card { background: #fff; border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.inv-aloj-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.inv-search-input { padding: 7px 12px; border: 1.5px solid #e5e7eb; border-radius: 7px; font-size: 12px; width: 260px; }
+.inv-search-input::placeholder { color: #9ca3af; }
+.inv-aloj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 4px; }
+
 /* === INVOICING CONFIG === */
 .inv-section { padding: 8px 0; }
 .inv-section-title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }

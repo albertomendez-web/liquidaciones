@@ -28,6 +28,19 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.31.0',
+    date: '2026-02-17',
+    changes: [
+      'Config lateral: toda la configuraci\u00f3n pasa de modal a sidebar con p\u00e1ginas dedicadas',
+      'Eliminado modal de configuraci\u00f3n y bot\u00f3n engranaje',
+      'Facturaci\u00f3n: layout top-row (API + Empresas) + grid de alojamientos',
+      'Buscador de alojamientos en facturaci\u00f3n',
+      'Config: grid responsive para opciones (Canal de Venta, Servicio, etc.)',
+      'Auto-guardado en cada cambio de configuraci\u00f3n (sin necesidad de cerrar modal)',
+      'Navegaci\u00f3n: invalidateCache y rebuildSelectCache al volver a lista/consolidado',
+    ]
+  },
+  {
     version: '2.30.0',
     date: '2026-02-17',
     changes: [

@@ -9,14 +9,17 @@ function showScreen(name) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   document.getElementById("screen-" + name).classList.add("active");
-  document.getElementById("nav-" + name).classList.add("active");
+  var navEl = document.getElementById("nav-" + name);
+  if (navEl) navEl.classList.add("active");
   if (_previewActive) exitPreview();
   if (_navigating) return;
   _navigating = true;
-  if (name === "list") renderTable();
-  if (name === "consol") renderConsolGrid();
+  if (name === "list") { if (typeof rebuildSelectCache === 'function') rebuildSelectCache(); if (typeof invalidateCache === 'function') invalidateCache(); renderTable(); }
+  if (name === "consol") { if (typeof invalidateCache === 'function') invalidateCache(); renderConsolGrid(); }
   if (name === "consoldetail" && currentConsolAloj) viewConsolDetail(currentConsolAloj);
   if (name === "detail" && currentDetailIdx !== null) viewDetail(currentDetailIdx);
+  // Config screens — render all config pages on first visit
+  if (name.startsWith("cfg-") && typeof renderConfigPages === 'function') renderConfigPages();
   _navigating = false;
 }
 

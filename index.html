@@ -380,6 +380,27 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .liq-total-value.cpv:hover .cpv-ico, .cd-total-bar-amount.cpv:hover .cpv-ico { opacity: 0.6; }
 .cd-total-bar-amount.cpv { cursor: pointer; padding: 2px 6px; display: inline-flex; align-items: center; gap: 5px; }
 
+
+/* === CONFIG PAGES (sidebar navigation) === */
+.cfg-page { padding: 24px 32px; }
+.cfg-page-header { margin-bottom: 20px; }
+.cfg-page-header h2 { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.cfg-page-header p { font-size: 13px; color: #6b7280; margin: 0; }
+.cfg-page-body { }
+.cfg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.cfg-grid .modal-section { background: #fff; border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); margin-bottom: 0; }
+.nav-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 6px 12px; }
+.nav-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.3); padding: 10px 12px 3px; font-weight: 700; }
+
+/* === INVOICING: top row + grid === */
+.inv-top-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media (max-width: 1100px) { .inv-top-row { grid-template-columns: 1fr; } }
+.inv-top-card { background: #fff; border: 1.5px solid #e5e7eb; border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.inv-aloj-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.inv-search-input { padding: 7px 12px; border: 1.5px solid #e5e7eb; border-radius: 7px; font-size: 12px; width: 260px; }
+.inv-search-input::placeholder { color: #9ca3af; }
+.inv-aloj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 4px; }
+
 /* === INVOICING CONFIG === */
 .inv-section { padding: 8px 0; }
 .inv-section-title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
@@ -884,6 +905,14 @@ tr.ce2-highlighted { background:#faf8ff; }
     <div class="nav-item" id="nav-detail" onclick="showScreen('detail')" style="display:none;">&#128065; <span data-i18n="nav.detail">Liquidaci&oacute;n Reserva</span></div>
     <div class="nav-item" id="nav-consol" onclick="showScreen('consol')" style="display:none;">&#127968; <span data-i18n="nav.consol">Por Alojamiento</span></div>
     <div class="nav-item" id="nav-consoldetail" onclick="showScreen('consoldetail')" style="display:none;">&#128196; <span data-i18n="nav.consoldetail">Liquidaci&oacute;n Alojamiento</span></div>
+    <div class="nav-divider" id="cfg-nav-divider"></div>
+    <div class="nav-label" data-i18n="nav.configLabel">Configuraci&oacute;n</div>
+    <div class="nav-item" id="nav-cfg-plat" onclick="showScreen('cfg-plat')">&#128225; <span data-i18n="config.salesChannel">Canal de Venta</span></div>
+    <div class="nav-item" id="nav-cfg-otros" onclick="showScreen('cfg-otros')">&#129529; <span data-i18n="config.gtcService">Servicio GTC / Limpieza</span></div>
+    <div class="nav-item" id="nav-cfg-pasarela" onclick="showScreen('cfg-pasarela')">&#128179; <span data-i18n="config.gateway">Pasarela</span></div>
+    <div class="nav-item" id="nav-cfg-impuestos" onclick="showScreen('cfg-impuestos')">&#128202; <span data-i18n="config.taxes">Impuestos</span></div>
+    <div class="nav-item" id="nav-cfg-8020" onclick="showScreen('cfg-8020')" style="color:#7c3aed;">&#8621; <span data-i18n="config.agreement8020">Acuerdo 80/20</span></div>
+    <div class="nav-item" id="nav-cfg-invoicing" onclick="showScreen('cfg-invoicing')" style="color:#059669;">&#128196; <span data-i18n="inv.tabTitle">Facturaci&oacute;n</span></div>
   </nav>
   <div class="sidebar-google" id="sidebar-google" style="display:none;">
     <span class="status-dot" id="google-dot"></span>
@@ -1105,7 +1134,6 @@ tr.ce2-highlighted { background:#faf8ff; }
         <div class="combo-list" id="combo-list-sortdir"></div>
       </div>
       <div class="filter-sep"></div>
-      <button class="gear-btn" onclick="openConfigModal()" data-i18n-title="misc.configValues" title="Configurar valores">&#9881;</button>
       <div class="col-toggle-wrap">
         <button class="col-toggle-btn" onclick="toggleColDropdown()" data-i18n-title="misc.showHideCols" title="Mostrar/ocultar columnas">&#9783; <span data-i18n="filter.columns">Columnas</span></button>
         <div class="col-toggle-dd" id="col-toggle-dd"></div>
@@ -1176,31 +1204,43 @@ tr.ce2-highlighted { background:#faf8ff; }
   </div>
 </div>
 
-<!-- CONFIG MODAL -->
-<div class="modal-overlay" id="config-modal" style="display:none;" onclick="if(event.target===this)closeConfigModal();">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>&#9881; <span data-i18n="config.title">Configurar Valores</span></h3>
-      <button class="modal-close" onclick="closeConfigModal()">&#10005;</button>
-    </div>
-    <div class="modal-tabs">
-      <button class="modal-tab active" onclick="switchTab('tab-plat',this)" data-i18n="config.salesChannel">Canal de Venta</button>
-      <button class="modal-tab" onclick="switchTab('tab-otros',this)" data-i18n="config.gtcService">Servicio GTC / Limpieza / Amenities / Mant.</button>
-      <button class="modal-tab" onclick="switchTab('tab-pasarela',this)" data-i18n="config.gateway">Pasarela</button>
-      <button class="modal-tab" onclick="switchTab('tab-impuestos',this)" data-i18n="config.taxes">Impuestos</button>
-      <button class="modal-tab" onclick="switchTab('tab-8020',this)" style="color:#7c3aed;" data-i18n="config.agreement8020">Acuerdo 80/20</button>
-      <button class="modal-tab" onclick="switchTab('tab-invoicing',this)" style="color:#059669;">&#128196; <span data-i18n="inv.tabTitle">Facturación</span></button>
-    </div>
-    <div class="modal-body">
-      <div class="tab-panel active" id="tab-plat"></div>
-      <div class="tab-panel" id="tab-otros"></div>
-      <div class="tab-panel" id="tab-pasarela"></div>
-      <div class="tab-panel" id="tab-impuestos"></div>
-      <div class="tab-panel" id="tab-8020"></div>
-      <div class="tab-panel" id="tab-invoicing"></div>
+  <!-- Config screens (sidebar navigation) -->
+  <div class="screen" id="screen-cfg-plat">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#128225; <span data-i18n="config.salesChannel">Canal de Venta</span></h2><p data-i18n="cfg.platDesc">Comisiones por plataforma de reserva (% sobre total IVA incl.).</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-plat"></div>
     </div>
   </div>
-</div>
+  <div class="screen" id="screen-cfg-otros">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#129529; <span data-i18n="config.gtcService">Servicio GTC / Limpieza / Amenities / Mant.</span></h2><p data-i18n="cfg.otrosDesc">Valores de gesti&oacute;n, limpieza, amenities y mantenimiento mensual.</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-otros"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-pasarela">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#128179; <span data-i18n="config.gateway">Pasarela</span></h2><p data-i18n="cfg.pasarelaDesc">Comisiones de pasarela por m&eacute;todo de pago.</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-pasarela"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-impuestos">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2>&#128202; <span data-i18n="config.taxes">Impuestos</span></h2><p data-i18n="cfg.impuestosDesc">Retenci&oacute;n IRPF aplicable a las liquidaciones.</p></div>
+      <div class="cfg-page-body cfg-grid" id="tab-impuestos"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-8020">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2 style="color:#7c3aed;">&#8621; <span data-i18n="config.agreement8020">Acuerdo 80/20 GTC</span></h2><p data-i18n="cfg.8020Desc">Alojamientos propiedad GTC vendidos: el propietario recibe el 80% del Subtotal.</p></div>
+      <div class="cfg-page-body" id="tab-8020"></div>
+    </div>
+  </div>
+  <div class="screen" id="screen-cfg-invoicing">
+    <div class="cfg-page">
+      <div class="cfg-page-header"><h2 style="color:#059669;">&#128196; <span data-i18n="inv.tabTitle">Facturaci&oacute;n</span></h2><p data-i18n="cfg.invoicingDesc">Configuraci&oacute;n de facturaci&oacute;n, empresas receptoras e integraci&oacute;n con Holded.</p></div>
+      <div class="cfg-page-body" id="tab-invoicing"></div>
+    </div>
+  </div>
 
 <script>
 /**
@@ -1420,9 +1460,9 @@ function toggleConsolVal(mode) {
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 7. NUNCA reutilizar un n\u00famero de versi\u00f3n ya existente
  * ===================================================================================================
  */
-const APP_VERSION = '2.30.0';
-const APP_BUILD   = '2026-02-17T16:00:00+01:00';
-const APP_CHANGES = 'F1 Facturaci\u00f3n: config empresas, toggle por alojamiento, Holded API key';
+const APP_VERSION = '2.31.0';
+const APP_BUILD   = '2026-02-17T18:00:00+01:00';
+const APP_CHANGES = 'Config lateral: modal eliminado, config en sidebar con p\u00e1ginas dedicadas';
 
 // ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -2156,6 +2196,15 @@ const I18N = {
   'inv.companyCif':     { es:'CIF', en:'Tax ID', de:'Steuernummer' },
   'inv.companyAddr':    { es:'Direcci\u00f3n fiscal', en:'Fiscal address', de:'Steueradresse' },
   'inv.companyUpdated': { es:'Empresa actualizada', en:'Company updated', de:'Firma aktualisiert' },
+  'inv.searchPlaceholder': { es:'Buscar alojamiento o propietario...', en:'Search property or owner...', de:'Unterkunft oder Eigent\u00fcmer suchen...' },
+  'nav.configLabel':      { es:'Configuraci\u00f3n', en:'Settings', de:'Einstellungen' },
+  'cfg.platDesc':         { es:'Comisiones por plataforma de reserva (% sobre total IVA incl.).', en:'Booking platform commissions (% of total incl. VAT).', de:'Buchungsplattform-Provisionen (% des Gesamtbetrags inkl. MwSt.).' },
+  'cfg.otrosDesc':        { es:'Valores de gesti\u00f3n, limpieza, amenities y mantenimiento mensual.', en:'Management, cleaning, amenities and monthly maintenance values.', de:'Management-, Reinigungs-, Amenities- und monatliche Wartungswerte.' },
+  'cfg.pasarelaDesc':     { es:'Comisiones de pasarela por m\u00e9todo de pago.', en:'Payment gateway commissions by method.', de:'Zahlungs-Gateway-Provisionen nach Methode.' },
+  'cfg.impuestosDesc':    { es:'Retenci\u00f3n IRPF aplicable a las liquidaciones.', en:'IRPF withholding applicable to settlements.', de:'IRPF-Einbehaltung f\u00fcr Abrechnungen.' },
+  'cfg.8020Desc':         { es:'Alojamientos propiedad GTC vendidos: el propietario recibe el 80% del Subtotal.', en:'GTC-owned sold properties: owner receives 80% of Subtotal.', de:'Verkaufte GTC-eigene Unterk\u00fcnfte: Eigent\u00fcmer erh\u00e4lt 80% der Zwischensumme.' },
+  'cfg.invoicingDesc':    { es:'Configuraci\u00f3n de facturaci\u00f3n, empresas receptoras e integraci\u00f3n con Holded.', en:'Invoicing configuration, recipient companies and Holded integration.', de:'Rechnungskonfiguration, Empf\u00e4ngerunternehmen und Holded-Integration.' },
+
   'inv.companyAdded':   { es:'Empresa a\u00f1adida', en:'Company added', de:'Firma hinzugef\u00fcgt' },
 
 };
@@ -2882,6 +2931,19 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.31.0',
+    date: '2026-02-17',
+    changes: [
+      'Config lateral: toda la configuraci\u00f3n pasa de modal a sidebar con p\u00e1ginas dedicadas',
+      'Eliminado modal de configuraci\u00f3n y bot\u00f3n engranaje',
+      'Facturaci\u00f3n: layout top-row (API + Empresas) + grid de alojamientos',
+      'Buscador de alojamientos en facturaci\u00f3n',
+      'Config: grid responsive para opciones (Canal de Venta, Servicio, etc.)',
+      'Auto-guardado en cada cambio de configuraci\u00f3n (sin necesidad de cerrar modal)',
+      'Navegaci\u00f3n: invalidateCache y rebuildSelectCache al volver a lista/consolidado',
+    ]
+  },
   {
     version: '2.30.0',
     date: '2026-02-17',
@@ -5797,14 +5859,17 @@ function showScreen(name) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
   document.getElementById("screen-" + name).classList.add("active");
-  document.getElementById("nav-" + name).classList.add("active");
+  var navEl = document.getElementById("nav-" + name);
+  if (navEl) navEl.classList.add("active");
   if (_previewActive) exitPreview();
   if (_navigating) return;
   _navigating = true;
-  if (name === "list") renderTable();
-  if (name === "consol") renderConsolGrid();
+  if (name === "list") { if (typeof rebuildSelectCache === 'function') rebuildSelectCache(); if (typeof invalidateCache === 'function') invalidateCache(); renderTable(); }
+  if (name === "consol") { if (typeof invalidateCache === 'function') invalidateCache(); renderConsolGrid(); }
   if (name === "consoldetail" && currentConsolAloj) viewConsolDetail(currentConsolAloj);
   if (name === "detail" && currentDetailIdx !== null) viewDetail(currentDetailIdx);
+  // Config screens — render all config pages on first visit
+  if (name.startsWith("cfg-") && typeof renderConfigPages === 'function') renderConfigPages();
   _navigating = false;
 }
 
@@ -8460,15 +8525,6 @@ function printConsolDirect() {
 //  [M17] SETTINGS_UI ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Modal de configuraci\u00f3n y gesti\u00f3n de opciones
 // ==============================================================================================================================
 
-/** @description Cambia de pesta\u00f1a en el modal de configuraci\u00f3n */
-function switchTab(tabId, btn) {
-  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".modal-tab").forEach(t => { t.classList.remove("active"); t.classList.remove("active-purple"); });
-  document.getElementById(tabId).classList.add("active");
-  btn.classList.add(tabId === 'tab-8020' ? 'active-purple' : 'active');
-}
-function openConfigModal() { renderConfigModal(); document.getElementById("config-modal").style.display = "flex"; }
-function closeConfigModal() { document.getElementById("config-modal").style.display = "none"; rebuildSelectCache(); invalidateCache(); renderTable(); scheduleGlobalConfigSave(); }
 
 function buildOS(title, desc, vals, unit, addId, addFn, delFn) {
   const items = vals.map((v, i) => `<div class="option-item"><span class="val">${v}${unit}</span>
@@ -8479,7 +8535,7 @@ function buildOS(title, desc, vals, unit, addId, addFn, delFn) {
     <button class="btn btn-sm btn-primary" onclick="${addFn}()">${t('btn.addValue')}</button></div></div>`;
 }
 
-function renderConfigModal() {
+function renderConfigPages() {
   const pN = Object.keys(platformOptions).sort();
   let pH = '';
   pN.forEach(name => {
@@ -8487,8 +8543,8 @@ function renderConfigModal() {
     pH += buildOS(name, "% sobre total reserva (IVA incl.)", platformOptions[name], "%", `add-plat-${safe}`, `addP_${safe}`, `delP_${safe}`);
     window[`addP_${safe}`] = function() { const inp=document.getElementById(`add-plat-${safe}`); const v=parseFloat(inp.value);
       if(isNaN(v)||v<0||v>100){showToast("Porcentaje v\u00e1lido: 0-100", "warning");return;} if(platformOptions[name].some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;}
-      platformOptions[name].push(v); platformOptions[name].sort((a,b)=>a-b); inp.value=""; renderConfigModal(); };
-    window[`delP_${safe}`] = function(i) { if(platformOptions[name].length<=1)return; platformOptions[name].splice(i,1); renderConfigModal(); };
+      platformOptions[name].push(v); platformOptions[name].sort((a,b)=>a-b); inp.value=""; renderConfigPages(); scheduleGlobalConfigSave(); };
+    window[`delP_${safe}`] = function(i) { if(platformOptions[name].length<=1)return; platformOptions[name].splice(i,1); renderConfigPages(); scheduleGlobalConfigSave(); };
   });
   document.getElementById("tab-plat").innerHTML = pH;
   document.getElementById("tab-pasarela").innerHTML =
@@ -8517,8 +8573,8 @@ function addAM(){aL(amenitiesOptions,"add-am",99999,false);} function delAM(i){d
 function addMT(){aL(maintenanceOptions,"add-mt",99999,false);} function delMT(i){dL(maintenanceOptions,i);}
 function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);const v=parseFloat(inp.value);
   if(isP!==false){if(isNaN(v)||v<0||v>max){showToast("Valor no v\u00e1lido.", "warning");return;}}else{if(isNaN(v)||v<0){showToast("Valor no v\u00e1lido.", "warning");return;}}
-  if(list.some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}
-function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal();}
+  if(list.some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigPages();scheduleGlobalConfigSave();}
+function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigPages();scheduleGlobalConfigSave();}
 
 function buildGtcSplitSection() {
   const alojs = _gtcOwnedAlojamientos.slice().sort();
@@ -8539,7 +8595,7 @@ function toggleGtcSplit(alojName) {
   const idx = _gtcSplitAlojamientos.indexOf(alojName);
   if (idx >= 0) { _gtcSplitAlojamientos.splice(idx, 1); }
   else { _gtcSplitAlojamientos.push(alojName); _gtcSplitAlojamientos.sort(); }
-  renderConfigModal();
+  renderConfigPages();
   scheduleGlobalConfigSave();
 }
 
@@ -10390,8 +10446,11 @@ function getInvoiceDate(periodStr) {
 function renderInvoicingTab() {
   var html = '';
 
-  // --- Section 1: Holded API Key ---
-  html += '<div class="inv-section">';
+  // --- Top row: API + Companies side by side ---
+  html += '<div class="inv-top-row">';
+
+  // Left: Holded API
+  html += '<div class="inv-top-card">';
   html += '<div class="inv-section-title">&#128273; ' + t('inv.holdedTitle') + '</div>';
   html += '<div class="inv-section-desc">' + t('inv.holdedDesc') + '</div>';
   html += '<div class="inv-api-row">';
@@ -10406,11 +10465,9 @@ function renderInvoicingTab() {
   }
   html += '</div>';
 
-  // --- Section 2: Empresas receptoras ---
-  html += '<hr class="section-divider">';
-  html += '<div class="inv-section">';
+  // Right: Companies
+  html += '<div class="inv-top-card">';
   html += '<div class="inv-section-title">&#127970; ' + t('inv.companiesTitle') + '</div>';
-  html += '<div class="inv-section-desc">' + t('inv.companiesDesc') + '</div>';
   html += '<div class="inv-companies">';
   _invoiceCompanies.forEach(function(c, i) {
     html += '<div class="inv-company-card">';
@@ -10420,20 +10477,15 @@ function renderInvoicingTab() {
     html += '<button class="inv-btn inv-btn-sm" onclick="editInvoiceCompany(' + i + ')" title="' + t('inv.edit') + '">&#9998;</button>';
     html += '</div>';
     html += '<div class="inv-company-detail"><span class="inv-label">' + t('inv.companyCif') + ':</span> ' + esc(c.cif) + '</div>';
-    html += '<div class="inv-company-detail"><span class="inv-label">' + t('inv.address') + ':</span> ' + esc(c.address) + '</div>';
     html += '</div>';
   });
   html += '</div>';
   html += '<button class="inv-btn inv-btn-outline" onclick="addInvoiceCompany()" style="margin-top:8px;">' + t('inv.addCompany') + '</button>';
   html += '</div>';
 
-  // --- Section 3: Toggle por alojamiento ---
-  html += '<hr class="section-divider">';
-  html += '<div class="inv-section">';
-  html += '<div class="inv-section-title">&#128196; ' + t('inv.alojTitle') + '</div>';
-  html += '<div class="inv-section-desc">' + t('inv.alojDesc') + '</div>';
+  html += '</div>'; // end inv-top-row
 
-  // Get all known alojamientos from data
+  // --- Alojamientos grid ---
   var alojs = [];
   if (typeof getAlojamientos === 'function') {
     var alojList = getAlojamientos();
@@ -10441,43 +10493,52 @@ function renderInvoicingTab() {
   }
 
   if (alojs.length === 0) {
-    html += '<div style="padding:16px;text-align:center;color:#9ca3af;font-size:13px;">' + t('inv.noData') + '</div>';
+    html += '<div style="padding:24px;text-align:center;color:#9ca3af;font-size:13px;">' + t('inv.noData') + '</div>';
   } else {
     var enabledCount = 0;
-    html += '<div class="inv-aloj-list">';
+    alojs.forEach(function(name) {
+      var key = name.trim().toLowerCase();
+      var cfg = _invoiceConfig[key] || { enabled: false };
+      if (cfg.enabled) enabledCount++;
+    });
+
+    // Header with search + counter
+    html += '<div class="inv-aloj-header">';
+    html += '<div class="inv-section-title" style="margin:0;">&#128196; ' + t('inv.alojTitle') + '</div>';
+    html += '<input class="inv-search-input" id="inv-search" placeholder="&#128269; ' + t('inv.searchPlaceholder') + '" oninput="filterInvoiceAlojs(this.value)" />';
+    html += '<div class="inv-counter"><span class="badge">' + enabledCount + '</span> ' + t('inv.of') + ' ' + alojs.length + ' ' + t('inv.activeCount') + '</div>';
+    html += '</div>';
+
+    // Grid
+    html += '<div class="inv-aloj-grid" id="inv-aloj-grid">';
     alojs.forEach(function(name) {
       var key = name.trim().toLowerCase();
       var cfg = _invoiceConfig[key] || { enabled: false, companyId: _invoiceCompanies.length > 0 ? _invoiceCompanies[0].id : '' };
       var on = cfg.enabled;
-      if (on) enabledCount++;
       var prop = typeof getPropietario === 'function' ? getPropietario(name) : '';
+      var safeName = name.replace(/'/g, "\\'");
 
-      html += '<div class="inv-aloj-row' + (on ? ' inv-aloj-on' : '') + '">';
-      // Toggle
-      html += '<div class="toggle" onclick="toggleInvoiceAloj(\'' + name.replace(/'/g, "\\'") + '\')">';
+      html += '<div class="inv-aloj-row' + (on ? ' inv-aloj-on' : '') + '" data-aloj="' + esc(name) + '" data-prop="' + esc(prop) + '">';
+      html += '<div class="toggle" onclick="toggleInvoiceAloj(\'' + safeName + '\')">';
       html += '<div class="toggle-track' + (on ? ' on' : '') + '" style="' + (on ? 'background:#059669;' : '') + '">';
       html += '<div class="toggle-thumb"></div></div></div>';
-      // Info
       html += '<div class="inv-aloj-info">';
       html += '<div class="inv-aloj-name">' + esc(name) + '</div>';
       if (prop && prop !== t('consol.missingOwner')) {
         html += '<div class="inv-aloj-prop">' + esc(prop) + '</div>';
       }
       html += '</div>';
-      // Company selector (only visible when enabled)
       if (on) {
-        html += '<select class="inv-select" onchange="setInvoiceCompany(\'' + name.replace(/'/g, "\\'") + '\', this.value)">';
-        _invoiceCompanies.forEach(function(c) {
-          html += '<option value="' + c.id + '"' + (cfg.companyId === c.id ? ' selected' : '') + '>' + c.id.toUpperCase() + ' - ' + esc(c.name) + '</option>';
+        html += '<select class="inv-select" onchange="setInvoiceCompany(\'' + safeName + '\', this.value)">';
+        _invoiceCompanies.forEach(function(co) {
+          html += '<option value="' + co.id + '"' + (cfg.companyId === co.id ? ' selected' : '') + '>' + co.id.toUpperCase() + '</option>';
         });
         html += '</select>';
       }
       html += '</div>';
     });
     html += '</div>';
-    html += '<div class="inv-counter"><span class="badge">' + enabledCount + '</span> de ' + alojs.length + ' con facturaci\u00f3n activa</div>';
   }
-  html += '</div>';
 
   return html;
 }
@@ -10519,6 +10580,18 @@ function setInvoiceCompany(alojName, companyId) {
     _invoiceConfig[key].companyId = companyId;
   }
   scheduleGlobalConfigSave();
+}
+
+function filterInvoiceAlojs(query) {
+  var grid = document.getElementById('inv-aloj-grid');
+  if (!grid) return;
+  var q = (query || '').toLowerCase();
+  var rows = grid.querySelectorAll('.inv-aloj-row');
+  rows.forEach(function(row) {
+    var aloj = (row.getAttribute('data-aloj') || '').toLowerCase();
+    var prop = (row.getAttribute('data-prop') || '').toLowerCase();
+    row.style.display = (!q || aloj.indexOf(q) >= 0 || prop.indexOf(q) >= 0) ? '' : 'none';
+  });
 }
 
 function renderInvoicingConfigTab() {

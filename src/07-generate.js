@@ -236,15 +236,6 @@ function printConsolDirect() {
 //  [M17] SETTINGS_UI ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Modal de configuraci\u00f3n y gesti\u00f3n de opciones
 // ==============================================================================================================================
 
-/** @description Cambia de pesta\u00f1a en el modal de configuraci\u00f3n */
-function switchTab(tabId, btn) {
-  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
-  document.querySelectorAll(".modal-tab").forEach(t => { t.classList.remove("active"); t.classList.remove("active-purple"); });
-  document.getElementById(tabId).classList.add("active");
-  btn.classList.add(tabId === 'tab-8020' ? 'active-purple' : 'active');
-}
-function openConfigModal() { renderConfigModal(); document.getElementById("config-modal").style.display = "flex"; }
-function closeConfigModal() { document.getElementById("config-modal").style.display = "none"; rebuildSelectCache(); invalidateCache(); renderTable(); scheduleGlobalConfigSave(); }
 
 function buildOS(title, desc, vals, unit, addId, addFn, delFn) {
   const items = vals.map((v, i) => `<div class="option-item"><span class="val">${v}${unit}</span>
@@ -255,7 +246,7 @@ function buildOS(title, desc, vals, unit, addId, addFn, delFn) {
     <button class="btn btn-sm btn-primary" onclick="${addFn}()">${t('btn.addValue')}</button></div></div>`;
 }
 
-function renderConfigModal() {
+function renderConfigPages() {
   const pN = Object.keys(platformOptions).sort();
   let pH = '';
   pN.forEach(name => {
@@ -263,8 +254,8 @@ function renderConfigModal() {
     pH += buildOS(name, "% sobre total reserva (IVA incl.)", platformOptions[name], "%", `add-plat-${safe}`, `addP_${safe}`, `delP_${safe}`);
     window[`addP_${safe}`] = function() { const inp=document.getElementById(`add-plat-${safe}`); const v=parseFloat(inp.value);
       if(isNaN(v)||v<0||v>100){showToast("Porcentaje v\u00e1lido: 0-100", "warning");return;} if(platformOptions[name].some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;}
-      platformOptions[name].push(v); platformOptions[name].sort((a,b)=>a-b); inp.value=""; renderConfigModal(); };
-    window[`delP_${safe}`] = function(i) { if(platformOptions[name].length<=1)return; platformOptions[name].splice(i,1); renderConfigModal(); };
+      platformOptions[name].push(v); platformOptions[name].sort((a,b)=>a-b); inp.value=""; renderConfigPages(); scheduleGlobalConfigSave(); };
+    window[`delP_${safe}`] = function(i) { if(platformOptions[name].length<=1)return; platformOptions[name].splice(i,1); renderConfigPages(); scheduleGlobalConfigSave(); };
   });
   document.getElementById("tab-plat").innerHTML = pH;
   document.getElementById("tab-pasarela").innerHTML =
@@ -293,8 +284,8 @@ function addAM(){aL(amenitiesOptions,"add-am",99999,false);} function delAM(i){d
 function addMT(){aL(maintenanceOptions,"add-mt",99999,false);} function delMT(i){dL(maintenanceOptions,i);}
 function aL(list,inputId,max,isP){const inp=document.getElementById(inputId);const v=parseFloat(inp.value);
   if(isP!==false){if(isNaN(v)||v<0||v>max){showToast("Valor no v\u00e1lido.", "warning");return;}}else{if(isNaN(v)||v<0){showToast("Valor no v\u00e1lido.", "warning");return;}}
-  if(list.some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigModal();}
-function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigModal();}
+  if(list.some(x=>Math.abs(x-v)<0.001)){showToast("Ya existe.", "warning");return;} list.push(v);list.sort((a,b)=>a-b);inp.value="";renderConfigPages();scheduleGlobalConfigSave();}
+function dL(list,i){if(list.length<=1)return;list.splice(i,1);renderConfigPages();scheduleGlobalConfigSave();}
 
 function buildGtcSplitSection() {
   const alojs = _gtcOwnedAlojamientos.slice().sort();
@@ -315,7 +306,7 @@ function toggleGtcSplit(alojName) {
   const idx = _gtcSplitAlojamientos.indexOf(alojName);
   if (idx >= 0) { _gtcSplitAlojamientos.splice(idx, 1); }
   else { _gtcSplitAlojamientos.push(alojName); _gtcSplitAlojamientos.sort(); }
-  renderConfigModal();
+  renderConfigPages();
   scheduleGlobalConfigSave();
 }
 

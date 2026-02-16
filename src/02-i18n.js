@@ -758,6 +758,12 @@ function _i18nRefreshUI() {
     const el = document.getElementById('screen-' + s);
     return el && el.classList.contains('active');
   });
+  // Check if a config screen is active
+  const cfgScreens = ['cfg-plat','cfg-otros','cfg-pasarela','cfg-impuestos','cfg-8020','cfg-invoicing'];
+  const activeCfg = cfgScreens.find(s => {
+    const el = document.getElementById('screen-' + s);
+    return el && el.classList.contains('active');
+  });
   if (active === 'list' && allReservas.length > 0) {
     renderTable();
   } else if (active === 'consol' && allReservas.length > 0) {
@@ -766,6 +772,9 @@ function _i18nRefreshUI() {
     viewDetail(currentDetailIdx);
   } else if (active === 'consoldetail' && currentConsolAloj) {
     viewConsolDetail(currentConsolAloj);
+  }
+  if (activeCfg && typeof renderConfigPages === 'function') {
+    renderConfigPages();
   }
   // Update filter placeholders
   const pi = document.querySelector('#combo-platform .combo-input');

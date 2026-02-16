@@ -28,6 +28,13 @@ const CONFIG = Object.freeze({
 
 const CHANGELOG = [
   {
+    version: '2.32.1',
+    date: '2026-02-17',
+    changes: [
+      'Combo buscable para asignaci\u00f3n manual de contactos Holded (reemplaza select nativo)',
+    ]
+  },
+  {
     version: '2.32.0',
     date: '2026-02-17',
     changes: [

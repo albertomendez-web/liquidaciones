@@ -289,13 +289,15 @@ function renderHoldedSyncSection() {
           if (mapping.vatnumber) html += '<span class="inv-map-nif">' + esc(mapping.vatnumber) + '</span>';
           html += '<button class="inv-btn inv-btn-sm inv-map-clear" onclick="clearHoldedMapping(\'' + safeName + '\')" title="' + t('inv.syncClear') + '">&#10007;</button>';
         } else {
-          html += '<select class="inv-select inv-map-select" onchange="assignHoldedContact(\'' + safeName + '\', this.value)">';
-          html += '<option value="">\u2014 ' + t('inv.syncAssign') + ' \u2014</option>';
+          var comboId = 'hc-' + key.replace(/[^a-z0-9]/g, '_');
+          html += '<div class="inv-combo" id="' + comboId + '">';
+          html += '<input class="inv-combo-input" placeholder="' + t('inv.syncAssign') + '…" onfocus="openHoldedCombo(\'' + comboId + '\')" oninput="filterHoldedCombo(\'' + comboId + '\', this.value)" />';
+          html += '<div class="inv-combo-drop">';
           _holdedContacts.forEach(function(c) {
             var label = c.name + (c.vatnumber ? ' (' + c.vatnumber + ')' : '');
-            html += '<option value="' + c.id + '">' + esc(label) + '</option>';
+            html += '<div class="inv-combo-opt" data-id="' + c.id + '" data-search="' + esc(label.toLowerCase()) + '" onclick="pickHoldedCombo(\'' + safeName + '\',\'' + c.id + '\')">' + esc(label) + '</div>';
           });
-          html += '</select>';
+          html += '</div></div>';
         }
         html += '</div>';
         html += '</div>';
@@ -541,6 +543,44 @@ function filterHoldedMapping(query) {
     row.style.display = (!q || aloj.indexOf(q) >= 0 || prop.indexOf(q) >= 0) ? '' : 'none';
   });
 }
+
+// --- Holded searchable combo ---
+function openHoldedCombo(comboId) {
+  // Close any other open combos first
+  document.querySelectorAll('.inv-combo.open').forEach(function(el) {
+    if (el.id !== comboId) el.classList.remove('open');
+  });
+  var el = document.getElementById(comboId);
+  if (!el) return;
+  el.classList.add('open');
+  // Reset filter
+  var opts = el.querySelectorAll('.inv-combo-opt');
+  opts.forEach(function(o) { o.style.display = ''; });
+}
+
+function filterHoldedCombo(comboId, query) {
+  var el = document.getElementById(comboId);
+  if (!el) return;
+  var q = (query || '').toLowerCase();
+  var opts = el.querySelectorAll('.inv-combo-opt');
+  opts.forEach(function(o) {
+    var s = o.getAttribute('data-search') || '';
+    o.style.display = (!q || s.indexOf(q) >= 0) ? '' : 'none';
+  });
+}
+
+function pickHoldedCombo(alojName, contactId) {
+  // Close all combos
+  document.querySelectorAll('.inv-combo.open').forEach(function(el) { el.classList.remove('open'); });
+  assignHoldedContact(alojName, contactId);
+}
+
+// Close combos on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.inv-combo')) {
+    document.querySelectorAll('.inv-combo.open').forEach(function(el) { el.classList.remove('open'); });
+  }
+});
 
 // --- F1 Actions (unchanged) ---
 function toggleHoldedKeyVisibility() {

@@ -460,6 +460,15 @@ select.sel:disabled { opacity: 0.5; cursor: not-allowed; }
 .inv-map-match { font-size: 12px; font-weight: 600; color: #059669; }
 .inv-map-nif { font-size: 10px; color: #6b7280; background: #f3f4f6; padding: 1px 6px; border-radius: 4px; }
 .inv-map-select { max-width: 250px; font-size: 11px; }
+/* Searchable combo */
+.inv-combo { position: relative; min-width: 220px; max-width: 280px; }
+.inv-combo-input { width: 100%; padding: 5px 10px; border: 1.5px solid #d1d5db; border-radius: 6px; font-size: 12px; background: #fff; box-sizing: border-box; }
+.inv-combo-input:focus { border-color: #059669; outline: none; box-shadow: 0 0 0 2px rgba(5,150,105,0.15); }
+.inv-combo-drop { display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 220px; overflow-y: auto; background: #fff; border: 1.5px solid #d1d5db; border-top: none; border-radius: 0 0 8px 8px; box-shadow: 0 6px 16px rgba(0,0,0,0.12); z-index: 100; }
+.inv-combo.open .inv-combo-drop { display: block; }
+.inv-combo.open .inv-combo-input { border-radius: 6px 6px 0 0; }
+.inv-combo-opt { padding: 6px 10px; font-size: 12px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inv-combo-opt:hover { background: #ecfdf5; color: #059669; }
 .inv-map-clear { padding: 3px 6px; font-size: 10px; color: #b91c1c; border-color: #fecaca; }
 .inv-map-clear:hover { background: #fef2f2; }
 .inv-holded-badge { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; background: #ecfdf5; color: #059669; margin-left: 4px; }
@@ -1491,9 +1500,9 @@ function toggleConsolVal(mode) {
  *  ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œ 7. NUNCA reutilizar un n\u00famero de versi\u00f3n ya existente
  * ===================================================================================================
  */
-const APP_VERSION = '2.32.0';
-const APP_BUILD   = '2026-02-17T22:00:00+01:00';
-const APP_CHANGES = 'F2: Holded API sync — contactos, auto-matching propietarios, caché datos fiscales';
+const APP_VERSION = '2.32.1';
+const APP_BUILD   = '2026-02-17T22:45:00+01:00';
+const APP_CHANGES = 'Combo buscable en asignación manual de contactos Holded';
 
 // ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
 //  [M02] UTILITIES — Funciones auxiliares reutilizables
@@ -3005,6 +3014,13 @@ const CONFIG = Object.freeze({
 
 
 const CHANGELOG = [
+  {
+    version: '2.32.1',
+    date: '2026-02-17',
+    changes: [
+      'Combo buscable para asignaci\u00f3n manual de contactos Holded (reemplaza select nativo)',
+    ]
+  },
   {
     version: '2.32.0',
     date: '2026-02-17',
@@ -10739,13 +10755,15 @@ function renderHoldedSyncSection() {
           if (mapping.vatnumber) html += '<span class="inv-map-nif">' + esc(mapping.vatnumber) + '</span>';
           html += '<button class="inv-btn inv-btn-sm inv-map-clear" onclick="clearHoldedMapping(\'' + safeName + '\')" title="' + t('inv.syncClear') + '">&#10007;</button>';
         } else {
-          html += '<select class="inv-select inv-map-select" onchange="assignHoldedContact(\'' + safeName + '\', this.value)">';
-          html += '<option value="">\u2014 ' + t('inv.syncAssign') + ' \u2014</option>';
+          var comboId = 'hc-' + key.replace(/[^a-z0-9]/g, '_');
+          html += '<div class="inv-combo" id="' + comboId + '">';
+          html += '<input class="inv-combo-input" placeholder="' + t('inv.syncAssign') + '…" onfocus="openHoldedCombo(\'' + comboId + '\')" oninput="filterHoldedCombo(\'' + comboId + '\', this.value)" />';
+          html += '<div class="inv-combo-drop">';
           _holdedContacts.forEach(function(c) {
             var label = c.name + (c.vatnumber ? ' (' + c.vatnumber + ')' : '');
-            html += '<option value="' + c.id + '">' + esc(label) + '</option>';
+            html += '<div class="inv-combo-opt" data-id="' + c.id + '" data-search="' + esc(label.toLowerCase()) + '" onclick="pickHoldedCombo(\'' + safeName + '\',\'' + c.id + '\')">' + esc(label) + '</div>';
           });
-          html += '</select>';
+          html += '</div></div>';
         }
         html += '</div>';
         html += '</div>';
@@ -10991,6 +11009,44 @@ function filterHoldedMapping(query) {
     row.style.display = (!q || aloj.indexOf(q) >= 0 || prop.indexOf(q) >= 0) ? '' : 'none';
   });
 }
+
+// --- Holded searchable combo ---
+function openHoldedCombo(comboId) {
+  // Close any other open combos first
+  document.querySelectorAll('.inv-combo.open').forEach(function(el) {
+    if (el.id !== comboId) el.classList.remove('open');
+  });
+  var el = document.getElementById(comboId);
+  if (!el) return;
+  el.classList.add('open');
+  // Reset filter
+  var opts = el.querySelectorAll('.inv-combo-opt');
+  opts.forEach(function(o) { o.style.display = ''; });
+}
+
+function filterHoldedCombo(comboId, query) {
+  var el = document.getElementById(comboId);
+  if (!el) return;
+  var q = (query || '').toLowerCase();
+  var opts = el.querySelectorAll('.inv-combo-opt');
+  opts.forEach(function(o) {
+    var s = o.getAttribute('data-search') || '';
+    o.style.display = (!q || s.indexOf(q) >= 0) ? '' : 'none';
+  });
+}
+
+function pickHoldedCombo(alojName, contactId) {
+  // Close all combos
+  document.querySelectorAll('.inv-combo.open').forEach(function(el) { el.classList.remove('open'); });
+  assignHoldedContact(alojName, contactId);
+}
+
+// Close combos on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.inv-combo')) {
+    document.querySelectorAll('.inv-combo.open').forEach(function(el) { el.classList.remove('open'); });
+  }
+});
 
 // --- F1 Actions (unchanged) ---
 function toggleHoldedKeyVisibility() {
